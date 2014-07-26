@@ -1,0 +1,9 @@
+name: DemigodsClassic
+main: com.demigodsrpg.demigods.classic.DGClassic
+version: ${project.version}
+description: Ally yourself with mythical deities and battle in the name of the Gods or Titans.
+authors: [marinating, HmmmQuestionMark, _Alex]
+softdepend: [WorldGuard, WorldEdit, Multiverse-Core]
+commands:
+  check:
+    usage: /check
