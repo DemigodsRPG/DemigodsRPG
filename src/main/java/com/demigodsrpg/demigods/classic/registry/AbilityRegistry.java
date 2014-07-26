@@ -23,7 +23,6 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.lang.reflect.Method;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,7 +46,7 @@ public class AbilityRegistry implements Listener {
             try {
                 PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
                 if (processAbility(model, ability)) {
-                    ability.getMethod().invoke(ability.getDeity().getParentObject(), event);
+                    ability.getMethod().invoke(ability.getDeity().getParentObject(), ability.eventClass.cast(event));
                     return;
                 }
             } catch (Exception oops) {
@@ -57,7 +56,7 @@ public class AbilityRegistry implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    private void onEvent(EntityDamageEvent  event) {
+    private void onEvent(EntityDamageEvent event) {
         for (Data ability : REGISTERED_ABILITIES.get(event.getClass())) {
             try {
                 if (event.getEntity() instanceof Player) {
@@ -65,7 +64,7 @@ public class AbilityRegistry implements Listener {
                     player.sendMessage("Health: " + player.getHealth());
                     PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
                     if (processAbility(model, ability)) {
-                        ability.getMethod().invoke(ability.getDeity().getParentObject(), event);
+                        ability.getMethod().invoke(ability.getDeity().getParentObject(), ability.eventClass.cast(event));
                     }
                 }
             } catch (Exception oops) {
@@ -81,7 +80,7 @@ public class AbilityRegistry implements Listener {
                 try {
                     if (model.getOnline() && model.getLocation().getWorld().equals(event.getBlock().getWorld()) && model.getLocation().distance(event.getBlock().getLocation()) < (int) Math.round(20 * Math.pow(model.getDevotion(Deity.HEPHAESTUS), 0.15))) {
                         if (processAbility(model, ability)) {
-                            ability.getMethod().invoke(ability.getDeity().getParentObject(), event);
+                            ability.getMethod().invoke(ability.getDeity().getParentObject(), ability.eventClass.cast(event));
                             return; // TODO
                         }
                     }
@@ -102,14 +101,14 @@ public class AbilityRegistry implements Listener {
         if (!ZoneUtil.inNoDGCZone(event.getPlayer().getLocation())) {
             // Process the command
             try {
-                if(args.length == 2 && "info".equals(args[1])) {
-                    if(abilityInfo(player, args[0].toLowerCase())) {
+                if (args.length == 2 && "info".equals(args[1])) {
+                    if (abilityInfo(player, args[0].toLowerCase())) {
                         DGClassic.CONSOLE.info(event.getPlayer().getName() + " used the command: /" + message);
                         event.setCancelled(true);
                         return;
                     }
                 }
-                if(bindAbility(player, args[0].toLowerCase())) {
+                if (bindAbility(player, args[0].toLowerCase())) {
                     DGClassic.CONSOLE.info(event.getPlayer().getName() + " used the command: /" + message);
                     event.setCancelled(true);
                 }
@@ -122,14 +121,14 @@ public class AbilityRegistry implements Listener {
 
     public boolean abilityInfo(Player player, String command) {
         for (Data ability : REGISTERED_ABILITIES.values()) {
-            if(ability.getCommand().equals(command)) {
+            if (ability.getCommand().equals(command)) {
                 player.sendMessage(StringUtil2.chatTitle(ability.getName()));
                 player.sendMessage(" - Deity: " + ability.getDeity().getColor() + ability.getDeity().getDeityName());
                 player.sendMessage(" - Type: " + StringUtil2.beautify(ability.getType().name()));
-                if(!ability.getType().equals(Ability.Type.PASSIVE)) {
+                if (!ability.getType().equals(Ability.Type.PASSIVE)) {
                     player.sendMessage(" - Cost / Delay (ms): " + ability.getCost() + " / " + ability.getDelay());
                 }
-                if(ability.getCooldown() > 0) {
+                if (ability.getCooldown() > 0) {
                     player.sendMessage(" - Cooldown (ms): " + ability.getCooldown());
                 }
                 player.sendMessage(ability.getInfo());
@@ -141,14 +140,14 @@ public class AbilityRegistry implements Listener {
 
     public boolean bindAbility(Player player, String command) {
         // Is this a correct command?
-        if(!REGISTERED_COMMANDS.keySet().contains(command)) {
+        if (!REGISTERED_COMMANDS.keySet().contains(command)) {
             return false;
         }
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
         Material material = player.getItemInHand().getType();
         Data bound = model.getBound(material);
-        if(bound != null) {
-            if(!bound.getCommand().equals(command)) {
+        if (bound != null) {
+            if (!bound.getCommand().equals(command)) {
                 player.sendMessage(ChatColor.RED + "This item already has /" + bound.getCommand() + " bound to it.");
                 return true;
             } else {
@@ -168,15 +167,15 @@ public class AbilityRegistry implements Listener {
     }
 
     public boolean processAbility(PlayerModel model, Data ability) {
-        if(ZoneUtil.isNoDGCWorld(model.getLocation().getWorld())) return false;
-        if(!ability.getType().equals(Ability.Type.PASSIVE)) {
-            if((ability.getType().equals(Ability.Type.OFFENSIVE) || ability.getType().equals(Ability.Type.ULTIMATE)) && ZoneUtil.inNoPvpZone(model.getLocation())) {
+        if (ZoneUtil.isNoDGCWorld(model.getLocation().getWorld())) return false;
+        if (!ability.getType().equals(Ability.Type.PASSIVE)) {
+            if ((ability.getType().equals(Ability.Type.OFFENSIVE) || ability.getType().equals(Ability.Type.ULTIMATE)) && ZoneUtil.inNoPvpZone(model.getLocation())) {
                 return false;
             }
-            if(model.getBound(ability) == null) {
+            if (model.getBound(ability) == null) {
                 return false;
             }
-            if(!model.getOfflinePlayer().getPlayer().getItemInHand().getType().equals(model.getBound(ability))) {
+            if (!model.getOfflinePlayer().getPlayer().getItemInHand().getType().equals(model.getBound(ability))) {
                 return false;
             }
 
@@ -229,7 +228,7 @@ public class AbilityRegistry implements Listener {
             Class<? extends Event> eventClass = (Class<? extends Event>) paramaters[0];
             Data data = new Data(deity, method, ability, eventClass);
             REGISTERED_ABILITIES.put(eventClass, data);
-            if(!"".equals(data.getCommand())) {
+            if (!"".equals(data.getCommand())) {
                 REGISTERED_COMMANDS.put(data.getCommand(), data);
             }
         } catch (Exception oops) {
@@ -238,7 +237,7 @@ public class AbilityRegistry implements Listener {
     }
 
     public Data fromCommand(String commandName) {
-        if(REGISTERED_COMMANDS.containsKey(commandName)) {
+        if (REGISTERED_COMMANDS.containsKey(commandName)) {
             return REGISTERED_COMMANDS.get(commandName);
         }
         return null;

@@ -1,9 +1,15 @@
 package com.demigodsrpg.demigods.classic.deity.titan.major;
 
+import com.demigodsrpg.demigods.classic.DGClassic;
+import com.demigodsrpg.demigods.classic.ability.Ability;
+import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.material.MaterialData;
 
 public class Cronus implements IDeity {
@@ -45,5 +51,51 @@ public class Cronus implements IDeity {
     @Override
     public IDeity.Pantheon getPantheon() {
         return Pantheon.TITAN;
+    }
+
+    @Ability(name = "Cleave", info = "Attacking with a sickle (hoe) does extra damage.", type = Ability.Type.PASSIVE)
+    public void cleaveAbility(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player) {
+            Player player = (Player) event.getDamager();
+            if (DGClassic.PLAYER_R.fromPlayer(player).getMajorDeity().equals(Deity.CRONUS)) {
+                switch (player.getItemInHand().getType()) {
+                    case WOOD_HOE:
+                        event.setDamage(7.0);
+                        break;
+                    case STONE_HOE:
+                        event.setDamage(8.0);
+                        break;
+                    case IRON_HOE:
+                        event.setDamage(10.0);
+                        break;
+                    case GOLD_HOE:
+                        event.setDamage(13.0);
+                        break;
+                    case DIAMOND_HOE:
+                        event.setDamage(15.0);
+                        break;
+                }
+            }
+        }
+    }
+
+    @Ability(name = "Cheat Death", info = "Can only die while being attacked.", type = Ability.Type.PASSIVE)
+    public void cheatDeathAbility(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            if (DGClassic.PLAYER_R.fromPlayer(player).getMajorDeity().equals(Deity.CRONUS)) {
+                if (player.getHealth() - event.getDamage() <= 0.0) {
+                    switch (event.getCause()) {
+                        case ENTITY_ATTACK:
+                        case PROJECTILE:
+                        case CUSTOM:
+                            break;
+                        default:
+                            player.setHealth(2);
+                            event.setCancelled(true);
+                    }
+                }
+            }
+        }
     }
 }

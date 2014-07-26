@@ -16,8 +16,8 @@ public class PlayerListener implements Listener {
             model = new PlayerModel(event.getPlayer());
             DGClassic.PLAYER_R.register(model);
 
-            model.giveMajorDeity(Deity.ZEUS);
-            model.giveDeity(Deity.HEPHAESTUS);
+            model.giveMajorDeity(Deity.CRONUS);
+            // model.giveDeity(Deity.HEPHAESTUS);
         }
     }
 }
