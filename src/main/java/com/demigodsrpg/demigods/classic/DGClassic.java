@@ -1,5 +1,6 @@
 package com.demigodsrpg.demigods.classic;
 
+import com.demigodsrpg.demigods.classic.command.AllianceCommand;
 import com.demigodsrpg.demigods.classic.command.BindsCommand;
 import com.demigodsrpg.demigods.classic.command.CheckCommand;
 import com.demigodsrpg.demigods.classic.listener.PlayerListener;
@@ -96,6 +97,7 @@ public class DGClassic extends JavaPlugin {
         // Register commands
         getCommand("check").setExecutor(new CheckCommand());
         getCommand("binds").setExecutor(new BindsCommand());
+        getCommand("alliance").setExecutor(new AllianceCommand());
 
         // Enable ZoneUtil
         ZoneUtil.init();
