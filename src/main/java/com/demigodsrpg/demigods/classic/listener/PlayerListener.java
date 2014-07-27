@@ -1,6 +1,5 @@
 package com.demigodsrpg.demigods.classic.listener;
 
-import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
@@ -46,10 +45,10 @@ public class PlayerListener implements Listener {
             for (PlayerModel playerModel : playerModelSet) {
                 event.getRecipients().add(playerModel.getOfflinePlayer().getPlayer());
             }
-            event.setFormat(ChatColor.GRAY + "[ALL]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + StringUtil2.beautify(model.getAlliance().name()) + "] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + ":" + event.getMessage());
+            event.setFormat(ChatColor.DARK_GRAY + "[.]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + model.getAlliance().name().charAt(0) + "]" + event.getPlayer().getDisplayName() + ChatColor.GRAY + ":" + event.getMessage());
         } else {
             String format = event.getFormat();
-            event.setFormat(ChatColor.GRAY + "[TEAM]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + StringUtil2.beautify(model.getAlliance().name()) + "] " + format);
+            event.setFormat(ChatColor.RED + "[!]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + model.getAlliance().name().charAt(0) + "]" + format);
         }
     }
 }
