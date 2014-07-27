@@ -54,7 +54,7 @@ public class ShrineModel extends AbstractPersistentModel<String> {
         Map<String, Object> map = new HashMap<>();
         map.put("ownerId", ownerMojangId.toString());
         map.put("deity", deity.name());
-        map.put("type", shrine);
+        map.put("type", shrine.name());
         map.put("world-name", location.getWorld().getName());
         map.put("x", location.getX());
         map.put("y", location.getY());

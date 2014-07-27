@@ -340,7 +340,7 @@ public class AbilityRegistry implements Listener {
                 }
                 case ZEUS: {
                     if (EntityDamageEvent.DamageCause.FALL.equals(event.getCause())) {
-                        event.setDamage(0.0);
+                        event.setCancelled(true);
                     }
                 }
             }

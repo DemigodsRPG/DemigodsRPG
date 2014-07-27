@@ -210,19 +210,9 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
     @Deprecated
     public String getCategory(Material material) {
         switch (material) {
-            case DIAMOND_BLOCK:
-            case EMERALD_BLOCK:
-            case GOLD_BLOCK:
-            case IRON_BLOCK:
-            case REDSTONE_BLOCK:
-            case COAL_BLOCK:
-            case LAPIS_BLOCK:
-                return "expensive_block";
-            case DIAMOND:
-            case EMERALD:
-            case GOLD_INGOT:
-            case IRON_INGOT:
-                return "clean_ore";
+            case DRAGON_EGG:
+            case NETHER_STAR:
+                return "boss_reward";
             case DIAMOND_ORE:
             case IRON_ORE:
             case GOLD_ORE:
@@ -230,10 +220,13 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
             case COAL_ORE:
                 return "raw_ore";
             case GLOWSTONE_DUST:
+            case GLOWSTONE:
             case REDSTONE:
+            case REDSTONE_BLOCK:
             case BLAZE_ROD:
             case GHAST_TEAR:
             case MOSSY_COBBLESTONE:
+            case OBSIDIAN:
                 return "mid_range";
             case DIRT:
             case GRASS:
@@ -241,10 +234,27 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
             case COBBLESTONE:
             case SAND:
             case SANDSTONE:
-            case WOOD:
             case LOG:
                 return "building_block";
             default:
+                if (material.name().contains("WOOD")) {
+                    return "wood";
+                } else if (material.name().contains("STONE")) {
+                    return "stone";
+                } else if (material.name().contains("IRON")) {
+                    return "iron";
+                } else if (material.name().contains("GOLD")) {
+                    return "gold";
+                } else if (material.name().contains("DIAMOND")) {
+                    return "diamond";
+                } else if (material.name().contains("EMERALD")) {
+                    return "emerald";
+                } else if (material.name().contains("COAL")) {
+                    return "coal";
+                } else if (material.name().contains("LEATHER")) {
+                    return "leather";
+                }
+                // TODO More
                 return "default";
         }
     }
