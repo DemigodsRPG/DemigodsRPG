@@ -67,7 +67,6 @@ public class AbilityRegistry implements Listener {
             try {
                 if (event.getEntity() instanceof Player) {
                     Player player = (Player) event.getEntity();
-                    player.sendMessage("Health: " + player.getHealth());
                     PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
                     if (processAbility(model, ability)) {
                         ability.getMethod().invoke(ability.getDeity().getParentObject(), ability.eventClass.cast(event));
@@ -85,7 +84,6 @@ public class AbilityRegistry implements Listener {
             try {
                 if (event.getDamager() instanceof Player) {
                     Player player = (Player) event.getDamager();
-                    player.sendMessage("Health: " + player.getHealth());
                     PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
                     if (processAbility(model, ability)) {
                         ability.getMethod().invoke(ability.getDeity().getParentObject(), ability.eventClass.cast(event));
