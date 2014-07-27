@@ -210,6 +210,14 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
     @Deprecated
     public String getCategory(Material material) {
         switch (material) {
+            case DIAMOND_BLOCK:
+            case EMERALD_BLOCK:
+            case GOLD_BLOCK:
+            case IRON_BLOCK:
+            case REDSTONE_BLOCK:
+            case COAL_BLOCK:
+            case LAPIS_BLOCK:
+                return "expensive_block";
             case DIAMOND:
             case EMERALD:
             case GOLD_INGOT:
@@ -219,7 +227,14 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
             case IRON_ORE:
             case GOLD_ORE:
             case LAPIS_ORE:
+            case COAL_ORE:
                 return "raw_ore";
+            case GLOWSTONE_DUST:
+            case REDSTONE:
+            case BLAZE_ROD:
+            case GHAST_TEAR:
+            case MOSSY_COBBLESTONE:
+                return "mid_range";
             case DIRT:
             case GRASS:
             case STONE:
