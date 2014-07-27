@@ -84,13 +84,18 @@ public class Cronus implements IDeity {
             Player player = (Player) event.getEntity();
             if (DGClassic.PLAYER_R.fromPlayer(player).getMajorDeity().equals(Deity.CRONUS)) {
                 if (player.getHealth() - event.getDamage() <= 0.0) {
+                    player.sendMessage("AAHHAHAHAHHAH");
                     switch (event.getCause()) {
                         case ENTITY_ATTACK:
+                            break;
                         case PROJECTILE:
+                            break;
                         case CUSTOM:
                             break;
                         default:
-                            player.setHealth(2);
+                            event.setDamage(0.0);
+                            player.setHealth(1.0);
+                            player.setNoDamageTicks(5);
                             event.setCancelled(true);
                     }
                 }
