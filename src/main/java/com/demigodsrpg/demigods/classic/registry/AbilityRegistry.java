@@ -42,6 +42,11 @@ public class AbilityRegistry implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onEvent(PlayerInteractEvent event) {
+        switch (event.getAction()) {
+            case LEFT_CLICK_BLOCK:
+            case LEFT_CLICK_AIR:
+                return;
+        }
         for (Data ability : REGISTERED_ABILITIES.get(event.getClass())) {
             try {
                 PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());

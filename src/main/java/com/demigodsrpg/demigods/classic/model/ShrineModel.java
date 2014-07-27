@@ -3,6 +3,7 @@ package com.demigodsrpg.demigods.classic.model;
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
+import com.demigodsrpg.demigods.classic.shrine.Shrine;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -13,24 +14,27 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ShrineModel extends AbstractPersistentModel<UUID> {
-    private UUID shrineId;
+public class ShrineModel extends AbstractPersistentModel<String> {
+    private String shrineId;
     private UUID ownerMojangId;
     private Deity deity;
+    private Shrine shrine;
     private Location location;
 
-    public ShrineModel(Player player, Deity deity, Location location) {
-        shrineId = UUID.randomUUID();
+    public ShrineModel(String name, Player player, Deity deity, Shrine shrine, Location location) {
+        shrineId = name;
         ownerMojangId = player.getUniqueId();
         this.deity = deity;
+        this.shrine = shrine;
         this.location = location;
     }
 
-    public ShrineModel(UUID shrineId, ConfigurationSection conf) {
+    public ShrineModel(String shrineId, ConfigurationSection conf) {
         this.shrineId = shrineId;
 
         ownerMojangId = UUID.fromString(conf.getString("ownerId"));
         deity = Deity.valueOf(conf.getString("deity"));
+        shrine = Shrine.valueOf(conf.getString("type"));
 
         World world = Bukkit.getWorld(conf.getString("world-name"));
         if (world != null) {
@@ -50,6 +54,7 @@ public class ShrineModel extends AbstractPersistentModel<UUID> {
         Map<String, Object> map = new HashMap<>();
         map.put("ownerId", ownerMojangId.toString());
         map.put("deity", deity.name());
+        map.put("type", shrine);
         map.put("world-name", location.getWorld().getName());
         map.put("x", location.getX());
         map.put("y", location.getY());
@@ -63,12 +68,20 @@ public class ShrineModel extends AbstractPersistentModel<UUID> {
         return DGClassic.PLAYER_R.fromId(ownerMojangId).getAlliance();
     }
 
+    public Deity getDeity() {
+        return deity;
+    }
+
+    public Shrine getShrineType() {
+        return shrine;
+    }
+
     public Location getLocation() {
         return location;
     }
 
     @Override
-    public UUID getPersistantId() {
+    public String getPersistantId() {
         return shrineId;
     }
 }

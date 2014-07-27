@@ -2,6 +2,7 @@ package com.demigodsrpg.demigods.classic;
 
 import com.demigodsrpg.demigods.classic.command.CheckCommand;
 import com.demigodsrpg.demigods.classic.listener.PlayerListener;
+import com.demigodsrpg.demigods.classic.listener.ShrineListener;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
 import com.demigodsrpg.demigods.classic.registry.*;
 import com.demigodsrpg.demigods.classic.util.ZoneUtil;
@@ -88,6 +89,7 @@ public class DGClassic extends JavaPlugin {
         // Register the listeners
         PluginManager manager = getServer().getPluginManager();
         manager.registerEvents(new PlayerListener(), this);
+        manager.registerEvents(new ShrineListener(), this);
         manager.registerEvents(ABILITY_R, this);
 
         // Register commands
@@ -138,7 +140,7 @@ public class DGClassic extends JavaPlugin {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (ZoneUtil.inNoDGCZone(player.getLocation())) continue;
                     PlayerModel model = PLAYER_R.fromPlayer(player);
-                    if(model != null) {
+                    if (model != null) {
                         model.updateCanPvp();
                     }
                 }
@@ -161,7 +163,7 @@ public class DGClassic extends JavaPlugin {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (ZoneUtil.inNoDGCZone(player.getLocation())) continue;
                     PlayerModel model = PLAYER_R.fromPlayer(player);
-                    if(model != null) {
+                    if (model != null) {
                         model.updateFavor();
                     }
                 }

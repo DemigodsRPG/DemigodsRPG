@@ -4,12 +4,11 @@ import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.ability.Ability;
 import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
 
 public class Cronus implements IDeity {
@@ -97,5 +96,22 @@ public class Cronus implements IDeity {
                 }
             }
         }
+    }
+
+    @Ability(name = "Warp Time", command = "warptime", info = "Warp time to your will.", cost = 700, cooldown = 150000, type = Ability.Type.ULTIMATE)
+    public void timeControlAbility(PlayerInteractEvent event) {
+        final World world = event.getPlayer().getWorld();
+        final long worldTime = world.getFullTime();
+        long newTime = worldTime + 12000;
+        for (long i = worldTime; i * 1000 <= newTime; i++) {
+            final long delta = i * 1000;
+            Bukkit.getScheduler().scheduleSyncDelayedTask(DGClassic.getInst(), new Runnable() {
+                @Override
+                public void run() {
+                    world.setFullTime(worldTime + delta);
+                }
+            }, i * 10);
+        }
+        event.getPlayer().sendMessage(ChatColor.RED + "With a mighty effort, you bend time to your will.");
     }
 }

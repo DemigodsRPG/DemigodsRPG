@@ -16,7 +16,7 @@ public abstract class AdminPlayerCommand extends BaseCommand implements TabCompl
         if (args.length > 0) {
             PlayerModel model = DGClassic.PLAYER_R.fromName(args[0]);
             if (model != null) {
-                return onPlayerCommand(sender, model, args);
+                return onCommand(sender, model, args);
             }
         }
         return CommandResult.NOT_ENOUGH_ARGS;
@@ -30,5 +30,5 @@ public abstract class AdminPlayerCommand extends BaseCommand implements TabCompl
         return new ArrayList<>();
     }
 
-    public abstract CommandResult onPlayerCommand(CommandSender sender, PlayerModel model, String[] args);
+    public abstract CommandResult onCommand(CommandSender sender, PlayerModel model, String[] args);
 }

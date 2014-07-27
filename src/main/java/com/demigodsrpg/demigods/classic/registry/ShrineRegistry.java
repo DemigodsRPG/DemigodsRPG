@@ -9,18 +9,27 @@ import com.google.common.collect.Iterables;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
-public class ShrineRegistry extends AbstractRegistry<UUID, ShrineModel> {
+public class ShrineRegistry extends AbstractRegistry<String, ShrineModel> {
     public static final String FILE_NAME = "shrines.dgc";
 
-    public ShrineModel getShrine(final Location location, final int range) {
-        return Iterables.find(getRegistered(), new Predicate<ShrineModel>() {
+    public Collection<ShrineModel> getShrines(final Location location, final int range) {
+        return Collections2.filter(getRegistered(), new Predicate<ShrineModel>() {
             @Override
             public boolean apply(ShrineModel shrineModel) {
                 return shrineModel.getLocation().distance(location) <= range;
+            }
+        });
+    }
+
+    public ShrineModel getShrine(final Location location) {
+        return Iterables.find(getRegistered(), new Predicate<ShrineModel>() {
+            @Override
+            public boolean apply(ShrineModel shrineModel) {
+                return shrineModel.getShrineType().getLocations(shrineModel.getLocation()).contains(location);
             }
         }, null);
     }
@@ -33,7 +42,7 @@ public class ShrineRegistry extends AbstractRegistry<UUID, ShrineModel> {
         Set<ShrineModel> set = new HashSet<>();
         for (String stringId : data.getKeys(false)) {
             try {
-                set.add(new ShrineModel(UUID.fromString(stringId), data.getConfigurationSection(stringId)));
+                set.add(new ShrineModel(stringId, data.getConfigurationSection(stringId)));
             } catch (Exception oops) {
                 oops.printStackTrace();
             }

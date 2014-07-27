@@ -2,11 +2,13 @@ package com.demigodsrpg.demigods.classic.registry;
 
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.deity.Deity;
+import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
 import com.demigodsrpg.demigods.classic.util.YamlFileUtil;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -44,6 +46,17 @@ public class PlayerRegistry extends AbstractRegistry<UUID, PlayerModel> {
             offlinePlayers.add(model.getOfflinePlayer());
         }
         return offlinePlayers;
+    }
+
+    public Set<PlayerModel> getOnlineInAlliance(IDeity.Alliance alliance) {
+        Set<PlayerModel> players = new HashSet<>();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            PlayerModel model = fromPlayer(player);
+            if (model.getAlliance().equals(alliance)) {
+                players.add(model);
+            }
+        }
+        return players;
     }
 
     public Collection<PlayerModel> fromDeity(final Deity deity) {

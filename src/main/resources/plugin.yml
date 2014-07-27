@@ -5,5 +5,15 @@ description: Ally yourself with mythical deities and battle in the name of the G
 authors: [marinating, HmmmQuestionMark, _Alex, janie177]
 softdepend: [WorldGuard, WorldEdit, Multiverse-Core]
 commands:
+  alliance:
+    usage: /alliance message
+    aliases: [a]
+  binds:
+    usage: /binds
+    aliases: [b]
   check:
     usage: /check
+    aliases: [c]
+  demigods:
+    usage: /demigods [subject]
+    aliases: [d, dg, demigod]

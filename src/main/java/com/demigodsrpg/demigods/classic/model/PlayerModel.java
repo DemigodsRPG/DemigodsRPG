@@ -160,6 +160,13 @@ public class PlayerModel extends AbstractPersistentModel<UUID> implements Partic
         DGClassic.PLAYER_R.register(this);
     }
 
+    public Set<Deity> getAllDeities() {
+        Set<Deity> deities = new HashSet<>();
+        deities.addAll(getContractedDeities());
+        deities.add(majorDeity);
+        return deities;
+    }
+
     public Set<Deity> getContractedDeities() {
         return contractedDeities;
     }
@@ -240,9 +247,13 @@ public class PlayerModel extends AbstractPersistentModel<UUID> implements Partic
         DGClassic.PLAYER_R.register(this);
     }
 
+    public Map<String, String> getBindsMap() {
+        return binds;
+    }
+
     public AbilityRegistry.Data getBound(Material material) {
-        if(binds.inverse().containsKey(material.name())) {
-           return DGClassic.ABILITY_R.fromCommand(binds.inverse().get(material.name()));
+        if (binds.inverse().containsKey(material.name())) {
+            return DGClassic.ABILITY_R.fromCommand(binds.inverse().get(material.name()));
         }
         return null;
     }
@@ -252,7 +263,7 @@ public class PlayerModel extends AbstractPersistentModel<UUID> implements Partic
     }
 
     public Material getBound(String abilityCommand) {
-        if(binds.containsKey(abilityCommand)) {
+        if (binds.containsKey(abilityCommand)) {
             return Material.valueOf(binds.get(abilityCommand));
         }
         return null;
@@ -490,7 +501,7 @@ public class PlayerModel extends AbstractPersistentModel<UUID> implements Partic
     }
 
     public void updateFavor() {
-        if(getFavor() < getMaxFavor()) {   
+        if (getFavor() < getMaxFavor()) {
             setFavor(getFavor() + 4);
         }
     }

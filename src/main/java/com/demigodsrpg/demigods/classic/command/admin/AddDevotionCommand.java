@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 
 public class AddDevotionCommand extends AdminPlayerCommand {
     @Override
-    public CommandResult onPlayerCommand(CommandSender sender, PlayerModel model, String[] args) {
+    public CommandResult onCommand(CommandSender sender, PlayerModel model, String[] args) {
         if (args.length == 2) {
 
         }

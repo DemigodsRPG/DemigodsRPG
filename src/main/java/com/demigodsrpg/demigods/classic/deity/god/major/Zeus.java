@@ -6,9 +6,7 @@ import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
 import com.demigodsrpg.demigods.classic.util.TargetingUtil;
-import com.demigodsrpg.demigods.classic.util.ZoneUtil;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -18,10 +16,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.rmi.dgc.DGC;
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class Zeus implements IDeity {
     @Override
@@ -66,7 +60,7 @@ public class Zeus implements IDeity {
 
     // -- ABILITIES -- //
 
-    @Ability(name = "Lightning", command = "lightning", info = {"Strike lightning at a target location."}, cost = 140, delay = 1000)
+    @Ability(name = "Lightning", command = "lightning", info = "Strike lightning at a target location.", cost = 140, delay = 1000)
     public void lightningAbility(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
@@ -109,8 +103,7 @@ public class Zeus implements IDeity {
                     damage += 4;
                     livingEntity.damage(damage);
                     entity.setLastDamageCause(new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.LIGHTNING, damage));
-                }
-                else if (livingEntity.getLocation().distance(toHit) < 2) {
+                } else if (livingEntity.getLocation().distance(toHit) < 2) {
                     damage += 3;
                     livingEntity.damage(damage);
                     entity.setLastDamageCause(new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.LIGHTNING, damage));
@@ -123,7 +116,7 @@ public class Zeus implements IDeity {
         return true;
     }
 
-    @Ability(name = "Shove", command = "shove", info = {"Use the force of wind to shove your enemies."}, cost = 170, delay = 1500)
+    @Ability(name = "Shove", command = "shove", info = "Use the force of wind to shove your enemies.", cost = 170, delay = 1500)
     public void pullAbility(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
@@ -133,7 +126,7 @@ public class Zeus implements IDeity {
 
         LivingEntity hit = TargetingUtil.autoTarget(player);
 
-        if(hit != null) {
+        if (hit != null) {
             player.sendMessage(ChatColor.YELLOW + "*whoosh*");
 
             Vector v = player.getLocation().toVector();
@@ -143,7 +136,7 @@ public class Zeus implements IDeity {
         }
     }
 
-    @Ability(name = "Storm", command = "storm", info = {"Strike fear into the hearts of your enemies."}, cost = 3700, cooldown = 600000, type = Ability.Type.ULTIMATE)
+    @Ability(name = "Storm", command = "storm", info = "Strike fear into the hearts of your enemies.", cost = 3700, cooldown = 600000, type = Ability.Type.ULTIMATE)
     public void stormAbility(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
 
@@ -177,7 +170,7 @@ public class Zeus implements IDeity {
                 public void run() {
                     for (int i = 0; i <= 3; i++) {
                         player.getWorld().strikeLightningEffect(entity.getLocation());
-                        ((LivingEntity )entity).damage(damage);
+                        ((LivingEntity) entity).damage(damage);
                         entity.setLastDamageCause(new EntityDamageByEntityEvent(player, entity, EntityDamageEvent.DamageCause.LIGHTNING, damage));
                     }
                 }
