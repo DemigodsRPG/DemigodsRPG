@@ -22,7 +22,7 @@ public class Hephaestus implements IDeity {
 
     @Override
     public ChatColor getColor() {
-        return ChatColor.BLACK;
+        return ChatColor.DARK_GRAY;
     }
 
     @Override
