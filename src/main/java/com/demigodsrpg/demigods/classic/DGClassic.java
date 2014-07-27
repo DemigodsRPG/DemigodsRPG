@@ -135,7 +135,7 @@ public class DGClassic extends JavaPlugin {
 
     // -- TASK RELATED -- //
 
-    private static final BukkitRunnable SYNC, ASYNC, FAVOR;
+    private static final BukkitRunnable SYNC, ASYNC, SAVE, FAVOR;
 
 
     static {
@@ -157,7 +157,11 @@ public class DGClassic extends JavaPlugin {
             public void run() {
                 // Update Timed Data
                 SERV_R.clearExpired();
-
+            }
+        };
+        SAVE = new BukkitRunnable() {
+            @Override
+            public void run() {
                 // Save the data
                 save();
             }
@@ -188,6 +192,10 @@ public class DGClassic extends JavaPlugin {
         // Start async demigods runnable
         scheduler.scheduleAsyncRepeatingTask(this, ASYNC, 20, 20);
         CONSOLE.info("Main Demigods ASYNC runnable enabled...");
+
+        // Start async demigods runnable
+        scheduler.scheduleAsyncRepeatingTask(this, SAVE, 20, 600);
+        CONSOLE.info("Main Demigods SAVE runnable enabled...");
 
         // Start favor runnable
         scheduler.scheduleAsyncRepeatingTask(this, FAVOR, 20, (long) ((double) Setting.FAVOR_REGEN_SECONDS.get() * 20));

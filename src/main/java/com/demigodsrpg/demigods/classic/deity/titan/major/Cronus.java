@@ -7,7 +7,6 @@ import com.demigodsrpg.demigods.classic.deity.IDeity;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
 
@@ -79,30 +78,8 @@ public class Cronus implements IDeity {
     }
 
     @Ability(name = "Cheat Death", info = "Can only die while being attacked.", type = Ability.Type.PASSIVE)
-    public void cheatDeathAbility(EntityDamageEvent event) {
-        Bukkit.broadcastMessage(event.getCause().name());
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            player.sendMessage("AAHHAHAHAHHAH");
-            if (DGClassic.PLAYER_R.fromPlayer(player).getMajorDeity().equals(Deity.CRONUS)) {
-                if (player.getHealth() - event.getDamage() <= 0.0) {
-
-                    switch (event.getCause()) {
-                        case ENTITY_ATTACK:
-                            break;
-                        case PROJECTILE:
-                            break;
-                        case CUSTOM:
-                            break;
-                        default:
-                            event.setDamage(0.0);
-                            player.setHealth(1.0);
-                            player.setNoDamageTicks(5);
-                            event.setCancelled(true);
-                    }
-                }
-            }
-        }
+    public void cheatDeathAbility() {
+        // Do nothing, handled directly in the other class
     }
 
     @Ability(name = "Warp Time", command = "warptime", info = "Warp time to your will.", cost = 700, cooldown = 150000, type = Ability.Type.ULTIMATE)
@@ -110,12 +87,12 @@ public class Cronus implements IDeity {
         final World world = event.getPlayer().getWorld();
         final long worldTime = world.getFullTime();
         long newTime = worldTime + 12000;
-        for (long i = worldTime; i * 1000 <= newTime; i++) {
+        for (long i = 1; i * 1000 <= newTime; i++) {
             final long delta = i * 1000;
             Bukkit.getScheduler().scheduleSyncDelayedTask(DGClassic.getInst(), new Runnable() {
                 @Override
                 public void run() {
-                    world.setFullTime(worldTime + delta);
+                    world.setTime(worldTime + delta);
                 }
             }, i * 10);
         }

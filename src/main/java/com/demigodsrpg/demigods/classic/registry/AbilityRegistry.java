@@ -61,19 +61,25 @@ public class AbilityRegistry implements Listener {
         }
     }
 
+    // Cronus - Cheat Death
     @EventHandler(priority = EventPriority.LOWEST)
-    private void onEvent(EntityDamageEvent event) {
-        for (Data ability : REGISTERED_ABILITIES.get(event.getClass())) {
-            try {
-                if (event.getEntity() instanceof Player) {
-                    Player player = (Player) event.getEntity();
-                    PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
-                    if (processAbility(model, ability)) {
-                        ability.getMethod().invoke(ability.getDeity().getParentObject(), ability.eventClass.cast(event));
+    private void onCheatDeath(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            if (DGClassic.PLAYER_R.fromPlayer(player).getMajorDeity().equals(Deity.CRONUS)) {
+                if (player.getHealth() <= event.getDamage()) {
+                    switch (event.getCause()) {
+                        case ENTITY_ATTACK:
+                            break;
+                        case PROJECTILE:
+                            break;
+                        case CUSTOM:
+                            break;
+                        default:
+                            event.setDamage(player.getHealth() - 1);
                     }
                 }
-            } catch (Exception oops) {
-                oops.printStackTrace();
+                event.setDamage(event.getDamage() / 2);
             }
         }
     }
