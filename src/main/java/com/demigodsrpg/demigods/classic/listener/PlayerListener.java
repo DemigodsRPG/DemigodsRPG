@@ -3,6 +3,7 @@ package com.demigodsrpg.demigods.classic.listener;
 import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.deity.Deity;
+import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -39,7 +40,7 @@ public class PlayerListener implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
 
-        if (DGClassic.SERV_R.exists("alliance_chat", event.getPlayer().getUniqueId().toString())) {
+        if (DGClassic.SERV_R.exists("alliance_chat", event.getPlayer().getUniqueId().toString()) && !IDeity.Alliance.NEUTRAL.equals(model.getAlliance()) && !IDeity.Alliance.EXCOMMUNICATED.equals(model.getAlliance())) {
             event.getRecipients().clear();
             Set<PlayerModel> playerModelSet = DGClassic.PLAYER_R.getOnlineInAlliance(model.getAlliance());
             for (PlayerModel playerModel : playerModelSet) {

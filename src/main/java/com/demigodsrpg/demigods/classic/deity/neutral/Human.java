@@ -19,7 +19,7 @@ public class Human implements IDeity {
 
     @Override
     public ChatColor getColor() {
-        return ChatColor.WHITE;
+        return ChatColor.GRAY;
     }
 
     @Override
