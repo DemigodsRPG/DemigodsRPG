@@ -80,11 +80,13 @@ public class Cronus implements IDeity {
 
     @Ability(name = "Cheat Death", info = "Can only die while being attacked.", type = Ability.Type.PASSIVE)
     public void cheatDeathAbility(EntityDamageEvent event) {
+        Bukkit.broadcastMessage(event.getCause().name());
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
+            player.sendMessage("AAHHAHAHAHHAH");
             if (DGClassic.PLAYER_R.fromPlayer(player).getMajorDeity().equals(Deity.CRONUS)) {
                 if (player.getHealth() - event.getDamage() <= 0.0) {
-                    player.sendMessage("AAHHAHAHAHHAH");
+
                     switch (event.getCause()) {
                         case ENTITY_ATTACK:
                             break;

@@ -95,10 +95,9 @@ public class DGClassic extends JavaPlugin {
         manager.registerEvents(ABILITY_R, this);
 
         // Register commands
+        getCommand("alliance").setExecutor(new AllianceCommand());
         getCommand("check").setExecutor(new CheckCommand());
         getCommand("binds").setExecutor(new BindsCommand());
-        getCommand("alliance").setExecutor(new AllianceCommand());
-        
 
         // Enable ZoneUtil
         ZoneUtil.init();
