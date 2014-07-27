@@ -77,9 +77,9 @@ public class Cronus implements IDeity {
         }
     }
 
-    @Ability(name = "Cheat Death", info = "Can only die while being attacked.", type = Ability.Type.PASSIVE)
+    @Ability(name = "Cheat Death", info = "Can only die while being attacked.", type = Ability.Type.PLACEHOLDER)
     public void cheatDeathAbility() {
-        // Do nothing, handled directly in the other class
+        // Do nothing, handled directly in the ability listener to save time
     }
 
     @Ability(name = "Warp Time", command = "warptime", info = "Warp time to your will.", cost = 700, cooldown = 150000, type = Ability.Type.ULTIMATE)

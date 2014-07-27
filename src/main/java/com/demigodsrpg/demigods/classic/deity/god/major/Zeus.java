@@ -190,4 +190,9 @@ public class Zeus implements IDeity {
             }
         }, ticks);
     }
+
+    @Ability(name = "No Fall Damage", info = "Take no fall damage.", type = Ability.Type.PLACEHOLDER)
+    public void noFallDamageAbility() {
+        // Do nothing, handled directly in the ability listener to save time
+    }
 }

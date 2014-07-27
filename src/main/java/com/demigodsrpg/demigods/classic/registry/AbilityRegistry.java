@@ -61,29 +61,6 @@ public class AbilityRegistry implements Listener {
         }
     }
 
-    // Cronus - Cheat Death
-    @EventHandler(priority = EventPriority.LOWEST)
-    private void onCheatDeath(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            if (DGClassic.PLAYER_R.fromPlayer(player).getMajorDeity().equals(Deity.CRONUS)) {
-                if (player.getHealth() <= event.getDamage()) {
-                    switch (event.getCause()) {
-                        case ENTITY_ATTACK:
-                            break;
-                        case PROJECTILE:
-                            break;
-                        case CUSTOM:
-                            break;
-                        default:
-                            event.setDamage(player.getHealth() - 1);
-                    }
-                }
-                event.setDamage(event.getDamage() / 2);
-            }
-        }
-    }
-
     @EventHandler(priority = EventPriority.LOWEST)
     private void onEvent(EntityDamageByEntityEvent event) {
         for (Data ability : REGISTERED_ABILITIES.get(event.getClass())) {
@@ -252,8 +229,13 @@ public class AbilityRegistry implements Listener {
 
     @SuppressWarnings("unchecked")
     public void register(Deity deity, Method method, Ability ability) {
+        if (Ability.Type.PLACEHOLDER.equals(ability.type())) return;
         Class<?>[] paramaters = method.getParameterTypes();
         try {
+            if (paramaters.length < 1) {
+                DGClassic.CONSOLE.severe("An ability (" + ability.name() + ") tried to register without any parameters.");
+                return;
+            }
             Class<? extends Event> eventClass = (Class<? extends Event>) paramaters[0];
             Data data = new Data(deity, method, ability, eventClass);
             REGISTERED_ABILITIES.put(eventClass, data);
@@ -327,6 +309,40 @@ public class AbilityRegistry implements Listener {
 
         public Ability getAbility() {
             return ability;
+        }
+    }
+
+    /**
+     * Various no damage abilities, these must be done by hand, and directly in this method.
+     *
+     * @param event The damage event.
+     */
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onNoDamageAbilities(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            switch (DGClassic.PLAYER_R.fromPlayer(player).getMajorDeity()) {
+                case CRONUS: {
+                    if (player.getHealth() <= event.getDamage()) {
+                        switch (event.getCause()) {
+                            case ENTITY_ATTACK:
+                                break;
+                            case PROJECTILE:
+                                break;
+                            case CUSTOM:
+                                break;
+                            default:
+                                event.setDamage(player.getHealth() - 1);
+                        }
+                    }
+                    event.setDamage(event.getDamage() / 2);
+                }
+                case ZEUS: {
+                    if (EntityDamageEvent.DamageCause.FALL.equals(event.getCause())) {
+                        event.setDamage(0.0);
+                    }
+                }
+            }
         }
     }
 }

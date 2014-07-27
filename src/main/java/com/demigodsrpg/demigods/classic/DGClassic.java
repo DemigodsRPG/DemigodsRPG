@@ -113,22 +113,28 @@ public class DGClassic extends JavaPlugin {
         Bukkit.getScheduler().cancelTasks(this);
 
         // Save the data
-        save();
-
-        // Let the console know
-        CONSOLE.info("Disabled successfully.");
+        if (!save()) {
+            CONSOLE.severe("The vital save data was unable to save correctly!");
+            CONSOLE.warning("Disabled with a corrupt save, please use a backup.");
+        } else {
+            // Let the console know
+            CONSOLE.info("Disabled successfully.");
+        }
     }
 
     // -- PLUGIN RELATED UTILITY METHODS -- //
 
-    public static void save() {
-        PLAYER_R.saveToFile();
-        SHRINE_R.saveToFile();
-        SPAWN_R.saveToFile();
+    public static boolean save() {
+        boolean noErrors;
+        noErrors = PLAYER_R.saveToFile();
+        noErrors = SHRINE_R.saveToFile() && noErrors;
+        noErrors = SPAWN_R.saveToFile() && noErrors;
 
         for (TerritoryRegistry terr_r : TERR_R.values()) {
-            terr_r.saveToFile();
+            noErrors = terr_r.saveToFile() && noErrors;
         }
+
+        return noErrors;
     }
 
     // -- TASK RELATED -- //
