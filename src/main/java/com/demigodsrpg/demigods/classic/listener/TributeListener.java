@@ -158,7 +158,7 @@ public class TributeListener implements Listener {
         Deity shrineDeity = save.getDeity();
 
         // Open the tribute inventory
-        Inventory ii = Bukkit.getServer().createInventory(player, 27, "Tribute to" + shrineDeity.getColor() + shrineDeity.getDeityName() + ChatColor.RESET + ".");
+        Inventory ii = Bukkit.getServer().createInventory(player, 27, "Tribute to " + shrineDeity.getColor() + shrineDeity.getDeityName() + ChatColor.RESET + ".");
         player.openInventory(ii);
         DGClassic.TEMP_DATA.put(player.getUniqueId().toString(), "tributing", LocationUtil.stringFromLocation(save.getLocation()));
     }
