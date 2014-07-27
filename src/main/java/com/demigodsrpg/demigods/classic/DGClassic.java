@@ -95,7 +95,7 @@ public class DGClassic extends JavaPlugin {
 
         // Register commands
         getCommand("check").setExecutor(new CheckCommand());
-        getCommand("bind").setExecutor(new BindsCommand());
+        getCommand("binds").setExecutor(new BindsCommand());
 
         // Enable ZoneUtil
         ZoneUtil.init();

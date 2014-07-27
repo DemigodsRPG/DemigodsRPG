@@ -1,5 +1,6 @@
 package com.demigodsrpg.demigods.classic.command;
 
+import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.command.type.BaseCommand;
 import com.demigodsrpg.demigods.classic.command.type.CommandResult;
@@ -19,14 +20,17 @@ public class CheckCommand extends BaseCommand {
         }
         Player player = (Player) sender;
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
+        player.sendMessage(StringUtil2.chatTitle("Player Stats"));
         player.sendMessage("You are a " + model.getMajorDeity().getColor() + model.getMajorDeity().getNomen());
-        StringBuilder builder = new StringBuilder();
-        for (Deity deity : model.getContractedDeities()) {
-            builder.append(deity.getColor()).append(deity.getDeityName()).append(ChatColor.RESET).append(", ");
+        if (!model.getContractedDeities().isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            for (Deity deity : model.getContractedDeities()) {
+                builder.append(deity.getColor()).append(deity.getDeityName()).append(ChatColor.RESET).append(", ");
+            }
+            String minorDeities = builder.toString();
+            minorDeities = minorDeities.substring(0, minorDeities.length() - 3);
+            player.sendMessage("You have also allied with: " + minorDeities);
         }
-        String minorDeities = builder.toString();
-        minorDeities = minorDeities.substring(0, minorDeities.length() - 4);
-        player.sendMessage("You have allied with: " + minorDeities);
         player.sendMessage("Favor: " + model.getFavor() + " / " + model.getMaxFavor());
         player.sendMessage("Total Devotion: " + model.getTotalDevotion());
         player.sendMessage("For a list of binds, use /binds");
