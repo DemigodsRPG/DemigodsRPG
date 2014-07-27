@@ -131,7 +131,7 @@ public class AbilityRegistry implements Listener {
                 player.sendMessage(" - Deity: " + ability.getDeity().getColor() + ability.getDeity().getDeityName());
                 player.sendMessage(" - Type: " + StringUtil2.beautify(ability.getType().name()));
                 if (!ability.getType().equals(Ability.Type.PASSIVE)) {
-                    player.sendMessage(" - Cost / Delay (ms): " + ability.getCost() + " / " + ability.getDelay());
+                    player.sendMessage(" - Cost: " + ability.getCost());
                 }
                 if (ability.getCooldown() > 0) {
                     player.sendMessage(" - Cooldown (ms): " + ability.getCooldown());
