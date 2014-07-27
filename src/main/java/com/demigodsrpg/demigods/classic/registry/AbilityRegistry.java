@@ -17,6 +17,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -66,6 +67,24 @@ public class AbilityRegistry implements Listener {
             try {
                 if (event.getEntity() instanceof Player) {
                     Player player = (Player) event.getEntity();
+                    player.sendMessage("Health: " + player.getHealth());
+                    PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
+                    if (processAbility(model, ability)) {
+                        ability.getMethod().invoke(ability.getDeity().getParentObject(), ability.eventClass.cast(event));
+                    }
+                }
+            } catch (Exception oops) {
+                oops.printStackTrace();
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onEvent(EntityDamageByEntityEvent event) {
+        for (Data ability : REGISTERED_ABILITIES.get(event.getClass())) {
+            try {
+                if (event.getDamager() instanceof Player) {
+                    Player player = (Player) event.getDamager();
                     player.sendMessage("Health: " + player.getHealth());
                     PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
                     if (processAbility(model, ability)) {
