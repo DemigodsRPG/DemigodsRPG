@@ -5,6 +5,7 @@ import com.demigodsrpg.demigods.classic.command.type.BaseCommand;
 import com.demigodsrpg.demigods.classic.command.type.CommandResult;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -21,16 +22,17 @@ public class AllianceCommand extends BaseCommand {
         Player player = (Player) sender;
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
 
-        if(model.getAlliance() == IDeity.Alliance.NEUTRAL){
-            player.sendMessage("You aren't in an Alliance");
+        if (IDeity.Alliance.NEUTRAL.equals(model.getAlliance()) || IDeity.Alliance.EXCOMMUNICATED.equals(model.getAlliance())) {
+            player.sendMessage(ChatColor.RED + "You aren't in an alliance,.");
             return CommandResult.QUIET_ERROR;
         }
-        if(DGClassic.SERV_R.exists("alliance_chat", player.getUniqueId().toString())){
+
+        if (DGClassic.SERV_R.exists("alliance_chat", player.getUniqueId().toString())) {
             DGClassic.SERV_R.remove("alliance_chat", player.getUniqueId().toString());
-            player.sendMessage("Disabled Alliance Chat");
-        }else{
+            player.sendMessage(ChatColor.YELLOW + "You just disabled alliance chat.");
+        } else {
             DGClassic.SERV_R.put("alliance_chat", player.getUniqueId().toString(), true);
-            player.sendMessage("Enabled Alliance Chat");
+            player.sendMessage(ChatColor.YELLOW + "You just enabled alliance chat.");
         }
         return CommandResult.SUCCESS;
     }

@@ -30,13 +30,15 @@ public class PlayerListener implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         if (DGClassic.SERV_R.exists("alliance_chat", event.getPlayer().getUniqueId().toString())) {
             event.getRecipients().clear();
+
             PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
             Set<PlayerModel> playerModelSet = DGClassic.PLAYER_R.getOnlineInAlliance(model.getAlliance());
             for (PlayerModel playerModel : playerModelSet) {
                 event.getRecipients().add(playerModel.getOfflinePlayer().getPlayer());
             }
+
             String format = event.getFormat();
-            event.setFormat("[" + StringUtil2.beautify(model.getAlliance().name()) + "] " + format);
+            event.setFormat(model.getMajorDeity().getColor() + "[" + StringUtil2.beautify(model.getAlliance().name()) + "]" + format);
         }
     }
 }
