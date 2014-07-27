@@ -38,6 +38,7 @@ public class AllianceCommand extends BaseCommand {
             builder.append(string);
         }
 
+
         for (PlayerModel onlinePlayer : onlinePlayers){
             Player onlinePlayer1 = Bukkit.getPlayer(onlinePlayer.getMojangId());
             onlinePlayer1.sendMessage("[" + StringUtil2.beautify(onlinePlayer.getAlliance().name()) + "] " + builder.toString());
