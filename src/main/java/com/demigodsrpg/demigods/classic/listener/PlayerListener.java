@@ -4,7 +4,6 @@ import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -47,7 +46,7 @@ public class PlayerListener implements Listener {
             }
 
             String format = event.getFormat();
-            event.setFormat(ChatColor.WHITE + "<" + model.getMajorDeity().getColor() + "*" + StringUtil2.beautify(model.getAlliance().name()) + ChatColor.WHITE + "> " + format);
+            event.setFormat(model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + StringUtil2.beautify(model.getAlliance().name()) + "] " + format);
         }
     }
 }
