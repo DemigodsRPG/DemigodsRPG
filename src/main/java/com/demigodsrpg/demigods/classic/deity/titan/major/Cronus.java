@@ -85,16 +85,24 @@ public class Cronus implements IDeity {
     @Ability(name = "Warp Time", command = "warptime", info = "Warp time to your will.", cost = 700, cooldown = 150000, type = Ability.Type.ULTIMATE)
     public void timeControlAbility(PlayerInteractEvent event) {
         final World world = event.getPlayer().getWorld();
-        final long worldTime = world.getFullTime();
+        long worldTime = world.getTime();
         long newTime = worldTime + 12000;
-        for (long i = 1; i * 1000 <= newTime; i++) {
-            final long delta = i * 1000;
+        if (newTime > 24000) {
+            worldTime -= 24000;
+            newTime -= 24000;
+        }
+        final long finalWorldTime = worldTime < 0 ? worldTime + 24000 : worldTime;
+        int count = 0;
+        for (long i = worldTime; i <= newTime; i += 1000) {
+            count++;
+            final long finalI = i;
             Bukkit.getScheduler().scheduleSyncDelayedTask(DGClassic.getInst(), new Runnable() {
                 @Override
                 public void run() {
-                    world.setTime(worldTime + delta);
+                    long time = finalWorldTime + finalI < 0 ? finalWorldTime + finalI + 24000 : finalWorldTime + finalI;
+                    world.setTime(time);
                 }
-            }, i * 10);
+            }, count * 10);
         }
         event.getPlayer().sendMessage(ChatColor.RED + "With a mighty effort, you bend time to your will.");
     }

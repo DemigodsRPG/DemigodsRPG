@@ -127,6 +127,7 @@ public class AbilityRegistry implements Listener {
         Player player = event.getPlayer();
 
         if (!ZoneUtil.inNoDGCZone(event.getPlayer().getLocation())) {
+            if (event.getPlayer().getItemInHand().getType().equals(Material.AIR)) return;
             // Process the command
             try {
                 if (args.length == 2 && "info".equals(args[1])) {

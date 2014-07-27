@@ -28,7 +28,7 @@ public class CheckCommand extends BaseCommand {
                 builder.append(deity.getColor()).append(deity.getDeityName()).append(ChatColor.RESET).append(", ");
             }
             String minorDeities = builder.toString();
-            minorDeities = minorDeities.substring(0, minorDeities.length() - 3);
+            minorDeities = minorDeities.substring(0, minorDeities.length() - 4);
             player.sendMessage("You have also allied with: " + minorDeities);
         }
         player.sendMessage("Favor: " + model.getFavor() + " / " + model.getMaxFavor());
