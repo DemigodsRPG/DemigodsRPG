@@ -38,16 +38,15 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
-
+        String format = event.getFormat();
         if (DGClassic.SERV_R.exists("alliance_chat", event.getPlayer().getUniqueId().toString()) && !IDeity.Alliance.NEUTRAL.equals(model.getAlliance()) && !IDeity.Alliance.EXCOMMUNICATED.equals(model.getAlliance())) {
             event.getRecipients().clear();
             Set<PlayerModel> playerModelSet = DGClassic.PLAYER_R.getOnlineInAlliance(model.getAlliance());
             for (PlayerModel playerModel : playerModelSet) {
                 event.getRecipients().add(playerModel.getOfflinePlayer().getPlayer());
             }
-            event.setFormat(ChatColor.DARK_GRAY + "[.]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + model.getAlliance().name().charAt(0) + "]" + event.getPlayer().getDisplayName() + ChatColor.GRAY + ":" + event.getMessage());
+            event.setFormat(ChatColor.DARK_GRAY + "[.]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + model.getAlliance().name().charAt(0) + "]" + format);
         } else {
-            String format = event.getFormat();
             event.setFormat(ChatColor.RED + "[!]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + model.getAlliance().name().charAt(0) + "]" + format);
         }
     }
