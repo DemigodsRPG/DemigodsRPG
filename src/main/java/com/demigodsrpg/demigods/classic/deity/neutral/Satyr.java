@@ -14,7 +14,7 @@ public class Satyr implements IDeity {
 
     @Override
     public String getNomen() {
-        return "Satyr";
+        return "satyr";
     }
 
     @Override

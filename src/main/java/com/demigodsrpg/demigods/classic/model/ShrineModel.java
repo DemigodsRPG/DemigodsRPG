@@ -68,6 +68,10 @@ public class ShrineModel extends AbstractPersistentModel<String> {
         return DGClassic.PLAYER_R.fromId(ownerMojangId).getAlliance();
     }
 
+    public UUID getOwnerMojangId() {
+        return ownerMojangId;
+    }
+
     public Deity getDeity() {
         return deity;
     }
@@ -78,6 +82,10 @@ public class ShrineModel extends AbstractPersistentModel<String> {
 
     public Location getLocation() {
         return location;
+    }
+
+    public Location getClickable() {
+        return getShrineType().getClickable(location);
     }
 
     @Override

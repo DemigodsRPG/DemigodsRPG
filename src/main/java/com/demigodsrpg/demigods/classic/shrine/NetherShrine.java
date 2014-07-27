@@ -24,7 +24,7 @@ public class NetherShrine extends Schematic implements IShrine {
     }
 
     @Override
-    public Location getCenter(Location reference) {
+    public Location getClickable(Location reference) {
         return reference.clone().add(0, 1, 0);
     }
 }

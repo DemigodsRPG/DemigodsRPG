@@ -17,8 +17,8 @@ public enum Shrine implements IShrine {
         parent.generate(reference);
     }
 
-    public Location getCenter(Location reference) {
-        return parent.getCenter(reference);
+    public Location getClickable(Location reference) {
+        return parent.getClickable(reference);
     }
 
     public int getGroundRadius() {

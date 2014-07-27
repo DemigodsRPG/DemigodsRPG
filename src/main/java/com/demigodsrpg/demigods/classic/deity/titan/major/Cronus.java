@@ -18,7 +18,7 @@ public class Cronus implements IDeity {
 
     @Override
     public String getNomen() {
-        return "Spawn of " + getDeityName();
+        return "spawn of " + getDeityName();
     }
 
     @Override

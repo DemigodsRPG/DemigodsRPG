@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.material.MaterialData;
 
-public class Hades implements IDeity{
+public class Hades implements IDeity {
     @Override
     public String getDeityName() {
         return "Hades";
@@ -14,7 +14,7 @@ public class Hades implements IDeity{
 
     @Override
     public String getNomen() {
-        return "Child of " + getDeityName();
+        return "child of " + getDeityName();
     }
 
     @Override

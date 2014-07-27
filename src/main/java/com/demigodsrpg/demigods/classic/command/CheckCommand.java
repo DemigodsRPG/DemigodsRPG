@@ -21,19 +21,20 @@ public class CheckCommand extends BaseCommand {
         Player player = (Player) sender;
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
         player.sendMessage(StringUtil2.chatTitle("Player Stats"));
-        player.sendMessage("You are a " + model.getMajorDeity().getColor() + model.getMajorDeity().getNomen());
+        String nomen = model.getMajorDeity().getNomen();
+        player.sendMessage("You are " + (StringUtil2.beginsWithVowel(nomen) ? "an " : "a ") + model.getMajorDeity().getColor() + nomen + ".");
         if (!model.getContractedDeities().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for (Deity deity : model.getContractedDeities()) {
                 builder.append(deity.getColor()).append(deity.getDeityName()).append(ChatColor.RESET).append(", ");
             }
             String minorDeities = builder.toString();
-            minorDeities = minorDeities.substring(0, minorDeities.length() - 4);
+            minorDeities = minorDeities.substring(0, minorDeities.length() - 4) + ".";
             player.sendMessage("You have also allied with: " + minorDeities);
         }
         player.sendMessage("Favor: " + model.getFavor() + " / " + model.getMaxFavor());
         player.sendMessage("Total Devotion: " + model.getTotalDevotion());
-        player.sendMessage("For a list of binds, use /binds");
+        player.sendMessage("Use " + ChatColor.ITALIC + "/binds" + ChatColor.RESET + " for a list of all ability binds.");
         return CommandResult.SUCCESS;
     }
 }

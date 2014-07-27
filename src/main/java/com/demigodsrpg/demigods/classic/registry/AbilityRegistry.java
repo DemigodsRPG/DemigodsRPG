@@ -53,6 +53,7 @@ public class AbilityRegistry implements Listener {
                 PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
                 if (processAbility(model, ability)) {
                     ability.getMethod().invoke(ability.getDeity().getParentObject(), ability.eventClass.cast(event));
+                    event.setCancelled(true);
                     return;
                 }
             } catch (Exception oops) {

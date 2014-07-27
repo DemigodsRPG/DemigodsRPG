@@ -25,7 +25,7 @@ public class Zeus implements IDeity {
 
     @Override
     public String getNomen() {
-        return "Child of " + getDeityName();
+        return "child of " + getDeityName();
     }
 
     @Override

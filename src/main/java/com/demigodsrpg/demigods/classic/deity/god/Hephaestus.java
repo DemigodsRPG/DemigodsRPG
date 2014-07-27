@@ -17,7 +17,7 @@ public class Hephaestus implements IDeity {
 
     @Override
     public String getNomen() {
-        return "Child of " + getDeityName();
+        return "acolyte of " + getDeityName();
     }
 
     @Override

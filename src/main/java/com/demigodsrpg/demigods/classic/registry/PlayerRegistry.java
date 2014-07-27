@@ -27,6 +27,7 @@ public class PlayerRegistry extends AbstractRegistry<UUID, PlayerModel> {
                 return model.getLastKnownName().equalsIgnoreCase(name);
             }
         }, null);
+
     }
 
     public PlayerModel fromId(UUID id) {
@@ -37,7 +38,12 @@ public class PlayerRegistry extends AbstractRegistry<UUID, PlayerModel> {
     }
 
     public PlayerModel fromPlayer(Player player) {
-        return fromId(player.getUniqueId());
+        PlayerModel found = fromId(player.getUniqueId());
+        if (found == null) {
+            found = new PlayerModel(player);
+            register(found);
+        }
+        return found;
     }
 
     public Set<OfflinePlayer> getOfflinePlayers() {

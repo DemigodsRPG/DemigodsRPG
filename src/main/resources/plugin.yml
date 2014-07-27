@@ -17,3 +17,6 @@ commands:
   demigods:
     usage: /demigods [subject]
     aliases: [d, dg, demigod]
+  values:
+    usage: /values
+    aliases: [v]

@@ -7,7 +7,7 @@ import java.util.Collection;
 public interface IShrine {
     void generate(Location reference);
 
-    Location getCenter(Location reference);
+    Location getClickable(Location reference);
 
     int getGroundRadius();
 

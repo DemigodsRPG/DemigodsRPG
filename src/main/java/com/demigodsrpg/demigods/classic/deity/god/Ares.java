@@ -14,7 +14,7 @@ public class Ares implements IDeity {
 
     @Override
     public String getNomen() {
-        return "Child of " + getDeityName();
+        return "acolyte of " + getDeityName();
     }
 
     @Override

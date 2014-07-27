@@ -14,7 +14,7 @@ public class Human implements IDeity {
 
     @Override
     public String getNomen() {
-        return "Child of " + getDeityName();
+        return "human";
     }
 
     @Override

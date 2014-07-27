@@ -3,8 +3,10 @@ package com.demigodsrpg.demigods.classic;
 import com.demigodsrpg.demigods.classic.command.AllianceCommand;
 import com.demigodsrpg.demigods.classic.command.BindsCommand;
 import com.demigodsrpg.demigods.classic.command.CheckCommand;
+import com.demigodsrpg.demigods.classic.command.ValuesCommand;
 import com.demigodsrpg.demigods.classic.listener.PlayerListener;
 import com.demigodsrpg.demigods.classic.listener.ShrineListener;
+import com.demigodsrpg.demigods.classic.listener.TributeListener;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
 import com.demigodsrpg.demigods.classic.registry.*;
 import com.demigodsrpg.demigods.classic.util.ZoneUtil;
@@ -38,6 +40,7 @@ public class DGClassic extends JavaPlugin {
 
     public static final PlayerRegistry PLAYER_R = new PlayerRegistry();
     public static final ShrineRegistry SHRINE_R = new ShrineRegistry();
+    public static final TributeRegistry TRIBUTE_R = new TributeRegistry();
     public static final SpawnRegistry SPAWN_R = new SpawnRegistry();
     public static final BattleRegistry BATTLE_R = new BattleRegistry();
     public static final AbilityRegistry ABILITY_R = new AbilityRegistry();
@@ -73,6 +76,7 @@ public class DGClassic extends JavaPlugin {
         // Load persistent data
         PLAYER_R.registerFromFile();
         SHRINE_R.registerFromFile();
+        TRIBUTE_R.registerFromFile();
         SPAWN_R.registerFromFile();
 
         // Determine territory registries
@@ -84,6 +88,7 @@ public class DGClassic extends JavaPlugin {
 
         // Register the abilities
         ABILITY_R.registerAbilities();
+        TRIBUTE_R.initializeTributeTracking();
 
         // Start the threads
         startThreads();
@@ -92,12 +97,14 @@ public class DGClassic extends JavaPlugin {
         PluginManager manager = getServer().getPluginManager();
         manager.registerEvents(new PlayerListener(), this);
         manager.registerEvents(new ShrineListener(), this);
+        manager.registerEvents(new TributeListener(), this);
         manager.registerEvents(ABILITY_R, this);
 
         // Register commands
         getCommand("alliance").setExecutor(new AllianceCommand());
         getCommand("check").setExecutor(new CheckCommand());
         getCommand("binds").setExecutor(new BindsCommand());
+        getCommand("values").setExecutor(new ValuesCommand());
 
         // Enable ZoneUtil
         ZoneUtil.init();
@@ -128,6 +135,7 @@ public class DGClassic extends JavaPlugin {
         boolean noErrors;
         noErrors = PLAYER_R.saveToFile();
         noErrors = SHRINE_R.saveToFile() && noErrors;
+        noErrors = TRIBUTE_R.saveToFile() && noErrors;
         noErrors = SPAWN_R.saveToFile() && noErrors;
 
         for (TerritoryRegistry terr_r : TERR_R.values()) {
