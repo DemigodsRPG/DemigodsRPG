@@ -53,7 +53,7 @@ public class Hephaestus implements IDeity {
     // -- ABILITIES -- //
 
     @Ability(name = "Furnace Love", info = {"Doubles the output of nearby furnaces."}, type = Ability.Type.PASSIVE)
-    public void lightningAbility(FurnaceSmeltEvent event) {
+    public void furnaceLoveAbility(FurnaceSmeltEvent event) {
         int amount = event.getResult().getAmount() * 2;
         ItemStack out = event.getResult();
         out.setAmount(amount);
