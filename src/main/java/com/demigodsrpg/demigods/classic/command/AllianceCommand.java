@@ -23,7 +23,7 @@ public class AllianceCommand extends BaseCommand {
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
 
         if (IDeity.Alliance.NEUTRAL.equals(model.getAlliance()) || IDeity.Alliance.EXCOMMUNICATED.equals(model.getAlliance())) {
-            player.sendMessage(ChatColor.RED + "You aren't in an alliance,.");
+            player.sendMessage(ChatColor.RED + "You aren't in an alliance.");
             return CommandResult.QUIET_ERROR;
         }
 
