@@ -3,6 +3,7 @@ package com.demigodsrpg.demigods.classic;
 import com.demigodsrpg.demigods.classic.command.AllianceCommand;
 import com.demigodsrpg.demigods.classic.command.BindsCommand;
 import com.demigodsrpg.demigods.classic.command.CheckCommand;
+import com.demigodsrpg.demigods.classic.listener.PlayerChatListener;
 import com.demigodsrpg.demigods.classic.listener.PlayerListener;
 import com.demigodsrpg.demigods.classic.listener.ShrineListener;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
@@ -92,6 +93,7 @@ public class DGClassic extends JavaPlugin {
         PluginManager manager = getServer().getPluginManager();
         manager.registerEvents(new PlayerListener(), this);
         manager.registerEvents(new ShrineListener(), this);
+        manager.registerEvents(new PlayerChatListener(), this);
         manager.registerEvents(ABILITY_R, this);
 
         // Register commands

@@ -1,18 +1,15 @@
 package com.demigodsrpg.demigods.classic.command;
 
-import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.command.type.BaseCommand;
 import com.demigodsrpg.demigods.classic.command.type.CommandResult;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Set;
 
 public class AllianceCommand extends BaseCommand {
     @Override
@@ -28,21 +25,12 @@ public class AllianceCommand extends BaseCommand {
             player.sendMessage("You aren't in an Alliance");
             return CommandResult.QUIET_ERROR;
         }
-        Set<PlayerModel> onlinePlayers = DGClassic.PLAYER_R.getOnlineInAlliance(model.getAlliance());
-
-        StringBuilder builder = new StringBuilder();
-        for(String string : args){
-            if(builder.length() > 0){
-                builder.append(" ");
-            }
-            builder.append(string);
-        }
-
-
-        for (PlayerModel onlinePlayer : onlinePlayers){
-            Player onlinePlayer1 = Bukkit.getPlayer(onlinePlayer.getMojangId());
-            onlinePlayer1.sendMessage("[" + StringUtil2.beautify(onlinePlayer.getAlliance().name()) + "] " + builder.toString());
-
+        if(DGClassic.SERV_R.exists("alliance_chat", player.getUniqueId().toString())){
+            DGClassic.SERV_R.remove("alliance_chat", player.getUniqueId().toString());
+            player.sendMessage("Disabled Alliance Chat");
+        }else{
+            DGClassic.SERV_R.put("alliance_chat", player.getUniqueId().toString(), true);
+            player.sendMessage("Enabled Alliance Chat");
         }
         return CommandResult.SUCCESS;
     }
