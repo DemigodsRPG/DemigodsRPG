@@ -28,8 +28,8 @@ public class ShrineListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void createShrine(PlayerInteractEvent e) {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-        if (!ZoneUtil.isNoDGCWorld(e.getPlayer().getWorld())) return;
-        if ((e.getClickedBlock().getType() != Material.SIGN) && (e.getClickedBlock().getType() != Material.SIGN_POST))
+        if (ZoneUtil.isNoDGCWorld(e.getPlayer().getWorld())) return;
+        if (e.getClickedBlock().getType() != Material.SIGN && e.getClickedBlock().getType() != Material.SIGN_POST)
             return;
         Sign s = (Sign) e.getClickedBlock().getState();
         if (!s.getLines()[0].trim().equalsIgnoreCase("shrine")) return;
