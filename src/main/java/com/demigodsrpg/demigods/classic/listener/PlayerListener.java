@@ -45,10 +45,10 @@ public class PlayerListener implements Listener {
             for (PlayerModel playerModel : playerModelSet) {
                 event.getRecipients().add(playerModel.getOfflinePlayer().getPlayer());
             }
-            event.setFormat(model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + StringUtil2.beautify(model.getAlliance().name()) + "] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + ":" + event.getMessage());
+            event.setFormat(ChatColor.GRAY + "[ALL]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + StringUtil2.beautify(model.getAlliance().name()) + "] " + event.getPlayer().getDisplayName() + ChatColor.GRAY + ":" + event.getMessage());
         } else {
             String format = event.getFormat();
-            event.setFormat(model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + StringUtil2.beautify(model.getAlliance().name()) + "] " + format);
+            event.setFormat(ChatColor.GRAY + "[TEAM]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + StringUtil2.beautify(model.getAlliance().name()) + "] " + format);
         }
     }
 }
