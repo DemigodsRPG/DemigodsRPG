@@ -151,7 +151,7 @@ public class PlayerModel extends AbstractPersistentModel<UUID> implements Partic
         DGClassic.PLAYER_R.register(this);
     }
 
-    public IDeity getMajorDeity() {
+    public Deity getMajorDeity() {
         return majorDeity;
     }
 

@@ -17,12 +17,12 @@ public class Hephaestus implements IDeity {
 
     @Override
     public String getNomen() {
-        return "Child of " + getDeityName();
+        return "acolyte of " + getDeityName();
     }
 
     @Override
     public ChatColor getColor() {
-        return ChatColor.BLACK;
+        return ChatColor.DARK_GRAY;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class Hephaestus implements IDeity {
     // -- ABILITIES -- //
 
     @Ability(name = "Furnace Love", info = {"Doubles the output of nearby furnaces."}, type = Ability.Type.PASSIVE)
-    public void lightningAbility(FurnaceSmeltEvent event) {
+    public void furnaceLoveAbility(FurnaceSmeltEvent event) {
         int amount = event.getResult().getAmount() * 2;
         ItemStack out = event.getResult();
         out.setAmount(amount);

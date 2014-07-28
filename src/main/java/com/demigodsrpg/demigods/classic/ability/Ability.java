@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 public @interface Ability {
     public enum Type {
-        PASSIVE, SUPPORT, OFFENSIVE, ULTIMATE
+        PASSIVE, SUPPORT, OFFENSIVE, ULTIMATE, PLACEHOLDER
     }
 
     String name();

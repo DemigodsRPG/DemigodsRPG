@@ -44,9 +44,9 @@ public class ShrineModel extends AbstractPersistentModel<String> {
             float yaw = Float.valueOf(conf.getString("yaw"));
             float pitch = Float.valueOf(conf.getString("pitch"));
             location = new Location(world, x, y, z, yaw, pitch);
+        } else {
+            throw new NullPointerException("World not found for a shrine location.");
         }
-
-        throw new NullPointerException("World not found for a shrine location.");
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ShrineModel extends AbstractPersistentModel<String> {
         Map<String, Object> map = new HashMap<>();
         map.put("ownerId", ownerMojangId.toString());
         map.put("deity", deity.name());
-        map.put("type", shrine);
+        map.put("type", shrine.name());
         map.put("world-name", location.getWorld().getName());
         map.put("x", location.getX());
         map.put("y", location.getY());
@@ -68,6 +68,10 @@ public class ShrineModel extends AbstractPersistentModel<String> {
         return DGClassic.PLAYER_R.fromId(ownerMojangId).getAlliance();
     }
 
+    public UUID getOwnerMojangId() {
+        return ownerMojangId;
+    }
+
     public Deity getDeity() {
         return deity;
     }
@@ -78,6 +82,10 @@ public class ShrineModel extends AbstractPersistentModel<String> {
 
     public Location getLocation() {
         return location;
+    }
+
+    public Location getClickable() {
+        return getShrineType().getClickable(location);
     }
 
     @Override

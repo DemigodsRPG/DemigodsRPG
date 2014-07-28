@@ -15,7 +15,7 @@ public class Rhea implements IDeity {
 
     @Override
     public String getNomen() {
-        return "Spawn of " + getDeityName();
+        return "spawn of " + getDeityName();
     }
 
     @Override

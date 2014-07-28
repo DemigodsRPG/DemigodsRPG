@@ -17,11 +17,3 @@ commands:
   demigods:
     usage: /demigods [subject]
     aliases: [d, dg, demigod]
-  adddevotion:
-    usage: /adddevotion [name, deity, amount]
-    permission: demigods.admin.adddevotion
-  checkplayer:
-    usage: /checkplayer [name]
-  givedeity:
-    usage: /givedeity [name, deity]
-    permission: demigods.admin.givedeity

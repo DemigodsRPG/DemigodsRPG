@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.material.MaterialData;
 
-public class Poseidon implements IDeity{
+public class Poseidon implements IDeity {
     @Override
     public String getDeityName() {
         return "Poseidon";
@@ -14,7 +14,7 @@ public class Poseidon implements IDeity{
 
     @Override
     public String getNomen() {
-        return "Child of " + getDeityName();
+        return "child of " + getDeityName();
     }
 
     @Override

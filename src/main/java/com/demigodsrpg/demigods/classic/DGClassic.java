@@ -3,9 +3,12 @@ package com.demigodsrpg.demigods.classic;
 import com.demigodsrpg.demigods.classic.command.AllianceCommand;
 import com.demigodsrpg.demigods.classic.command.BindsCommand;
 import com.demigodsrpg.demigods.classic.command.CheckCommand;
+import com.demigodsrpg.demigods.classic.command.ValuesCommand;
 import com.demigodsrpg.demigods.classic.listener.PlayerListener;
 import com.demigodsrpg.demigods.classic.listener.ShrineListener;
+import com.demigodsrpg.demigods.classic.listener.TributeListener;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
+import com.demigodsrpg.demigods.classic.model.TributeModel;
 import com.demigodsrpg.demigods.classic.registry.*;
 import com.demigodsrpg.demigods.classic.util.ZoneUtil;
 import com.google.common.base.Supplier;
@@ -26,6 +29,9 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+
+// FIXME: Massive memory leak.
+
 public class DGClassic extends JavaPlugin {
     // -- PLUGIN RELATED CONSTANTS -- //
 
@@ -38,6 +44,7 @@ public class DGClassic extends JavaPlugin {
 
     public static final PlayerRegistry PLAYER_R = new PlayerRegistry();
     public static final ShrineRegistry SHRINE_R = new ShrineRegistry();
+    public static final TributeRegistry TRIBUTE_R = new TributeRegistry();
     public static final SpawnRegistry SPAWN_R = new SpawnRegistry();
     public static final BattleRegistry BATTLE_R = new BattleRegistry();
     public static final AbilityRegistry ABILITY_R = new AbilityRegistry();
@@ -73,7 +80,9 @@ public class DGClassic extends JavaPlugin {
         // Load persistent data
         PLAYER_R.registerFromFile();
         SHRINE_R.registerFromFile();
+        TRIBUTE_R.registerFromFile();
         SPAWN_R.registerFromFile();
+        SERV_R.registerFromFile();
 
         // Determine territory registries
         for (World world : Bukkit.getWorlds()) {
@@ -92,12 +101,14 @@ public class DGClassic extends JavaPlugin {
         PluginManager manager = getServer().getPluginManager();
         manager.registerEvents(new PlayerListener(), this);
         manager.registerEvents(new ShrineListener(), this);
+        manager.registerEvents(new TributeListener(), this);
         manager.registerEvents(ABILITY_R, this);
 
         // Register commands
         getCommand("alliance").setExecutor(new AllianceCommand());
         getCommand("check").setExecutor(new CheckCommand());
         getCommand("binds").setExecutor(new BindsCommand());
+        getCommand("values").setExecutor(new ValuesCommand());
 
         // Enable ZoneUtil
         ZoneUtil.init();
@@ -113,27 +124,35 @@ public class DGClassic extends JavaPlugin {
         Bukkit.getScheduler().cancelTasks(this);
 
         // Save the data
-        save();
-
-        // Let the console know
-        CONSOLE.info("Disabled successfully.");
+        if (!save()) {
+            CONSOLE.severe("The vital save data was unable to save correctly!");
+            CONSOLE.warning("Disabled with a corrupt save, please use a backup.");
+        } else {
+            // Let the console know
+            CONSOLE.info("Disabled successfully.");
+        }
     }
 
     // -- PLUGIN RELATED UTILITY METHODS -- //
 
-    public static void save() {
-        PLAYER_R.saveToFile();
-        SHRINE_R.saveToFile();
-        SPAWN_R.saveToFile();
+    public static boolean save() {
+        boolean noErrors;
+        noErrors = PLAYER_R.saveToFile();
+        noErrors = SHRINE_R.saveToFile() && noErrors;
+        noErrors = TRIBUTE_R.saveToFile() && noErrors;
+        noErrors = SPAWN_R.saveToFile() && noErrors;
+        noErrors = SERV_R.saveToFile() && noErrors;
 
         for (TerritoryRegistry terr_r : TERR_R.values()) {
-            terr_r.saveToFile();
+            noErrors = terr_r.saveToFile() && noErrors;
         }
+
+        return noErrors;
     }
 
     // -- TASK RELATED -- //
 
-    private static final BukkitRunnable SYNC, ASYNC, SAVE, FAVOR;
+    private static final BukkitRunnable SYNC, ASYNC, SAVE, FAVOR, VALUE;
 
 
     static {
@@ -177,6 +196,7 @@ public class DGClassic extends JavaPlugin {
                 }
             }
         };
+        VALUE = new TributeModel.ValueTask();
     }
 
     @SuppressWarnings("deprecation")
@@ -192,12 +212,16 @@ public class DGClassic extends JavaPlugin {
         CONSOLE.info("Main Demigods ASYNC runnable enabled...");
 
         // Start async demigods runnable
-        scheduler.scheduleAsyncRepeatingTask(this, SAVE, 20, 600);
+        scheduler.scheduleAsyncRepeatingTask(this, SAVE, 20, 1200);
         CONSOLE.info("Main Demigods SAVE runnable enabled...");
 
-        // Start favor runnable
+        // Start async favor runnable
         scheduler.scheduleAsyncRepeatingTask(this, FAVOR, 20, (long) ((double) Setting.FAVOR_REGEN_SECONDS.get() * 20));
         CONSOLE.info("Favor regeneration (" + (TimeUnit.SECONDS.toMillis((long) (double) Setting.FAVOR_REGEN_SECONDS.get())) + ") runnable enabled...");
+
+        // Start async value runnable
+        scheduler.scheduleAsyncRepeatingTask(this, VALUE, 60, 200);
+        CONSOLE.info("Main Demigods VALUE runnable enabled...");
     }
 
     public static DGClassic getInst() {

@@ -14,7 +14,7 @@ public class Hyperion implements IDeity {
 
     @Override
     public String getNomen() {
-        return "Spawn of " + getDeityName();
+        return "agent of " + getDeityName();
     }
 
     @Override

@@ -1,42 +1,53 @@
 package com.demigodsrpg.demigods.classic.listener;
 
-import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.deity.Deity;
+import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.Random;
 import java.util.Set;
 
 public class PlayerListener implements Listener {
+    Random random = new Random();
+
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
 
-        if (model == null) {
+        // TODO REMOVE THIS DEBUG TESTING ONLY
+        if (model.getMajorDeity().equals(Deity.HUMAN)) {
             model = new PlayerModel(event.getPlayer());
             DGClassic.PLAYER_R.register(model);
 
-            model.giveMajorDeity(Deity.ZEUS);
-            model.giveDeity(Deity.HEPHAESTUS);
+            if (random.nextBoolean()) {
+                model.giveMajorDeity(Deity.ZEUS);
+                model.giveDeity(Deity.HEPHAESTUS);
+            } else {
+                model.giveMajorDeity(Deity.CRONUS);
+            }
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        if (DGClassic.SERV_R.exists("alliance_chat", event.getPlayer().getUniqueId().toString())) {
+        PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
+        String format = event.getFormat();
+        if (DGClassic.SERV_R.exists("alliance_chat", event.getPlayer().getUniqueId().toString()) && !IDeity.Alliance.NEUTRAL.equals(model.getAlliance()) && !IDeity.Alliance.EXCOMMUNICATED.equals(model.getAlliance())) {
             event.getRecipients().clear();
-            PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
             Set<PlayerModel> playerModelSet = DGClassic.PLAYER_R.getOnlineInAlliance(model.getAlliance());
             for (PlayerModel playerModel : playerModelSet) {
                 event.getRecipients().add(playerModel.getOfflinePlayer().getPlayer());
             }
-            String format = event.getFormat();
-            event.setFormat("[" + StringUtil2.beautify(model.getAlliance().name()) + "] " + format);
+            event.setFormat(ChatColor.DARK_GRAY + "[.]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + model.getAlliance().name().charAt(0) + "]" + format);
+        } else {
+            event.setFormat(ChatColor.DARK_RED + "[!]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + model.getAlliance().name().charAt(0) + "]" + format);
         }
     }
 }

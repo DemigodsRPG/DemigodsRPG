@@ -1,16 +1,14 @@
 package com.demigodsrpg.demigods.classic.registry;
 
-import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
-import com.demigodsrpg.demigods.classic.util.YamlFileUtil;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -27,6 +25,7 @@ public class PlayerRegistry extends AbstractRegistry<UUID, PlayerModel> {
                 return model.getLastKnownName().equalsIgnoreCase(name);
             }
         }, null);
+
     }
 
     public PlayerModel fromId(UUID id) {
@@ -37,7 +36,12 @@ public class PlayerRegistry extends AbstractRegistry<UUID, PlayerModel> {
     }
 
     public PlayerModel fromPlayer(Player player) {
-        return fromId(player.getUniqueId());
+        PlayerModel found = fromId(player.getUniqueId());
+        if (found == null) {
+            found = new PlayerModel(player);
+            register(found);
+        }
+        return found;
     }
 
     public Set<OfflinePlayer> getOfflinePlayers() {
@@ -79,50 +83,18 @@ public class PlayerRegistry extends AbstractRegistry<UUID, PlayerModel> {
         return names;
     }
 
-    public Map<UUID, PlayerModel> getFileData() {
-        // Grab the current file.
-        FileConfiguration data = YamlFileUtil.getConfiguration(DGClassic.SAVE_PATH, FILE_NAME);
-
-        // Convert the raw file data into more usable data, in map form.
-        Map<UUID, PlayerModel> map = new HashMap<>();
-        for (String stringId : data.getKeys(false)) {
-            try {
-                map.put(UUID.fromString(stringId), new PlayerModel(UUID.fromString(stringId), data.getConfigurationSection(stringId)));
-            } catch (Exception oops) {
-                oops.printStackTrace();
-            }
-        }
-        return map;
+    @Override
+    public String getFileName() {
+        return FILE_NAME;
     }
 
-    public void registerFromFile() {
-        register(getFileData().values());
+    @Override
+    public UUID keyFromString(String stringKey) {
+        return UUID.fromString(stringKey);
     }
 
-    public boolean saveToFile() {
-        // Grab the current file, and its data as a usable map.
-        FileConfiguration currentFile = YamlFileUtil.getConfiguration(DGClassic.SAVE_PATH, FILE_NAME);
-        final Map<UUID, PlayerModel> currentFileData = getFileData();
-
-        // Create/overwrite a configuration section if new data exists.
-        for (Map.Entry<UUID, PlayerModel> entry : Collections2.filter(REGISTERED_DATA.entrySet(), new Predicate<Map.Entry<UUID, PlayerModel>>() {
-            @Override
-            public boolean apply(Map.Entry<UUID, PlayerModel> value) {
-                return !currentFileData.containsKey(value.getKey()) || currentFileData.get(value.getKey()).equals(value.getValue());
-            }
-        }))
-            currentFile.createSection(entry.getKey().toString(), entry.getValue().serialize());
-
-        // Remove old unneeded data.
-        for (PlayerModel model : Collections2.filter(currentFileData.values(), new Predicate<PlayerModel>() {
-            @Override
-            public boolean apply(PlayerModel key) {
-                return !getRegistered().contains(key);
-            }
-        }))
-            currentFile.set(model.getPersistantId().toString(), null);
-
-        // Save the file!
-        return YamlFileUtil.saveFile(DGClassic.SAVE_PATH, FILE_NAME, currentFile);
+    @Override
+    public PlayerModel valueFromData(String stringKey, ConfigurationSection data) {
+        return new PlayerModel(keyFromString(stringKey), data);
     }
 }

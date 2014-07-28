@@ -25,7 +25,7 @@ public class Zeus implements IDeity {
 
     @Override
     public String getNomen() {
-        return "Child of " + getDeityName();
+        return "child of " + getDeityName();
     }
 
     @Override
@@ -145,7 +145,7 @@ public class Zeus implements IDeity {
 
         // Define variables
         final int ultimateSkillLevel = model.getAscensions();
-        final int damage = (int) Math.ceil(8 * (int) Math.pow(ultimateSkillLevel, 0.5));
+        final int damage = 10 * model.getAscensions();
         final int radius = (int) Math.log10(10 * ultimateSkillLevel) * 25;
 
         // Make it stormy for the caster
@@ -170,7 +170,11 @@ public class Zeus implements IDeity {
                 public void run() {
                     for (int i = 0; i <= 3; i++) {
                         player.getWorld().strikeLightningEffect(entity.getLocation());
-                        ((LivingEntity) entity).damage(damage);
+                        if (entity.getLocation().getBlock().getType().equals(Material.WATER)) {
+                            ((LivingEntity) entity).damage(damage + 4);
+                        } else {
+                            ((LivingEntity) entity).damage(damage);
+                        }
                         entity.setLastDamageCause(new EntityDamageByEntityEvent(player, entity, EntityDamageEvent.DamageCause.LIGHTNING, damage));
                     }
                 }
@@ -189,5 +193,10 @@ public class Zeus implements IDeity {
                 player.resetPlayerWeather();
             }
         }, ticks);
+    }
+
+    @Ability(name = "No Fall Damage", info = "Take no fall damage.", type = Ability.Type.PLACEHOLDER)
+    public void noFallDamageAbility() {
+        // Do nothing, handled directly in the ability listener to save time
     }
 }

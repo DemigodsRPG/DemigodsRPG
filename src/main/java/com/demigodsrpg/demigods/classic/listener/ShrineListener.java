@@ -43,7 +43,7 @@ public class ShrineListener implements Listener {
                 break;
             }
         }
-        String shrinename = "";
+        String shrinename;
         if (s.getLines()[3].trim().length() == 0) {
             p.sendMessage(ChatColor.YELLOW + "The shrine requires a name.");
             return;

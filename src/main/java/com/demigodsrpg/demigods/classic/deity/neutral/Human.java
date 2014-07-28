@@ -14,12 +14,12 @@ public class Human implements IDeity {
 
     @Override
     public String getNomen() {
-        return "Child of " + getDeityName();
+        return "human";
     }
 
     @Override
     public ChatColor getColor() {
-        return ChatColor.WHITE;
+        return ChatColor.GRAY;
     }
 
     @Override
