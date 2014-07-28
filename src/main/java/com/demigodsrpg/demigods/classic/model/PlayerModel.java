@@ -427,7 +427,8 @@ public class PlayerModel extends AbstractPersistentModel<UUID> implements Partic
         while (getTotalDevotion() >= (int) Math.ceil(500 * Math.pow(getAscensions() + 1, 2.02)) && getAscensions() < (int) Setting.ASCENSION_CAP.get()) {
             setMaxHealth(getMaxHealth() + 10.0);
             player.setMaxHealth(getMaxHealth());
-            player.setHealthScale(getMaxHealth());
+            player.setHealthScale(40.0);
+            player.setHealthScaled(true);
             player.setHealth(getMaxHealth());
 
             setAscensions(getAscensions() + 1);

@@ -99,7 +99,7 @@ public class Cronus implements IDeity {
             Bukkit.getScheduler().scheduleSyncDelayedTask(DGClassic.getInst(), new Runnable() {
                 @Override
                 public void run() {
-                    long time = finalWorldTime + finalI < 0 ? finalWorldTime + finalI + 12000 : finalWorldTime + finalI;
+                    long time = finalWorldTime + finalI < 0 ? finalWorldTime + finalI + 24000 : finalWorldTime + finalI;
                     world.setTime(time);
                 }
             }, count * 10);

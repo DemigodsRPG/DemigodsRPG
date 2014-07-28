@@ -21,6 +21,10 @@ public enum Shrine implements IShrine {
         return parent.getClickable(reference);
     }
 
+    public Location getSafeTeleport(Location reference) {
+        return parent.getSafeTeleport(reference);
+    }
+
     public int getGroundRadius() {
         return parent.getGroundRadius();
     }

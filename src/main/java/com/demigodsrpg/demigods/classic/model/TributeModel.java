@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class TributeModel extends AbstractPersistentModel<Material> {
-    private static final Double MAX_VALUE = 5000.0;
+    private static final Double VALUE_K = 142.86;
 
     private Material material;
     private List<Long> tributeTimes;
@@ -75,7 +75,7 @@ public class TributeModel extends AbstractPersistentModel<Material> {
     }
 
     private void updateValue(double percentOffset) {
-        lastKnownValue = (getValuePercentage() / percentOffset) * MAX_VALUE;
+        lastKnownValue = (getValuePercentage() / percentOffset) * VALUE_K * DGClassic.TRIBUTE_R.getRegisteredKeys().size();
         DGClassic.TRIBUTE_R.register(this);
     }
 

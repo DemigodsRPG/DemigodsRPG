@@ -21,10 +21,20 @@ public class NetherShrine extends Schematic implements IShrine {
         add(new Selection(1, 0, 0, Material.NETHER_BRICK_STAIRS, (byte) 1));
         add(new Selection(0, 0, -1, Material.NETHER_BRICK_STAIRS, (byte) 2));
         add(new Selection(0, 0, 1, Material.NETHER_BRICK_STAIRS, (byte) 3));
+
+        // Safe zone
+        add(new Selection(1, -1, 1, Material.NETHER_BRICK));
+        add(new Selection(1, 0, 1, Material.AIR));
+        add(new Selection(1, 1, 1, Material.AIR));
     }
 
     @Override
     public Location getClickable(Location reference) {
         return reference.clone().add(0, 1, 0);
+    }
+
+    @Override
+    public Location getSafeTeleport(Location reference) {
+        return reference.clone().add(1, 0, 1);
     }
 }

@@ -9,6 +9,8 @@ public interface IShrine {
 
     Location getClickable(Location reference);
 
+    Location getSafeTeleport(Location reference);
+
     int getGroundRadius();
 
     Collection<Location> getLocations(Location reference);
