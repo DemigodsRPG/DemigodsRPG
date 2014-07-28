@@ -47,7 +47,7 @@ public class PlayerListener implements Listener {
             }
             event.setFormat(ChatColor.DARK_GRAY + "[.]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + model.getAlliance().name().charAt(0) + "]" + format);
         } else {
-            event.setFormat(ChatColor.RED + "[!]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + model.getAlliance().name().charAt(0) + "]" + format);
+            event.setFormat(ChatColor.DARK_RED + "[!]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + model.getAlliance().name().charAt(0) + "]" + format);
         }
     }
 }

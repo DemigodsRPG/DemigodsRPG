@@ -11,9 +11,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
+public class TributeRegistry extends AbstractDirectRegistry<Material, TributeModel> {
     private final String FILE_NAME = "tributes.dgc";
-    private Double K = 5000.0;
 
     @Override
     public Material keyFromString(String stringKey) {
@@ -30,12 +29,12 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
         return FILE_NAME;
     }
 
-    public void save(String category, Material material, int amount) {
+    public void save(Material material, int amount) {
         // Remove the data if it exists already
         remove(material);
 
         // Make the new one
-        register(new TributeModel(category, material, amount));
+        register(new TributeModel(material, amount));
     }
 
     public void remove(Material material) {
@@ -48,14 +47,16 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
         if (REGISTERED_DATA.containsKey(material)) {
             return REGISTERED_DATA.get(material);
         }
-        return null;
+        TributeModel model = new TributeModel(material, 1);
+        register(model);
+        return model;
     }
 
     public Collection<TributeModel> find(final String category) {
         return Collections2.filter(getRegistered(), new Predicate<TributeModel>() {
             @Override
             public boolean apply(TributeModel tributeModel) {
-                return category.equals(tributeModel.getCategory());
+                return category.equalsIgnoreCase(tributeModel.getCategory());
             }
         });
     }
@@ -81,7 +82,7 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
     public int getTotalTributes() {
         int total = 1;
         for (TributeModel data : getRegistered()) {
-            total += data.getAmount();
+            total += data.getFitness();
         }
         return total;
     }
@@ -94,7 +95,7 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
      */
     public int getTributes(Material material) {
         TributeModel data = find(material);
-        if (data != null) return data.getAmount();
+        if (data != null) return data.getFitness();
         else return 1;
     }
 
@@ -108,7 +109,7 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
     public int getTributesForCategory(String category) {
         int total = 1;
         for (TributeModel data : find(category))
-            total += data.getAmount();
+            total += data.getFitness();
         return total;
     }
 
@@ -121,9 +122,9 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
         TributeModel data = find(item.getType());
 
         if (data != null) {
-            data.setAmount(data.getAmount() + item.getAmount());
+            data.setFitness(data.getFitness() + item.getAmount());
         } else {
-            save(getCategory(item.getType()), item.getType(), item.getAmount());
+            save(item.getType(), item.getAmount());
         }
     }
 
@@ -131,7 +132,7 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
      * Returns the value for a <code>material</code>.
      */
     public int getValue(Material material) {
-        return getValue(new ItemStack(material));
+        return (int) find(material).getLastKnownValue();
     }
 
     /**
@@ -141,17 +142,7 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
      * @return the value of the item.
      */
     public int getValue(ItemStack item) {
-        // Define values for reference
-        double baseValue = getBaseTributeValue(item.getType());
-        int totalItemTributes = getTributes(item.getType()) + 1;
-        int tributesInCategory = getTributesForCategory(getCategory(item.getType()));
-        double idk = K / getRegistered().size() + 2 / tributesInCategory;
-
-        // Calculate bonus
-        double bonus = (1 / baseValue) * Math.pow(idk / totalItemTributes, ((idk + totalItemTributes) / totalItemTributes));
-
-        // Return the value
-        return (int) Math.ceil(item.getAmount() * (baseValue + bonus));
+        return getValue(item.getType());
     }
 
     /**

@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
-// TODO Is this safe? Regardless it might be a better idea to scrap reflection... but mah annotations...
+// FIXME Scrap reflection... but mah annotations...
 
 public class AbilityRegistry implements Listener {
     protected static final ConcurrentMap<String, Data> REGISTERED_COMMANDS = new ConcurrentHashMap<>();

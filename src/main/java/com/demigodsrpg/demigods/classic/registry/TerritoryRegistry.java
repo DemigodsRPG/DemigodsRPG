@@ -5,7 +5,7 @@ import com.demigodsrpg.demigods.classic.territory.Territory;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 
-public class TerritoryRegistry extends AbstractRegistry<IDeity.Alliance, Territory> {
+public class TerritoryRegistry extends AbstractDirectRegistry<IDeity.Alliance, Territory> {
     private final World WORLD;
     private final String FILE_NAME;
 

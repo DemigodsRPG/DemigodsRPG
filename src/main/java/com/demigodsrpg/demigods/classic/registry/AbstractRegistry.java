@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentMap;
 public abstract class AbstractRegistry<K, T extends AbstractPersistentModel<K>> {
     protected ConcurrentMap<K, T> REGISTERED_DATA = new ConcurrentHashMap<>();
 
-    public final void register(T data) {
+    public void register(T data) {
         REGISTERED_DATA.put(data.getPersistantId(), data);
     }
 
@@ -38,15 +38,15 @@ public abstract class AbstractRegistry<K, T extends AbstractPersistentModel<K>> 
     }
 
     @SuppressWarnings("RedundantCast")
-    public final void unregister(T data) {
+    public void unregister(T data) {
         REGISTERED_DATA.remove((K) data.getPersistantId());
     }
 
-    public final Collection<T> getRegistered() {
+    public Collection<T> getRegistered() {
         return REGISTERED_DATA.values();
     }
 
-    public final boolean saveToFile() {
+    public boolean saveToFile() {
         // Grab the current file, and its data as a usable map.
         FileConfiguration currentFile = YamlFileUtil.getConfiguration(DGClassic.SAVE_PATH, getFileName());
         final Map<K, T> currentFileMap = getFileData();

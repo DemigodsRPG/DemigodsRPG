@@ -92,9 +92,9 @@ public class TributeListener implements Listener {
         double devotionBefore = model.getDevotion(save.getDeity());
 
         // Update the character's favor
-        model.setFavor(favorBefore + tributeValue / 3);
-        model.setMaxFavor(maxFavorBefore + tributeValue);
-        model.setDevotion(save.getDeity(), devotionBefore + tributeValue * 2);
+        model.setFavor(favorBefore + tributeValue / 6);
+        model.setMaxFavor(maxFavorBefore + tributeValue / 2);
+        model.setDevotion(save.getDeity(), devotionBefore + tributeValue);
 
         DGClassic.PLAYER_R.register(model);
 
@@ -138,9 +138,8 @@ public class TributeListener implements Listener {
         }
         if (model.getMaxFavor() >= (int) Setting.FAVOR_CAP.get()) {
             // They have already met the max favor cap
-            player.sendMessage(save.getDeity().getColor() + save.getDeity().getDeityName() + "");
             if (model.getFavor() > favorBefore)
-                player.sendMessage(ChatColor.YELLOW + "You have been blessed with " + (model.getFavor() - favorBefore) + " favor.");
+                player.sendMessage(ChatColor.YELLOW + "You have been blessed with " + (model.getFavor() - favorBefore) + " instant favor.");
         } else {
             if (model.getMaxFavor() > maxFavorBefore) {
                 // Message the tributer

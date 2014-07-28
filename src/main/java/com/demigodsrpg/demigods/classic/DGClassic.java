@@ -8,6 +8,7 @@ import com.demigodsrpg.demigods.classic.listener.PlayerListener;
 import com.demigodsrpg.demigods.classic.listener.ShrineListener;
 import com.demigodsrpg.demigods.classic.listener.TributeListener;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
+import com.demigodsrpg.demigods.classic.model.TributeModel;
 import com.demigodsrpg.demigods.classic.registry.*;
 import com.demigodsrpg.demigods.classic.util.ZoneUtil;
 import com.google.common.base.Supplier;
@@ -148,7 +149,7 @@ public class DGClassic extends JavaPlugin {
 
     // -- TASK RELATED -- //
 
-    private static final BukkitRunnable SYNC, ASYNC, SAVE, FAVOR;
+    private static final BukkitRunnable SYNC, ASYNC, SAVE, FAVOR, VALUE;
 
 
     static {
@@ -192,6 +193,7 @@ public class DGClassic extends JavaPlugin {
                 }
             }
         };
+        VALUE = new TributeModel.ValueTask();
     }
 
     @SuppressWarnings("deprecation")
@@ -207,12 +209,16 @@ public class DGClassic extends JavaPlugin {
         CONSOLE.info("Main Demigods ASYNC runnable enabled...");
 
         // Start async demigods runnable
-        scheduler.scheduleAsyncRepeatingTask(this, SAVE, 20, 600);
+        scheduler.scheduleAsyncRepeatingTask(this, SAVE, 20, 1200);
         CONSOLE.info("Main Demigods SAVE runnable enabled...");
 
-        // Start favor runnable
+        // Start async favor runnable
         scheduler.scheduleAsyncRepeatingTask(this, FAVOR, 20, (long) ((double) Setting.FAVOR_REGEN_SECONDS.get() * 20));
         CONSOLE.info("Favor regeneration (" + (TimeUnit.SECONDS.toMillis((long) (double) Setting.FAVOR_REGEN_SECONDS.get())) + ") runnable enabled...");
+
+        // Start async value runnable
+        scheduler.scheduleAsyncRepeatingTask(this, VALUE, 60, 600);
+        CONSOLE.info("Main Demigods VALUE runnable enabled...");
     }
 
     public static DGClassic getInst() {
