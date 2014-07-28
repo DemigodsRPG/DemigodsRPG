@@ -1,5 +1,6 @@
 package com.demigodsrpg.demigods.classic.deity.titan.major;
 
+import com.demigodsrpg.demigods.classic.ability.Ability;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

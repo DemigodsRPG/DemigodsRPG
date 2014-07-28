@@ -5,6 +5,7 @@ import com.demigodsrpg.demigods.classic.deity.god.major.Zeus;
 import com.demigodsrpg.demigods.classic.deity.neutral.Human;
 import com.demigodsrpg.demigods.classic.deity.neutral.Satyr;
 import com.demigodsrpg.demigods.classic.deity.titan.major.Cronus;
+import com.demigodsrpg.demigods.classic.deity.titan.major.Rhea;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.material.MaterialData;
@@ -20,7 +21,7 @@ public enum Deity implements IDeity {
 
     // -- TITAN -- //
 
-    CRONUS(new Cronus());
+    CRONUS(new Cronus()), RHEA(new Rhea());
 
     private IDeity deity;
 
