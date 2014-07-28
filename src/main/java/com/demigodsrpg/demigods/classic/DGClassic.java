@@ -102,6 +102,8 @@ public class DGClassic extends JavaPlugin {
         getCommand("binds").setExecutor(new BindsCommand());
         getCommand("values").setExecutor(new ValuesCommand());
 
+        // TODO Admin commands
+
         // Enable ZoneUtil
         ZoneUtil.init();
 
