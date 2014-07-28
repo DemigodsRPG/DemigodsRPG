@@ -6,7 +6,6 @@ import com.demigodsrpg.demigods.classic.command.type.BaseCommand;
 import com.demigodsrpg.demigods.classic.command.type.CommandResult;
 import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
-import com.google.common.cache.CacheStats;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -42,9 +41,9 @@ public class CheckCommand extends BaseCommand {
         if (player.hasPermission("demigods.admin.debug")) {
             player.sendMessage("   ");
             player.sendMessage(StringUtil2.chatTitle("Server Debug Stats"));
-            CacheStats stats = DGClassic.PLAYER_R.getCache().stats();
-            player.sendMessage("Requests to cache: " + stats.requestCount());
-            player.sendMessage("Size of cache: " + DGClassic.PLAYER_R.getCache().size());
+            player.sendMessage("Size of player cache: " + DGClassic.PLAYER_R.getRegistered().size());
+            player.sendMessage("Size of tribute cache: " + DGClassic.TRIBUTE_R.getRegistered().size());
+            player.sendMessage("Size of shrine cache: " + DGClassic.SHRINE_R.getRegistered().size());
         }
 
         return CommandResult.SUCCESS;

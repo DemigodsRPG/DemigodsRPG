@@ -75,7 +75,7 @@ public class TributeModel extends AbstractPersistentModel<Material> {
     }
 
     private void updateValue(double percentOffset) {
-        lastKnownValue = (getValuePercentage() / percentOffset) * VALUE_K * DGClassic.TRIBUTE_R.getRegisteredKeys().size();
+        lastKnownValue = (getValuePercentage() / percentOffset) * VALUE_K * DGClassic.TRIBUTE_R.getRegistered().size();
         DGClassic.TRIBUTE_R.register(this);
     }
 

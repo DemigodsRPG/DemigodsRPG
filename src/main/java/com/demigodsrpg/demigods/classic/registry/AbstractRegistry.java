@@ -4,54 +4,30 @@ package com.demigodsrpg.demigods.classic.registry;
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.model.AbstractPersistentModel;
 import com.demigodsrpg.demigods.classic.util.YamlFileUtil;
-import com.google.common.base.Function;
 import com.google.common.base.Predicate;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
 import com.google.common.collect.Collections2;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractRegistry<K, T extends AbstractPersistentModel<K>> {
-    // -- CACHE -- //
-
-    /**
-     * This cache is very important, it takes the load of constant querying data away from I/O and puts it into the RAM.
-     * The accuracy of stats becomes fudged a but, but we only cache settings for 5 seconds, so I hope it's not too bad.
-     * TODO Find the optimal balance for the cache.
-     */
-    protected Cache<K, T> REGISTERED_DATA_CACHE = CacheBuilder.newBuilder().concurrencyLevel(4).maximumSize(1000).expireAfterWrite(2, TimeUnit.SECONDS).build(new CacheLoader<K, T>() {
-        @Override
-        public T load(K key) throws Exception {
-            return valueFromData(key.toString(), getFileData().getConfigurationSection(key.toString()));
-        }
-    });
+    protected ConcurrentMap<K, T> REGISTERED_DATA = new ConcurrentHashMap<>();
 
     public T fromId(K id) {
-        try {
-            if (REGISTERED_DATA_CACHE.get(id) != null) {
-                return REGISTERED_DATA_CACHE.get(id);
-            }
-        } catch (Exception ignored) {
+        if (REGISTERED_DATA.get(id) != null) {
+            return REGISTERED_DATA.get(id);
         }
         return null;
     }
 
     public void register(T data) {
-        FileConfiguration file = getFileData();
-        file.set(data.getPersistantId().toString(), data.serialize());
-        YamlFileUtil.saveFile(DGClassic.SAVE_PATH, getFileName(), file);
-        REGISTERED_DATA_CACHE.invalidate(data.getPersistantId());
+        REGISTERED_DATA.put(data.getPersistantId(), data);
     }
 
     public final void register(T[] data) {
@@ -64,50 +40,47 @@ public abstract class AbstractRegistry<K, T extends AbstractPersistentModel<K>> 
         }
     }
 
-    public void unregister(T data) {
-        unregister(data.getPersistantId());
+    public final void registerFromFile() {
+        register(getFileData().values());
     }
 
-    public void unregister(K key) {
-        FileConfiguration file = getFileData();
-        file.set(key.toString(), null);
-        YamlFileUtil.saveFile(DGClassic.SAVE_PATH, getFileName(), file);
-        REGISTERED_DATA_CACHE.invalidate(key);
+    @SuppressWarnings("RedundantCast")
+    public void unregister(T data) {
+        REGISTERED_DATA.remove((K) data.getPersistantId());
     }
 
     public Collection<T> getRegistered() {
-        return Collections2.filter(Collections2.transform(getRegisteredKeys(), new Function<K, T>() {
+        return REGISTERED_DATA.values();
+    }
+
+    public boolean saveToFile() {
+        // Grab the current file, and its data as a usable map.
+        FileConfiguration currentFile = YamlFileUtil.getConfiguration(DGClassic.SAVE_PATH, getFileName());
+        final Map<K, T> currentFileMap = getFileData();
+
+        // Create/overwrite a configuration section if new data exists.
+        for (Map.Entry<K, T> data : Collections2.filter(REGISTERED_DATA.entrySet(), new Predicate<Map.Entry<K, T>>() {
             @Override
-            public T apply(K k) {
-                return fromId(k);
+            public boolean apply(Map.Entry<K, T> entry) {
+                return !currentFileMap.containsKey(entry.getKey()) || !currentFileMap.get(entry.getKey()).equals(entry.getValue());
             }
-        }), new Predicate<T>() {
+        }))
+            currentFile.createSection(data.getKey().toString(), data.getValue().serialize());
+
+        // Remove old unneeded data.
+        for (K key : Collections2.filter(currentFileMap.keySet(), new Predicate<K>() {
             @Override
-            public boolean apply(@Nullable T t) {
-                return t != null;
+            public boolean apply(K key) {
+                return !REGISTERED_DATA.keySet().contains(key);
             }
-        });
+        }))
+            currentFile.set(key.toString(), null);
+
+        // Save the file!
+        return YamlFileUtil.saveFile(DGClassic.SAVE_PATH, getFileName(), currentFile);
     }
 
-    public Collection<K> getRegisteredKeys() {
-        return Collections2.transform(getFileData().getKeys(false), new Function<String, K>() {
-            @Override
-            public K apply(String s) {
-                return keyFromString(s);
-            }
-        });
-    }
-
-    public Cache<K, T> getCache() {
-        return REGISTERED_DATA_CACHE;
-    }
-
-    public final FileConfiguration getFileData() {
-        // Grab the current file
-        return YamlFileUtil.getConfiguration(DGClassic.SAVE_PATH, getFileName());
-    }
-
-    public final Map<K, T> getFileDataAsMap() {
+    public final Map<K, T> getFileData() {
         // Grab the current file.
         FileConfiguration data = YamlFileUtil.getConfiguration(DGClassic.SAVE_PATH, getFileName());
 
@@ -126,6 +99,11 @@ public abstract class AbstractRegistry<K, T extends AbstractPersistentModel<K>> 
             }
         }
         return map;
+    }
+
+    @SuppressWarnings("unchecked")
+    public final Map<String, Object> serialize(K id) {
+        return (REGISTERED_DATA.get(id)).serialize();
     }
 
     /**
