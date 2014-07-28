@@ -117,6 +117,7 @@ public class DGClassic extends JavaPlugin {
         getCommand("removedevotion").setExecutor(new RemoveDevotionCommand());
         getCommand("givedeity").setExecutor(new GiveDeityCommand());
         getCommand("removedeity").setExecutor(new RemoveDeityCommand());
+        getCommand("setalliance").setExecutor(new SetAllianceCommand());
 
         // Enable ZoneUtil
         ZoneUtil.init();
