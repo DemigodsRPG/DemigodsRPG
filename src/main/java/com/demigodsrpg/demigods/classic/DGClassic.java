@@ -29,6 +29,9 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+
+// FIXME: Massive memory leak.
+
 public class DGClassic extends JavaPlugin {
     // -- PLUGIN RELATED CONSTANTS -- //
 
@@ -217,7 +220,7 @@ public class DGClassic extends JavaPlugin {
         CONSOLE.info("Favor regeneration (" + (TimeUnit.SECONDS.toMillis((long) (double) Setting.FAVOR_REGEN_SECONDS.get())) + ") runnable enabled...");
 
         // Start async value runnable
-        scheduler.scheduleAsyncRepeatingTask(this, VALUE, 60, 600);
+        scheduler.scheduleAsyncRepeatingTask(this, VALUE, 60, 200);
         CONSOLE.info("Main Demigods VALUE runnable enabled...");
     }
 
