@@ -87,6 +87,9 @@ public class DGClassic extends JavaPlugin {
         // Register the abilities
         ABILITY_R.registerAbilities();
 
+        // Regen shrines
+        SHRINE_R.generate();
+
         // Start the threads
         startThreads();
 

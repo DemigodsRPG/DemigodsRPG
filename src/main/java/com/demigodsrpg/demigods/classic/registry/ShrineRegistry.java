@@ -30,6 +30,12 @@ public class ShrineRegistry extends AbstractRegistry<String, ShrineModel> {
         }, null);
     }
 
+    public void generate() {
+        for (ShrineModel model : getRegistered()) {
+            model.getShrineType().generate(model.getLocation());
+        }
+    }
+
     @Override
     public String keyFromString(String stringKey) {
         return stringKey;
