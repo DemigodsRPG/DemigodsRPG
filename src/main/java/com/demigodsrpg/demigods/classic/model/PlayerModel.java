@@ -487,7 +487,7 @@ public class PlayerModel extends AbstractPersistentModel<UUID> implements Partic
         } else if (!inNoPvpZone) {
             setCanPvp(true);
             DGClassic.SERV_R.remove(player.getName(), "pvp_cooldown");
-        } else if (getCanPvp() && !DGClassic.SERV_R.exists(player.getName(), "pvp_cooldown")) {
+        } else if (getCanPvp() && !DGClassic.SERV_R.contains(player.getName(), "pvp_cooldown")) {
             int delay = 10;
             DGClassic.SERV_R.put(player.getName(), "pvp_cooldown", true, delay, TimeUnit.SECONDS);
             final PlayerModel THIS = this;

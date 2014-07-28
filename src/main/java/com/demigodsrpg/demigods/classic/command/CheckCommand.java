@@ -38,15 +38,6 @@ public class CheckCommand extends BaseCommand {
         player.sendMessage("Number of ascensions: " + model.getAscensions());
         player.sendMessage("Use " + ChatColor.ITALIC + "/binds" + ChatColor.RESET + " for a list of all ability binds.");
 
-        if (player.hasPermission("demigods.admin.debug")) {
-            player.sendMessage("   ");
-            player.sendMessage(StringUtil2.chatTitle("Server Debug Stats"));
-            player.sendMessage("Size of player cache: " + DGClassic.PLAYER_R.getRegistered().size());
-            player.sendMessage("Size of tribute cache: " + DGClassic.TRIBUTE_R.getRegistered().size());
-            player.sendMessage("Size of shrine cache: " + DGClassic.SHRINE_R.getRegistered().size());
-            player.sendMessage("Temp table size: " + DGClassic.TEMP_DATA.size());
-        }
-
         return CommandResult.SUCCESS;
     }
 }

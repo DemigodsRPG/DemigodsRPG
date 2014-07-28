@@ -132,12 +132,12 @@ public class ShrineListener implements Listener {
 
         if (DGClassic.SHRINE_R.getShrine(location) != null) {
             // Cancel break animation
-            DGClassic.TEMP_DATA.put(playerId, "NO-BREAK", true);
+            DGClassic.SERV_R.put(playerId, "NO-BREAK", true);
             event.getPlayer().addPotionEffect(PotionEffectType.SLOW_DIGGING.createEffect(9999999, 5), true);
             event.setCancelled(true);
-        } else if (DGClassic.TEMP_DATA.contains(playerId, "NO-BREAK")) {
+        } else if (DGClassic.SERV_R.contains(playerId, "NO-BREAK")) {
             // Allow break animation
-            DGClassic.TEMP_DATA.remove(playerId, "NO-BREAK");
+            DGClassic.SERV_R.remove(playerId, "NO-BREAK");
             event.getPlayer().removePotionEffect(PotionEffectType.SLOW_DIGGING);
         }
     }
@@ -146,9 +146,9 @@ public class ShrineListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         String playerId = event.getPlayer().getUniqueId().toString();
         Block block = event.getClickedBlock();
-        if (block == null && DGClassic.TEMP_DATA.contains(playerId, "NO-BREAK")) {
+        if (block == null && DGClassic.SERV_R.contains(playerId, "NO-BREAK")) {
             // Allow break animation
-            DGClassic.TEMP_DATA.remove(playerId, "NO-BREAK");
+            DGClassic.SERV_R.remove(playerId, "NO-BREAK");
             event.getPlayer().removePotionEffect(PotionEffectType.SLOW_DIGGING);
         }
     }
@@ -189,7 +189,7 @@ public class ShrineListener implements Listener {
             }
         }, 1);
 
-        if (DGClassic.SERV_R.exists("explode-structure", "blaam")) return;
+        if (DGClassic.SERV_R.contains("explode-structure", "blaam")) return;
         DGClassic.SERV_R.put("explode-structure", "blaam", true, 2, TimeUnit.SECONDS);
 
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGClassic.getInst(), new Runnable() {

@@ -19,7 +19,7 @@ public class Iapetus implements IDeity {
 
     @Override
     public ChatColor getColor() {
-        return ChatColor.DARK_RED;
+        return ChatColor.WHITE;
     }
 
     @Override

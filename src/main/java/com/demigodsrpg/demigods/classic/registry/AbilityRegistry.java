@@ -191,10 +191,10 @@ public class AbilityRegistry implements Listener {
                 model.getOfflinePlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " requires more favor.");
                 return false;
             }
-            if (DGClassic.SERV_R.exists(model.getMojangId().toString(), ability + ":delay")) {
+            if (DGClassic.SERV_R.contains(model.getMojangId().toString(), ability + ":delay")) {
                 return false;
             }
-            if (DGClassic.SERV_R.exists(model.getMojangId().toString(), ability + ":cooldown")) {
+            if (DGClassic.SERV_R.contains(model.getMojangId().toString(), ability + ":cooldown")) {
                 model.getOfflinePlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " is on a cooldown.");
                 return false;
             }

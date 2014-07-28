@@ -23,7 +23,7 @@ public class Cronus implements IDeity {
 
     @Override
     public ChatColor getColor() {
-        return ChatColor.DARK_BLUE;
+        return ChatColor.GOLD;
     }
 
     @Override

@@ -45,7 +45,7 @@ public class ServerDataRegistry extends AbstractRegistry<UUID, ServerDataModel> 
         register(timedData);
     }
 
-    public boolean exists(String row, String column) {
+    public boolean contains(String row, String column) {
         return find(row, column) != null;
     }
 

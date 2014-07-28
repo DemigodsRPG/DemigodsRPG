@@ -27,7 +27,7 @@ public class AllianceCommand extends BaseCommand {
             return CommandResult.QUIET_ERROR;
         }
 
-        if (DGClassic.SERV_R.exists("alliance_chat", player.getUniqueId().toString())) {
+        if (DGClassic.SERV_R.contains("alliance_chat", player.getUniqueId().toString())) {
             DGClassic.SERV_R.remove("alliance_chat", player.getUniqueId().toString());
             player.sendMessage(ChatColor.YELLOW + "You just disabled alliance chat.");
         } else {
