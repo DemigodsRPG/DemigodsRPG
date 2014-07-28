@@ -159,25 +159,27 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
     @Deprecated
     public Category getCategory(final Material material) {
         switch (material) {
+            case BEDROCK:
+                return Category.CHEATING;
             case DRAGON_EGG:
             case NETHER_STAR:
                 return Category.BOSS_REWARD;
+            case GHAST_TEAR:
             case DIAMOND_ORE:
+            case LAPIS_ORE:
+                return Category.MID_HIGH_RANGE;
             case IRON_ORE:
             case GOLD_ORE:
-            case LAPIS_ORE:
-            case COAL_ORE:
                 return Category.RAW_ORE;
             case GLOWSTONE_DUST:
             case GLOWSTONE:
             case REDSTONE:
             case REDSTONE_BLOCK:
             case BLAZE_ROD:
-            case GHAST_TEAR:
             case MOSSY_COBBLESTONE:
             case OBSIDIAN:
+            case REDSTONE_ORE:
             case GRASS:
-            case STONE:
                 return Category.MID_RANGE;
             case LOG:
             case DIRT:
@@ -464,6 +466,6 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
     }
 
     public enum Category {
-        BOSS_REWARD, RAW_ORE, MID_RANGE, WORTHLESS, WOOD, STONE, IRON, GOLD, DIAMOND, EMERALD, COAL, LEATHER, MANUFACTURED, OTHER
+        CHEATING, BOSS_REWARD, RAW_ORE, MID_HIGH_RANGE, MID_RANGE, WORTHLESS, WOOD, STONE, IRON, GOLD, DIAMOND, EMERALD, COAL, LEATHER, MANUFACTURED, OTHER
     }
 }

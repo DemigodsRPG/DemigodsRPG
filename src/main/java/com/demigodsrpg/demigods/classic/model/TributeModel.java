@@ -76,10 +76,13 @@ public class TributeModel extends AbstractPersistentModel<Material> {
     }
 
     private void updateValue(double percentOffset) {
-        if (getCategory().equals("worthless")) {
+        if (getCategory().equals(TributeRegistry.Category.WORTHLESS)) {
             lastKnownValue = 0.0;
+        } else if (getCategory().equals(TributeRegistry.Category.CHEATING)) {
+            lastKnownValue = -3000.0;
+        } else {
+            lastKnownValue = (getValuePercentage() / percentOffset) * VALUE_K * DGClassic.TRIBUTE_R.getRegistered().size();
         }
-        lastKnownValue = (getValuePercentage() / percentOffset) * VALUE_K * DGClassic.TRIBUTE_R.getRegistered().size();
         DGClassic.TRIBUTE_R.register(this);
     }
 
