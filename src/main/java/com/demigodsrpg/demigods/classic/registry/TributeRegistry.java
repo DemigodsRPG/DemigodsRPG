@@ -173,15 +173,16 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
             case GHAST_TEAR:
             case MOSSY_COBBLESTONE:
             case OBSIDIAN:
-                return "mid_range";
-            case DIRT:
             case GRASS:
             case STONE:
-            case COBBLESTONE:
-            case SAND:
-            case SANDSTONE:
             case LOG:
-                return "building_block";
+                return "mid_range";
+            case DIRT:
+            case SAND:
+            case GRAVEL:
+            case COBBLESTONE:
+            case SANDSTONE:
+                return "worthless";
             default:
                 if (material.name().contains("WOOD")) {
                     return "wood";
