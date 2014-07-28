@@ -3,9 +3,12 @@ package com.demigodsrpg.demigods.classic.registry;
 import com.demigodsrpg.demigods.classic.model.TributeModel;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterators;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -53,11 +56,11 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
         return model;
     }
 
-    public Collection<TributeModel> find(final String category) {
+    public Collection<TributeModel> find(final Category category) {
         return Collections2.filter(getRegistered(), new Predicate<TributeModel>() {
             @Override
             public boolean apply(TributeModel tributeModel) {
-                return category.equalsIgnoreCase(tributeModel.getCategory());
+                return category.equals(tributeModel.getCategory());
             }
         });
     }
@@ -107,7 +110,7 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
      * @return the total number of tributes.
      */
     @Deprecated
-    public int getTributesForCategory(String category) {
+    public int getTributesForCategory(Category category) {
         int total = 1;
         for (TributeModel data : find(category))
             total += data.getFitness();
@@ -154,17 +157,17 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
      * @return the category
      */
     @Deprecated
-    public String getCategory(Material material) {
+    public Category getCategory(final Material material) {
         switch (material) {
             case DRAGON_EGG:
             case NETHER_STAR:
-                return "boss_reward";
+                return Category.BOSS_REWARD;
             case DIAMOND_ORE:
             case IRON_ORE:
             case GOLD_ORE:
             case LAPIS_ORE:
             case COAL_ORE:
-                return "raw_ore";
+                return Category.RAW_ORE;
             case GLOWSTONE_DUST:
             case GLOWSTONE:
             case REDSTONE:
@@ -175,34 +178,44 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
             case OBSIDIAN:
             case GRASS:
             case STONE:
+                return Category.MID_RANGE;
             case LOG:
-                return "mid_range";
             case DIRT:
             case SAND:
             case GRAVEL:
             case COBBLESTONE:
             case SANDSTONE:
-                return "worthless";
+                return Category.WORTHLESS;
             default:
                 if (material.name().contains("WOOD")) {
-                    return "wood";
+                    return Category.WOOD;
                 } else if (material.name().contains("STONE")) {
-                    return "stone";
+                    return Category.STONE;
                 } else if (material.name().contains("IRON")) {
-                    return "iron";
+                    return Category.IRON;
                 } else if (material.name().contains("GOLD")) {
-                    return "gold";
+                    return Category.GOLD;
                 } else if (material.name().contains("DIAMOND")) {
-                    return "diamond";
+                    return Category.DIAMOND;
                 } else if (material.name().contains("EMERALD")) {
-                    return "emerald";
+                    return Category.EMERALD;
                 } else if (material.name().contains("COAL")) {
-                    return "coal";
+                    return Category.COAL;
                 } else if (material.name().contains("LEATHER")) {
-                    return "leather";
+                    return Category.LEATHER;
                 }
+
+                if (Iterators.any(Bukkit.recipeIterator(), new Predicate<Recipe>() {
+                    @Override
+                    public boolean apply(Recipe recipe) {
+                        return recipe.getResult().getType().equals(material);
+                    }
+                })) {
+                    return Category.MANUFACTURED;
+                }
+
                 // TODO More
-                return "default";
+                return Category.OTHER;
         }
     }
 
@@ -448,5 +461,9 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
 
         // Return
         return value;
+    }
+
+    public enum Category {
+        BOSS_REWARD, RAW_ORE, MID_RANGE, WORTHLESS, WOOD, STONE, IRON, GOLD, DIAMOND, EMERALD, COAL, LEATHER, MANUFACTURED, OTHER
     }
 }

@@ -2,6 +2,7 @@ package com.demigodsrpg.demigods.classic.model;
 
 import com.censoredsoftware.library.util.MapUtil2;
 import com.demigodsrpg.demigods.classic.DGClassic;
+import com.demigodsrpg.demigods.classic.registry.TributeRegistry;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -15,7 +16,7 @@ public class TributeModel extends AbstractPersistentModel<Material> {
     private Material material;
     private List<Long> tributeTimes;
     private Integer fitness;
-    private String category;
+    private TributeRegistry.Category category;
     private Double lastKnownValue;
 
     public TributeModel(Material material, ConfigurationSection conf) {
@@ -62,7 +63,7 @@ public class TributeModel extends AbstractPersistentModel<Material> {
         DGClassic.TRIBUTE_R.register(this);
     }
 
-    public String getCategory() {
+    public TributeRegistry.Category getCategory() {
         return category;
     }
 
