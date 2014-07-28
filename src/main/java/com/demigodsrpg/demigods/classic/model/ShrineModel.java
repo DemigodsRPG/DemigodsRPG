@@ -44,9 +44,9 @@ public class ShrineModel extends AbstractPersistentModel<String> {
             float yaw = Float.valueOf(conf.getString("yaw"));
             float pitch = Float.valueOf(conf.getString("pitch"));
             location = new Location(world, x, y, z, yaw, pitch);
+        } else {
+            throw new NullPointerException("World not found for a shrine location.");
         }
-
-        throw new NullPointerException("World not found for a shrine location.");
     }
 
     @Override

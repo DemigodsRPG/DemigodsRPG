@@ -4,12 +4,15 @@ import com.demigodsrpg.demigods.classic.model.ServerDataModel;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class ServerDataRegistry extends AbstractRegistry<UUID, ServerDataModel> {
+    private static final String FILE_NAME = "misc.dgc";
+
     public void put(String row, String column, Object value) {
         // Remove the value if it exists already
         remove(row, column);
@@ -87,5 +90,20 @@ public class ServerDataRegistry extends AbstractRegistry<UUID, ServerDataModel> 
             }
         }))
             unregister(data);
+    }
+
+    @Override
+    public UUID keyFromString(String stringKey) {
+        return UUID.fromString(stringKey);
+    }
+
+    @Override
+    public ServerDataModel valueFromData(String stringKey, ConfigurationSection data) {
+        return new ServerDataModel(keyFromString(stringKey), data);
+    }
+
+    @Override
+    public String getFileName() {
+        return FILE_NAME;
     }
 }

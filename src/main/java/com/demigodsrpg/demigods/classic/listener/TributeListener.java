@@ -27,13 +27,15 @@ public class TributeListener implements Listener {
     public void onTributeInteract(PlayerInteractEvent event) {
         if (ZoneUtil.inNoDGCZone(event.getPlayer().getLocation())) return;
 
+        // Return from actions we don't care about
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
         // Define variables
         Location location = event.getClickedBlock().getLocation();
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
 
         // Return if the player is mortal
         if (IDeity.Pantheon.MORTAL.equals(model.getMajorDeity().getPantheon())) return;
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
         // Define the shrine
         ShrineModel shrine = DGClassic.SHRINE_R.getShrine(location);

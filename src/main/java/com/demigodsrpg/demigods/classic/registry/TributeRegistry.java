@@ -1,65 +1,34 @@
 package com.demigodsrpg.demigods.classic.registry;
 
 import com.censoredsoftware.library.util.RandomUtil;
-import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.model.TributeModel;
-import com.demigodsrpg.demigods.classic.util.YamlFileUtil;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
     public final String FILE_NAME = "tributes.dgc";
 
-    public Set<TributeModel> getFileData() {
-        // Grab the current file.
-        FileConfiguration data = YamlFileUtil.getConfiguration(DGClassic.SAVE_PATH, FILE_NAME);
-
-        // Convert the raw file data into more usable data, in map form.
-        Set<TributeModel> set = new HashSet<>();
-        for (String stringId : data.getKeys(false)) {
-            try {
-                set.add(new TributeModel(Material.valueOf(stringId), data.getConfigurationSection(stringId)));
-            } catch (Exception oops) {
-                oops.printStackTrace();
-            }
-        }
-        return set;
+    @Override
+    public Material keyFromString(String stringKey) {
+        return Material.valueOf(stringKey);
     }
 
-    public void registerFromFile() {
-        register(getFileData());
+    @Override
+    public TributeModel valueFromData(String stringKey, ConfigurationSection data) {
+        return new TributeModel(keyFromString(stringKey), data);
     }
 
-    public boolean saveToFile() {
-        // Grab the current file, and its data as a usable map.
-        FileConfiguration currentFile = YamlFileUtil.getConfiguration(DGClassic.SAVE_PATH, FILE_NAME);
-        final Set<TributeModel> currentFileData = getFileData();
-
-        // Create/overwrite a configuration section if new data exists.
-        for (TributeModel model : Collections2.filter(getRegistered(), new Predicate<TributeModel>() {
-            @Override
-            public boolean apply(TributeModel key) {
-                return !currentFileData.contains(key);
-            }
-        }))
-            currentFile.createSection(model.getMaterial().name(), model.serialize());
-
-        // Remove old unneeded data.
-        for (TributeModel model : Collections2.filter(currentFileData, new Predicate<TributeModel>() {
-            @Override
-            public boolean apply(TributeModel key) {
-                return !getRegistered().contains(key);
-            }
-        }))
-            currentFile.set(model.getMaterial().name(), null);
-
-        // Save the file!
-        return YamlFileUtil.saveFile(DGClassic.SAVE_PATH, FILE_NAME, currentFile);
+    @Override
+    public String getFileName() {
+        return FILE_NAME;
     }
 
     /**

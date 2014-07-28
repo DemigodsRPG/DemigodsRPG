@@ -78,6 +78,7 @@ public class DGClassic extends JavaPlugin {
         SHRINE_R.registerFromFile();
         TRIBUTE_R.registerFromFile();
         SPAWN_R.registerFromFile();
+        SERV_R.registerFromFile();
 
         // Determine territory registries
         for (World world : Bukkit.getWorlds()) {
@@ -137,6 +138,7 @@ public class DGClassic extends JavaPlugin {
         noErrors = SHRINE_R.saveToFile() && noErrors;
         noErrors = TRIBUTE_R.saveToFile() && noErrors;
         noErrors = SPAWN_R.saveToFile() && noErrors;
+        noErrors = SERV_R.saveToFile() && noErrors;
 
         for (TerritoryRegistry terr_r : TERR_R.values()) {
             noErrors = terr_r.saveToFile() && noErrors;
