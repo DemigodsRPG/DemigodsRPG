@@ -17,12 +17,15 @@ import java.util.Set;
 public class PlayerListener implements Listener {
     Random random = new Random();
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent event) {
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
 
         // TODO REMOVE THIS DEBUG TESTING ONLY
+        event.getPlayer().sendMessage("Welcome!");
         if (model.getMajorDeity().equals(Deity.HUMAN)) {
+            event.getPlayer().sendMessage("Here, have a free deity (for science)!");
+
             model = new PlayerModel(event.getPlayer());
             DGClassic.PLAYER_R.register(model);
 

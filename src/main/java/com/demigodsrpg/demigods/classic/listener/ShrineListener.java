@@ -138,22 +138,18 @@ public class ShrineListener implements Listener {
         } else if (DGClassic.TEMP_DATA.contains(playerId, "NO-BREAK")) {
             // Allow break animation
             DGClassic.TEMP_DATA.remove(playerId, "NO-BREAK");
-            event.getPlayer().addPotionEffect(PotionEffectType.SLOW_DIGGING.createEffect(1, 0), true);
+            event.getPlayer().removePotionEffect(PotionEffectType.SLOW_DIGGING);
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        Location location = event.getPlayer().getLocation();
-        if (event.isCancelled() || ZoneUtil.inNoDGCZone(location)) return;
-
         String playerId = event.getPlayer().getUniqueId().toString();
         Block block = event.getClickedBlock();
-
         if (block == null && DGClassic.TEMP_DATA.contains(playerId, "NO-BREAK")) {
             // Allow break animation
             DGClassic.TEMP_DATA.remove(playerId, "NO-BREAK");
-            event.getPlayer().addPotionEffect(PotionEffectType.SLOW_DIGGING.createEffect(1, 0), true);
+            event.getPlayer().removePotionEffect(PotionEffectType.SLOW_DIGGING);
         }
     }
 
