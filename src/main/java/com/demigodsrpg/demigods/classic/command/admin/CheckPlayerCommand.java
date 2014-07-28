@@ -24,17 +24,17 @@ public class CheckPlayerCommand extends AdminPlayerCommand{
                 sender.sendMessage(ChatColor.RED + "Player is not real, but we appreciate the attempt!");
                 return CommandResult.QUIET_ERROR;
             }
-            sendInfo(p);
+            sendInfo(p, sender);
             return CommandResult.SUCCESS;
         }
         return CommandResult.NOT_ENOUGH_ARGS;
     }
 
-    private void sendInfo(Player p)
+    private void sendInfo(Player p, CommandSender s)
     {
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(p);
-        p.sendMessage(StringUtil2.chatTitle("Player Stats"));
-        p.sendMessage(p.getName() + " is a " + model.getMajorDeity().getColor() + model.getMajorDeity().getNomen());
+        s.sendMessage(StringUtil2.chatTitle("Player Stats"));
+        s.sendMessage(p.getName() + " is a " + model.getMajorDeity().getColor() + model.getMajorDeity().getNomen());
         if (!model.getContractedDeities().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for (Deity deity : model.getContractedDeities()) {
@@ -42,10 +42,10 @@ public class CheckPlayerCommand extends AdminPlayerCommand{
             }
             String minorDeities = builder.toString();
             minorDeities = minorDeities.substring(0, minorDeities.length() - 4);
-            p.sendMessage(p.getName() + " is also allied with: " + minorDeities);
+            s.sendMessage(p.getName() + " is also allied with: " + minorDeities);
         }
-        p.sendMessage("Favor: " + model.getFavor() + " / " + model.getMaxFavor());
-        p.sendMessage("Total Devotion: " + model.getTotalDevotion());
-        p.sendMessage("Number of ascensions: " + model.getAscensions());
+        s.sendMessage("Favor: " + model.getFavor() + " / " + model.getMaxFavor());
+        s.sendMessage("Total Devotion: " + model.getTotalDevotion());
+        s.sendMessage("Number of ascensions: " + model.getAscensions());
     }
 }
