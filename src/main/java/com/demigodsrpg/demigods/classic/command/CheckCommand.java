@@ -35,6 +35,7 @@ public class CheckCommand extends BaseCommand {
         }
         player.sendMessage("Favor: " + model.getFavor() + " / " + model.getMaxFavor());
         player.sendMessage("Total Devotion: " + model.getTotalDevotion());
+        player.sendMessage("Number of ascensions: " + model.getAscensions());
         player.sendMessage("Use " + ChatColor.ITALIC + "/binds" + ChatColor.RESET + " for a list of all ability binds.");
 
         if (player.hasPermission("demigods.admin.debug")) {

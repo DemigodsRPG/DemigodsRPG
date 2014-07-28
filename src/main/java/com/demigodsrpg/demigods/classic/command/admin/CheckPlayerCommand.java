@@ -46,6 +46,6 @@ public class CheckPlayerCommand extends AdminPlayerCommand{
         }
         p.sendMessage("Favor: " + model.getFavor() + " / " + model.getMaxFavor());
         p.sendMessage("Total Devotion: " + model.getTotalDevotion());
-        p.sendMessage("For a list of binds, use /binds");
+        p.sendMessage("Number of ascensions: " + model.getAscensions());
     }
 }
