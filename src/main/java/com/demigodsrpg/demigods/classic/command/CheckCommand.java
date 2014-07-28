@@ -24,6 +24,7 @@ public class CheckCommand extends BaseCommand {
         player.sendMessage(StringUtil2.chatTitle("Player Stats"));
         String nomen = model.getMajorDeity().getNomen();
         player.sendMessage("You are " + (StringUtil2.beginsWithVowel(nomen) ? "an " : "a ") + model.getMajorDeity().getColor() + nomen + ".");
+        player.sendMessage("You have " + ChatColor.RED + model.getMaxHealth() + ChatColor.RESET + " health.");
         if (!model.getContractedDeities().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for (Deity deity : model.getContractedDeities()) {

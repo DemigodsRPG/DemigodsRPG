@@ -35,6 +35,7 @@ public class CheckPlayerCommand extends AdminPlayerCommand{
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(p);
         s.sendMessage(StringUtil2.chatTitle("Player Stats"));
         s.sendMessage(p.getName() + " is a " + model.getMajorDeity().getColor() + model.getMajorDeity().getNomen());
+        s.sendMessage(p.getName() + " has " + ChatColor.RED + model.getMaxHealth() + ChatColor.RESET + " health.");
         if (!model.getContractedDeities().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for (Deity deity : model.getContractedDeities()) {
