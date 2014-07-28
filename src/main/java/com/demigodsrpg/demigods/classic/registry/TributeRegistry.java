@@ -1,6 +1,5 @@
 package com.demigodsrpg.demigods.classic.registry;
 
-import com.censoredsoftware.library.util.RandomUtil;
 import com.demigodsrpg.demigods.classic.model.TributeModel;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -8,13 +7,13 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
-    public final String FILE_NAME = "tributes.dgc";
+    private final String FILE_NAME = "tributes.dgc";
+    private Double K = 5000.0;
 
     @Override
     public Material keyFromString(String stringKey) {
@@ -29,22 +28,6 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
     @Override
     public String getFileName() {
         return FILE_NAME;
-    }
-
-    /**
-     * Initialized the tribute map with some base data. This prevents fresh data from being out of whack.
-     */
-    @Deprecated
-    public void initializeTributeTracking() {
-        for (Material material : Material.values()) {
-            // Don't use certain materials
-            Material[] unused = {Material.AIR, Material.WATER, Material.STATIONARY_WATER, Material.LAVA, Material.STATIONARY_LAVA, Material.ENDER_PORTAL, Material.BEDROCK, Material.FIRE, Material.MOB_SPAWNER, Material.BURNING_FURNACE, Material.FLOWER_POT, Material.SKULL, Material.DOUBLE_STEP, Material.PORTAL, Material.CAKE_BLOCK, Material.BREWING_STAND, Material.CARROT, Material.DIODE_BLOCK_OFF, Material.DIODE_BLOCK_ON, Material.DOUBLE_PLANT, Material.EXP_BOTTLE, Material.GLOWING_REDSTONE_ORE, Material.LOG_2, Material.SIGN_POST, Material.SNOW, Material.WALL_SIGN};
-            if (Arrays.asList(unused).contains(material)) continue;
-
-            // Fill it with random data
-            String category = getCategory(material);
-            if (getTributes(material) == 0) save(category, material, RandomUtil.generateIntRange(1, 10));
-        }
     }
 
     public void save(String category, Material material, int amount) {
@@ -161,10 +144,11 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
         // Define values for reference
         double baseValue = getBaseTributeValue(item.getType());
         int totalItemTributes = getTributes(item.getType()) + 1;
-        int totalTributes = getTotalTributes() + 2;
+        int tributesInCategory = getTributesForCategory(getCategory(item.getType()));
+        double idk = K / getRegistered().size() + 2 / tributesInCategory;
 
         // Calculate bonus
-        double bonus = (1 / baseValue) * Math.pow(totalTributes / totalItemTributes, ((totalTributes + totalItemTributes) / (totalTributes - totalItemTributes))) / totalItemTributes;
+        double bonus = (1 / baseValue) * Math.pow(idk / totalItemTributes, ((idk + totalItemTributes) / totalItemTributes));
 
         // Return the value
         return (int) Math.ceil(item.getAmount() * (baseValue + bonus));

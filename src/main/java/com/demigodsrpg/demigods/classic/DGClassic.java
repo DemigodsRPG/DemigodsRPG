@@ -89,7 +89,6 @@ public class DGClassic extends JavaPlugin {
 
         // Register the abilities
         ABILITY_R.registerAbilities();
-        TRIBUTE_R.initializeTributeTracking();
 
         // Start the threads
         startThreads();

@@ -1,5 +1,6 @@
 package com.demigodsrpg.demigods.classic.model;
 
+import com.demigodsrpg.demigods.classic.DGClassic;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -41,6 +42,7 @@ public class TributeModel extends AbstractPersistentModel<Material> {
 
     public void setAmount(int amount) {
         this.amount = amount;
+        DGClassic.TRIBUTE_R.register(this);
     }
 
     @Override
