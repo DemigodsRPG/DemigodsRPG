@@ -22,13 +22,12 @@ public class CheckPlayerCommand extends AdminPlayerCommand{
             } catch (Exception ignored)
             {
                 sender.sendMessage(ChatColor.RED + "Player is not real, but we appreciate the attempt!");
-                return CommandResult.SUCCESS;
+                return CommandResult.QUIET_ERROR;
             }
             sendInfo(p);
             return CommandResult.SUCCESS;
         }
-        sender.sendMessage(ChatColor.RED + "Wrong syntax! /CheckPlayer [Name]");
-        return CommandResult.SUCCESS;
+        return CommandResult.NOT_ENOUGH_ARGS;
     }
 
     private void sendInfo(Player p)
