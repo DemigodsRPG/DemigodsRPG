@@ -13,8 +13,8 @@ public abstract class BaseCommand implements CommandExecutor {
             case SUCCESS:
             case QUIET_ERROR:
                 break;
-            case NOT_ENOUGH_ARGS:
-                sender.sendMessage(ChatColor.RED + "Not enough args.");
+            case INVALID_SYNTAX:
+                sender.sendMessage(ChatColor.RED + "Invalid syntax, please try again.");
                 return false;
             case NO_PERMISSIONS:
                 sender.sendMessage(ChatColor.RED + "You don't have the permissions to use this command.");

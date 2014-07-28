@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender;
 public class SetAllianceCommand extends AdminPlayerCommand {
     @Override
     public CommandResult onCommand(CommandSender sender, PlayerModel model, String[] args) {
-        if (args.length == 3) {
+        if (args.length == 2) {
             PlayerModel player = null;
             IDeity.Alliance alliance = null;
             player = DGClassic.PLAYER_R.fromName(args[0]);
@@ -23,6 +23,6 @@ public class SetAllianceCommand extends AdminPlayerCommand {
             player.setAlliance(alliance);
             sender.sendMessage(ChatColor.YELLOW + player.getLastKnownName() + " has been set to " + alliance.name() + ".");
         }
-        return CommandResult.NOT_ENOUGH_ARGS;
+        return CommandResult.INVALID_SYNTAX;
     }
 }

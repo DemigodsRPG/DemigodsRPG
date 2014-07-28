@@ -26,20 +26,17 @@ public class GiveDeityCommand extends AdminPlayerCommand {
                 sender.sendMessage(ChatColor.RED + "Wrong player or deity! Please try a little harder.");
                 return CommandResult.QUIET_ERROR;
             }
-            if(major)
-            {
+            if (major) {
                 DGClassic.PLAYER_R.fromPlayer(p).giveMajorDeity(deity, false); // TODO This might be the first time sometimes
                 sender.sendMessage(ChatColor.YELLOW + "You added " + deity.getDeityName() + " to " + p.getName() + " as major deity.");
                 return CommandResult.SUCCESS;
-            }
-            else
-            {
+            } else {
                 DGClassic.PLAYER_R.fromPlayer(p).giveDeity(deity);
                 sender.sendMessage(ChatColor.YELLOW + "You added " + deity.getDeityName() + " to " + p.getName() + " as minor deity.");
                 return CommandResult.SUCCESS;
             }
 
         }
-        return CommandResult.NOT_ENOUGH_ARGS;
+        return CommandResult.INVALID_SYNTAX;
     }
 }

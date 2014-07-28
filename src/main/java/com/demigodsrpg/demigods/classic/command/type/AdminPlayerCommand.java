@@ -19,7 +19,7 @@ public abstract class AdminPlayerCommand extends BaseCommand implements TabCompl
                 return onCommand(sender, model, args);
             }
         }
-        return CommandResult.NOT_ENOUGH_ARGS;
+        return CommandResult.INVALID_SYNTAX;
     }
 
     @Override

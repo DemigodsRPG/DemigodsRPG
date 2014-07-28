@@ -26,7 +26,7 @@ public class CheckPlayerCommand extends AdminPlayerCommand {
             sendInfo(p, sender);
             return CommandResult.SUCCESS;
         }
-        return CommandResult.NOT_ENOUGH_ARGS;
+        return CommandResult.INVALID_SYNTAX;
     }
 
     private void sendInfo(OfflinePlayer p, CommandSender s) {

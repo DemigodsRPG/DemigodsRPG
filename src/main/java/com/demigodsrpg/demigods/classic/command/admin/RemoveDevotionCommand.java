@@ -13,7 +13,7 @@ public class RemoveDevotionCommand extends AdminPlayerCommand {
     @Override
     public CommandResult onCommand(CommandSender sender, PlayerModel model, String[] args) {
         if (args.length == 3) {
-            
+
             PlayerModel m;
             try {
                 Player p = DGClassic.PLAYER_R.fromName(args[0]).getOfflinePlayer().getPlayer();
@@ -25,7 +25,7 @@ public class RemoveDevotionCommand extends AdminPlayerCommand {
                     return CommandResult.QUIET_ERROR;
                 }
                 double newAmount = m.getDevotion(deity) - amount;
-                if(newAmount < 0)newAmount = 0;
+                if (newAmount < 0) newAmount = 0;
 
                 m.setDevotion(deity, newAmount);
 
@@ -36,6 +36,6 @@ public class RemoveDevotionCommand extends AdminPlayerCommand {
             }
             return CommandResult.SUCCESS;
         }
-        return CommandResult.NOT_ENOUGH_ARGS;
+        return CommandResult.INVALID_SYNTAX;
     }
 }
