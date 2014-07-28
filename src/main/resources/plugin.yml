@@ -23,17 +23,29 @@ commands:
     aliases: [v]
   ## Admin Commands
   checkplayer:
-    usage: /CheckPlayer [Name]
+    usage: /checkplayer [player]
+    permissions: demigods.admin.check
   adddevotion:
-    permission: demigods.admin.adddevotion
+    usage: /adddevotion [player] [deity] [amount]
+    permission: demigods.admin.devotion
   removedevotion:
-    permission: demigods.admin.removedevotion
+    usage: /removedevotion [player] [deity] [amount]
+    permission: demigods.admin.devotion
   givedeity:
-    usage: /GiveDeity [Name, Deity, Major/Minor]
-    permission: demigods.admin.givedeity
+    usage: /givedeity [player] [deity] [major|minor]
+    permission: demigods.admin.deity
   removedeity:
-    usage: /RemoveDeity [Name, Deity]
-    permission: demigods.admin.removedeity
+    usage: /removedeity [player] [deity]
+    permission: demigods.admin.deity
+  setalliance:
+    usage: /setalliance [player] [alliance]
+    permission: demigods.admin.alliance
 permisions:
-  demigods.admin.debug:
+  demigods.admin.check:
+    default: op
+  demigods.admin.devotion:
+    default: op
+  demigods.admin.deity:
+    default: op
+  demigods.admin.alliance:
     default: op
