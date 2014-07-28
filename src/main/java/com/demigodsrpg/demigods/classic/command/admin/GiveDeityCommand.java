@@ -28,7 +28,7 @@ public class GiveDeityCommand extends AdminPlayerCommand {
             }
             if(major)
             {
-                DGClassic.PLAYER_R.fromPlayer(p).giveMajorDeity(deity);
+                DGClassic.PLAYER_R.fromPlayer(p).giveMajorDeity(deity, false); // TODO This might be the first time sometimes
                 sender.sendMessage(ChatColor.YELLOW + "You added " + deity.getDeityName() + " to " + p.getName() + " as major deity.");
                 return CommandResult.SUCCESS;
             }

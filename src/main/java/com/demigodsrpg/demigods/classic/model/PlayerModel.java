@@ -403,17 +403,17 @@ public class PlayerModel extends AbstractPersistentModel<UUID> implements Partic
         return true;
     }
 
-    public void giveMajorDeity(Deity deity) {
-        if (majorDeity == null) {
-            setMajorDeity(deity);
+    public void giveMajorDeity(Deity deity, boolean firstTime) {
+        setMajorDeity(deity);
+        if (firstTime) {
             setAlliance(deity.getDefaultAlliance());
             setMaxHealth(25.0);
             setMaxFavor(700.0);
             setFavor(getMaxFavor());
-            setDevotion(deity, 20.0);
             setAscensions(1);
-            calculateAscensions();
         }
+        setDevotion(deity, 20.0);
+        calculateAscensions();
     }
 
     public void giveDeity(Deity deity) {

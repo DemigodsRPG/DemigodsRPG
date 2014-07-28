@@ -30,10 +30,10 @@ public class PlayerListener implements Listener {
             DGClassic.PLAYER_R.register(model);
 
             if (random.nextBoolean()) {
-                model.giveMajorDeity(Deity.ZEUS);
+                model.giveMajorDeity(Deity.ZEUS, true);
                 model.giveDeity(Deity.HEPHAESTUS);
             } else {
-                model.giveMajorDeity(Deity.CRONUS);
+                model.giveMajorDeity(Deity.CRONUS, true);
             }
         }
     }
