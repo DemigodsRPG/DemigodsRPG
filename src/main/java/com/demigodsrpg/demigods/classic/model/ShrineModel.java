@@ -88,6 +88,10 @@ public class ShrineModel extends AbstractPersistentModel<String> {
         return getShrineType().getClickable(location);
     }
 
+    public Location getSafeTeleport() {
+        return getShrineType().getSafeTeleport(location);
+    }
+
     @Override
     public String getPersistantId() {
         return shrineId;
