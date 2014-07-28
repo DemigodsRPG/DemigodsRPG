@@ -28,13 +28,6 @@ public class PlayerRegistry extends AbstractRegistry<UUID, PlayerModel> {
 
     }
 
-    public PlayerModel fromId(UUID id) {
-        if (super.REGISTERED_DATA.containsKey(id)) {
-            return super.REGISTERED_DATA.get(id);
-        }
-        return null;
-    }
-
     public PlayerModel fromPlayer(Player player) {
         PlayerModel found = fromId(player.getUniqueId());
         if (found == null) {

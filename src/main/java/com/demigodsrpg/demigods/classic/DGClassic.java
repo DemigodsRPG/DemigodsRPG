@@ -77,17 +77,9 @@ public class DGClassic extends JavaPlugin {
         // Define the save path
         SAVE_PATH = getDataFolder().getPath() + "/data/";
 
-        // Load persistent data
-        PLAYER_R.registerFromFile();
-        SHRINE_R.registerFromFile();
-        TRIBUTE_R.registerFromFile();
-        SPAWN_R.registerFromFile();
-        SERV_R.registerFromFile();
-
         // Determine territory registries
         for (World world : Bukkit.getWorlds()) {
             TerritoryRegistry terr_r = new TerritoryRegistry(world);
-            terr_r.registerFromFile();
             TERR_R.put(world.getName(), new TerritoryRegistry(world));
         }
 
@@ -122,37 +114,11 @@ public class DGClassic extends JavaPlugin {
         // Ensure that we unregister our commands and tasks
         HandlerList.unregisterAll(this);
         Bukkit.getScheduler().cancelTasks(this);
-
-        // Save the data
-        if (!save()) {
-            CONSOLE.severe("The vital save data was unable to save correctly!");
-            CONSOLE.warning("Disabled with a corrupt save, please use a backup.");
-        } else {
-            // Let the console know
-            CONSOLE.info("Disabled successfully.");
-        }
-    }
-
-    // -- PLUGIN RELATED UTILITY METHODS -- //
-
-    public static boolean save() {
-        boolean noErrors;
-        noErrors = PLAYER_R.saveToFile();
-        noErrors = SHRINE_R.saveToFile() && noErrors;
-        noErrors = TRIBUTE_R.saveToFile() && noErrors;
-        noErrors = SPAWN_R.saveToFile() && noErrors;
-        noErrors = SERV_R.saveToFile() && noErrors;
-
-        for (TerritoryRegistry terr_r : TERR_R.values()) {
-            noErrors = terr_r.saveToFile() && noErrors;
-        }
-
-        return noErrors;
     }
 
     // -- TASK RELATED -- //
 
-    private static final BukkitRunnable SYNC, ASYNC, SAVE, FAVOR, VALUE;
+    private static final BukkitRunnable SYNC, ASYNC, FAVOR, VALUE;
 
 
     static {
@@ -174,13 +140,6 @@ public class DGClassic extends JavaPlugin {
             public void run() {
                 // Update Timed Data
                 SERV_R.clearExpired();
-            }
-        };
-        SAVE = new BukkitRunnable() {
-            @Override
-            public void run() {
-                // Save the data
-                save();
             }
         };
         FAVOR = new BukkitRunnable() {
@@ -210,10 +169,6 @@ public class DGClassic extends JavaPlugin {
         // Start async demigods runnable
         scheduler.scheduleAsyncRepeatingTask(this, ASYNC, 20, 20);
         CONSOLE.info("Main Demigods ASYNC runnable enabled...");
-
-        // Start async demigods runnable
-        scheduler.scheduleAsyncRepeatingTask(this, SAVE, 20, 1200);
-        CONSOLE.info("Main Demigods SAVE runnable enabled...");
 
         // Start async favor runnable
         scheduler.scheduleAsyncRepeatingTask(this, FAVOR, 20, (long) ((double) Setting.FAVOR_REGEN_SECONDS.get() * 20));

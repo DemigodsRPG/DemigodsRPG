@@ -8,7 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 
-public class SpawnRegistry extends AbstractDirectRegistry<IDeity.Alliance, SpawnModel> {
+public class SpawnRegistry extends AbstractRegistry<IDeity.Alliance, SpawnModel> {
     public static final String FILE_NAME = "spawns.dgc";
 
     public Location getSpawn(final IDeity.Alliance alliance) {

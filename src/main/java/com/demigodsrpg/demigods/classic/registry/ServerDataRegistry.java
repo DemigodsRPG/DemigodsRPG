@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class ServerDataRegistry extends AbstractDirectRegistry<UUID, ServerDataModel> {
+public class ServerDataRegistry extends AbstractRegistry<UUID, ServerDataModel> {
     private static final String FILE_NAME = "misc.dgc";
 
     public void put(String row, String column, Object value) {

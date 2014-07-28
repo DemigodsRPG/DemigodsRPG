@@ -27,11 +27,20 @@ public class TributeListener implements Listener {
     public void onTributeInteract(PlayerInteractEvent event) {
         if (ZoneUtil.inNoDGCZone(event.getPlayer().getLocation())) return;
 
+        // Define the location
+        Location location = null;
+
         // Return from actions we don't care about
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if (!Action.RIGHT_CLICK_BLOCK.equals(event.getAction())) {
+            if (Action.RIGHT_CLICK_AIR.equals(event.getAction())) {
+                location = event.getPlayer().getTargetBlock(null, 10).getLocation();
+            } else {
+                return;
+            }
+        }
 
         // Define variables
-        Location location = event.getClickedBlock().getLocation();
+        if (location == null) location = event.getClickedBlock().getLocation();
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
 
         // Return if the player is mortal
@@ -68,7 +77,7 @@ public class TributeListener implements Listener {
         ShrineModel save = DGClassic.SHRINE_R.getShrine(player.getTargetBlock(null, 10).getLocation());
 
         // If it isn't a tribute chest then break the method
-        if (!event.getInventory().getName().contains("Tribute to") /* TODO make this work with translations, I'm sleepy */ || save == null)
+        if (!event.getInventory().getName().contains("Tribute to") || save == null)
             return;
 
         // Calculate the tribute value
@@ -84,7 +93,7 @@ public class TributeListener implements Listener {
         if (items == 0) return;
 
         // Handle the multiplier
-        tributeValue *= (double) Setting.EXP_MULTIPLIER.get();
+        // tributeValue *= (double) Setting.EXP_MULTIPLIER.get();
 
         // Get the current favor for comparison
         double favorBefore = model.getFavor();
@@ -139,15 +148,15 @@ public class TributeListener implements Listener {
         if (model.getMaxFavor() >= (int) Setting.FAVOR_CAP.get()) {
             // They have already met the max favor cap
             if (model.getFavor() > favorBefore)
-                player.sendMessage(ChatColor.YELLOW + "You have been blessed with " + (model.getFavor() - favorBefore) + " instant favor.");
+                player.sendMessage(ChatColor.YELLOW + "You have been blessed with " + ChatColor.ITALIC + (model.getFavor() - favorBefore) + ChatColor.YELLOW + " instant favor.");
         } else {
             if (model.getMaxFavor() > maxFavorBefore) {
                 // Message the tributer
-                player.sendMessage(ChatColor.YELLOW + "Your favor cap has increased to " + model.getMaxFavor() + "!");
+                player.sendMessage(ChatColor.YELLOW + "Your favor cap has increased by " + ChatColor.ITALIC + (model.getFavor() - favorBefore) + ChatColor.YELLOW + "!");
             }
             if (model.getDevotion(save.getDeity()) > devotionBefore) {
                 // Message the tributer
-                player.sendMessage(save.getDeity().getColor() + "Your devotion to " + save.getDeity().getDeityName() + " has increased to " + model.getDevotion(save.getDeity()) + "!");
+                player.sendMessage(save.getDeity().getColor() + "Your devotion to " + save.getDeity().getDeityName() + " has increased by " + ChatColor.ITALIC + (model.getDevotion(save.getDeity()) - devotionBefore) + "!");
             }
         }
 

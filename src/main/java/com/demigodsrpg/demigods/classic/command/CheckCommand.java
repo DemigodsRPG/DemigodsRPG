@@ -6,6 +6,7 @@ import com.demigodsrpg.demigods.classic.command.type.BaseCommand;
 import com.demigodsrpg.demigods.classic.command.type.CommandResult;
 import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
+import com.google.common.cache.CacheStats;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -35,6 +36,15 @@ public class CheckCommand extends BaseCommand {
         player.sendMessage("Favor: " + model.getFavor() + " / " + model.getMaxFavor());
         player.sendMessage("Total Devotion: " + model.getTotalDevotion());
         player.sendMessage("Use " + ChatColor.ITALIC + "/binds" + ChatColor.RESET + " for a list of all ability binds.");
+
+        if (player.hasPermission("demigods.admin.debug")) {
+            player.sendMessage("   ");
+            player.sendMessage(StringUtil2.chatTitle("Server Debug Stats"));
+            CacheStats stats = DGClassic.PLAYER_R.getCache().stats();
+            player.sendMessage("Requests to cache: " + stats.requestCount());
+            player.sendMessage("Size of cache: " + DGClassic.PLAYER_R.getCache().size());
+        }
+
         return CommandResult.SUCCESS;
     }
 }

@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TributeRegistry extends AbstractDirectRegistry<Material, TributeModel> {
+public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
     private final String FILE_NAME = "tributes.dgc";
 
     @Override
@@ -38,17 +38,18 @@ public class TributeRegistry extends AbstractDirectRegistry<Material, TributeMod
     }
 
     public void remove(Material material) {
-        if (find(material) != null) {
-            unregister(find(material));
+        if (fromId(material) != null) {
+            unregister(fromId(material));
         }
     }
 
-    public TributeModel find(Material material) {
-        if (REGISTERED_DATA.containsKey(material)) {
-            return REGISTERED_DATA.get(material);
+    @Override
+    public TributeModel fromId(Material material) {
+        TributeModel model = super.fromId(material);
+        if (model == null) {
+            model = new TributeModel(material, 1);
+            register(model);
         }
-        TributeModel model = new TributeModel(material, 1);
-        register(model);
         return model;
     }
 
@@ -94,7 +95,7 @@ public class TributeRegistry extends AbstractDirectRegistry<Material, TributeMod
      * @return the total number of tributes.
      */
     public int getTributes(Material material) {
-        TributeModel data = find(material);
+        TributeModel data = fromId(material);
         if (data != null) return data.getFitness();
         else return 1;
     }
@@ -119,7 +120,7 @@ public class TributeRegistry extends AbstractDirectRegistry<Material, TributeMod
      * @param item the item whose amount to save.
      */
     public void saveTribute(ItemStack item) {
-        TributeModel data = find(item.getType());
+        TributeModel data = fromId(item.getType());
 
         if (data != null) {
             data.setFitness(data.getFitness() + item.getAmount());
@@ -132,7 +133,8 @@ public class TributeRegistry extends AbstractDirectRegistry<Material, TributeMod
      * Returns the value for a <code>material</code>.
      */
     public int getValue(Material material) {
-        return (int) find(material).getLastKnownValue();
+        int lastKnownValue = (int) fromId(material).getLastKnownValue();
+        return lastKnownValue > 0 ? lastKnownValue : 1;
     }
 
     /**

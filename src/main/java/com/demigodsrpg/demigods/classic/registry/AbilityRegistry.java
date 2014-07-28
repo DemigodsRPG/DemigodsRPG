@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AbilityRegistry implements Listener {
     protected static final ConcurrentMap<String, Data> REGISTERED_COMMANDS = new ConcurrentHashMap<>();
-    protected static final Multimap<Class<? extends Event>, Data> REGISTERED_ABILITIES = Multimaps.newMultimap(new ConcurrentHashMap<Class<? extends Event>, Collection<Data>>(), new Supplier<Collection<Data>>() {
+    protected static final Multimap<String, Data> REGISTERED_ABILITIES = Multimaps.newMultimap(new ConcurrentHashMap<String, Collection<Data>>(), new Supplier<Collection<Data>>() {
         @Override
         public Collection<Data> get() {
             return new HashSet<>();
@@ -48,11 +48,11 @@ public class AbilityRegistry implements Listener {
             case LEFT_CLICK_AIR:
                 return;
         }
-        for (Data ability : REGISTERED_ABILITIES.get(event.getClass())) {
+        for (Data ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
             try {
                 PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
                 if (processAbility(model, ability)) {
-                    ability.getMethod().invoke(ability.getDeity().getParentObject(), ability.eventClass.cast(event));
+                    ability.getMethod().invoke(ability.getDeity().getParentObject(), event);
                     event.setCancelled(true);
                     return;
                 }
@@ -64,13 +64,13 @@ public class AbilityRegistry implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onEvent(EntityDamageByEntityEvent event) {
-        for (Data ability : REGISTERED_ABILITIES.get(event.getClass())) {
+        for (Data ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
             try {
                 if (event.getDamager() instanceof Player) {
                     Player player = (Player) event.getDamager();
                     PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
                     if (processAbility(model, ability)) {
-                        ability.getMethod().invoke(ability.getDeity().getParentObject(), ability.eventClass.cast(event));
+                        ability.getMethod().invoke(ability.getDeity().getParentObject(), event);
                     }
                 }
             } catch (Exception oops) {
@@ -81,12 +81,12 @@ public class AbilityRegistry implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onEvent(FurnaceSmeltEvent event) {
-        for (Data ability : REGISTERED_ABILITIES.get(event.getClass())) {
+        for (Data ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
             for (PlayerModel model : DGClassic.PLAYER_R.fromDeity(ability.getDeity())) {
                 try {
                     if (model.getOnline() && model.getLocation().getWorld().equals(event.getBlock().getWorld()) && model.getLocation().distance(event.getBlock().getLocation()) < (int) Math.round(20 * Math.pow(model.getDevotion(Deity.HEPHAESTUS), 0.15))) {
                         if (processAbility(model, ability)) {
-                            ability.getMethod().invoke(ability.getDeity().getParentObject(), ability.eventClass.cast(event));
+                            ability.getMethod().invoke(ability.getDeity().getParentObject(), event);
                             return; // TODO
                         }
                     }
@@ -238,8 +238,8 @@ public class AbilityRegistry implements Listener {
                 return;
             }
             Class<? extends Event> eventClass = (Class<? extends Event>) paramaters[0];
-            Data data = new Data(deity, method, ability, eventClass);
-            REGISTERED_ABILITIES.put(eventClass, data);
+            Data data = new Data(deity, method, ability);
+            REGISTERED_ABILITIES.put(eventClass.getName(), data);
             if (!"".equals(data.getCommand())) {
                 REGISTERED_COMMANDS.put(data.getCommand(), data);
             }
@@ -259,13 +259,11 @@ public class AbilityRegistry implements Listener {
         private Deity deity;
         private Method method;
         private Ability ability;
-        private Class<? extends Event> eventClass;
 
-        public Data(Deity deity, Method method, Ability ability, Class<? extends Event> eventClass) {
+        public Data(Deity deity, Method method, Ability ability) {
             this.deity = deity;
             this.method = method;
             this.ability = ability;
-            this.eventClass = eventClass;
         }
 
         public Deity getDeity() {
@@ -298,10 +296,6 @@ public class AbilityRegistry implements Listener {
 
         public long getCooldown() {
             return ability.cooldown();
-        }
-
-        public EventPriority getEventPriority() {
-            return ability.priority();
         }
 
         public Method getMethod() {

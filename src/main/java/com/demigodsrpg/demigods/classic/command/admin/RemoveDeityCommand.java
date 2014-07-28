@@ -24,13 +24,13 @@ public class RemoveDeityCommand extends AdminPlayerCommand{
             } catch (Exception ignored)
             {
                 sender.sendMessage(ChatColor.RED + "Wrong player or deity! Please try a little harder.");
-                return CommandResult.SUCCESS;
+                return CommandResult.QUIET_ERROR;
             }
+            // TODO Major deity
             DGClassic.PLAYER_R.fromPlayer(p).removeContractedDeity(deity);
-            sender.sendMessage(ChatColor.YELLOW + "You removed " + deity.getNomen() + " from " + p.getName() + ".");
+            sender.sendMessage(ChatColor.YELLOW + "You removed " + deity.getDeityName() + " from " + p.getName() + ".");
             return CommandResult.SUCCESS;
         }
-        sender.sendMessage(ChatColor.RED + "Wrong syntax! /RemoveDeity [Player, Deity]");
-        return CommandResult.SUCCESS;
+        return CommandResult.NOT_ENOUGH_ARGS;
     }
 }

@@ -1,7 +1,5 @@
 package com.demigodsrpg.demigods.classic.ability;
 
-import org.bukkit.event.EventPriority;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -33,6 +31,4 @@ public @interface Ability {
     long delay() default 0;
 
     long cooldown() default 0;
-
-    EventPriority priority() default EventPriority.NORMAL;
 }
