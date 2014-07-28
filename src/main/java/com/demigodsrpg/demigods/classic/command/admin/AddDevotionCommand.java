@@ -25,7 +25,7 @@ public class AddDevotionCommand extends AdminPlayerCommand {
 
                 DGClassic.PLAYER_R.fromPlayer(p).setDevotion(deity, DGClassic.PLAYER_R.fromPlayer(p).getDevotion(deity) + amount);
 
-                sender.sendMessage(ChatColor.YELLOW + "You added " + amount + " favor to " + p.getName() + " in the deity " + deity.getNomen() + ".");
+                sender.sendMessage(ChatColor.YELLOW + "You added " + amount + " devotion to " + p.getName() + " in the deity " + deity.getNomen() + ".");
             } catch (Exception ignored){
                 sender.sendMessage(ChatColor.RED + "Invalid syntax! /AddDevotion [Name, Deity, Amount]");
                 return CommandResult.QUIET_ERROR;

@@ -17,19 +17,30 @@ public class RemoveDeityCommand extends AdminPlayerCommand{
         {
             Player p;
             Deity deity;
+            PlayerModel m;
             try
             {
                 deity = Deity.valueOf(args[1].toUpperCase());
                 p = DGClassic.PLAYER_R.fromName(args[0]).getOfflinePlayer().getPlayer();
+                m = DGClassic.PLAYER_R.fromPlayer(p);
             } catch (Exception ignored)
             {
                 sender.sendMessage(ChatColor.RED + "Wrong player or deity! Please try a little harder.");
                 return CommandResult.QUIET_ERROR;
             }
-            // TODO Major deity
-            DGClassic.PLAYER_R.fromPlayer(p).removeContractedDeity(deity);
-            sender.sendMessage(ChatColor.YELLOW + "You removed " + deity.getDeityName() + " from " + p.getName() + ".");
-            return CommandResult.SUCCESS;
+            if(m.getMajorDeity().equals(deity))
+            {
+                m.setMajorDeity(Deity.HUMAN);
+                sender.sendMessage(ChatColor.YELLOW + "You removed " + deity.getDeityName() + " from " + p.getName() + ".");
+                m.setDevotion(deity, 0.0);
+                return CommandResult.SUCCESS;
+            }
+            else {
+                m.removeContractedDeity(deity);
+                sender.sendMessage(ChatColor.YELLOW + "You removed " + deity.getDeityName() + " from " + p.getName() + ".");
+                m.setDevotion(deity, 0.0);
+                return CommandResult.SUCCESS;
+            }
         }
         return CommandResult.NOT_ENOUGH_ARGS;
     }

@@ -20,6 +20,16 @@ commands:
   values:
     usage: /values
     aliases: [v]
+  adddevotion:
+    permission: demigods.admin.adddevotion
+  checkplayer:
+    usage: /CheckPlayer [Name]
+  givedeity:
+    usage: /GiveDeity [Name, Deity, Major/Minor]
+    permission: demigods.admin.givedeity
+  removedeity:
+    usage: /RemoveDeity [Name, Deity]
+    permission: demigods.admin.removedeity
 permisions:
   demigods.admin.debug:
     default: op
