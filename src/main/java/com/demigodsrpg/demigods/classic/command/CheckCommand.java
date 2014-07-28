@@ -1,5 +1,6 @@
 package com.demigodsrpg.demigods.classic.command;
 
+import com.censoredsoftware.library.util.ColorUtil;
 import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.command.type.BaseCommand;
@@ -22,8 +23,9 @@ public class CheckCommand extends BaseCommand {
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
         player.sendMessage(StringUtil2.chatTitle("Player Stats"));
         String nomen = model.getMajorDeity().getNomen();
-        player.sendMessage("You are " + (StringUtil2.beginsWithVowel(nomen) ? "an " : "a ") + model.getMajorDeity().getColor() + nomen + ".");
-        player.sendMessage("You have " + ChatColor.RED + model.getMaxHealth() + ChatColor.RESET + " health.");
+        player.sendMessage(ChatColor.YELLOW + "You are " + (StringUtil2.beginsWithVowel(nomen) ? "an " : "a ") + model.getMajorDeity().getColor() + nomen + ".");
+        player.sendMessage(ChatColor.YELLOW + "You are allied with the " + StringUtil2.beautify(model.getAlliance().name()) + " alliance.");
+        player.sendMessage(ChatColor.YELLOW + "You have " + ColorUtil.getColor(player.getHealth(), player.getMaxHealth()) + ChatColor.ITALIC + player.getHealth() + " / " + player.getMaxHealth() + ChatColor.YELLOW + " health.");
         if (!model.getContractedDeities().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for (Deity deity : model.getContractedDeities()) {
