@@ -30,7 +30,7 @@ public abstract class AbstractRegistry<K, T extends AbstractPersistentModel<K>> 
      * The accuracy of stats becomes fudged a but, but we only cache settings for 5 seconds, so I hope it's not too bad.
      * TODO Find the optimal balance for the cache.
      */
-    protected Cache<K, T> REGISTERED_DATA_CACHE = CacheBuilder.newBuilder().concurrencyLevel(4).maximumSize(1000).expireAfterWrite(5, TimeUnit.SECONDS).build(new CacheLoader<K, T>() {
+    protected Cache<K, T> REGISTERED_DATA_CACHE = CacheBuilder.newBuilder().concurrencyLevel(4).maximumSize(1000).expireAfterWrite(2, TimeUnit.SECONDS).build(new CacheLoader<K, T>() {
         @Override
         public T load(K key) throws Exception {
             return valueFromData(key.toString(), getFileData().getConfigurationSection(key.toString()));

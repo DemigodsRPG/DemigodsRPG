@@ -16,7 +16,7 @@ public class ShrineRegistry extends AbstractRegistry<String, ShrineModel> {
         return Collections2.filter(getRegistered(), new Predicate<ShrineModel>() {
             @Override
             public boolean apply(ShrineModel shrineModel) {
-                return shrineModel.getLocation().distance(location) <= range;
+                return shrineModel.getLocation().getWorld().equals(location.getWorld()) && shrineModel.getLocation().distance(location) <= range;
             }
         });
     }

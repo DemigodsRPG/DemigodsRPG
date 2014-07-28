@@ -207,7 +207,7 @@ public class AbilityRegistry implements Listener {
                 DGClassic.SERV_R.put(model.getMojangId().toString(), ability + ":delay", true, delay, TimeUnit.MILLISECONDS);
             }
             if (cooldown > 0) {
-                DGClassic.SERV_R.put(model.getMojangId().toString(), ability + ":cooldown", true, delay, TimeUnit.MILLISECONDS);
+                DGClassic.SERV_R.put(model.getMojangId().toString(), ability + ":cooldown", true, cooldown, TimeUnit.MILLISECONDS);
             }
             if (cost > 0) {
                 model.setFavor(model.getFavor() - cost);
