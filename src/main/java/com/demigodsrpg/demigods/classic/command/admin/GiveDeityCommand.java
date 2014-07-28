@@ -13,28 +13,29 @@ public class GiveDeityCommand extends AdminPlayerCommand {
     @Override
     public CommandResult onCommand(CommandSender sender, PlayerModel model, String[] args) {
         if (args.length == 3) {
-            Player p;
-            Deity deity;
-            boolean major;
+            Player p = null;
+            Deity deity = null;
+            boolean major = true;
             try {
-                if(args[2].equalsIgnoreCase("major"))major = true;
-                else{major = false;}
+                major = args[2].equalsIgnoreCase("major");
                 deity = Deity.valueOf(args[1].toUpperCase());
                 p = DGClassic.PLAYER_R.fromName(args[0]).getOfflinePlayer().getPlayer();
             } catch (Exception ignored) {
+            }
+            if (deity == null || p == null) {
                 sender.sendMessage(ChatColor.RED + "Wrong player or deity! Please try a little harder.");
                 return CommandResult.QUIET_ERROR;
             }
             if(major)
             {
                 DGClassic.PLAYER_R.fromPlayer(p).giveMajorDeity(deity);
-                sender.sendMessage(ChatColor.YELLOW + "You added " + deity.getNomen() + " to " + p.getName() + " as major deity.");
+                sender.sendMessage(ChatColor.YELLOW + "You added " + deity.getDeityName() + " to " + p.getName() + " as major deity.");
                 return CommandResult.SUCCESS;
             }
             else
             {
                 DGClassic.PLAYER_R.fromPlayer(p).giveDeity(deity);
-                sender.sendMessage(ChatColor.YELLOW + "You added " + deity.getNomen() + " to " + p.getName() + " as minor deity.");
+                sender.sendMessage(ChatColor.YELLOW + "You added " + deity.getDeityName() + " to " + p.getName() + " as minor deity.");
                 return CommandResult.SUCCESS;
             }
 

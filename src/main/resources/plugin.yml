@@ -5,6 +5,7 @@ description: Ally yourself with mythical deities and battle in the name of the G
 authors: [marinating, HmmmQuestionMark, _Alex, TheFatDemon, janie177]
 softdepend: [WorldGuard, WorldEdit, Multiverse-Core]
 commands:
+  ## Everyday Commands
   alliance:
     usage: /alliance message
     aliases: [a]
@@ -20,10 +21,13 @@ commands:
   values:
     usage: /values
     aliases: [v]
-  adddevotion:
-    permission: demigods.admin.adddevotion
+  ## Admin Commands
   checkplayer:
     usage: /CheckPlayer [Name]
+  adddevotion:
+    permission: demigods.admin.adddevotion
+  removedevotion:
+    permission: demigods.admin.removedevotion
   givedeity:
     usage: /GiveDeity [Name, Deity, Major/Minor]
     permission: demigods.admin.givedeity

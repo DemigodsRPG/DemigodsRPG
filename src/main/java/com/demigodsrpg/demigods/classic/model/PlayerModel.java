@@ -235,6 +235,7 @@ public class PlayerModel extends AbstractPersistentModel<UUID> implements Partic
 
     public void setDevotion(Deity deity, Double devotion) {
         this.devotion.put(deity.name(), devotion);
+        calculateAscensions();
         DGClassic.PLAYER_R.register(this);
     }
 
@@ -403,14 +404,16 @@ public class PlayerModel extends AbstractPersistentModel<UUID> implements Partic
     }
 
     public void giveMajorDeity(Deity deity) {
-        setMajorDeity(deity);
-        setAlliance(deity.getDefaultAlliance());
-        setMaxHealth(25.0);
-        setMaxFavor(700.0);
-        setFavor(getMaxFavor());
-        setDevotion(deity, 20.0);
-        setAscensions(1);
-        calculateAscensions();
+        if (majorDeity == null) {
+            setMajorDeity(deity);
+            setAlliance(deity.getDefaultAlliance());
+            setMaxHealth(25.0);
+            setMaxFavor(700.0);
+            setFavor(getMaxFavor());
+            setDevotion(deity, 20.0);
+            setAscensions(1);
+            calculateAscensions();
+        }
     }
 
     public void giveDeity(Deity deity) {
@@ -423,9 +426,9 @@ public class PlayerModel extends AbstractPersistentModel<UUID> implements Partic
         if (getAscensions() >= (int) Setting.ASCENSION_CAP.get()) return;
         while (getTotalDevotion() >= (int) Math.ceil(500 * Math.pow(getAscensions() + 1, 2.02)) && getAscensions() < (int) Setting.ASCENSION_CAP.get()) {
             setMaxHealth(getMaxHealth() + 10.0);
-            player.setHealth(getMaxHealth());
             player.setMaxHealth(getMaxHealth());
             player.setHealthScale(getMaxHealth());
+            player.setHealth(getMaxHealth());
 
             setAscensions(getAscensions() + 1);
 

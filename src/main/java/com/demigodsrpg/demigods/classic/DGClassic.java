@@ -98,18 +98,18 @@ public class DGClassic extends JavaPlugin {
         manager.registerEvents(ABILITY_R, this);
 
         // Register commands
-        getCommand("adddevotion").setExecutor(new AddDevotionCommand());
-        getCommand("checkplayer").setExecutor(new CheckPlayerCommand());
-        getCommand("givedeity").setExecutor(new GiveDeityCommand());
-        getCommand("removedeity").setExecutor(new RemoveDeityCommand());
-        getCommand("removedevotion").setExecutor(new RemoveDevotionCommand());
         getCommand("alliance").setExecutor(new AllianceCommand());
         getCommand("alliance").setExecutor(new AllianceCommand());
         getCommand("check").setExecutor(new CheckCommand());
         getCommand("binds").setExecutor(new BindsCommand());
         getCommand("values").setExecutor(new ValuesCommand());
 
-        // TODO Admin commands
+        // Admin commands
+        getCommand("checkplayer").setExecutor(new CheckPlayerCommand());
+        getCommand("adddevotion").setExecutor(new AddDevotionCommand());
+        getCommand("removedevotion").setExecutor(new RemoveDevotionCommand());
+        getCommand("givedeity").setExecutor(new GiveDeityCommand());
+        getCommand("removedeity").setExecutor(new RemoveDeityCommand());
 
         // Enable ZoneUtil
         ZoneUtil.init();
