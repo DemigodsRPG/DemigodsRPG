@@ -4,6 +4,7 @@ import com.demigodsrpg.demigods.classic.command.AllianceCommand;
 import com.demigodsrpg.demigods.classic.command.BindsCommand;
 import com.demigodsrpg.demigods.classic.command.CheckCommand;
 import com.demigodsrpg.demigods.classic.command.ValuesCommand;
+import com.demigodsrpg.demigods.classic.command.admin.*;
 import com.demigodsrpg.demigods.classic.listener.PlayerListener;
 import com.demigodsrpg.demigods.classic.listener.ShrineListener;
 import com.demigodsrpg.demigods.classic.listener.TributeListener;
@@ -97,6 +98,12 @@ public class DGClassic extends JavaPlugin {
         manager.registerEvents(ABILITY_R, this);
 
         // Register commands
+        getCommand("adddevotion").setExecutor(new AddDevotionCommand());
+        getCommand("checkplayer").setExecutor(new CheckPlayerCommand());
+        getCommand("givedeity").setExecutor(new GiveDeityCommand());
+        getCommand("removedeity").setExecutor(new RemoveDeityCommand());
+        getCommand("removedevotion").setExecutor(new RemoveDevotionCommand());
+        getCommand("alliance").setExecutor(new AllianceCommand());
         getCommand("alliance").setExecutor(new AllianceCommand());
         getCommand("check").setExecutor(new CheckCommand());
         getCommand("binds").setExecutor(new BindsCommand());
