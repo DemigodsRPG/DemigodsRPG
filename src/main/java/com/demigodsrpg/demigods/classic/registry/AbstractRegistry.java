@@ -23,6 +23,13 @@ import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractRegistry<K, T extends AbstractPersistentModel<K>> {
+    // -- CACHE -- //
+
+    /**
+     * This cache is very important, it takes the load of constant querying data away from I/O and puts it into the RAM.
+     * The accuracy of stats becomes fudged a but, but we only cache settings for 5 seconds, so I hope it's not too bad.
+     * TODO Find the optimal balance for the cache.
+     */
     protected Cache<K, T> REGISTERED_DATA_CACHE = CacheBuilder.newBuilder().concurrencyLevel(4).maximumSize(1000).expireAfterWrite(5, TimeUnit.SECONDS).build(new CacheLoader<K, T>() {
         @Override
         public T load(K key) throws Exception {
