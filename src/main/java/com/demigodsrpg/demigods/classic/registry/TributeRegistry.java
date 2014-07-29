@@ -167,6 +167,10 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
             case GHAST_TEAR:
             case DIAMOND_ORE:
             case LAPIS_ORE:
+            case CHAINMAIL_BOOTS:
+            case CHAINMAIL_CHESTPLATE:
+            case CHAINMAIL_HELMET:
+            case CHAINMAIL_LEGGINGS:
                 return Category.MID_HIGH_RANGE;
             case IRON_ORE:
             case GOLD_ORE:
@@ -180,13 +184,52 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
             case OBSIDIAN:
             case REDSTONE_ORE:
             case GRASS:
+            case GOLDEN_CARROT:
+            case GOLDEN_APPLE:
                 return Category.MID_RANGE;
+            case COOKED_BEEF:
+            case COOKED_CHICKEN:
+            case COOKED_FISH:
+            case GRILLED_PORK:
+            case BAKED_POTATO:
+            case MUSHROOM_SOUP:
+            case CAKE:
+            case PUMPKIN_PIE:
+                return Category.COOKED_FOOD;
+            case APPLE:
+            case ROTTEN_FLESH:
+            case RAW_BEEF:
+            case RAW_CHICKEN:
+            case RAW_FISH:
+            case LEATHER:
+            case WOOL:
+            case INK_SACK:
+            case EGG:
+            case RED_ROSE:
+            case SPIDER_EYE:
+            case STRING:
+            case BONE:
+            case PORK:
+            case FEATHER:
+            case POTATO:
+            case POISONOUS_POTATO:
+            case CARROT:
+            case PUMPKIN:
+            case PUMPKIN_SEEDS:
+            case MELON:
+            case MELON_SEEDS:
+            case SEEDS:
+            case WHEAT:
+            case HAY_BLOCK:
+                return Category.MOB_LOOT;
             case LOG:
             case DIRT:
             case SAND:
             case GRAVEL:
             case COBBLESTONE:
             case SANDSTONE:
+            case STICK:
+            case TORCH:
                 return Category.WORTHLESS;
             default:
                 if (material.name().contains("WOOD")) {
@@ -466,6 +509,6 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
     }
 
     public enum Category {
-        CHEATING, BOSS_REWARD, RAW_ORE, MID_HIGH_RANGE, MID_RANGE, WORTHLESS, WOOD, STONE, IRON, GOLD, DIAMOND, EMERALD, COAL, LEATHER, MANUFACTURED, OTHER
+        CHEATING, COOKED_FOOD, MOB_LOOT, BOSS_REWARD, RAW_ORE, MID_HIGH_RANGE, MID_RANGE, WORTHLESS, WOOD, STONE, IRON, GOLD, DIAMOND, EMERALD, COAL, LEATHER, MANUFACTURED, OTHER
     }
 }
