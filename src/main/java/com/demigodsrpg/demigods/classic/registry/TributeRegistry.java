@@ -174,9 +174,6 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
             case CHAINMAIL_HELMET:
             case CHAINMAIL_LEGGINGS:
                 return Category.MID_HIGH_RANGE;
-            case IRON_ORE:
-            case GOLD_ORE:
-                return Category.RAW_ORE;
             case GLOWSTONE_DUST:
             case GLOWSTONE:
             case REDSTONE:

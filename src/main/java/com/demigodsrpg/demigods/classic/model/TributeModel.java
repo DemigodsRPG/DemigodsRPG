@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class TributeModel extends AbstractPersistentModel<Material> {
-    private static final Double VALUE_K = 71.43;
+    private static final Double VALUE_K = 14.286;
     private static Double OFFSET = 1.0;
 
     private Material material;
