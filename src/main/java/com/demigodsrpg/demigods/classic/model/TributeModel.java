@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TributeModel extends AbstractPersistentModel<Material> {
     private static final Double VALUE_K = 71.43;
+    private static Double OFFSET = 1.0;
 
     private Material material;
     private List<Long> tributeTimes;
@@ -32,7 +33,7 @@ public class TributeModel extends AbstractPersistentModel<Material> {
         tributeTimes = new ArrayList<>();
         this.fitness = fitness;
         category = DGClassic.TRIBUTE_R.getCategory(material);
-        lastKnownValue = getValuePercentage();
+        lastKnownValue = 1.0;
     }
 
     public Material getMaterial() {
@@ -75,13 +76,13 @@ public class TributeModel extends AbstractPersistentModel<Material> {
         return lastKnownValue;
     }
 
-    private void updateValue(double percentOffset) {
+    private void updateValue() {
         if (getCategory().equals(TributeRegistry.Category.WORTHLESS)) {
             lastKnownValue = 0.0;
         } else if (getCategory().equals(TributeRegistry.Category.CHEATING)) {
             lastKnownValue = -3000.0;
         } else {
-            lastKnownValue = (getValuePercentage() / percentOffset) * VALUE_K * DGClassic.TRIBUTE_R.getRegistered().size();
+            lastKnownValue = (getValuePercentage() / OFFSET) * VALUE_K * DGClassic.TRIBUTE_R.getRegistered().size();
         }
         DGClassic.TRIBUTE_R.register(this);
     }
@@ -127,12 +128,12 @@ public class TributeModel extends AbstractPersistentModel<Material> {
     public static class ValueTask extends BukkitRunnable {
         @Override
         public void run() {
-            double percentOffset = 0;
+            OFFSET = 1.0;
             for (TributeModel model : DGClassic.TRIBUTE_R.getRegistered()) {
-                percentOffset += model.getValuePercentage();
+                OFFSET += model.getValuePercentage();
             }
             for (TributeModel model : DGClassic.TRIBUTE_R.getRegistered()) {
-                model.updateValue(percentOffset);
+                model.updateValue();
             }
         }
     }

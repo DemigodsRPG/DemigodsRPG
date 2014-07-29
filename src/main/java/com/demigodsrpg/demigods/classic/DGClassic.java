@@ -94,6 +94,11 @@ public class DGClassic extends JavaPlugin {
         // Regen shrines
         SHRINE_R.generate();
 
+        // Fill up tribute data
+        if (TRIBUTE_R.getRegistered().isEmpty()) {
+            TRIBUTE_R.initializeTributeTracking();
+        }
+
         // Start the threads
         startThreads();
 
