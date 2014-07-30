@@ -15,3 +15,9 @@ TODO
 - Add add Deities and abilities.
 - Balance them.
 - Optimize plugin after everything is feature complete.
+
+BUGS
+====
+
+- Tribute data is causing huge memory leaks?
+- Every reload causes climbing memory usage.
