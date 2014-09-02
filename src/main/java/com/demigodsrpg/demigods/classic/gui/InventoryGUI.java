@@ -1,18 +1,13 @@
 package com.demigodsrpg.demigods.classic.gui;
 
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
-
-public enum InventoryGUI implements IInventoryGUI
-{
+public enum InventoryGUI implements IInventoryGUI {
     ShrineGUI(new ShrineGUI());
 
     private IInventoryGUI gui;
 
-    private InventoryGUI(IInventoryGUI gui)
-    {
+    private InventoryGUI(IInventoryGUI gui) {
         this.gui = gui;
     }
 

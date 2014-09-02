@@ -12,18 +12,17 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class ShrineModel extends AbstractPersistentModel<String> {
     private String shrineId;
-    private UUID ownerMojangId;
+    private String ownerMojangId;
     private Deity deity;
     private Shrine shrine;
     private Location location;
 
     public ShrineModel(String name, Player player, Deity deity, Shrine shrine, Location location) {
         shrineId = name;
-        ownerMojangId = player.getUniqueId();
+        ownerMojangId = player.getUniqueId().toString();
         this.deity = deity;
         this.shrine = shrine;
         this.location = location;
@@ -32,7 +31,7 @@ public class ShrineModel extends AbstractPersistentModel<String> {
     public ShrineModel(String shrineId, ConfigurationSection conf) {
         this.shrineId = shrineId;
 
-        ownerMojangId = UUID.fromString(conf.getString("ownerId"));
+        ownerMojangId = conf.getString("ownerId");
         deity = Deity.valueOf(conf.getString("deity"));
         shrine = Shrine.valueOf(conf.getString("type"));
 
@@ -68,7 +67,7 @@ public class ShrineModel extends AbstractPersistentModel<String> {
         return DGClassic.PLAYER_R.fromId(ownerMojangId).getAlliance();
     }
 
-    public UUID getOwnerMojangId() {
+    public String getOwnerMojangId() {
         return ownerMojangId;
     }
 

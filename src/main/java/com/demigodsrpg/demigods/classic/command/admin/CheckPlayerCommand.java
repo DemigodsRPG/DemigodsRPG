@@ -10,6 +10,7 @@ import com.demigodsrpg.demigods.classic.model.PlayerModel;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class CheckPlayerCommand extends AdminPlayerCommand {
     @Override
@@ -23,14 +24,16 @@ public class CheckPlayerCommand extends AdminPlayerCommand {
                 sender.sendMessage(ChatColor.RED + "Player is not real, but we appreciate the attempt!");
                 return CommandResult.QUIET_ERROR;
             }
-            sendInfo(p, sender);
+            if (p.isOnline()) {
+                sendInfo(p.getPlayer(), sender);
+            }
             return CommandResult.SUCCESS;
         }
         return CommandResult.INVALID_SYNTAX;
     }
 
-    private void sendInfo(OfflinePlayer p, CommandSender s) {
-        PlayerModel model = DGClassic.PLAYER_R.fromId(p.getUniqueId());
+    private void sendInfo(Player p, CommandSender s) {
+        PlayerModel model = DGClassic.PLAYER_R.fromId(p.getUniqueId().toString());
         s.sendMessage(StringUtil2.chatTitle("Player Stats"));
         s.sendMessage(p.getName() + " is a " + model.getMajorDeity().getColor() + model.getMajorDeity().getNomen());
         s.sendMessage(p.getName() + " is allied with the " + StringUtil2.beautify(model.getAlliance().name()) + " alliance.");

@@ -16,14 +16,14 @@ public class BattleRegistry {
     }
 
     public Participant defineParticipant(Entity entity) {
-        if(entity instanceof Player) {
+        if (entity instanceof Player) {
             return DGClassic.PLAYER_R.fromPlayer((Player) entity);
         }
         return null;
     }
 
     public boolean canTarget(Entity entity) {
-        if(ZoneUtil.isNoDGCWorld(entity.getWorld())) return false;
+        if (ZoneUtil.isNoDGCWorld(entity.getWorld())) return false;
         Participant participant = defineParticipant(entity);
         return participant == null || participant.getCanPvp();
     }

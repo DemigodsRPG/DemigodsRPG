@@ -13,10 +13,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Tameable;
 import org.bukkit.util.BlockIterator;
 
-import java.rmi.dgc.DGC;
 import java.util.List;
 import java.util.Random;
 
@@ -50,7 +48,7 @@ public class TargetingUtil {
             targets.addAll(Collections2.filter(player.getNearbyEntities(range, range, range), new Predicate<Entity>() {
                 @Override
                 public boolean apply(Entity entity) {
-                    if(entity instanceof LivingEntity && entity.getLocation().distance(block.getLocation()) <= correction) {
+                    if (entity instanceof LivingEntity && entity.getLocation().distance(block.getLocation()) <= correction) {
                         if (entity instanceof Player) {
                             PlayerModel target = DGClassic.PLAYER_R.fromPlayer((Player) entity);
                             if (looking.getAlliance().equals(target.getAlliance()) || ((Player) entity).getGameMode().equals(GameMode.CREATIVE))
@@ -100,7 +98,7 @@ public class TargetingUtil {
      * at when target <code>target</code>.
      *
      * @param player the character triggering the ability callAbilityEvent
-     * @param target    the location the character is target at
+     * @param target the location the character is target at
      * @return the aimed at location
      */
     public static Location adjustedAimLocation(PlayerModel player, Location target) {

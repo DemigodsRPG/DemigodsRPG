@@ -21,8 +21,8 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class PlayerModel extends AbstractPersistentModel<UUID> implements Participant {
-    private UUID mojangId;
+public class PlayerModel extends AbstractPersistentModel<String> implements Participant {
+    private String mojangId;
     private String lastKnownName;
     private Long lastLoginTime;
 
@@ -46,7 +46,7 @@ public class PlayerModel extends AbstractPersistentModel<UUID> implements Partic
 
     @SuppressWarnings("deprecation")
     public PlayerModel(Player player) {
-        mojangId = player.getUniqueId();
+        mojangId = player.getUniqueId().toString();
         lastKnownName = player.getName();
         lastLoginTime = System.currentTimeMillis();
 
@@ -68,7 +68,7 @@ public class PlayerModel extends AbstractPersistentModel<UUID> implements Partic
         teamKills = 0;
     }
 
-    public PlayerModel(UUID mojangId, ConfigurationSection conf) {
+    public PlayerModel(String mojangId, ConfigurationSection conf) {
         this.mojangId = mojangId;
         lastKnownName = conf.getString("lastKnownName");
         lastLoginTime = conf.getLong("lastLoginTime");
@@ -100,8 +100,8 @@ public class PlayerModel extends AbstractPersistentModel<UUID> implements Partic
     }
 
     @Override
-    public UUID getPersistantId() {
-        return getMojangId();
+    public String getPersistantId() {
+        return mojangId;
     }
 
     @Override
@@ -130,7 +130,7 @@ public class PlayerModel extends AbstractPersistentModel<UUID> implements Partic
     }
 
     public UUID getMojangId() {
-        return mojangId;
+        return UUID.fromString(mojangId);
     }
 
     public String getLastKnownName() {
@@ -337,7 +337,7 @@ public class PlayerModel extends AbstractPersistentModel<UUID> implements Partic
     }
 
     public OfflinePlayer getOfflinePlayer() {
-        return Bukkit.getOfflinePlayer(mojangId);
+        return Bukkit.getOfflinePlayer(UUID.fromString(mojangId));
     }
 
     public boolean getOnline() {

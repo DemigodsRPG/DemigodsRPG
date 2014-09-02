@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class PlayerRegistry extends AbstractRegistry<UUID, PlayerModel> {
+public class PlayerRegistry extends AbstractRegistry<String, PlayerModel> {
     public static final String FILE_NAME = "players.dgc";
 
     @Deprecated
@@ -25,11 +25,10 @@ public class PlayerRegistry extends AbstractRegistry<UUID, PlayerModel> {
                 return model.getLastKnownName().equalsIgnoreCase(name);
             }
         }, null);
-
     }
 
     public PlayerModel fromPlayer(Player player) {
-        PlayerModel found = fromId(player.getUniqueId());
+        PlayerModel found = fromId(player.getUniqueId().toString());
         if (found == null) {
             found = new PlayerModel(player);
             register(found);
@@ -82,12 +81,12 @@ public class PlayerRegistry extends AbstractRegistry<UUID, PlayerModel> {
     }
 
     @Override
-    public UUID keyFromString(String stringKey) {
-        return UUID.fromString(stringKey);
+    public String keyFromString(String stringKey) {
+        return stringKey;
     }
 
     @Override
     public PlayerModel valueFromData(String stringKey, ConfigurationSection data) {
-        return new PlayerModel(keyFromString(stringKey), data);
+        return new PlayerModel(stringKey, data);
     }
 }

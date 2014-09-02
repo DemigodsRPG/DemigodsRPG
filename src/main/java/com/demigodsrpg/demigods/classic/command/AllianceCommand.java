@@ -11,7 +11,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-
 public class AllianceCommand extends BaseCommand {
     @Override
     public CommandResult onCommand(CommandSender sender, Command command, String[] args) {
