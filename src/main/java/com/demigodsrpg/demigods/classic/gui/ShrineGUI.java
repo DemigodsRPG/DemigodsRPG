@@ -2,59 +2,113 @@ package com.demigodsrpg.demigods.classic.gui;
 
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.model.ShrineModel;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ShrineGUI implements IInventoryGUI {
-    private Inventory inv;
-    private String invName = "ShrineWarpSelect";
-    private int slots = 27;
+    public static final String INVENTORY_NAME = "Shrine Select";
 
-    public ShrineGUI() {
+    private List<Inventory> INVENTORY_LIST;
+    private ImmutableMap<Integer, SlotFunction> FUNCTION_MAP;
 
-    }
+    public ShrineGUI(Player player) {
+        // FUNCTION MAP
+        ImmutableMap.Builder<Integer, SlotFunction> builder = ImmutableMap.builder();
 
-    private void createInventory() {
-        List<ItemStack> items = Lists.newArrayList();
-        inv = Bukkit.createInventory(null, slots, invName);
-        int count = 0;
-        for (ShrineModel model : DGClassic.SHRINE_R.getRegistered()) {
+        for (int i = 0; i < 18; i++) {
+            builder.put(i, SlotFunction.WARP);
+        }
+
+        builder.put(25, SlotFunction.PREVIOUS_PAGE);
+        builder.put(26, SlotFunction.NEXT_PAGE);
+
+        FUNCTION_MAP = builder.build();
+
+        // INVENTORY LIST
+        INVENTORY_LIST = new ArrayList<>();
+        List<ItemStack> items = new ArrayList<>();
+        int count = 0, icount = 0;
+        Iterator<ShrineModel> shrines = DGClassic.SHRINE_R.getRegistered().iterator();
+        while (shrines.hasNext()) {
+            ShrineModel model = shrines.next();
             final String name = model.getPersistantId();
             final String type = model.getShrineType().name();
             final String owner = DGClassic.PLAYER_R.fromId(model.getOwnerMojangId()).getLastKnownName();
-            if (count == 19) count++;
-            items.add(count, new ItemStack(Material.GOLD_BLOCK, 1) {
-                {
-                    ItemMeta meta = getItemMeta();
-                    meta.setDisplayName(ChatColor.GOLD + name);
-                    List<String> lore = Lists.newArrayList(ChatColor.AQUA + type, ChatColor.YELLOW + "Owner: " + ChatColor.LIGHT_PURPLE + owner);
-                    meta.setLore(lore);
-                    setItemMeta(meta);
+
+            if (owner.equals(player.getName())) {
+                items.add(count, new ItemStack(Material.GOLD_BLOCK, 1) {
+                    {
+                        ItemMeta meta = getItemMeta();
+                        meta.setDisplayName(name);
+                        List<String> lore = Lists.newArrayList(ChatColor.AQUA + type, ChatColor.YELLOW + "Owner: " + ChatColor.LIGHT_PURPLE + owner);
+                        meta.setLore(lore);
+                        setItemMeta(meta);
+                    }
+                });
+
+                count++;
+
+                if (count % 19 == 0 || !shrines.hasNext()) {
+                    Inventory inventory = Bukkit.createInventory(player, 27, INVENTORY_NAME + " " + icount);
+                    for (int i = 0; i < items.size(); i++) {
+                        inventory.setItem(i, items.get(i));
+                    }
+                    if (icount > 0) {
+                        inventory.setItem(25, new ItemStack(Material.BUCKET, 1) {
+                            {
+                                ItemMeta meta = getItemMeta();
+                                meta.setDisplayName(ChatColor.GOLD + "< BACK");
+                                setItemMeta(meta);
+                            }
+                        });
+                    }
+                    if (shrines.hasNext()) {
+                        inventory.setItem(26, new ItemStack(Material.BUCKET, 1) {
+                            {
+                                ItemMeta meta = getItemMeta();
+                                meta.setDisplayName(ChatColor.GOLD + "NEXT >");
+                                setItemMeta(meta);
+                            }
+                        });
+                    }
+
+                    items.clear();
+                    count = 0;
+
+                    INVENTORY_LIST.add(inventory);
+                    icount++;
                 }
-            });
-            count++;
+            }
         }
     }
 
     @Override
-    public Inventory getInvenrory() {
-        return inv;
+    public Inventory getInventory(Integer... inventory) {
+        if (INVENTORY_LIST.size() < 1) {
+            return null;
+        }
+        if (inventory.length == 0) {
+            return INVENTORY_LIST.get(0);
+        }
+        return INVENTORY_LIST.get(inventory[0]);
     }
 
     @Override
-    public String getInventoryname() {
-        return invName;
-    }
-
-    @Override
-    public int getSlots() {
-        return slots;
+    public SlotFunction getFunction(int slot) {
+        if (FUNCTION_MAP.containsKey(slot)) {
+            return FUNCTION_MAP.get(slot);
+        }
+        return SlotFunction.NO_FUNCTION;
     }
 }

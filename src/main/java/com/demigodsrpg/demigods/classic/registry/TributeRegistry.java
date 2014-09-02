@@ -149,7 +149,7 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
      * @return the value of the item.
      */
     public int getValue(ItemStack item) {
-        return getValue(item.getType());
+        return getValue(item.getType()) * item.getAmount();
     }
 
     /**

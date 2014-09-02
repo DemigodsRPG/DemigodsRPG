@@ -3,17 +3,9 @@ package com.demigodsrpg.demigods.classic.gui;
 import org.bukkit.inventory.Inventory;
 
 public interface IInventoryGUI {
-    //get the inventory
-    public Inventory getInvenrory();
+    //Get the inventory
+    public Inventory getInventory(Integer... inventory);
 
-    //Generate inventory
-    public String getInventoryname();
-
-    //Get amound of slots
-    public int getSlots();
-
-    //Slots
-    public enum SlotFunction {
-        NEXT_PAGE, PREVIOUS_PAGE, RUN_COMMAND, OPEN_NEW_INVENTORY
-    }
+    //Get the function of the slot
+    public SlotFunction getFunction(int slot);
 }

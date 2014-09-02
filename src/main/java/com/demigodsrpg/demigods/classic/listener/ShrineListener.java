@@ -88,10 +88,7 @@ public class ShrineListener implements Listener {
         shrine.getShrineType().generate(shrine.getLocation());
         e.getClickedBlock().getWorld().strikeLightningEffect(e.getClickedBlock().getLocation());
         p.sendMessage("You have dedicated this shrine to " + deity.getColor() + deity.getDeityName() + ChatColor.WHITE + ".");
-        p.sendMessage(ChatColor.YELLOW + "Warp here at any time with /shrinewarp " + deity.getDeityName().toLowerCase() + ".");
-        if ((shrinename.length() > 0) && (shrinename.charAt(0) == '#')) {
-            p.sendMessage(ChatColor.YELLOW + "You may also warp here using /shrinewarp " + shrinename.substring(1).toLowerCase() + ".");
-        }
+        p.sendMessage(ChatColor.YELLOW + "Warp here at any time with /shrine.");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

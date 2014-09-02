@@ -1,10 +1,8 @@
 package com.demigodsrpg.demigods.classic;
 
-import com.demigodsrpg.demigods.classic.command.AllianceCommand;
-import com.demigodsrpg.demigods.classic.command.BindsCommand;
-import com.demigodsrpg.demigods.classic.command.CheckCommand;
-import com.demigodsrpg.demigods.classic.command.ValuesCommand;
+import com.demigodsrpg.demigods.classic.command.*;
 import com.demigodsrpg.demigods.classic.command.admin.*;
+import com.demigodsrpg.demigods.classic.listener.InventoryListener;
 import com.demigodsrpg.demigods.classic.listener.PlayerListener;
 import com.demigodsrpg.demigods.classic.listener.ShrineListener;
 import com.demigodsrpg.demigods.classic.listener.TributeListener;
@@ -104,6 +102,7 @@ public class DGClassic extends JavaPlugin {
 
         // Register the listeners
         PluginManager manager = getServer().getPluginManager();
+        manager.registerEvents(new InventoryListener(), this);
         manager.registerEvents(new PlayerListener(), this);
         manager.registerEvents(new ShrineListener(), this);
         manager.registerEvents(new TributeListener(), this);
@@ -111,9 +110,9 @@ public class DGClassic extends JavaPlugin {
 
         // Register commands
         getCommand("alliance").setExecutor(new AllianceCommand());
-        getCommand("alliance").setExecutor(new AllianceCommand());
-        getCommand("check").setExecutor(new CheckCommand());
         getCommand("binds").setExecutor(new BindsCommand());
+        getCommand("check").setExecutor(new CheckCommand());
+        getCommand("shrine").setExecutor(new ShrineCommand());
         getCommand("values").setExecutor(new ValuesCommand());
 
         // Admin commands

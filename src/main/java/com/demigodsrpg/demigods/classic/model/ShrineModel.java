@@ -30,7 +30,6 @@ public class ShrineModel extends AbstractPersistentModel<String> {
 
     public ShrineModel(String shrineId, ConfigurationSection conf) {
         this.shrineId = shrineId;
-
         ownerMojangId = conf.getString("ownerId");
         deity = Deity.valueOf(conf.getString("deity"));
         shrine = Shrine.valueOf(conf.getString("type"));
@@ -51,7 +50,7 @@ public class ShrineModel extends AbstractPersistentModel<String> {
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
-        map.put("ownerId", ownerMojangId.toString());
+        map.put("ownerId", ownerMojangId);
         map.put("deity", deity.name());
         map.put("type", shrine.name());
         map.put("world-name", location.getWorld().getName());
