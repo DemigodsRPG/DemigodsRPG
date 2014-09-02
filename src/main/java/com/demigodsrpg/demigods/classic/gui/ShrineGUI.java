@@ -2,7 +2,9 @@ package com.demigodsrpg.demigods.classic.gui;
 
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.model.ShrineModel;
+import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,7 +24,7 @@ public class ShrineGUI implements IInventoryGUI {
     private List<Inventory> INVENTORY_LIST;
     private ImmutableMap<Integer, SlotFunction> FUNCTION_MAP;
 
-    public ShrineGUI(Player player) {
+    public ShrineGUI(final Player player) {
         // FUNCTION MAP
         ImmutableMap.Builder<Integer, SlotFunction> builder = ImmutableMap.builder();
 
@@ -39,56 +41,59 @@ public class ShrineGUI implements IInventoryGUI {
         INVENTORY_LIST = new ArrayList<>();
         List<ItemStack> items = new ArrayList<>();
         int count = 0, icount = 0;
-        Iterator<ShrineModel> shrines = DGClassic.SHRINE_R.getRegistered().iterator();
+        Iterator<ShrineModel> shrines = Iterators.filter(DGClassic.SHRINE_R.getRegistered().iterator(), new Predicate<ShrineModel>() {
+            @Override
+            public boolean apply(ShrineModel model) {
+                return model.getOwnerMojangId().equals(player.getUniqueId().toString());
+            }
+        });
         while (shrines.hasNext()) {
             ShrineModel model = shrines.next();
             final String name = model.getPersistantId();
             final String type = model.getShrineType().name();
             final String owner = DGClassic.PLAYER_R.fromId(model.getOwnerMojangId()).getLastKnownName();
 
-            if (owner.equals(player.getName())) {
-                items.add(count, new ItemStack(Material.GOLD_BLOCK, 1) {
-                    {
-                        ItemMeta meta = getItemMeta();
-                        meta.setDisplayName(name);
-                        List<String> lore = Lists.newArrayList(ChatColor.AQUA + type, ChatColor.YELLOW + "Owner: " + ChatColor.LIGHT_PURPLE + owner);
-                        meta.setLore(lore);
-                        setItemMeta(meta);
-                    }
-                });
-
-                count++;
-
-                if (count % 19 == 0 || !shrines.hasNext()) {
-                    Inventory inventory = Bukkit.createInventory(player, 27, INVENTORY_NAME + " " + icount);
-                    for (int i = 0; i < items.size(); i++) {
-                        inventory.setItem(i, items.get(i));
-                    }
-                    if (icount > 0) {
-                        inventory.setItem(25, new ItemStack(Material.BUCKET, 1) {
-                            {
-                                ItemMeta meta = getItemMeta();
-                                meta.setDisplayName(ChatColor.GOLD + "< BACK");
-                                setItemMeta(meta);
-                            }
-                        });
-                    }
-                    if (shrines.hasNext()) {
-                        inventory.setItem(26, new ItemStack(Material.BUCKET, 1) {
-                            {
-                                ItemMeta meta = getItemMeta();
-                                meta.setDisplayName(ChatColor.GOLD + "NEXT >");
-                                setItemMeta(meta);
-                            }
-                        });
-                    }
-
-                    items.clear();
-                    count = 0;
-
-                    INVENTORY_LIST.add(inventory);
-                    icount++;
+            items.add(count, new ItemStack(Material.GOLD_BLOCK, 1) {
+                {
+                    ItemMeta meta = getItemMeta();
+                    meta.setDisplayName(name);
+                    List<String> lore = Lists.newArrayList(ChatColor.AQUA + type, ChatColor.YELLOW + "Owner: " + ChatColor.LIGHT_PURPLE + owner);
+                    meta.setLore(lore);
+                    setItemMeta(meta);
                 }
+            });
+
+            count++;
+
+            if (count % 19 == 0 || !shrines.hasNext()) {
+                Inventory inventory = Bukkit.createInventory(player, 27, INVENTORY_NAME + " " + icount);
+                for (int i = 0; i < items.size(); i++) {
+                    inventory.setItem(i, items.get(i));
+                }
+                if (icount > 0) {
+                    inventory.setItem(25, new ItemStack(Material.BUCKET, 1) {
+                        {
+                            ItemMeta meta = getItemMeta();
+                            meta.setDisplayName(ChatColor.GOLD + "< BACK");
+                            setItemMeta(meta);
+                        }
+                    });
+                }
+                if (shrines.hasNext()) {
+                    inventory.setItem(26, new ItemStack(Material.BUCKET, 1) {
+                        {
+                            ItemMeta meta = getItemMeta();
+                            meta.setDisplayName(ChatColor.GOLD + "NEXT >");
+                            setItemMeta(meta);
+                        }
+                    });
+                }
+
+                items.clear();
+                count = 0;
+
+                INVENTORY_LIST.add(inventory);
+                icount++;
             }
         }
     }
