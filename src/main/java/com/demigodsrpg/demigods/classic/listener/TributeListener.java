@@ -6,7 +6,6 @@ import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
 import com.demigodsrpg.demigods.classic.model.ShrineModel;
-import com.demigodsrpg.demigods.classic.util.LocationUtil;
 import com.demigodsrpg.demigods.classic.util.ZoneUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -170,6 +169,5 @@ public class TributeListener implements Listener {
         // Open the tribute inventory
         Inventory ii = Bukkit.getServer().createInventory(player, 27, "Tribute to " + shrineDeity.getColor() + shrineDeity.getDeityName() + ChatColor.RESET + ".");
         player.openInventory(ii);
-        DGClassic.TEMP_DATA.put(player.getUniqueId().toString(), "tributing", LocationUtil.stringFromLocation(save.getLocation()));
     }
 }

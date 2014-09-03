@@ -10,9 +10,6 @@ import com.demigodsrpg.demigods.classic.model.PlayerModel;
 import com.demigodsrpg.demigods.classic.model.TributeModel;
 import com.demigodsrpg.demigods.classic.registry.*;
 import com.demigodsrpg.demigods.classic.util.ZoneUtil;
-import com.google.common.base.Supplier;
-import com.google.common.collect.Table;
-import com.google.common.collect.Tables;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -22,7 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
@@ -45,15 +41,6 @@ public class DGClassic extends JavaPlugin {
     public static final AbilityRegistry ABILITY_R = new AbilityRegistry();
     public static final ServerDataRegistry SERV_R = new ServerDataRegistry();
     public static final ConcurrentMap<String, TerritoryRegistry> TERR_R = new ConcurrentHashMap<>();
-
-    // -- TEMP DATA -- //
-
-    public static final Table<String, String, Object> TEMP_DATA = Tables.newCustomTable(new ConcurrentHashMap<String, Map<String, Object>>(), new Supplier<Map<String, Object>>() {
-        @Override
-        public Map<String, Object> get() {
-            return new ConcurrentHashMap<>();
-        }
-    });
 
     // -- PLUGIN RELATED INSTANCE METHODS -- //
 
