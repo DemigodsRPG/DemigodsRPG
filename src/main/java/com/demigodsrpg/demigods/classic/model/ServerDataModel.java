@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class ServerDataModel extends AbstractPersistentModel<UUID> {
-    private UUID id;
+public class ServerDataModel extends AbstractPersistentModel<String> {
+    private String id;
     private DataType type;
     private String row;
     private String column;
@@ -19,7 +19,7 @@ public class ServerDataModel extends AbstractPersistentModel<UUID> {
     public ServerDataModel() {
     }
 
-    public ServerDataModel(UUID id, ConfigurationSection conf) {
+    public ServerDataModel(String id, ConfigurationSection conf) {
         this.id = id;
         this.type = DataType.valueOf(conf.getString("type"));
         this.row = conf.getString("row");
@@ -40,7 +40,7 @@ public class ServerDataModel extends AbstractPersistentModel<UUID> {
     }
 
     public void generateId() {
-        id = UUID.randomUUID();
+        id = UUID.randomUUID().toString();
     }
 
     public void setDataType(DataType type) {
@@ -71,7 +71,7 @@ public class ServerDataModel extends AbstractPersistentModel<UUID> {
     }
 
     @Override
-    public UUID getPersistantId() {
+    public String getPersistantId() {
         return id;
     }
 

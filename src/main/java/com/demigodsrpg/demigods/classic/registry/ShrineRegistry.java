@@ -9,7 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Collection;
 
-public class ShrineRegistry extends AbstractRegistry<String, ShrineModel> {
+public class ShrineRegistry extends AbstractRegistry<ShrineModel> {
     public static final String FILE_NAME = "shrines.dgc";
 
     public Collection<ShrineModel> getShrines(final Location location, final int range) {
@@ -34,11 +34,6 @@ public class ShrineRegistry extends AbstractRegistry<String, ShrineModel> {
         for (ShrineModel model : getRegistered()) {
             model.getShrineType().generate(model.getLocation());
         }
-    }
-
-    @Override
-    public String keyFromString(String stringKey) {
-        return stringKey;
     }
 
     @Override

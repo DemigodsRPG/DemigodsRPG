@@ -5,7 +5,7 @@ import com.demigodsrpg.demigods.classic.territory.Territory;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 
-public class TerritoryRegistry extends AbstractRegistry<IDeity.Alliance, Territory> {
+public class TerritoryRegistry extends AbstractRegistry<Territory> {
     private final World WORLD;
     private final String FILE_NAME;
 
@@ -19,13 +19,8 @@ public class TerritoryRegistry extends AbstractRegistry<IDeity.Alliance, Territo
     }
 
     @Override
-    public IDeity.Alliance keyFromString(String stringKey) {
-        return IDeity.Alliance.valueOf(stringKey);
-    }
-
-    @Override
     public Territory valueFromData(String stringKey, ConfigurationSection data) {
-        return new Territory(keyFromString(stringKey), data);
+        return new Territory(IDeity.Alliance.valueOf(stringKey), data);
     }
 
     @Override

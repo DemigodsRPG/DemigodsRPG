@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class PlayerRegistry extends AbstractRegistry<String, PlayerModel> {
+public class PlayerRegistry extends AbstractRegistry<PlayerModel> {
     public static final String FILE_NAME = "players.dgc";
 
     @Deprecated
@@ -78,11 +78,6 @@ public class PlayerRegistry extends AbstractRegistry<String, PlayerModel> {
     @Override
     public String getFileName() {
         return FILE_NAME;
-    }
-
-    @Override
-    public String keyFromString(String stringKey) {
-        return stringKey;
     }
 
     @Override

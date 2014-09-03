@@ -10,7 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class TributeModel extends AbstractPersistentModel<Material> {
+public class TributeModel extends AbstractPersistentModel<String> {
     private static final Double VALUE_K = 14.286;
     private static Double OFFSET = 1.0;
 
@@ -121,8 +121,8 @@ public class TributeModel extends AbstractPersistentModel<Material> {
     }
 
     @Override
-    public Material getPersistantId() {
-        return getMaterial();
+    public String getPersistantId() {
+        return getMaterial().name();
     }
 
     public static class ValueTask extends BukkitRunnable {
@@ -132,7 +132,14 @@ public class TributeModel extends AbstractPersistentModel<Material> {
             for (TributeModel model : DGClassic.TRIBUTE_R.getRegistered()) {
                 OFFSET += model.getValuePercentage();
             }
+
             for (TributeModel model : DGClassic.TRIBUTE_R.getRegistered()) {
+                // Trim the tribute times
+                if (model.tributeTimes.size() > 30) {
+                    model.tributeTimes = model.tributeTimes.subList(model.tributeTimes.size() - 31, model.tributeTimes.size() - 1);
+                }
+
+                // Update the value
                 model.updateValue();
             }
         }

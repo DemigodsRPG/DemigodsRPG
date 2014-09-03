@@ -16,17 +16,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
+public class TributeRegistry extends AbstractRegistry<TributeModel> {
     private final String FILE_NAME = "tributes.dgc";
 
     @Override
-    public Material keyFromString(String stringKey) {
-        return Material.valueOf(stringKey);
-    }
-
-    @Override
     public TributeModel valueFromData(String stringKey, ConfigurationSection data) {
-        return new TributeModel(keyFromString(stringKey), data);
+        return new TributeModel(Material.getMaterial(stringKey), data);
     }
 
     @Override
@@ -43,16 +38,16 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
     }
 
     public void remove(Material material) {
-        if (fromId(material) != null) {
-            unregister(fromId(material));
+        if (fromId(material.name()) != null) {
+            unregister(fromId(material.name()));
         }
     }
 
     @Override
-    public TributeModel fromId(Material material) {
-        TributeModel model = super.fromId(material);
+    public TributeModel fromId(String materialName) {
+        TributeModel model = super.fromId(materialName);
         if (model == null) {
-            model = new TributeModel(material, 1);
+            model = new TributeModel(Material.valueOf(materialName), 1);
             register(model);
         }
         return model;
@@ -100,7 +95,7 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
      * @return the total number of tributes.
      */
     public int getTributes(Material material) {
-        TributeModel data = fromId(material);
+        TributeModel data = fromId(material.name());
         if (data != null) return data.getFitness();
         else return 1;
     }
@@ -125,7 +120,7 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
      * @param item the item whose amount to save.
      */
     public void saveTribute(ItemStack item) {
-        TributeModel data = fromId(item.getType());
+        TributeModel data = fromId(item.getType().name());
 
         if (data != null) {
             data.setFitness(data.getFitness() + item.getAmount());
@@ -138,7 +133,7 @@ public class TributeRegistry extends AbstractRegistry<Material, TributeModel> {
      * Returns the value for a <code>material</code>.
      */
     public int getValue(Material material) {
-        int lastKnownValue = (int) fromId(material).getLastKnownValue();
+        int lastKnownValue = (int) fromId(material.name()).getLastKnownValue();
         return lastKnownValue > 0 ? lastKnownValue : 1;
     }
 

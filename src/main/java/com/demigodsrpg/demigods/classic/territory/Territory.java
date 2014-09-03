@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Territory extends AbstractPersistentModel<IDeity.Alliance> {
+public class Territory extends AbstractPersistentModel<String> {
     private IDeity.Alliance alliance;
     private Priority priority;
     private java.util.List<Location> corners;
@@ -71,8 +71,8 @@ public class Territory extends AbstractPersistentModel<IDeity.Alliance> {
     }
 
     @Override
-    public IDeity.Alliance getPersistantId() {
-        return getAlliance();
+    public String getPersistantId() {
+        return getAlliance().name();
     }
 
     public enum Priority {

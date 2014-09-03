@@ -8,7 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 
-public class SpawnRegistry extends AbstractRegistry<IDeity.Alliance, SpawnModel> {
+public class SpawnRegistry extends AbstractRegistry<SpawnModel> {
     public static final String FILE_NAME = "spawns.dgc";
 
     public Location getSpawn(final IDeity.Alliance alliance) {
@@ -25,13 +25,8 @@ public class SpawnRegistry extends AbstractRegistry<IDeity.Alliance, SpawnModel>
     }
 
     @Override
-    public IDeity.Alliance keyFromString(String stringKey) {
-        return IDeity.Alliance.valueOf(stringKey);
-    }
-
-    @Override
     public SpawnModel valueFromData(String stringKey, ConfigurationSection data) {
-        return new SpawnModel(keyFromString(stringKey), data);
+        return new SpawnModel(IDeity.Alliance.valueOf(stringKey), data);
     }
 
     @Override

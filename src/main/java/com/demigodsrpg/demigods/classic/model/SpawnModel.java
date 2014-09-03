@@ -9,7 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SpawnModel extends AbstractPersistentModel<IDeity.Alliance> {
+public class SpawnModel extends AbstractPersistentModel<String> {
     private IDeity.Alliance alliance;
     private Location location;
 
@@ -55,7 +55,7 @@ public class SpawnModel extends AbstractPersistentModel<IDeity.Alliance> {
     }
 
     @Override
-    public IDeity.Alliance getPersistantId() {
-        return getAlliance();
+    public String getPersistantId() {
+        return getAlliance().name();
     }
 }

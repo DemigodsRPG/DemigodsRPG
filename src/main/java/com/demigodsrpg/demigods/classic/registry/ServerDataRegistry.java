@@ -7,13 +7,40 @@ import com.google.common.collect.Sets;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class ServerDataRegistry extends AbstractRegistry<UUID, ServerDataModel> {
+public class ServerDataRegistry extends AbstractRegistry<ServerDataModel> {
     private static final String FILE_NAME = "misc.dgc";
 
-    public void put(String row, String column, Object value) {
+    public void put(String row, String column, String value) {
+        // Remove the value if it exists already
+        remove(row, column);
+
+        // Create and save the timed value
+        ServerDataModel timedData = new ServerDataModel();
+        timedData.generateId();
+        timedData.setDataType(ServerDataModel.DataType.PERSISTENT);
+        timedData.setRow(row);
+        timedData.setColumn(column);
+        timedData.setValue(value);
+        register(timedData);
+    }
+
+    public void put(String row, String column, Boolean value) {
+        // Remove the value if it exists already
+        remove(row, column);
+
+        // Create and save the timed value
+        ServerDataModel timedData = new ServerDataModel();
+        timedData.generateId();
+        timedData.setDataType(ServerDataModel.DataType.PERSISTENT);
+        timedData.setRow(row);
+        timedData.setColumn(column);
+        timedData.setValue(value);
+        register(timedData);
+    }
+
+    public void put(String row, String column, Number value) {
         // Remove the value if it exists already
         remove(row, column);
 
@@ -93,13 +120,8 @@ public class ServerDataRegistry extends AbstractRegistry<UUID, ServerDataModel> 
     }
 
     @Override
-    public UUID keyFromString(String stringKey) {
-        return UUID.fromString(stringKey);
-    }
-
-    @Override
     public ServerDataModel valueFromData(String stringKey, ConfigurationSection data) {
-        return new ServerDataModel(keyFromString(stringKey), data);
+        return new ServerDataModel(stringKey, data);
     }
 
     @Override
