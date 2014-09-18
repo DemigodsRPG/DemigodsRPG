@@ -32,8 +32,10 @@ public class PlayerListener implements Listener {
             if (random.nextBoolean()) {
                 model.giveMajorDeity(Deity.ZEUS, true);
                 model.giveDeity(Deity.HEPHAESTUS);
-            } else {
+            } else if (random.nextBoolean()) {
                 model.giveMajorDeity(Deity.CRONUS, true);
+            } else {
+                model.giveMajorDeity(Deity.POSEIDON, true);
             }
         }
     }

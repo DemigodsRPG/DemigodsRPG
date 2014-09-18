@@ -22,6 +22,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -322,27 +324,45 @@ public class AbilityRegistry implements Listener {
     private void onNoDamageAbilities(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            switch (DGClassic.PLAYER_R.fromPlayer(player).getMajorDeity()) {
-                case CRONUS: {
-                    if (player.getHealth() <= event.getDamage()) {
-                        switch (event.getCause()) {
-                            case ENTITY_ATTACK:
-                                break;
-                            case PROJECTILE:
-                                break;
-                            case CUSTOM:
-                                break;
-                            default:
-                                event.setDamage(player.getHealth() - 1);
-                        }
-                    }
-                    event.setDamage(event.getDamage() / 2);
-                }
-                case ZEUS: {
-                    if (EntityDamageEvent.DamageCause.FALL.equals(event.getCause())) {
-                        event.setCancelled(true);
+
+            if (Deity.hasDeity(player, Deity.CRONUS)) {
+                if (player.getHealth() <= event.getDamage()) {
+                    switch (event.getCause()) {
+                        case ENTITY_ATTACK:
+                            break;
+                        case PROJECTILE:
+                            break;
+                        case CUSTOM:
+                            break;
+                        default:
+                            event.setDamage(player.getHealth() - 1);
                     }
                 }
+                event.setDamage(event.getDamage() / 2);
+            } else if (Deity.hasDeity(player, Deity.ZEUS)) {
+                if (EntityDamageEvent.DamageCause.FALL.equals(event.getCause())) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    /**
+     * Varius player move abilities, these must be done by hand, and directly in this method.
+     *
+     * @param event The move event.
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void onPlayerMoveEvent(PlayerMoveEvent event) {
+        if (ZoneUtil.inNoDGCZone(event.getPlayer().getLocation())) return;
+
+        Player player = event.getPlayer();
+
+        if (Deity.hasDeity(player, Deity.POSEIDON)) {
+            Material locationMaterial = player.getLocation().getBlock().getType();
+            if ((locationMaterial.equals(Material.STATIONARY_WATER) || locationMaterial.equals(Material.WATER)) && player.isSneaking()) {
+                Vector victor = (player.getPassenger() != null && player.getLocation().getDirection().getY() > 0 ? player.getLocation().getDirection().clone().setY(0) : player.getLocation().getDirection()).normalize().multiply(1.3D);
+                player.setVelocity(new Vector(victor.getX(), victor.getY(), victor.getZ()));
             }
         }
     }

@@ -1,13 +1,17 @@
 package com.demigodsrpg.demigods.classic.deity;
 
+import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.deity.god.Hephaestus;
+import com.demigodsrpg.demigods.classic.deity.god.major.Poseidon;
 import com.demigodsrpg.demigods.classic.deity.god.major.Zeus;
 import com.demigodsrpg.demigods.classic.deity.neutral.Human;
 import com.demigodsrpg.demigods.classic.deity.neutral.Satyr;
 import com.demigodsrpg.demigods.classic.deity.titan.major.Cronus;
 import com.demigodsrpg.demigods.classic.deity.titan.major.Rhea;
+import com.demigodsrpg.demigods.classic.model.PlayerModel;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.material.MaterialData;
 
 public enum Deity implements IDeity {
@@ -17,7 +21,7 @@ public enum Deity implements IDeity {
 
     // -- OLYMPIAN -- //
 
-    ZEUS(new Zeus()), HEPHAESTUS(new Hephaestus()),
+    ZEUS(new Zeus()), POSEIDON(new Poseidon()), HEPHAESTUS(new Hephaestus()),
 
     // -- TITAN -- //
 
@@ -75,5 +79,10 @@ public enum Deity implements IDeity {
 
     public Class<? extends IDeity> getParentObjectClass() {
         return deity.getClass();
+    }
+
+    public static boolean hasDeity(Player player, Deity deity) {
+        PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
+        return model.getMajorDeity().equals(deity) || model.getContractedDeities().contains(deity);
     }
 }
