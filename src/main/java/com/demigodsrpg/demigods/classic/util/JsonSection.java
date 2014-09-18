@@ -10,19 +10,42 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Object representing a section of a json file.
+ */
 @SuppressWarnings("unchecked")
 public class JsonSection {
-    private Map<String, Object> SECTION_DATA = new HashMap<>();
+    // -- PRIVATE FIELDS -- //
 
+    private Map<String, Object> SECTION_DATA = new HashMap<String, Object>();
+
+    // -- CONSTRUCTORS -- //
+
+    /**
+     * Default constructor.
+     */
     public JsonSection() {
     }
 
+    /**
+     * Constructor accepting default data.
+     *
+     * @param data Default data.
+     */
     public JsonSection(Map<String, Object> data) {
         if (data != null) {
             SECTION_DATA = data;
         }
     }
 
+    // -- UTILITY METHODS -- //
+
+    /**
+     * Save this section to a json file.
+     *
+     * @param dataFile The file to hold the section data.
+     * @return Save success or failure.
+     */
     public boolean save(File dataFile) {
         try {
             Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
@@ -36,6 +59,10 @@ public class JsonSection {
         }
         return false;
     }
+
+    // -- GETTERS -- //
+
+    // TODO Add documentation for the methods below.
 
     public Set<String> getKeys() {
         return SECTION_DATA.keySet();
@@ -62,23 +89,6 @@ public class JsonSection {
             return get(s);
         }
         return o;
-    }
-
-    public void set(String s, Object o) {
-        SECTION_DATA.put(s, o);
-    }
-
-    public JsonSection createSection(String s) {
-        JsonSection section = new JsonSection();
-        SECTION_DATA.put(s, section.SECTION_DATA);
-        return section;
-    }
-
-    public JsonSection createSection(String s, Map<String, Object> map) {
-        JsonSection section = new JsonSection();
-        section.SECTION_DATA = map;
-        SECTION_DATA.put(s, section.SECTION_DATA);
-        return section;
     }
 
     public String getString(String s) {
@@ -177,5 +187,24 @@ public class JsonSection {
 
     public boolean isSection(String s) {
         return get(s) instanceof Map;
+    }
+
+    // -- MUTATORS -- //
+
+    public void set(String s, Object o) {
+        SECTION_DATA.put(s, o);
+    }
+
+    public JsonSection createSection(String s) {
+        JsonSection section = new JsonSection();
+        SECTION_DATA.put(s, section.SECTION_DATA);
+        return section;
+    }
+
+    public JsonSection createSection(String s, Map<String, Object> map) {
+        JsonSection section = new JsonSection();
+        section.SECTION_DATA = map;
+        SECTION_DATA.put(s, section.SECTION_DATA);
+        return section;
     }
 }
