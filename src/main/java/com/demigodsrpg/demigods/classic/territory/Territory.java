@@ -9,12 +9,13 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Territory extends AbstractPersistentModel<String> {
     private IDeity.Alliance alliance;
     private Priority priority;
-    private java.util.List<Location> corners;
+    private List<Location> corners;
     private Polygon shape;
 
     public Territory(IDeity.Alliance alliance, Priority priority, java.util.List<Location> corners) {

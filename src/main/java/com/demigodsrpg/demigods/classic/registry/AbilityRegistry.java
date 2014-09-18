@@ -105,7 +105,6 @@ public class AbilityRegistry implements Listener {
         Player player = event.getPlayer();
 
         if (!ZoneUtil.inNoDGCZone(event.getPlayer().getLocation())) {
-            if (event.getPlayer().getItemInHand().getType().equals(Material.AIR)) return;
             // Process the command
             try {
                 if (args.length == 2 && "info".equals(args[1])) {
@@ -150,6 +149,13 @@ public class AbilityRegistry implements Listener {
         if (!REGISTERED_COMMANDS.keySet().contains(command)) {
             return false;
         }
+
+        // Can't bind to air.
+        if (player.getItemInHand() == null || Material.AIR.equals(player.getItemInHand().getType())) {
+            abilityInfo(player, command);
+            return true;
+        }
+
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
         Material material = player.getItemInHand().getType();
         Data bound = model.getBound(material);

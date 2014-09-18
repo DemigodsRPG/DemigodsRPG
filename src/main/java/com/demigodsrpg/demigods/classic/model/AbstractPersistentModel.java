@@ -8,5 +8,7 @@ public abstract class AbstractPersistentModel<P> implements Model<P> {
         return Type.PERSISTENT;
     }
 
+    public abstract P getPersistantId();
+
     public abstract Map<String, Object> serialize();
 }

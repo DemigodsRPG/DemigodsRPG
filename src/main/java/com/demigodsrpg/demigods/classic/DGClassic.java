@@ -123,37 +123,30 @@ public class DGClassic extends JavaPlugin {
         HandlerList.unregisterAll(this);
         Bukkit.getScheduler().cancelTasks(this);
 
-        // Save the data
-        if (!save()) {
-            CONSOLE.severe("The vital save data was unable to save correctly!");
-            CONSOLE.warning("Disabled with a corrupt save, please use a backup.");
-        } else {
-            // Let the console know
-            CONSOLE.info("Disabled successfully.");
-        }
+        // Clear the cache.
+        clearCache();
+
+        // Let the console know
+        CONSOLE.info("Disabled successfully.");
     }
 
     // -- PLUGIN RELATED UTILITY METHODS -- //
 
-    public static boolean save() {
-        boolean noErrors;
-        noErrors = PLAYER_R.saveToFile();
-        noErrors = SHRINE_R.saveToFile() && noErrors;
-        noErrors = TRIBUTE_R.saveToFile() && noErrors;
-        noErrors = SPAWN_R.saveToFile() && noErrors;
-        noErrors = SERV_R.saveToFile() && noErrors;
+    public static void clearCache() {
+        PLAYER_R.clearCache();
+        SHRINE_R.clearCache();
+        TRIBUTE_R.clearCache();
+        SPAWN_R.clearCache();
+        SERV_R.clearCache();
 
         for (TerritoryRegistry terr_r : TERR_R.values()) {
-            noErrors = terr_r.saveToFile() && noErrors;
+            terr_r.clearCache();
         }
-
-        return noErrors;
     }
 
     // -- TASK RELATED -- //
 
-    private static final BukkitRunnable SYNC, ASYNC, SAVE, FAVOR, VALUE;
-
+    private static final BukkitRunnable SYNC, ASYNC, FAVOR, VALUE;
 
     static {
         SYNC = new BukkitRunnable() {
@@ -174,13 +167,6 @@ public class DGClassic extends JavaPlugin {
             public void run() {
                 // Update Timed Data
                 SERV_R.clearExpired();
-            }
-        };
-        SAVE = new BukkitRunnable() {
-            @Override
-            public void run() {
-                // Save the data
-                save();
             }
         };
         FAVOR = new BukkitRunnable() {
@@ -211,16 +197,12 @@ public class DGClassic extends JavaPlugin {
         scheduler.scheduleAsyncRepeatingTask(this, ASYNC, 20, 20);
         CONSOLE.info("Main Demigods ASYNC runnable enabled...");
 
-        // Start async demigods runnable
-        scheduler.scheduleAsyncRepeatingTask(this, SAVE, 20, 1200);
-        CONSOLE.info("Main Demigods SAVE runnable enabled...");
-
         // Start async favor runnable
-        scheduler.scheduleAsyncRepeatingTask(this, FAVOR, 20, (long) ((double) Setting.FAVOR_REGEN_SECONDS.get() * 20));
-        CONSOLE.info("Favor regeneration (" + (TimeUnit.SECONDS.toMillis((long) (double) Setting.FAVOR_REGEN_SECONDS.get())) + ") runnable enabled...");
+        scheduler.scheduleAsyncRepeatingTask(this, FAVOR, 20, (long) ((double) Setting.FAVOR_REGEN_SECONDS.get() * 20.0));
+        CONSOLE.info("Favor regeneration (every " + (TimeUnit.SECONDS.toMillis((long) (double) Setting.FAVOR_REGEN_SECONDS.get())) + " seconds) runnable enabled...");
 
         // Start async value runnable
-        scheduler.scheduleAsyncRepeatingTask(this, VALUE, 60, 200);
+        scheduler.scheduleAsyncRepeatingTask(this, VALUE, 60, 400);
         CONSOLE.info("Main Demigods VALUE runnable enabled...");
     }
 

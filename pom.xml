@@ -79,6 +79,13 @@
             <version>${spigot.version}</version>
         </dependency>
 
+        <!-- Apache Lang
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency> -->
+
         <!-- CensoredLib -->
         <dependency>
             <groupId>com.censoredsoftware.library</groupId>
@@ -121,11 +128,16 @@
                             <minimizeJar>true</minimizeJar>
                             <artifactSet>
                                 <includes>
+                                    <!-- <include>commons-lang:commons-lang</include> -->
                                     <include>mkremins:fanciful</include>
                                     <include>com.censoredsoftware.library:*</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
+                                <!-- <relocation>
+                                    <pattern>org.apache.commons.lang</pattern>
+                                    <shadedPattern>com.demigodsrpg.demigods.classic.org.apache.commons.lang</shadedPattern>
+                                </relocation> -->
                                 <relocation>
                                     <pattern>mkremins</pattern>
                                     <shadedPattern>com.demigodsrpg.demigods.classic.mkremins</shadedPattern>
