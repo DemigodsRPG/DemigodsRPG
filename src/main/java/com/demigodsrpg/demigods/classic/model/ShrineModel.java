@@ -4,10 +4,10 @@ import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.shrine.Shrine;
+import com.demigodsrpg.demigods.classic.util.JsonSection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public class ShrineModel extends AbstractPersistentModel<String> {
         this.location = location;
     }
 
-    public ShrineModel(String shrineId, ConfigurationSection conf) {
+    public ShrineModel(String shrineId, JsonSection conf) {
         this.shrineId = shrineId;
         ownerMojangId = conf.getString("ownerId");
         deity = Deity.valueOf(conf.getString("deity"));

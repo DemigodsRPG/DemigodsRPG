@@ -1,10 +1,10 @@
 package com.demigodsrpg.demigods.classic.registry;
 
 import com.demigodsrpg.demigods.classic.model.ServerDataModel;
+import com.demigodsrpg.demigods.classic.util.JsonSection;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -120,7 +120,7 @@ public class ServerDataRegistry extends AbstractRegistry<ServerDataModel> {
     }
 
     @Override
-    public ServerDataModel valueFromData(String stringKey, ConfigurationSection data) {
+    public ServerDataModel valueFromData(String stringKey, JsonSection data) {
         return new ServerDataModel(stringKey, data);
     }
 

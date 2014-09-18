@@ -1,6 +1,6 @@
 package com.demigodsrpg.demigods.classic.model;
 
-import org.bukkit.configuration.ConfigurationSection;
+import com.demigodsrpg.demigods.classic.util.JsonSection;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +19,7 @@ public class ServerDataModel extends AbstractPersistentModel<String> {
     public ServerDataModel() {
     }
 
-    public ServerDataModel(String id, ConfigurationSection conf) {
+    public ServerDataModel(String id, JsonSection conf) {
         this.id = id;
         this.type = DataType.valueOf(conf.getString("type"));
         this.row = conf.getString("row");

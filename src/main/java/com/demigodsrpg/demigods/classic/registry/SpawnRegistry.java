@@ -2,11 +2,11 @@ package com.demigodsrpg.demigods.classic.registry;
 
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.SpawnModel;
+import com.demigodsrpg.demigods.classic.util.JsonSection;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
 
 public class SpawnRegistry extends AbstractRegistry<SpawnModel> {
     public static final String FILE_NAME = "spawns.dgc";
@@ -25,7 +25,7 @@ public class SpawnRegistry extends AbstractRegistry<SpawnModel> {
     }
 
     @Override
-    public SpawnModel valueFromData(String stringKey, ConfigurationSection data) {
+    public SpawnModel valueFromData(String stringKey, JsonSection data) {
         return new SpawnModel(IDeity.Alliance.valueOf(stringKey), data);
     }
 

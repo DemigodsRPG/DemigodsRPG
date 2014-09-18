@@ -7,12 +7,12 @@ import com.demigodsrpg.demigods.classic.battle.Participant;
 import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.registry.AbilityRegistry;
+import com.demigodsrpg.demigods.classic.util.JsonSection;
 import com.demigodsrpg.demigods.classic.util.ZoneUtil;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 import org.bukkit.*;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -68,7 +68,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         teamKills = 0;
     }
 
-    public PlayerModel(String mojangId, ConfigurationSection conf) {
+    public PlayerModel(String mojangId, JsonSection conf) {
         this.mojangId = mojangId;
         lastKnownName = conf.getString("lastKnownName");
         lastLoginTime = conf.getLong("lastLoginTime");
@@ -77,11 +77,11 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
             contractedDeities.add(Deity.valueOf(name));
         }
         acceptedAlliance = IDeity.Alliance.valueOf(conf.getString("alliance"));
-        binds.putAll((Map) conf.getConfigurationSection("binds").getValues(false));
+        binds.putAll((Map) conf.getSection("binds").getValues());
         maxHealth = conf.getDouble("maxHealth");
         maxFavor = conf.getDouble("maxFavor");
         favor = conf.getDouble("favor");
-        devotion = Maps.newHashMap(Maps.transformEntries(conf.getConfigurationSection("devotion").getValues(false), new Maps.EntryTransformer<String, Object, Double>() {
+        devotion = Maps.newHashMap(Maps.transformEntries(conf.getSection("devotion").getValues(), new Maps.EntryTransformer<String, Object, Double>() {
             @Override
             public Double transformEntry(String s, Object o) {
                 return Double.parseDouble(o.toString());

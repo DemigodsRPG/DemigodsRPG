@@ -3,8 +3,8 @@ package com.demigodsrpg.demigods.classic.model;
 import com.censoredsoftware.library.util.MapUtil2;
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.registry.TributeRegistry;
+import com.demigodsrpg.demigods.classic.util.JsonSection;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -15,14 +15,14 @@ public class TributeModel extends AbstractPersistentModel<String> {
     private static Double OFFSET = 1.0;
 
     private Material material;
-    private List<Long> tributeTimes;
+    private List<Double> tributeTimes;
     private Integer fitness;
     private TributeRegistry.Category category;
     private Double lastKnownValue;
 
-    public TributeModel(Material material, ConfigurationSection conf) {
+    public TributeModel(Material material, JsonSection conf) {
         this.material = material;
-        tributeTimes = conf.getLongList("tributeTimes");
+        tributeTimes = conf.getDoubleList("tributeTimes");
         fitness = conf.getInt("fitness");
         category = DGClassic.TRIBUTE_R.getCategory(material);
         lastKnownValue = conf.getDouble("lastKnownValue");
@@ -40,9 +40,9 @@ public class TributeModel extends AbstractPersistentModel<String> {
         return material;
     }
 
-    public List<Long> getTributeTimes() {
+    public List<Double> getTributeTimes() {
         long twoWeeksAgo = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(14);
-        for (Long time : tributeTimes) {
+        for (Double time : tributeTimes) {
             if (time < twoWeeksAgo) {
                 tributeTimes.remove(time);
             }
@@ -51,7 +51,7 @@ public class TributeModel extends AbstractPersistentModel<String> {
     }
 
     public void addTributeTime() {
-        tributeTimes.add(System.currentTimeMillis());
+        tributeTimes.add((double) System.currentTimeMillis());
     }
 
     public int getFitness() {
@@ -60,7 +60,7 @@ public class TributeModel extends AbstractPersistentModel<String> {
 
     public void setFitness(int amount) {
         this.fitness = amount;
-        tributeTimes.add(System.currentTimeMillis());
+        tributeTimes.add((double) System.currentTimeMillis());
         DGClassic.TRIBUTE_R.register(this);
     }
 

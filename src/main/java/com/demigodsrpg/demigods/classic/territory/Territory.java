@@ -2,9 +2,9 @@ package com.demigodsrpg.demigods.classic.territory;
 
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.AbstractPersistentModel;
+import com.demigodsrpg.demigods.classic.util.JsonSection;
 import com.demigodsrpg.demigods.classic.util.LocationUtil;
 import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class Territory extends AbstractPersistentModel<String> {
         shape = new Polygon(x, z, corners.size());
     }
 
-    public Territory(IDeity.Alliance alliance, final ConfigurationSection conf) {
+    public Territory(IDeity.Alliance alliance, final JsonSection conf) {
         this(alliance, Priority.valueOf(conf.getString("priority")), new ArrayList<Location>() {
             {
                 for (String locString : conf.getStringList("locations")) {

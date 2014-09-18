@@ -1,10 +1,10 @@
 package com.demigodsrpg.demigods.classic.model;
 
 import com.demigodsrpg.demigods.classic.deity.IDeity;
+import com.demigodsrpg.demigods.classic.util.JsonSection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +18,7 @@ public class SpawnModel extends AbstractPersistentModel<String> {
         this.location = location;
     }
 
-    public SpawnModel(IDeity.Alliance alliance, ConfigurationSection conf) {
+    public SpawnModel(IDeity.Alliance alliance, JsonSection conf) {
         this.alliance = alliance;
 
         World world = Bukkit.getWorld(conf.getString("world-name"));

@@ -2,8 +2,8 @@ package com.demigodsrpg.demigods.classic.registry;
 
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.territory.Territory;
+import com.demigodsrpg.demigods.classic.util.JsonSection;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 
 public class TerritoryRegistry extends AbstractRegistry<Territory> {
     private final World WORLD;
@@ -19,7 +19,7 @@ public class TerritoryRegistry extends AbstractRegistry<Territory> {
     }
 
     @Override
-    public Territory valueFromData(String stringKey, ConfigurationSection data) {
+    public Territory valueFromData(String stringKey, JsonSection data) {
         return new Territory(IDeity.Alliance.valueOf(stringKey), data);
     }
 

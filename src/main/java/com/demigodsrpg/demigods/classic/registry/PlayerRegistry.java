@@ -3,12 +3,12 @@ package com.demigodsrpg.demigods.classic.registry;
 import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
+import com.demigodsrpg.demigods.classic.util.JsonSection;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -81,7 +81,7 @@ public class PlayerRegistry extends AbstractRegistry<PlayerModel> {
     }
 
     @Override
-    public PlayerModel valueFromData(String stringKey, ConfigurationSection data) {
+    public PlayerModel valueFromData(String stringKey, JsonSection data) {
         return new PlayerModel(stringKey, data);
     }
 }

@@ -1,11 +1,9 @@
 package com.demigodsrpg.demigods.classic.registry;
 
-
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.model.AbstractPersistentModel;
-import com.demigodsrpg.demigods.classic.util.YamlFileUtil;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.demigodsrpg.demigods.classic.util.JsonFileUtil;
+import com.demigodsrpg.demigods.classic.util.JsonSection;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,10 +18,10 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
         if (REGISTERED_DATA.get(id) != null) {
             return REGISTERED_DATA.get(id);
         } else {
-            FileConfiguration currentFile = getFile();
+            JsonSection currentFile = getFile();
             if (currentFile != null) {
                 synchronized (currentFile) {
-                    if (currentFile.isConfigurationSection(id)) {
+                    if (currentFile.isSection(id)) {
                         registerFromFile();
                     }
                 }
@@ -50,11 +48,11 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
     }
 
     public final synchronized void registerFromFile() {
-        FileConfiguration currentFile = getFile();
+        JsonSection currentFile = getFile();
         if (currentFile != null) {
             synchronized (currentFile) {
-                for (String key : currentFile.getValues(false).keySet()) {
-                    REGISTERED_DATA.put(key, valueFromData(key, currentFile.getConfigurationSection(key)));
+                for (String key : currentFile.getKeys()) {
+                    REGISTERED_DATA.put(key, valueFromData(key, currentFile.getSection(key)));
                 }
             }
         }
@@ -76,14 +74,14 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
 
     public synchronized boolean deleteFromFile(String key) {
         // Grab the current file, and its data as a usable map.
-        FileConfiguration currentFile = getFile();
+        JsonSection currentFile = getFile();
 
         if (currentFile != null) {
             // Remove data.
             currentFile.set(key, null);
 
             // Save the file!
-            return YamlFileUtil.saveFile(DGClassic.SAVE_PATH, getFileName(), currentFile);
+            return JsonFileUtil.saveFile(DGClassic.SAVE_PATH, getFileName(), currentFile);
         }
 
         return false;
@@ -91,22 +89,22 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
 
     public synchronized boolean addToFile(String key, T data) {
         // Grab the current file, and its data as a usable map.
-        FileConfiguration currentFile = getFile();
+        JsonSection currentFile = getFile();
 
         if (currentFile != null) {
             // Create/overwrite a configuration section.
             currentFile.createSection(key, data.serialize());
 
             // Save the file!
-            return YamlFileUtil.saveFile(DGClassic.SAVE_PATH, getFileName(), currentFile);
+            return JsonFileUtil.saveFile(DGClassic.SAVE_PATH, getFileName(), currentFile);
         }
 
         return false;
     }
 
-    public final FileConfiguration getFile() {
+    public final JsonSection getFile() {
         try {
-            return YamlFileUtil.getConfiguration(DGClassic.SAVE_PATH, getFileName());
+            return JsonFileUtil.getSection(DGClassic.SAVE_PATH, getFileName());
         } catch (Exception ignored) {
             DGClassic.CONSOLE.warning("File corrupt: " + getFileName());
         }
@@ -124,7 +122,7 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
      * @param data      The provided data object.
      * @return The converted get.
      */
-    public abstract T valueFromData(String stringKey, ConfigurationSection data);
+    public abstract T valueFromData(String stringKey, JsonSection data);
 
     public abstract String getFileName();
 }

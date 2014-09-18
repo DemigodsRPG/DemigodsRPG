@@ -2,12 +2,12 @@ package com.demigodsrpg.demigods.classic.registry;
 
 import com.censoredsoftware.library.util.RandomUtil;
 import com.demigodsrpg.demigods.classic.model.TributeModel;
+import com.demigodsrpg.demigods.classic.util.JsonSection;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterators;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
@@ -20,7 +20,7 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
     private final String FILE_NAME = "tributes.dgc";
 
     @Override
-    public TributeModel valueFromData(String stringKey, ConfigurationSection data) {
+    public TributeModel valueFromData(String stringKey, JsonSection data) {
         return new TributeModel(Material.getMaterial(stringKey), data);
     }
 
@@ -70,7 +70,7 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
     public Map<Material, Integer> getTributeValuesMap() {
         Map<Material, Integer> map = new HashMap<>();
         for (TributeModel data : getRegistered()) {
-            map.put(data.getMaterial(), getValue(data.getMaterial()));
+            map.put(data.getMaterial(), (int) getValue(data.getMaterial()));
         }
         return map;
     }
@@ -132,9 +132,9 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
     /**
      * Returns the value for a <code>material</code>.
      */
-    public int getValue(Material material) {
+    public double getValue(Material material) {
         int lastKnownValue = (int) fromId(material.name()).getLastKnownValue();
-        return lastKnownValue > 0 ? lastKnownValue : 1;
+        return lastKnownValue >= 0.0 ? lastKnownValue : 1.0;
     }
 
     /**
@@ -144,7 +144,7 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
      * @return the value of the item.
      */
     public int getValue(ItemStack item) {
-        return getValue(item.getType()) * item.getAmount();
+        return (int) getValue(item.getType()) * item.getAmount();
     }
 
     /**
