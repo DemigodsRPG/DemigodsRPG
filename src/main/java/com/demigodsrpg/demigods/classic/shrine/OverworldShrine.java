@@ -37,6 +37,6 @@ public class OverworldShrine extends Schematic implements IShrine {
 
     @Override
     public Location getSafeTeleport(Location reference) {
-        return reference.clone().add(1, 0, 1);
+        return reference.clone().add(1.5, 0, 1.5);
     }
 }
