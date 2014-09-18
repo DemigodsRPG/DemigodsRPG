@@ -39,7 +39,7 @@ public class JsonFileUtil {
      * Load a JsonSection from a json file.
      *
      * @param dataFile The json file.
-     * @return The JsonSectionf for the entire file.
+     * @return The JsonSection for the entire file.
      */
     @SuppressWarnings("unchecked")
     public static JsonSection loadSection(File dataFile) {
