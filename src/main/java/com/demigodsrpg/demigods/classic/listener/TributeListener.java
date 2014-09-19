@@ -52,7 +52,7 @@ public class TributeListener implements Listener {
             event.setCancelled(true);
 
             Deity deity = shrine.getDeity();
-            if (shrine.getOwnerMojangId() != null && !model.getAllDeities().contains(deity)) {
+            if (shrine.getOwnerMojangId() != null && !Deity.hasDeity(event.getPlayer(), deity)) {
                 event.getPlayer().sendMessage(ChatColor.YELLOW + "You must be allied with " + deity.getColor() + deity.getDeityName() + ChatColor.YELLOW + " to tribute here.");
                 return;
             }
@@ -96,12 +96,10 @@ public class TributeListener implements Listener {
 
         // Get the current favor for comparison
         double favorBefore = model.getFavor();
-        double maxFavorBefore = model.getMaxFavor();
         double devotionBefore = model.getDevotion(save.getDeity());
 
         // Update the character's favor
-        model.setFavor(favorBefore + tributeValue / 6);
-        model.setMaxFavor(maxFavorBefore + tributeValue / 2);
+        model.setFavor(favorBefore + tributeValue);
         model.setDevotion(save.getDeity(), devotionBefore + tributeValue);
 
         DGClassic.PLAYER_R.register(model);
@@ -111,26 +109,28 @@ public class TributeListener implements Listener {
             PlayerModel shrineOwner = DGClassic.PLAYER_R.fromId(save.getOwnerMojangId());
             OfflinePlayer shrineOwnerPlayer = shrineOwner.getOfflinePlayer();
 
-            if (model.getMaxFavor() >= (int) Setting.FAVOR_CAP.get() && !player.getName().equals(shrineOwnerPlayer.getName())) {
+            if (shrineOwner.getFavor() < (int) Setting.FAVOR_CAP.get() && !model.getMojangId().equals(shrineOwner.getMojangId())) {
                 // Give them some of the blessings
-                shrineOwner.setMaxFavor(shrineOwner.getMaxFavor() + tributeValue / 5);
+                shrineOwner.setFavor(shrineOwner.getFavor() + tributeValue / 5);
 
                 // Message them
-                if (shrineOwnerPlayer.isOnline() && model.getMojangId().equals(shrineOwner.getMojangId())) {
+                if (shrineOwnerPlayer.isOnline()) {
                     ((Player) shrineOwnerPlayer).sendMessage(save.getDeity().getColor() + "Another " + save.getDeity().getNomen() + " has recently paid tribute at a shrine you own.");
                 }
-            } else if (model.getMaxFavor() > maxFavorBefore && !player.getName().equals(shrineOwnerPlayer.getName())) {
-                // Define variables
-                double ownerFavorBefore = shrineOwner.getMaxFavor();
 
-                // Give them some of the blessings
-                shrineOwner.setMaxFavor(shrineOwner.getMaxFavor() + tributeValue / 5);
+                if (model.getFavor() > favorBefore && !model.getMojangId().equals(shrineOwner.getMojangId())) {
+                    // Define variables
+                    double ownerFavorBefore = shrineOwner.getFavor();
 
-                // Message them
-                if (shrineOwnerPlayer.isOnline() && model.getMojangId().equals(shrineOwner.getMojangId())) {
-                    ((Player) shrineOwnerPlayer).sendMessage(save.getDeity().getColor() + "Another " + save.getDeity().getNomen() + " has recently paid tribute at a shrine you own.");
-                    if (shrineOwner.getMaxFavor() > ownerFavorBefore)
-                        ((Player) shrineOwnerPlayer).sendMessage(ChatColor.YELLOW + "Your favor cap has increased to " + shrineOwner.getMaxFavor() + "!");
+                    // Give them some of the blessings
+                    shrineOwner.setFavor(shrineOwner.getFavor() + tributeValue / 5);
+
+                    // Message them
+                    if (shrineOwnerPlayer.isOnline()) {
+                        ((Player) shrineOwnerPlayer).sendMessage(save.getDeity().getColor() + "Another " + save.getDeity().getNomen() + " has recently paid tribute at a shrine you own.");
+                        if (shrineOwner.getFavor() > ownerFavorBefore)
+                            ((Player) shrineOwnerPlayer).sendMessage(ChatColor.YELLOW + "Your favor has increased to " + shrineOwner.getFavor() + "!");
+                    }
                 }
             }
 
@@ -138,21 +138,16 @@ public class TributeListener implements Listener {
         }
 
         // Handle messaging and Shrine owner updating
-        if (items <= 0) {
+        if (tributeValue < 1) {
             // They aren't good enough, let them know!
             player.sendMessage(ChatColor.RED + "Your tributes were insufficient for " + save.getDeity().getColor() + save.getDeity().getDeityName() + "'s" + ChatColor.RED + " blessings.");
         } else {
             player.sendMessage(save.getDeity().getColor() + save.getDeity().getDeityName() + " is pleased with your tribute.");
         }
-        if (model.getMaxFavor() >= (int) Setting.FAVOR_CAP.get()) {
-            // They have already met the max favor cap
+        if (model.getFavor() < (int) Setting.FAVOR_CAP.get()) {
             if (model.getFavor() > favorBefore)
-                player.sendMessage(ChatColor.YELLOW + "You have been blessed with " + ChatColor.ITALIC + (model.getFavor() - favorBefore) + ChatColor.YELLOW + " instant favor.");
+                player.sendMessage(ChatColor.YELLOW + "You have been blessed with " + ChatColor.ITALIC + (model.getFavor() - favorBefore) + ChatColor.YELLOW + " favor.");
         } else {
-            if (model.getMaxFavor() > maxFavorBefore) {
-                // Message the tributer
-                player.sendMessage(ChatColor.YELLOW + "Your favor cap has increased by " + ChatColor.ITALIC + (model.getFavor() - favorBefore) + ChatColor.YELLOW + "!");
-            }
             if (model.getDevotion(save.getDeity()) > devotionBefore) {
                 // Message the tributer
                 player.sendMessage(save.getDeity().getColor() + "Your devotion to " + save.getDeity().getDeityName() + " has increased by " + ChatColor.ITALIC + (model.getDevotion(save.getDeity()) - devotionBefore) + "!");

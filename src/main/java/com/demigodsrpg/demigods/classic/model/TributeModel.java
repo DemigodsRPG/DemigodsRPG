@@ -22,10 +22,10 @@ public class TributeModel extends AbstractPersistentModel<String> {
 
     public TributeModel(Material material, JsonSection conf) {
         this.material = material;
-        tributeTimes = conf.getDoubleList("tributeTimes");
+        tributeTimes = conf.getDoubleList("tribute_times");
         fitness = conf.getInt("fitness");
         category = DGClassic.TRIBUTE_R.getCategory(material);
-        lastKnownValue = conf.getDouble("lastKnownValue");
+        lastKnownValue = conf.getDouble("last_known_value");
     }
 
     public TributeModel(Material material, int fitness) {
@@ -114,9 +114,9 @@ public class TributeModel extends AbstractPersistentModel<String> {
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
-        map.put("tributeTimes", tributeTimes);
+        map.put("tribute_times", tributeTimes);
         map.put("fitness", fitness);
-        map.put("lastKnownValue", lastKnownValue);
+        map.put("last_known_value", lastKnownValue);
         return map;
     }
 

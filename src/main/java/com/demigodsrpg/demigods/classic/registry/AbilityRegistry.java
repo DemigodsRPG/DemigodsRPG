@@ -360,9 +360,9 @@ public class AbilityRegistry implements Listener {
 
         if (Deity.hasDeity(player, Deity.POSEIDON)) {
             Material locationMaterial = player.getLocation().getBlock().getType();
-            if ((locationMaterial.equals(Material.STATIONARY_WATER) || locationMaterial.equals(Material.WATER)) && player.isSneaking()) {
+            if (player.isSneaking() && (locationMaterial.equals(Material.STATIONARY_WATER) || locationMaterial.equals(Material.WATER))) {
                 Vector victor = (player.getPassenger() != null && player.getLocation().getDirection().getY() > 0 ? player.getLocation().getDirection().clone().setY(0) : player.getLocation().getDirection()).normalize().multiply(1.3D);
-                player.setVelocity(new Vector(victor.getX(), victor.getY(), victor.getZ()));
+                player.setVelocity(victor);
             }
         }
     }

@@ -37,7 +37,8 @@ public class ShrineListener implements Listener {
         Deity deity = null;
         Player p = e.getPlayer();
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(p);
-        for (Deity d : model.getAllDeities()) {
+        for (String dN : model.getAllDeities()) {
+            Deity d = Deity.valueOf(dN);
             if (s.getLines()[2].trim().equalsIgnoreCase(d.getDeityName())) {
                 deity = d;
                 break;

@@ -41,14 +41,15 @@ public class CheckPlayerCommand extends AdminPlayerCommand {
             s.sendMessage(p.getName() + " has " + ColorUtil.getColor(p.getPlayer().getHealth(), p.getPlayer().getMaxHealth()) + ChatColor.ITALIC + p.getPlayer().getHealth() + " / " + p.getPlayer().getMaxHealth() + ChatColor.YELLOW + " health.");
         if (!model.getContractedDeities().isEmpty()) {
             StringBuilder builder = new StringBuilder();
-            for (Deity deity : model.getContractedDeities()) {
+            for (String deityName : model.getContractedDeities()) {
+                Deity deity = Deity.valueOf(deityName);
                 builder.append(deity.getColor()).append(deity.getDeityName()).append(ChatColor.RESET).append(", ");
             }
             String minorDeities = builder.toString();
             minorDeities = minorDeities.substring(0, minorDeities.length() - 4);
             s.sendMessage(p.getName() + " is also allied with: " + minorDeities);
         }
-        s.sendMessage("Favor: " + model.getFavor() + " / " + model.getMaxFavor());
+        s.sendMessage("Favor: " + model.getFavor());
         s.sendMessage("Total Devotion: " + model.getTotalDevotion());
         s.sendMessage("Number of ascensions: " + model.getAscensions());
     }

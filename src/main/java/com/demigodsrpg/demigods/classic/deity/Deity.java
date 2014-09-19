@@ -83,6 +83,6 @@ public enum Deity implements IDeity {
 
     public static boolean hasDeity(Player player, Deity deity) {
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
-        return model.getMajorDeity().equals(deity) || model.getContractedDeities().contains(deity);
+        return model.getMajorDeity().equals(deity) || model.getContractedDeities().contains(deity.name());
     }
 }

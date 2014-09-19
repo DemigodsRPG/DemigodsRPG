@@ -10,7 +10,7 @@ active_worlds:
 inactive_worlds:
 globalfavormultiplier: 1.0
 globalexpmultiplier: 1.0
-globalfavorcap: 20000
+globalfavorcap: 140000
 max_devotion_lost_on_death: 15000
 max_target_range: 100
 max_hp: 3000

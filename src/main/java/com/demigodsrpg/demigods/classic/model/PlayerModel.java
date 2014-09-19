@@ -11,6 +11,7 @@ import com.demigodsrpg.demigods.classic.util.JsonSection;
 import com.demigodsrpg.demigods.classic.util.ZoneUtil;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
@@ -24,25 +25,25 @@ import java.util.concurrent.TimeUnit;
 public class PlayerModel extends AbstractPersistentModel<String> implements Participant {
     private String mojangId;
     private String lastKnownName;
-    private Long lastLoginTime;
 
-    private Deity majorDeity;
-    private Set<Deity> contractedDeities = new HashSet<>();
-    private Map<String, Double> devotion;
+    private String majorDeity;
+    private Set<String> contractedDeities = new HashSet<>();
     private IDeity.Alliance acceptedAlliance;
-
     private BiMap<String, String> binds = HashBiMap.create();
 
-    private Double maxHealth;
-    private Double maxFavor;
-    private Double favor;
-    private Integer ascensions;
+    private Map<String, Double> devotion;
 
-    private Boolean canPvp;
+    private long lastLoginTime;
 
-    private Integer kills;
-    private Integer deaths;
-    private Integer teamKills;
+    private double maxHealth;
+    private double favor;
+    private int ascensions;
+
+    private boolean canPvp;
+
+    private int kills;
+    private int deaths;
+    private int teamKills;
 
     @SuppressWarnings("deprecation")
     public PlayerModel(Player player) {
@@ -50,15 +51,14 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         lastKnownName = player.getName();
         lastLoginTime = System.currentTimeMillis();
 
-        majorDeity = Deity.HUMAN;
+        majorDeity = Deity.HUMAN.name();
         devotion = new HashMap<>();
 
         acceptedAlliance = IDeity.Alliance.NEUTRAL;
 
         maxHealth = 20.0;
-        maxFavor = 0.0;
 
-        favor = 0.0;
+        favor = 700.0;
         ascensions = 0;
 
         canPvp = true;
@@ -70,16 +70,15 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
     public PlayerModel(String mojangId, JsonSection conf) {
         this.mojangId = mojangId;
-        lastKnownName = conf.getString("lastKnownName");
-        lastLoginTime = conf.getLong("lastLoginTime");
-        majorDeity = Deity.valueOf(conf.getString("majorDeity"));
-        for (String name : conf.getStringList("contractedDeities")) {
-            contractedDeities.add(Deity.valueOf(name));
+        lastKnownName = conf.getString("last_known_name");
+        lastLoginTime = conf.getLong("last_login_time");
+        majorDeity = conf.getString("major_deity");
+        for (String name : conf.getStringList("contracted_deities")) {
+            contractedDeities.add(name);
         }
         acceptedAlliance = IDeity.Alliance.valueOf(conf.getString("alliance"));
         binds.putAll((Map) conf.getSection("binds").getValues());
-        maxHealth = conf.getDouble("maxHealth");
-        maxFavor = conf.getDouble("maxFavor");
+        maxHealth = conf.getDouble("max_health");
         favor = conf.getDouble("favor");
         devotion = Maps.newHashMap(Maps.transformEntries(conf.getSection("devotion").getValues(), new Maps.EntryTransformer<String, Object, Double>() {
             @Override
@@ -88,10 +87,10 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
             }
         }));
         ascensions = conf.getInt("ascensions");
-        canPvp = conf.getBoolean("canPvp", true);
+        canPvp = conf.getBoolean("can_pvp", true);
         kills = conf.getInt("kills");
         deaths = conf.getInt("deaths");
-        teamKills = conf.getInt("teamKills");
+        teamKills = conf.getInt("team_kills");
     }
 
     @Override
@@ -107,25 +106,20 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
-        map.put("lastKnownName", lastKnownName);
-        map.put("lastLoginTime", lastLoginTime);
-        map.put("majorDeity", majorDeity.name());
-        List<String> contractedDeities = new ArrayList<>();
-        for (Deity deity : this.contractedDeities) {
-            contractedDeities.add(deity.name());
-        }
-        map.put("contractedDeities", contractedDeities);
+        map.put("last_known_name", lastKnownName);
+        map.put("last_login_time", lastLoginTime);
+        map.put("major_deity", majorDeity);
+        map.put("contracted_deities", Lists.newArrayList(contractedDeities));
         map.put("alliance", acceptedAlliance.name());
-        map.put("binds", Maps.newHashMap(binds));
-        map.put("maxHealth", maxHealth);
-        map.put("maxFavor", maxFavor);
+        map.put("binds", binds);
+        map.put("max_health", maxHealth);
         map.put("favor", favor);
         map.put("devotion", devotion);
         map.put("ascensions", ascensions);
-        map.put("canPvp", canPvp);
+        map.put("can_pvp", canPvp);
         map.put("kills", kills);
         map.put("deaths", deaths);
-        map.put("teamKills", teamKills);
+        map.put("team_kills", teamKills);
         return map;
     }
 
@@ -152,32 +146,32 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public Deity getMajorDeity() {
-        return majorDeity;
+        return Deity.valueOf(majorDeity);
     }
 
     public void setMajorDeity(Deity majorDeity) {
-        this.majorDeity = majorDeity;
+        this.majorDeity = majorDeity.name();
         DGClassic.PLAYER_R.register(this);
     }
 
-    public Set<Deity> getAllDeities() {
-        Set<Deity> deities = new HashSet<>();
+    public Set<String> getAllDeities() {
+        Set<String> deities = new HashSet<>();
         deities.addAll(getContractedDeities());
         deities.add(majorDeity);
         return deities;
     }
 
-    public Set<Deity> getContractedDeities() {
+    public Set<String> getContractedDeities() {
         return contractedDeities;
     }
 
     public void addContractedDeity(Deity deity) {
-        contractedDeities.add(deity);
+        contractedDeities.add(deity.name());
         DGClassic.PLAYER_R.register(this);
     }
 
     public void removeContractedDeity(Deity deity) {
-        contractedDeities.remove(deity);
+        contractedDeities.remove(deity.name());
         DGClassic.PLAYER_R.register(this);
     }
 
@@ -200,15 +194,6 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         DGClassic.PLAYER_R.register(this);
     }
 
-    public Double getMaxFavor() {
-        return maxFavor;
-    }
-
-    public void setMaxFavor(Double maxFavor) {
-        this.maxFavor = maxFavor;
-        DGClassic.PLAYER_R.register(this);
-    }
-
     public Double getFavor() {
         return favor;
     }
@@ -219,15 +204,22 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public Double getDevotion(Deity deity) {
-        if (!devotion.containsKey(deity.toString())) {
+        if (!devotion.containsKey(deity.name())) {
             return 0.0;
         }
         return devotion.get(deity.name());
     }
 
+    public Double getDevotion(String deityName) {
+        if (!devotion.containsKey(deityName)) {
+            return 0.0;
+        }
+        return devotion.get(deityName);
+    }
+
     public Double getTotalDevotion() {
         double total = getDevotion(majorDeity);
-        for (Deity deity : contractedDeities) {
+        for (String deity : contractedDeities) {
             total += getDevotion(deity);
         }
         return total;
@@ -235,6 +227,12 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
     public void setDevotion(Deity deity, Double devotion) {
         this.devotion.put(deity.name(), devotion);
+        calculateAscensions();
+        DGClassic.PLAYER_R.register(this);
+    }
+
+    public void setDevotion(String deityName, Double devotion) {
+        this.devotion.put(deityName, devotion);
         calculateAscensions();
         DGClassic.PLAYER_R.register(this);
     }
@@ -371,7 +369,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
             score *= (double) Setting.EXP_MULTIPLIER.get();
             score /= contractedDeities.size() + 1;
             setDevotion(majorDeity, getDevotion(majorDeity) + score);
-            for (Deity deity : contractedDeities) {
+            for (String deity : contractedDeities) {
                 setDevotion(deity, getDevotion(deity) + score);
             }
         }
@@ -408,8 +406,6 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         if (firstTime) {
             setAlliance(deity.getDefaultAlliance());
             setMaxHealth(25.0);
-            setMaxFavor(700.0);
-            setFavor(getMaxFavor());
             setAscensions(1);
         }
         setDevotion(deity, 20.0);
@@ -417,7 +413,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public void giveDeity(Deity deity) {
-        contractedDeities.add(deity);
+        contractedDeities.add(deity.name());
         setDevotion(deity, 20.0);
     }
 
@@ -501,12 +497,6 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
                     }
                 }
             }, (delay * 20));
-        }
-    }
-
-    public void updateFavor() {
-        if (getFavor() < getMaxFavor()) {
-            setFavor(getFavor() + 4);
         }
     }
 }

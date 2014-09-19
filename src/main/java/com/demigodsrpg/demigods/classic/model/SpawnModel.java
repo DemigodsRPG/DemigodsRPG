@@ -21,7 +21,7 @@ public class SpawnModel extends AbstractPersistentModel<String> {
     public SpawnModel(IDeity.Alliance alliance, JsonSection conf) {
         this.alliance = alliance;
 
-        World world = Bukkit.getWorld(conf.getString("world-name"));
+        World world = Bukkit.getWorld(conf.getString("world_name"));
         if (world != null) {
             double x = conf.getDouble("x");
             double y = conf.getDouble("y");
@@ -37,7 +37,7 @@ public class SpawnModel extends AbstractPersistentModel<String> {
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
-        map.put("world-name", location.getWorld().getName());
+        map.put("world_name", location.getWorld().getName());
         map.put("x", location.getX());
         map.put("y", location.getY());
         map.put("z", location.getZ());

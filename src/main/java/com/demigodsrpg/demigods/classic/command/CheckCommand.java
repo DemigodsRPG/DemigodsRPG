@@ -28,14 +28,15 @@ public class CheckCommand extends BaseCommand {
         player.sendMessage(ChatColor.YELLOW + "You have " + ColorUtil.getColor(player.getHealth(), player.getMaxHealth()) + ChatColor.ITALIC + player.getHealth() + " / " + player.getMaxHealth() + ChatColor.YELLOW + " health.");
         if (!model.getContractedDeities().isEmpty()) {
             StringBuilder builder = new StringBuilder();
-            for (Deity deity : model.getContractedDeities()) {
+            for (String deityName : model.getContractedDeities()) {
+                Deity deity = Deity.valueOf(deityName);
                 builder.append(deity.getColor()).append(deity.getDeityName()).append(ChatColor.RESET).append(", ");
             }
             String minorDeities = builder.toString();
             minorDeities = minorDeities.substring(0, minorDeities.length() - 4) + ".";
             player.sendMessage("You have also allied with: " + minorDeities);
         }
-        player.sendMessage("Favor: " + model.getFavor() + " / " + model.getMaxFavor());
+        player.sendMessage("Favor: " + model.getFavor());
         player.sendMessage("Total Devotion: " + model.getTotalDevotion());
         player.sendMessage("Number of ascensions: " + model.getAscensions());
         player.sendMessage("Use " + ChatColor.ITALIC + "/binds" + ChatColor.RESET + " for a list of all ability binds.");

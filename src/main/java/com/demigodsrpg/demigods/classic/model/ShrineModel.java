@@ -30,11 +30,11 @@ public class ShrineModel extends AbstractPersistentModel<String> {
 
     public ShrineModel(String shrineId, JsonSection conf) {
         this.shrineId = shrineId;
-        ownerMojangId = conf.getString("ownerId");
+        ownerMojangId = conf.getString("owner_id");
         deity = Deity.valueOf(conf.getString("deity"));
         shrine = Shrine.valueOf(conf.getString("type"));
 
-        World world = Bukkit.getWorld(conf.getString("world-name"));
+        World world = Bukkit.getWorld(conf.getString("world_name"));
         if (world != null) {
             double x = conf.getDouble("x");
             double y = conf.getDouble("y");
@@ -50,10 +50,10 @@ public class ShrineModel extends AbstractPersistentModel<String> {
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
-        map.put("ownerId", ownerMojangId);
+        map.put("owner_id", ownerMojangId);
         map.put("deity", deity.name());
         map.put("type", shrine.name());
-        map.put("world-name", location.getWorld().getName());
+        map.put("world_name", location.getWorld().getName());
         map.put("x", location.getX());
         map.put("y", location.getY());
         map.put("z", location.getZ());

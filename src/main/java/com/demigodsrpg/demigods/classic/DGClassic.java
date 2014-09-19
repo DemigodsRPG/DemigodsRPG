@@ -21,7 +21,6 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class DGClassic extends JavaPlugin {
@@ -58,13 +57,6 @@ public class DGClassic extends JavaPlugin {
 
         // Define the save path
         SAVE_PATH = getDataFolder().getPath() + "/data/";
-
-        // Load persistent data
-        PLAYER_R.registerFromFile();
-        SHRINE_R.registerFromFile();
-        TRIBUTE_R.registerFromFile();
-        SPAWN_R.registerFromFile();
-        SERV_R.registerFromFile();
 
         // Determine territory registries
         for (World world : Bukkit.getWorlds()) {
@@ -146,7 +138,7 @@ public class DGClassic extends JavaPlugin {
 
     // -- TASK RELATED -- //
 
-    private static final BukkitRunnable SYNC, ASYNC, FAVOR, VALUE;
+    private static final BukkitRunnable SYNC, ASYNC, VALUE;
 
     static {
         SYNC = new BukkitRunnable() {
@@ -169,19 +161,6 @@ public class DGClassic extends JavaPlugin {
                 SERV_R.clearExpired();
             }
         };
-        FAVOR = new BukkitRunnable() {
-            @Override
-            public void run() {
-                // Update Favor
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (ZoneUtil.inNoDGCZone(player.getLocation())) continue;
-                    PlayerModel model = PLAYER_R.fromPlayer(player);
-                    if (model != null) {
-                        model.updateFavor();
-                    }
-                }
-            }
-        };
         VALUE = new TributeModel.ValueTask();
     }
 
@@ -196,10 +175,6 @@ public class DGClassic extends JavaPlugin {
         // Start async demigods runnable
         scheduler.scheduleAsyncRepeatingTask(this, ASYNC, 20, 20);
         CONSOLE.info("Main Demigods ASYNC runnable enabled...");
-
-        // Start async favor runnable
-        scheduler.scheduleAsyncRepeatingTask(this, FAVOR, 20, (long) ((double) Setting.FAVOR_REGEN_SECONDS.get() * 20.0));
-        CONSOLE.info("Favor regeneration (every " + (TimeUnit.SECONDS.toMillis((long) (double) Setting.FAVOR_REGEN_SECONDS.get())) + " seconds) runnable enabled...");
 
         // Start async value runnable
         scheduler.scheduleAsyncRepeatingTask(this, VALUE, 60, 400);
