@@ -8,16 +8,13 @@ TODO
 
 - PvE exp. (based on dropped mc exp?)
 - Battles, and battle rewards.
-- Shrine rewards for shrine owners when others tribute (broken).
-- Shrine warps.
 - Commands.
 - Documentation (abilities, deities, and general gameplay).
 - Add add Deities and abilities.
-- Balance them.
+-- Balance them.
 - Optimize plugin after everything is feature complete.
 
 BUGS
 ====
 
-- Tribute data is causing huge memory leaks?
-- Every reload causes climbing memory usage.
+- Shrines don't reward shrine owners when others tribute.
