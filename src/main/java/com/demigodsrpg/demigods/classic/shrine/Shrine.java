@@ -7,7 +7,7 @@ import java.util.Collection;
 public enum Shrine implements IShrine {
     OVERWORLD(new OverworldShrine()), NETHER(new NetherShrine());
 
-    private IShrine parent;
+    private final IShrine parent;
 
     private Shrine(IShrine parent) {
         this.parent = parent;

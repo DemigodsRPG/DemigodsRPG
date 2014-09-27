@@ -27,7 +27,7 @@ public enum Deity implements IDeity {
 
     CRONUS(new Cronus()), RHEA(new Rhea());
 
-    private IDeity deity;
+    private final IDeity deity;
 
     private Deity(IDeity deity) {
         this.deity = deity;

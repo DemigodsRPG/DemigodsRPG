@@ -2,7 +2,7 @@ package com.demigodsrpg.demigods.classic.gui;
 
 import org.bukkit.inventory.Inventory;
 
-public interface IInventoryGUI {
+interface IInventoryGUI {
     //Get the inventory
     public Inventory getInventory(Integer... inventory);
 

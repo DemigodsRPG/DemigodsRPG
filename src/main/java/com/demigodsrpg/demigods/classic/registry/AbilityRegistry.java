@@ -3,6 +3,7 @@ package com.demigodsrpg.demigods.classic.registry;
 import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.ability.Ability;
+import com.demigodsrpg.demigods.classic.ability.AbilityMetaData;
 import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
@@ -26,20 +27,21 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
-// FIXME Scrap reflection... but mah annotations...
-
 public class AbilityRegistry implements Listener {
-    protected static final ConcurrentMap<String, Data> REGISTERED_COMMANDS = new ConcurrentHashMap<>();
-    protected static final Multimap<String, Data> REGISTERED_ABILITIES = Multimaps.newMultimap(new ConcurrentHashMap<String, Collection<Data>>(), new Supplier<Collection<Data>>() {
+    // FIXME Do we really need two collections for the same data? This is expensive...
+
+    private static final ConcurrentMap<String, AbilityMetaData> REGISTERED_COMMANDS = new ConcurrentHashMap<>();
+    private static final Multimap<String, AbilityMetaData> REGISTERED_ABILITIES = Multimaps.newListMultimap(new ConcurrentHashMap<String, Collection<AbilityMetaData>>(), new Supplier<List<AbilityMetaData>>() {
         @Override
-        public Collection<Data> get() {
-            return new HashSet<>();
+        public List<AbilityMetaData> get() {
+            return new ArrayList<>(0);
         }
     });
 
@@ -50,7 +52,7 @@ public class AbilityRegistry implements Listener {
             case LEFT_CLICK_AIR:
                 return;
         }
-        for (Data ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
+        for (AbilityMetaData ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
             try {
                 PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
                 if (processAbility(model, ability)) {
@@ -61,12 +63,13 @@ public class AbilityRegistry implements Listener {
             } catch (Exception oops) {
                 oops.printStackTrace();
             }
+
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onEvent(EntityDamageByEntityEvent event) {
-        for (Data ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
+        for (AbilityMetaData ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
             try {
                 if (event.getDamager() instanceof Player) {
                     Player player = (Player) event.getDamager();
@@ -83,7 +86,7 @@ public class AbilityRegistry implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onEvent(FurnaceSmeltEvent event) {
-        for (Data ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
+        for (AbilityMetaData ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
             for (PlayerModel model : DGClassic.PLAYER_R.fromDeity(ability.getDeity())) {
                 try {
                     if (model.getOnline() && model.getLocation().getWorld().equals(event.getBlock().getWorld()) && model.getLocation().distance(event.getBlock().getLocation()) < (int) Math.round(20 * Math.pow(model.getDevotion(Deity.HEPHAESTUS), 0.15))) {
@@ -127,8 +130,8 @@ public class AbilityRegistry implements Listener {
         }
     }
 
-    public boolean abilityInfo(Player player, String command) {
-        for (Data ability : REGISTERED_ABILITIES.values()) {
+    boolean abilityInfo(Player player, String command) {
+        for (AbilityMetaData ability : REGISTERED_ABILITIES.values()) {
             if (ability.getCommand().equals(command)) {
                 player.sendMessage(StringUtil2.chatTitle(ability.getName()));
                 player.sendMessage(" - Deity: " + ability.getDeity().getColor() + ability.getDeity().getDeityName());
@@ -146,7 +149,7 @@ public class AbilityRegistry implements Listener {
         return false;
     }
 
-    public boolean bindAbility(Player player, String command) {
+    boolean bindAbility(Player player, String command) {
         // Is this a correct command?
         if (!REGISTERED_COMMANDS.keySet().contains(command)) {
             return false;
@@ -160,7 +163,7 @@ public class AbilityRegistry implements Listener {
 
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
         Material material = player.getItemInHand().getType();
-        Data bound = model.getBound(material);
+        AbilityMetaData bound = model.getBound(material);
         if (bound != null) {
             if (!bound.getCommand().equals(command)) {
                 player.sendMessage(ChatColor.RED + "This item already has /" + bound.getCommand() + " bound to it.");
@@ -171,7 +174,7 @@ public class AbilityRegistry implements Listener {
                 return true;
             }
         } else {
-            Data ability = fromCommand(command);
+            AbilityMetaData ability = fromCommand(command);
             if (ability.getCommand().equals(command) && (model.getMajorDeity().equals(ability.getDeity()) || model.getContractedDeities().contains(ability.getDeity()) && ability.getCommand().equals(command))) {
                 model.bind(ability, material);
                 player.sendMessage(ChatColor.YELLOW + ability.getName() + " has been bound to " + StringUtil2.beautify(material.name()) + ".");
@@ -181,7 +184,7 @@ public class AbilityRegistry implements Listener {
         return false;
     }
 
-    public boolean processAbility(PlayerModel model, Data ability) {
+    boolean processAbility(PlayerModel model, AbilityMetaData ability) {
         if (ZoneUtil.isNoDGCWorld(model.getLocation().getWorld())) return false;
         if (!ability.getType().equals(Ability.Type.PASSIVE)) {
             if ((ability.getType().equals(Ability.Type.OFFENSIVE) || ability.getType().equals(Ability.Type.ULTIMATE)) && ZoneUtil.inNoPvpZone(model.getLocation())) {
@@ -199,10 +202,10 @@ public class AbilityRegistry implements Listener {
                 model.getOfflinePlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " requires more favor.");
                 return false;
             }
-            if (DGClassic.SERV_R.contains(model.getMojangId().toString(), ability + ":delay")) {
+            if (DGClassic.SERV_R.contains(model.getMojangId(), ability + ":delay")) {
                 return false;
             }
-            if (DGClassic.SERV_R.contains(model.getMojangId().toString(), ability + ":cooldown")) {
+            if (DGClassic.SERV_R.contains(model.getMojangId(), ability + ":cooldown")) {
                 model.getOfflinePlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " is on a cooldown.");
                 return false;
             }
@@ -212,10 +215,10 @@ public class AbilityRegistry implements Listener {
             long cooldown = ability.getCooldown();
 
             if (delay > 0) {
-                DGClassic.SERV_R.put(model.getMojangId().toString(), ability + ":delay", true, delay, TimeUnit.MILLISECONDS);
+                DGClassic.SERV_R.put(model.getMojangId(), ability + ":delay", true, delay, TimeUnit.MILLISECONDS);
             }
             if (cooldown > 0) {
-                DGClassic.SERV_R.put(model.getMojangId().toString(), ability + ":cooldown", true, cooldown, TimeUnit.MILLISECONDS);
+                DGClassic.SERV_R.put(model.getMojangId(), ability + ":cooldown", true, cooldown, TimeUnit.MILLISECONDS);
             }
             if (cost > 0) {
                 model.setFavor(model.getFavor() - cost);
@@ -237,7 +240,7 @@ public class AbilityRegistry implements Listener {
     }
 
     @SuppressWarnings("unchecked")
-    public void register(Deity deity, Method method, Ability ability) {
+    void register(Deity deity, Method method, Ability ability) {
         if (Ability.Type.PLACEHOLDER.equals(ability.type())) return;
         Class<?>[] paramaters = method.getParameterTypes();
         try {
@@ -246,7 +249,7 @@ public class AbilityRegistry implements Listener {
                 return;
             }
             Class<? extends Event> eventClass = (Class<? extends Event>) paramaters[0];
-            Data data = new Data(deity, method, ability);
+            AbilityMetaData data = new AbilityMetaData(deity, method, ability);
             REGISTERED_ABILITIES.put(eventClass.getName(), data);
             if (!"".equals(data.getCommand())) {
                 REGISTERED_COMMANDS.put(data.getCommand(), data);
@@ -256,63 +259,11 @@ public class AbilityRegistry implements Listener {
         }
     }
 
-    public Data fromCommand(String commandName) {
+    public AbilityMetaData fromCommand(String commandName) {
         if (REGISTERED_COMMANDS.containsKey(commandName)) {
             return REGISTERED_COMMANDS.get(commandName);
         }
         return null;
-    }
-
-    public static class Data {
-        private Deity deity;
-        private Method method;
-        private Ability ability;
-
-        public Data(Deity deity, Method method, Ability ability) {
-            this.deity = deity;
-            this.method = method;
-            this.ability = ability;
-        }
-
-        public Deity getDeity() {
-            return deity;
-        }
-
-        public String getName() {
-            return ability.name();
-        }
-
-        public String getCommand() {
-            return ability.command();
-        }
-
-        public String[] getInfo() {
-            return ability.info();
-        }
-
-        public Ability.Type getType() {
-            return ability.type();
-        }
-
-        public double getCost() {
-            return ability.cost();
-        }
-
-        public long getDelay() {
-            return ability.delay();
-        }
-
-        public long getCooldown() {
-            return ability.cooldown();
-        }
-
-        public Method getMethod() {
-            return method;
-        }
-
-        public Ability getAbility() {
-            return ability;
-        }
     }
 
     /**

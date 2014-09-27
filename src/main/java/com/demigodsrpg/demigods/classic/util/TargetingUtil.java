@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Random;
 
 public class TargetingUtil {
-    public static final int TARGET_OFFSET = 5;
+    private static final int TARGET_OFFSET = 5;
 
     /**
      * Returns the LivingEntity that <code>player</code> is target.

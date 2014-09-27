@@ -29,7 +29,7 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
         return FILE_NAME;
     }
 
-    public void save(Material material, int amount) {
+    void save(Material material, int amount) {
         // Remove the data if it exists already
         remove(material);
 
@@ -37,7 +37,7 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
         register(new TributeModel(material, amount));
     }
 
-    public void remove(Material material) {
+    void remove(Material material) {
         if (fromId(material.name()) != null) {
             unregister(fromId(material.name()));
         }
@@ -94,7 +94,7 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
      * @param material the material to check.
      * @return the total number of tributes.
      */
-    public int getTributes(Material material) {
+    int getTributes(Material material) {
         TributeModel data = fromId(material.name());
         if (data != null) return data.getFitness();
         else return 1;
@@ -119,7 +119,7 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
      *
      * @param item the item whose amount to save.
      */
-    public void saveTribute(ItemStack item) {
+    void saveTribute(ItemStack item) {
         TributeModel data = fromId(item.getType().name());
 
         if (data != null) {
@@ -132,7 +132,7 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
     /**
      * Returns the value for a <code>material</code>.
      */
-    public double getValue(Material material) {
+    double getValue(Material material) {
         int lastKnownValue = (int) fromId(material.name()).getLastKnownValue();
         return lastKnownValue >= 0.0 ? lastKnownValue : 1.0;
     }

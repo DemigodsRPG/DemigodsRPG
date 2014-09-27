@@ -65,13 +65,6 @@
     </repositories>
 
     <dependencies>
-        <!-- fanciful -->
-        <dependency>
-            <groupId>mkremins</groupId>
-            <artifactId>fanciful</artifactId>
-            <version>0.1.5</version>
-        </dependency>
-
         <!-- Spigot -->
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -137,7 +130,6 @@
                                 <includes>
                                     <include>com.google.code.gson:gson</include>
                                     <!-- <include>commons-lang:commons-lang</include> -->
-                                    <include>mkremins:fanciful</include>
                                     <include>com.censoredsoftware.library:*</include>
                                 </includes>
                             </artifactSet>
@@ -150,10 +142,6 @@
                                     <pattern>org.apache.commons.lang</pattern>
                                     <shadedPattern>com.demigodsrpg.demigods.classic.org.apache.commons.lang</shadedPattern>
                                 </relocation> -->
-                                <relocation>
-                                    <pattern>mkremins</pattern>
-                                    <shadedPattern>com.demigodsrpg.demigods.classic.mkremins</shadedPattern>
-                                </relocation>
                                 <relocation>
                                     <pattern>com.censoredsoftware.library</pattern>
                                     <shadedPattern>com.demigodsrpg.demigods.classic.com.censoredsoftware.library

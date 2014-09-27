@@ -84,7 +84,7 @@ public class Zeus implements IDeity {
         strikeLightning(player, target, notify);
     }
 
-    public static boolean strikeLightning(Player player, Location target, boolean notify) {
+    private static boolean strikeLightning(Player player, Location target, boolean notify) {
         // Set variables
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
 
@@ -182,7 +182,7 @@ public class Zeus implements IDeity {
         }
     }
 
-    public static void setWeather(final Player player, long ticks) {
+    private static void setWeather(final Player player, long ticks) {
         // Set the weather
         player.setPlayerWeather(WeatherType.DOWNFALL);
 

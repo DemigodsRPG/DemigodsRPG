@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Map;
 
 public class Territory extends AbstractPersistentModel<String> {
-    private IDeity.Alliance alliance;
-    private Priority priority;
-    private List<Location> corners;
-    private Polygon shape;
+    private final IDeity.Alliance alliance;
+    private final Priority priority;
+    private final List<Location> corners;
+    private final Polygon shape;
 
-    public Territory(IDeity.Alliance alliance, Priority priority, java.util.List<Location> corners) {
+    private Territory(IDeity.Alliance alliance, Priority priority, java.util.List<Location> corners) {
         this.alliance = alliance;
         this.priority = priority;
         int[] x = new int[corners.size()];
@@ -47,7 +47,7 @@ public class Territory extends AbstractPersistentModel<String> {
         return shape.contains(location.getX(), location.getZ());
     }
 
-    public IDeity.Alliance getAlliance() {
+    IDeity.Alliance getAlliance() {
         return alliance;
     }
 

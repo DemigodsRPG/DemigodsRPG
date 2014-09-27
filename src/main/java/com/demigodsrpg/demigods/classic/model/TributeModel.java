@@ -11,14 +11,14 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class TributeModel extends AbstractPersistentModel<String> {
-    private static final Double VALUE_K = 14.286;
-    private static Double OFFSET = 1.0;
+    private static final double VALUE_K = 14.286;
+    private static double OFFSET = 1.0;
 
-    private Material material;
+    private final Material material;
     private List<Double> tributeTimes;
-    private Integer fitness;
-    private TributeRegistry.Category category;
-    private Double lastKnownValue;
+    private int fitness;
+    private final TributeRegistry.Category category;
+    private double lastKnownValue;
 
     public TributeModel(Material material, JsonSection conf) {
         this.material = material;
@@ -40,7 +40,7 @@ public class TributeModel extends AbstractPersistentModel<String> {
         return material;
     }
 
-    public List<Double> getTributeTimes() {
+    List<Double> getTributeTimes() {
         long twoWeeksAgo = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(14);
         for (Double time : tributeTimes) {
             if (time < twoWeeksAgo) {
@@ -68,7 +68,7 @@ public class TributeModel extends AbstractPersistentModel<String> {
         return category;
     }
 
-    public double getFrequency() {
+    double getFrequency() {
         return getTributeTimes().size() / 336;
     }
 

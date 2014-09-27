@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 public class DGClassic extends JavaPlugin {
     // -- PLUGIN RELATED CONSTANTS -- //
 
-    public static DGClassic INST;
+    private static DGClassic INST;
     public static Logger CONSOLE;
     public static String SAVE_PATH;
 
@@ -35,11 +35,11 @@ public class DGClassic extends JavaPlugin {
     public static final PlayerRegistry PLAYER_R = new PlayerRegistry();
     public static final ShrineRegistry SHRINE_R = new ShrineRegistry();
     public static final TributeRegistry TRIBUTE_R = new TributeRegistry();
-    public static final SpawnRegistry SPAWN_R = new SpawnRegistry();
+    private static final SpawnRegistry SPAWN_R = new SpawnRegistry();
     public static final BattleRegistry BATTLE_R = new BattleRegistry();
     public static final AbilityRegistry ABILITY_R = new AbilityRegistry();
     public static final ServerDataRegistry SERV_R = new ServerDataRegistry();
-    public static final ConcurrentMap<String, TerritoryRegistry> TERR_R = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<String, TerritoryRegistry> TERR_R = new ConcurrentHashMap<>();
 
     // -- PLUGIN RELATED INSTANCE METHODS -- //
 
@@ -124,7 +124,7 @@ public class DGClassic extends JavaPlugin {
 
     // -- PLUGIN RELATED UTILITY METHODS -- //
 
-    public static void clearCache() {
+    private static void clearCache() {
         PLAYER_R.clearCache();
         SHRINE_R.clearCache();
         TRIBUTE_R.clearCache();
@@ -165,7 +165,7 @@ public class DGClassic extends JavaPlugin {
     }
 
     @SuppressWarnings("deprecation")
-    public void startThreads() {
+    void startThreads() {
         BukkitScheduler scheduler = Bukkit.getScheduler();
 
         // Start sync demigods runnable

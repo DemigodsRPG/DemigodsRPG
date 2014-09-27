@@ -4,7 +4,7 @@ import org.bukkit.Location;
 
 public class Report {
     public Location startLocation;
-    public Long battleLength;
+    public long battleLength;
 
     public Report(Battle battle) {
 

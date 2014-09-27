@@ -17,14 +17,14 @@ import java.util.Set;
 public class JsonSection {
     // -- PRIVATE FIELDS -- //
 
-    private Map<String, Object> SECTION_DATA = new HashMap<String, Object>();
+    private Map<String, Object> SECTION_DATA = new HashMap<>();
 
     // -- CONSTRUCTORS -- //
 
     /**
      * Default constructor.
      */
-    public JsonSection() {
+    private JsonSection() {
     }
 
     /**
@@ -72,7 +72,7 @@ public class JsonSection {
         return SECTION_DATA;
     }
 
-    public boolean contains(String s) {
+    boolean contains(String s) {
         return SECTION_DATA.containsKey(s);
     }
 
@@ -84,7 +84,7 @@ public class JsonSection {
         return SECTION_DATA.get(s);
     }
 
-    public Object get(String s, Object o) {
+    Object get(String s, Object o) {
         if (contains(s)) {
             return get(s);
         }
@@ -131,7 +131,7 @@ public class JsonSection {
         return Double.parseDouble(get(s).toString());
     }
 
-    public Double getDouble(String s, double v) {
+    Double getDouble(String s, double v) {
         return Double.parseDouble(get(s, v).toString());
     }
 
@@ -193,6 +193,10 @@ public class JsonSection {
 
     public void set(String s, Object o) {
         SECTION_DATA.put(s, o);
+    }
+
+    public void remove(String s) {
+        SECTION_DATA.put(s, null);
     }
 
     public JsonSection createSection(String s) {

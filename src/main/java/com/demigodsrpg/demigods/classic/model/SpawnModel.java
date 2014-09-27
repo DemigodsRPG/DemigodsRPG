@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SpawnModel extends AbstractPersistentModel<String> {
-    private IDeity.Alliance alliance;
+    private final IDeity.Alliance alliance;
     private Location location;
 
     public SpawnModel(IDeity.Alliance alliance, Location location) {

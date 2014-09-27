@@ -3,18 +3,18 @@ package com.demigodsrpg.demigods.classic.battle;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import org.bukkit.Location;
 
-import java.util.Set;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-public class Battle {
-    private ConcurrentMap<Participant, Data> involved;
-    private Set<Micro> microBattles;
+class Battle {
+    private ConcurrentMap<Participant, BattleMetaData> involved;
+    private List<Micro> microBattles;
 
     private Location startLocation;
 
-    private Long startTimeMillis;
-    private Long endTimeMillis;
+    private long startTimeMillis;
+    private long endTimeMillis;
 
     private IDeity.Alliance won;
     private IDeity.Alliance lost;
@@ -27,7 +27,7 @@ public class Battle {
         }
         involved = new ConcurrentHashMap<>();
         for (Participant participant : participants) {
-            involved.put(participant, new Data());
+            involved.put(participant, new BattleMetaData());
         }
         startLocation = participants[0].getLocation();
         startTimeMillis = System.currentTimeMillis();
@@ -59,42 +59,7 @@ public class Battle {
 
     private void putIfAbsent(Participant... toPut) {
         for (Participant participant : toPut) {
-            involved.putIfAbsent(participant, new Data());
-        }
-    }
-
-    // -- SUB-CLASSES -- //
-
-    public static class Data {
-        private int hits = 0;
-        private int assists = 0;
-        private int denies = 0;
-        private int kills = 0;
-        private int teamKills = 0;
-        private int deaths = 0;
-
-        public int getHits() {
-            return hits;
-        }
-
-        public int getAssists() {
-            return assists;
-        }
-
-        public int getDenies() {
-            return denies;
-        }
-
-        public int getKills() {
-            return kills;
-        }
-
-        public int getTeamKills() {
-            return teamKills;
-        }
-
-        public int getDeaths() {
-            return deaths;
+            involved.putIfAbsent(participant, new BattleMetaData());
         }
     }
 }

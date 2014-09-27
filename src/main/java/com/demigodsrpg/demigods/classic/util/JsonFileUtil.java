@@ -42,7 +42,7 @@ public class JsonFileUtil {
      * @return The JsonSection for the entire file.
      */
     @SuppressWarnings("unchecked")
-    public static JsonSection loadSection(File dataFile) {
+    private static JsonSection loadSection(File dataFile) {
         Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
         try {
             FileInputStream inputStream = new FileInputStream(dataFile);
@@ -62,7 +62,7 @@ public class JsonFileUtil {
      * @param dataFile The file object.
      */
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void createFile(File dataFile) {
+    private static void createFile(File dataFile) {
         try {
             // Create the directories.
             (dataFile.getParentFile()).mkdirs();
@@ -77,9 +77,9 @@ public class JsonFileUtil {
     /**
      * Save a JsonSection as a json file.
      *
-     * @param path The path to the json file.
+     * @param path     The path to the json file.
      * @param fileName The filename (incl. file extension).
-     * @param section The JsonSection to be saved.
+     * @param section  The JsonSection to be saved.
      * @return Save success or failure.
      */
     public static boolean saveFile(String path, String fileName, JsonSection section) {

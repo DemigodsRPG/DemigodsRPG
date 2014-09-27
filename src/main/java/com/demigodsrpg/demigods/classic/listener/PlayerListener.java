@@ -15,7 +15,7 @@ import java.util.Random;
 import java.util.Set;
 
 public class PlayerListener implements Listener {
-    private Random random = new Random();
+    private final Random random = new Random();
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent event) {

@@ -10,7 +10,7 @@ import org.bukkit.Location;
 import java.util.Collection;
 
 public class ShrineRegistry extends AbstractRegistry<ShrineModel> {
-    public static final String FILE_NAME = "shrines.dgc";
+    private static final String FILE_NAME = "shrines.dgc";
 
     public Collection<ShrineModel> getShrines(final Location location, final int range) {
         return Collections2.filter(getRegistered(), new Predicate<ShrineModel>() {

@@ -26,7 +26,7 @@ public class ServerDataRegistry extends AbstractRegistry<ServerDataModel> {
         register(timedData);
     }
 
-    public void put(String row, String column, Boolean value) {
+    public void put(String row, String column, boolean value) {
         // Remove the value if it exists already
         remove(row, column);
 
@@ -80,11 +80,11 @@ public class ServerDataRegistry extends AbstractRegistry<ServerDataModel> {
         return find(row, column).getValue();
     }
 
-    public Long getExpiration(String row, String column) throws NullPointerException {
+    public long getExpiration(String row, String column) throws NullPointerException {
         return find(row, column).getExpiration();
     }
 
-    public ServerDataModel find(String row, String column) {
+    ServerDataModel find(String row, String column) {
         if (findByRow(row) == null) return null;
 
         for (ServerDataModel data : findByRow(row))
@@ -93,7 +93,7 @@ public class ServerDataRegistry extends AbstractRegistry<ServerDataModel> {
         return null;
     }
 
-    public Set<ServerDataModel> findByRow(final String row) {
+    Set<ServerDataModel> findByRow(final String row) {
         return Sets.newHashSet(Collections2.filter(getRegistered(), new Predicate<ServerDataModel>() {
             @Override
             public boolean apply(ServerDataModel ServerDataModel) {

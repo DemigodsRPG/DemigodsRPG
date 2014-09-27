@@ -4,7 +4,7 @@ import org.bukkit.Location;
 
 import java.util.Collection;
 
-public interface IShrine {
+interface IShrine {
     void generate(Location reference);
 
     Location getClickable(Location reference);

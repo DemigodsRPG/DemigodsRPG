@@ -15,8 +15,8 @@ public enum Setting {
     FRIENDLY_FIRE(Boolean.class, getConfig().getBoolean("friendly_fire", false)),
     EXP_MULTIPLIER(Double.class, getConfig().getDouble("globalexpmultiplier", 4.0));
 
-    private Class<?> clazz;
-    private Object setting;
+    private final Class<?> clazz;
+    private final Object setting;
 
     private <T> Setting(Class<T> clazz, T setting) {
         this.clazz = clazz;
@@ -31,7 +31,7 @@ public enum Setting {
         return ((Class<T>) clazz).cast(setting);
     }
 
-    public static ConfigurationSection getConfig() {
+    private static ConfigurationSection getConfig() {
         return DGClassic.getInst().getConfig();
     }
 }

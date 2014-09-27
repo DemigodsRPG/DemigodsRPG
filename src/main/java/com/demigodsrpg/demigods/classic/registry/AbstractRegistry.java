@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentMap;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>> {
-    protected ConcurrentMap<String, T> REGISTERED_DATA = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, T> REGISTERED_DATA = new ConcurrentHashMap<>();
 
     public T fromId(String id) {
         if (REGISTERED_DATA.get(id) != null) {
@@ -41,7 +41,7 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
         register(Arrays.asList(data));
     }
 
-    public final void register(Collection<T> data) {
+    final void register(Collection<T> data) {
         for (T data_ : data) {
             register(data_);
         }
@@ -58,7 +58,7 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
         }
     }
 
-    public void unregister(T data) {
+    void unregister(T data) {
         REGISTERED_DATA.remove(data.getPersistantId());
         synchronized (data) {
             deleteFromFile(data.getPersistantId());
@@ -72,13 +72,13 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
         return REGISTERED_DATA.values();
     }
 
-    public synchronized boolean deleteFromFile(String key) {
+    synchronized boolean deleteFromFile(String key) {
         // Grab the current file, and its data as a usable map.
         JsonSection currentFile = getFile();
 
         if (currentFile != null) {
             // Remove data.
-            currentFile.set(key, null);
+            currentFile.remove(key);
 
             // Save the file!
             return JsonFileUtil.saveFile(DGClassic.SAVE_PATH, getFileName(), currentFile);
@@ -87,7 +87,7 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
         return false;
     }
 
-    public synchronized boolean addToFile(String key, T data) {
+    synchronized boolean addToFile(String key, T data) {
         // Grab the current file, and its data as a usable map.
         JsonSection currentFile = getFile();
 
@@ -102,7 +102,7 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
         return false;
     }
 
-    public final JsonSection getFile() {
+    final JsonSection getFile() {
         try {
             return JsonFileUtil.getSection(DGClassic.SAVE_PATH, getFileName());
         } catch (Exception ignored) {
@@ -122,7 +122,7 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
      * @param data      The provided data object.
      * @return The converted get.
      */
-    public abstract T valueFromData(String stringKey, JsonSection data);
+    protected abstract T valueFromData(String stringKey, JsonSection data);
 
-    public abstract String getFileName();
+    protected abstract String getFileName();
 }

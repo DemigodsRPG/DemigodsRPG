@@ -14,10 +14,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ShrineModel extends AbstractPersistentModel<String> {
-    private String shrineId;
-    private String ownerMojangId;
-    private Deity deity;
-    private Shrine shrine;
+    private final String shrineId;
+    private final String ownerMojangId;
+    private final Deity deity;
+    private final Shrine shrine;
     private Location location;
 
     public ShrineModel(String name, Player player, Deity deity, Shrine shrine, Location location) {

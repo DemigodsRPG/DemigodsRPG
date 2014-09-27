@@ -36,5 +36,5 @@ public abstract class BaseCommand implements CommandExecutor {
         return true;
     }
 
-    public abstract CommandResult onCommand(CommandSender sender, Command command, String[] args);
+    protected abstract CommandResult onCommand(CommandSender sender, Command command, String[] args);
 }

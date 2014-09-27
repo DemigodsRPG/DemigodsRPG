@@ -21,8 +21,8 @@ import java.util.List;
 public class ShrineGUI implements IInventoryGUI {
     public static final String INVENTORY_NAME = "Shrine Select";
 
-    private List<Inventory> INVENTORY_LIST;
-    private ImmutableMap<Integer, SlotFunction> FUNCTION_MAP;
+    private final List<Inventory> INVENTORY_LIST;
+    private final ImmutableMap<Integer, SlotFunction> FUNCTION_MAP;
 
     public ShrineGUI(final Player player) {
         // FUNCTION MAP

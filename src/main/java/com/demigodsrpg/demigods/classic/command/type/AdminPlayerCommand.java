@@ -30,5 +30,5 @@ public abstract class AdminPlayerCommand extends BaseCommand implements TabCompl
         return new ArrayList<>();
     }
 
-    public abstract CommandResult onCommand(CommandSender sender, PlayerModel model, String[] args);
+    protected abstract CommandResult onCommand(CommandSender sender, PlayerModel model, String[] args);
 }

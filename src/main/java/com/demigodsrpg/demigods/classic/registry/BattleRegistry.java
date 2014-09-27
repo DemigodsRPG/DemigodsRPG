@@ -15,7 +15,7 @@ public class BattleRegistry {
         return !(entity instanceof Player) || defineParticipant(entity).getCanPvp();
     }
 
-    public Participant defineParticipant(Entity entity) {
+    Participant defineParticipant(Entity entity) {
         if (entity instanceof Player) {
             return DGClassic.PLAYER_R.fromPlayer((Player) entity);
         }

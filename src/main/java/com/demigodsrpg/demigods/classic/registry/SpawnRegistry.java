@@ -9,7 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 public class SpawnRegistry extends AbstractRegistry<SpawnModel> {
-    public static final String FILE_NAME = "spawns.dgc";
+    private static final String FILE_NAME = "spawns.dgc";
 
     public Location getSpawn(final IDeity.Alliance alliance) {
         SpawnModel point = Iterables.find(getRegistered(), new Predicate<SpawnModel>() {

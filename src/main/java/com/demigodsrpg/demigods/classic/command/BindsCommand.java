@@ -2,10 +2,10 @@ package com.demigodsrpg.demigods.classic.command;
 
 import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.demigods.classic.DGClassic;
+import com.demigodsrpg.demigods.classic.ability.AbilityMetaData;
 import com.demigodsrpg.demigods.classic.command.type.BaseCommand;
 import com.demigodsrpg.demigods.classic.command.type.CommandResult;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
-import com.demigodsrpg.demigods.classic.registry.AbilityRegistry;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -26,7 +26,7 @@ public class BindsCommand extends BaseCommand {
         sender.sendMessage(StringUtil2.chatTitle("Binds"));
         if (!player.getBindsMap().isEmpty()) {
             for (Map.Entry<String, String> bind : player.getBindsMap().entrySet()) {
-                AbilityRegistry.Data ability = DGClassic.ABILITY_R.fromCommand(bind.getKey());
+                AbilityMetaData ability = DGClassic.ABILITY_R.fromCommand(bind.getKey());
                 if (ability != null) {
                     String materialName = bind.getValue();
                     sender.sendMessage(" - " + ability.getDeity().getColor() + ability.getName() +

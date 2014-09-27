@@ -13,5 +13,5 @@ public interface Participant {
 
     IDeity.Alliance getAlliance();
 
-    boolean reward(Battle.Data data);
+    boolean reward(BattleMetaData data);
 }
