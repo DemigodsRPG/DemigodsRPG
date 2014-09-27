@@ -12,7 +12,7 @@ import com.demigodsrpg.demigods.classic.util.ZoneUtil;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Lists;
-import gnu.trove.map.hash.TIntDoubleHashMap;
+import net.minecraft.util.gnu.trove.map.hash.TIntDoubleHashMap;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;

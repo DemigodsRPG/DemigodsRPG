@@ -1,7 +1,7 @@
 package com.demigodsrpg.demigods.classic.util;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
+import org.bukkit.craftbukkit.libs.com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.io.FileInputStream;

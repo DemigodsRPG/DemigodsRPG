@@ -15,9 +15,7 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
     private final ConcurrentMap<String, T> REGISTERED_DATA = new ConcurrentHashMap<>();
 
     public T fromId(String id) {
-        if (REGISTERED_DATA.get(id) != null) {
-            return REGISTERED_DATA.get(id);
-        } else {
+        if (REGISTERED_DATA.get(id) == null) {
             JsonSection currentFile = getFile();
             if (currentFile != null) {
                 synchronized (currentFile) {
@@ -27,7 +25,7 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
                 }
             }
         }
-        return null;
+        return REGISTERED_DATA.get(id);
     }
 
     public void register(T data) {

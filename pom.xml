@@ -79,12 +79,12 @@
             <version>2.6</version>
         </dependency> -->
 
-        <!-- Gson -->
+        <!-- Gson
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.3</version>
-        </dependency>
+        </dependency> -->
 
         <!-- CensoredLib -->
         <dependency>
@@ -128,17 +128,17 @@
                             <minimizeJar>true</minimizeJar>
                             <artifactSet>
                                 <includes>
-                                    <include>com.google.code.gson:gson</include>
+                                    <!-- <include>com.google.code.gson:gson</include> -->
                                     <!-- <include>commons-lang:commons-lang</include> -->
                                     <include>com.censoredsoftware.library:*</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
-                                <relocation>
+                                <!-- <relocation>
                                     <pattern>com.google.code.gson</pattern>
                                     <shadedPattern>com.demigodsrpg.demigods.classic.com.google.code.gson</shadedPattern>
                                 </relocation>
-                                <!-- <relocation>
+                                <relocation>
                                     <pattern>org.apache.commons.lang</pattern>
                                     <shadedPattern>com.demigodsrpg.demigods.classic.org.apache.commons.lang</shadedPattern>
                                 </relocation> -->
