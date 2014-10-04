@@ -84,7 +84,7 @@ public class DeityCommand extends BaseCommand {
                                     for (int i = 0; i < 20; i++)
                                         player.getWorld().spawn(player.getLocation(), ExperienceOrb.class);
                                 }
-                            });
+                            }, 60);
                         } else {
                             // Pondering message
                             player.sendMessage(deity.getColor() + deityName + ChatColor.GRAY + " is pondering your choice...");
@@ -103,13 +103,14 @@ public class DeityCommand extends BaseCommand {
                                     player.playSound(player.getLocation(), Sound.ENDERDRAGON_DEATH, 1F, 1F);
 
                                     // Message them and do cool things
+                                    player.sendMessage(deity.getColor() + "You have been accepted as an " + deity.getNomen() + ".");
                                     player.getWorld().playEffect(player.getLocation(), Effect.EXPLOSION_HUGE, 4F);
 
                                     // Fancy particles
                                     for (int i = 0; i < 20; i++)
                                         player.getWorld().spawn(player.getLocation(), ExperienceOrb.class);
                                 }
-                            });
+                            }, 60);
                         }
 
                         return CommandResult.SUCCESS;
