@@ -59,7 +59,7 @@ public class ChooseDeityGUI implements IInventoryGUI {
             final ChatColor color = deity.getColor();
             final String alliance = deity.getDefaultAlliance().name();
 
-            items.add(count, new ItemStack(deity.getClaimMaterial().getItemType(), deity.getClaimMaterial().getData()) {
+            items.add(count, new ItemStack(deity.getClaimMaterial().getItemType(), 1, (short) 0, deity.getClaimMaterial().getData()) {
                 {
                     ItemMeta meta = getItemMeta();
                     meta.setDisplayName(color + name);

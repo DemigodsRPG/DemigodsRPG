@@ -71,7 +71,7 @@ public class InventoryListener implements Listener {
                             player.openInventory(gui.getInventory(count - 1));
                             break;
                         case RUN_COMMAND:
-                            String deityName = event.getCurrentItem().getItemMeta().getDisplayName();
+                            String deityName = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
                             Deity deity = Deity.valueOf(deityName);
                             if (deity != null) {
                                 player.closeInventory();
