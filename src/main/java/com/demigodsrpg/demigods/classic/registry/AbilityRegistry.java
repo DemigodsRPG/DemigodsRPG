@@ -294,6 +294,11 @@ public class AbilityRegistry implements Listener {
                 if (EntityDamageEvent.DamageCause.FALL.equals(event.getCause())) {
                     event.setCancelled(true);
                 }
+            } else if (Deity.hasDeity(player, Deity.POSEIDON)) {
+                if (EntityDamageEvent.DamageCause.DROWNING.equals(event.getCause())) {
+                    event.setCancelled(true);
+                    player.setRemainingAir(player.getMaximumAir());
+                }
             }
         }
     }

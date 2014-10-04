@@ -21,22 +21,9 @@ public class PlayerListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
 
-        // TODO REMOVE THIS DEBUG TESTING ONLY
         event.getPlayer().sendMessage("Welcome!");
         if (model.getMajorDeity().equals(Deity.HUMAN)) {
-            event.getPlayer().sendMessage("Here, have a free deity (for science)!");
-
-            model = new PlayerModel(event.getPlayer());
-            DGClassic.PLAYER_R.register(model);
-
-            if (random.nextBoolean()) {
-                model.giveMajorDeity(Deity.ZEUS, true);
-                model.giveDeity(Deity.HEPHAESTUS);
-            } else if (random.nextBoolean()) {
-                model.giveMajorDeity(Deity.CRONUS, true);
-            } else {
-                model.giveMajorDeity(Deity.POSEIDON, true);
-            }
+            event.getPlayer().sendMessage(ChatColor.GRAY + "Use " + ChatColor.YELLOW + "/deity claim" + ChatColor.GRAY + " to claim a deity.");
         }
     }
 

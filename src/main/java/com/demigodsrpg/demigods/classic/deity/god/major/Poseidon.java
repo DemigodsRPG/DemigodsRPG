@@ -1,10 +1,18 @@
 package com.demigodsrpg.demigods.classic.deity.god.major;
 
+import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.ability.Ability;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
+import com.demigodsrpg.demigods.classic.model.PlayerModel;
+import com.demigodsrpg.demigods.classic.util.TargetingUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
 
 public class Poseidon implements IDeity {
@@ -50,6 +58,36 @@ public class Poseidon implements IDeity {
 
     @Ability(name = "Swim", info = "Swim like quickly poseidon through the water.", type = Ability.Type.PLACEHOLDER)
     public void swimAbility() {
+        // Do nothing, handled directly in the ability listener to save time
+    }
+
+    @Ability(name = "Drown", command = "drown", info = "Use the power of water for a stronger attack.", cost = 120, delay = 1500)
+    public void drownAbility(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
+
+        if (!model.getCanPvp()) {
+            player.sendMessage(ChatColor.YELLOW + "You can't do that from a no-PVP zone.");
+            return;
+        }
+
+        double damage = Math.ceil(0.37286 * Math.pow(model.getAscensions() * 100, 0.371238)); // TODO Make damage do more?
+
+        LivingEntity hit = TargetingUtil.autoTarget(player);
+
+        if (hit != null) {
+            player.sendMessage(ChatColor.AQUA + "*shploosh*");
+            hit.damage(damage);
+            hit.setLastDamageCause(new EntityDamageByEntityEvent(player, hit, EntityDamageEvent.DamageCause.DROWNING, damage));
+
+            if (hit.getLocation().getBlock().getType().equals(Material.AIR)) {
+                hit.getLocation().getBlock().setTypeIdAndData(Material.WATER.getId(), (byte) 0x8, true);
+            }
+        }
+    }
+
+    @Ability(name = "No Drown Damage", info = "Take no drown damage.", type = Ability.Type.PLACEHOLDER)
+    public void noDrownDamageAbility() {
         // Do nothing, handled directly in the ability listener to save time
     }
 }

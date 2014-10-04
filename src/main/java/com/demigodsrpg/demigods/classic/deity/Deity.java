@@ -8,7 +8,6 @@ import com.demigodsrpg.demigods.classic.deity.neutral.Human;
 import com.demigodsrpg.demigods.classic.deity.neutral.Satyr;
 import com.demigodsrpg.demigods.classic.deity.titan.major.Cronus;
 import com.demigodsrpg.demigods.classic.deity.titan.major.Rhea;
-import com.demigodsrpg.demigods.classic.model.PlayerModel;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -82,7 +81,6 @@ public enum Deity implements IDeity {
     }
 
     public static boolean hasDeity(Player player, Deity deity) {
-        PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
-        return model.getMajorDeity().equals(deity) || model.getContractedDeities().contains(deity.name());
+        return DGClassic.PLAYER_R.fromPlayer(player).hasDeity(deity);
     }
 }

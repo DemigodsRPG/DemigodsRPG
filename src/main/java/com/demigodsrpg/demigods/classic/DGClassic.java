@@ -91,6 +91,7 @@ public class DGClassic extends JavaPlugin {
         getCommand("alliance").setExecutor(new AllianceCommand());
         getCommand("binds").setExecutor(new BindsCommand());
         getCommand("check").setExecutor(new CheckCommand());
+        getCommand("deity").setExecutor(new DeityCommand());
         getCommand("shrine").setExecutor(new ShrineCommand());
         getCommand("values").setExecutor(new ValuesCommand());
 

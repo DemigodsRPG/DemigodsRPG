@@ -358,6 +358,10 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         throw new UnsupportedOperationException("We don't support finding locations for players who aren't online.");
     }
 
+    public boolean hasDeity(Deity deity) {
+        return getMajorDeity().equals(deity) || getContractedDeities().contains(deity.name());
+    }
+
     @SuppressWarnings("RedundantCast")
     @Override
     public boolean reward(BattleMetaData data) {
@@ -418,6 +422,10 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     public void giveDeity(Deity deity) {
         contractedDeities.add(deity.name());
         setDevotion(deity, 20.0);
+    }
+
+    public boolean canClaim(Deity deity) {
+        return !hasDeity(deity) && (acceptedAlliance.equals(IDeity.Alliance.NEUTRAL) && IDeity.Importance.MAJOR.equals(deity.getImportance()) || costForNextDeity() <= ascensions && deity.getDefaultAlliance().equals(acceptedAlliance));
     }
 
     void calculateAscensions() {
