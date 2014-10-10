@@ -435,7 +435,10 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public boolean canClaim(Deity deity) {
-        return !hasDeity(deity) && (acceptedAlliance.equals(IDeity.Alliance.NEUTRAL) && IDeity.Importance.MAJOR.equals(deity.getImportance()) || costForNextDeity() <= ascensions && deity.getDefaultAlliance().equals(acceptedAlliance));
+        if (acceptedAlliance.equals(IDeity.Alliance.NEUTRAL)) {
+            return !hasDeity(deity) && IDeity.Importance.MAJOR.equals(deity.getImportance());
+        }
+        return !hasDeity(deity) && costForNextDeity() <= ascensions && deity.getDefaultAlliance().equals(acceptedAlliance);
     }
 
     void calculateAscensions() {

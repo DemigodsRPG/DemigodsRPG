@@ -59,9 +59,26 @@ public class DeityCommand extends BaseCommand {
                     final Deity deity = Deity.valueOf(deityName.toUpperCase());
 
                     if (deity != null && model.canClaim(deity)) {
-                        if (IDeity.Importance.MAJOR.equals(deity.getImportance())) {
+                        // Check if the importance is none
+                        if (IDeity.Importance.NONE.equals(deity.getImportance())) {
+                            // TODO CANNOT CLAIM DEITIES THAT AREN'T IMPORTANT
+                            player.sendMessage(ChatColor.RED + "You cannot claim this deity.");
+                            return CommandResult.QUIET_ERROR;
+
+                            // Give the deity
+                            // model.giveMajorDeity(deity, true);
+
+                            // Message them
+                            // player.sendMessage(deity.getColor() + "The " + StringUtil2.beautify(deity.getDefaultAlliance().name()) + " alliance welcomes you, " + deity.getNomen() + ".");
+
+                            // Fancy particles
+                            // for (int i = 0; i < 20; i++)
+                            //    player.getWorld().spawn(player.getLocation(), ExperienceOrb.class);
+                        }
+                        // Check if the importance is major
+                        else if (IDeity.Importance.MAJOR.equals(deity.getImportance())) {
                             // Pondering message
-                            player.sendMessage(deity.getColor() + deityName + ChatColor.GRAY + " is pondering your choice...");
+                            player.sendMessage(deity.getColor() + deity.getDeityName() + ChatColor.GRAY + " is pondering your choice...");
 
                             // Play scary sound
                             player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 0.6F, 1F);
@@ -87,7 +104,7 @@ public class DeityCommand extends BaseCommand {
                             }, 60);
                         } else {
                             // Pondering message
-                            player.sendMessage(deity.getColor() + deityName + ChatColor.GRAY + " is pondering your choice...");
+                            player.sendMessage(deity.getColor() + deity.getDeityName() + ChatColor.GRAY + " is pondering your choice...");
 
                             // Play scary sound
                             player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 0.6F, 1F);
