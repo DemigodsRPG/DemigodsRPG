@@ -76,7 +76,7 @@ public class DeityCommand extends BaseCommand {
                             //    player.getWorld().spawn(player.getLocation(), ExperienceOrb.class);
                         }
                         // Check if the importance is major
-                        else if (IDeity.Importance.MAJOR.equals(deity.getImportance())) {
+                        else if (IDeity.Importance.MAJOR.equals(deity.getImportance()) && !model.getMajorDeity().getImportance().equals(IDeity.Importance.MAJOR)) {
                             // Pondering message
                             player.sendMessage(deity.getColor() + deity.getDeityName() + ChatColor.GRAY + " is pondering your choice...");
 
