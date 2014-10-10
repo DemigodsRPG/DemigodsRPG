@@ -329,7 +329,7 @@ public class AbilityRegistry implements Listener {
      *
      * @param event The target event.
      */
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void onEvent(EntityTargetEvent event) {
         Entity entity = event.getEntity();
 

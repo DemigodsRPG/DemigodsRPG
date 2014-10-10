@@ -79,13 +79,13 @@ public class Hades implements IDeity {
         }
 
         double devotion = model.getDevotion(Deity.HADES);
-        double damage = Math.round(5 * Math.pow(devotion, 0.20688));
+        double damage = Math.round(Math.pow(devotion, 0.20688));
         int blindpower = (int) Math.round(1.26985 * Math.pow(devotion, 0.13047));
         int blindduration = (int) Math.round(0.75 * Math.pow(devotion, 0.323999));
         chain(player, damage, blindpower, blindduration);
     }
 
-    @Ability(name = "Entomb", command = "entomb", info = "Entomb an entity in obsidian.", cost = 470, delay = 2000)
+    @Ability(name = "Entomb", command = "entomb", info = "Entomb an entity in obsidian.", cost = 470, cooldown = 20000)
     public void entombAbility(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
@@ -121,7 +121,7 @@ public class Hades implements IDeity {
         }, duration * 20);
     }
 
-    @Ability(name = "Curse", command = "curse", info = "Turns day to night as Hades curses your enemies.", cost = 4000, cooldown = 600, type = Ability.Type.ULTIMATE)
+    @Ability(name = "Curse", command = "curse", info = "Turns day to night as Hades curses your enemies.", cost = 4000, cooldown = 600000, type = Ability.Type.ULTIMATE)
     public void curseAbility(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
@@ -170,7 +170,6 @@ public class Hades implements IDeity {
     private void target(LivingEntity le, int duration) {
         le.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration, 5));
         le.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, duration, 5));
-        le.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, duration, 5));
         le.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, duration, 5));
     }
 }
