@@ -38,9 +38,9 @@ public class PlayerListener implements Listener {
             for (PlayerModel playerModel : playerModelSet) {
                 event.getRecipients().add(playerModel.getOfflinePlayer().getPlayer());
             }
-            event.setFormat(ChatColor.DARK_GRAY + "[.]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + symbol + "]" + format);
+            event.setFormat(ChatColor.DARK_GRAY + "[.]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + symbol + "]" + ChatColor.RESET + format);
         } else {
-            event.setFormat(ChatColor.DARK_RED + "[!]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + symbol + "]" + format);
+            event.setFormat(ChatColor.DARK_RED + "[!]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + symbol + "]" + ChatColor.RESET + format);
         }
     }
 }
