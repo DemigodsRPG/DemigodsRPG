@@ -20,6 +20,8 @@ commands:
   demigods:
     usage: /demigods [subject]
     aliases: [d, dg, demigod]
+  forsake:
+    usage: /fosake [all|player] [all]
   shrine:
     usage: /shrine
     aliases: [s, sh, shrines]
@@ -53,4 +55,6 @@ permisions:
   demigods.admin.deity:
     default: op
   demigods.admin.alliance:
+    default: op
+  demigods.admin.forsake:
     default: op
