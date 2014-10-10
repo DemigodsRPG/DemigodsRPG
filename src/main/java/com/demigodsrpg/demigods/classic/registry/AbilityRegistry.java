@@ -176,7 +176,7 @@ public class AbilityRegistry implements Listener {
             }
         } else {
             AbilityMetaData ability = fromCommand(command);
-            if (ability.getCommand().equals(command) && (model.getMajorDeity().equals(ability.getDeity()) || model.getContractedDeities().contains(ability.getDeity()) && ability.getCommand().equals(command))) {
+            if (ability.getCommand().equals(command) && (model.getMajorDeity().equals(ability.getDeity()) || model.getContractedDeities().contains(ability.getDeity().name()) && ability.getCommand().equals(command))) {
                 model.bind(ability, material);
                 player.sendMessage(ChatColor.YELLOW + ability.getName() + " has been bound to " + StringUtil2.beautify(material.name()) + ".");
                 return true;

@@ -9,6 +9,7 @@ import com.demigodsrpg.demigods.classic.util.TargetingUtil;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -17,7 +18,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,16 +154,19 @@ public class Hades implements IDeity {
 
     private int tartarus(Player p, PlayerModel m) {
         int range = (int) Math.round(18.83043 * Math.pow(m.getDevotion(Deity.HADES), 0.088637));
-        List<LivingEntity> entitylist = new ArrayList<LivingEntity>();
-        Vector ploc = p.getLocation().toVector();
-        for (LivingEntity anEntity : p.getWorld().getLivingEntities()) {
-            if (anEntity instanceof Player)
-                if (m.getAlliance().equals(DGClassic.PLAYER_R.fromPlayer((Player) anEntity).getAlliance())) continue;
-            if (anEntity.getLocation().toVector().isInSphere(ploc, range)) entitylist.add(anEntity);
+        List<LivingEntity> entitylist = new ArrayList<>();
+        for (Entity anEntity : p.getNearbyEntities(range, range, range)) {
+            if (anEntity instanceof Player && m.getAlliance().equals(DGClassic.PLAYER_R.fromPlayer((Player) anEntity).getAlliance())) {
+                continue;
+            }
+            if (anEntity instanceof LivingEntity) {
+                entitylist.add((LivingEntity) anEntity);
+            }
         }
         int duration = (int) Math.round(30 * Math.pow(m.getDevotion(Deity.HADES), 0.09)) * 20;
-        for (LivingEntity le : entitylist)
+        for (LivingEntity le : entitylist) {
             target(le, duration);
+        }
         return entitylist.size();
     }
 

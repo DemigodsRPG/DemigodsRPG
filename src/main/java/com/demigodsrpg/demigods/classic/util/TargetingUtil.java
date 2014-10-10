@@ -21,15 +21,19 @@ import java.util.Random;
 public class TargetingUtil {
     private static final int TARGET_OFFSET = 5;
 
+    @Deprecated
+    public static LivingEntity autoTarget(Player player) {
+        return autoTarget(player, 140);
+    }
+
     /**
      * Returns the LivingEntity that <code>player</code> is target.
      *
      * @param player the player
      * @return the targeted LivingEntity
      */
-    public static LivingEntity autoTarget(Player player) {
+    public static LivingEntity autoTarget(Player player, int range) {
         // Define variables
-        int range = 140;
         final int correction = 3;
         Location target = null;
         try {
