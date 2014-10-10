@@ -2,6 +2,7 @@ package com.demigodsrpg.demigods.classic.deity;
 
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.deity.god.Hephaestus;
+import com.demigodsrpg.demigods.classic.deity.god.major.Hades;
 import com.demigodsrpg.demigods.classic.deity.god.major.Poseidon;
 import com.demigodsrpg.demigods.classic.deity.god.major.Zeus;
 import com.demigodsrpg.demigods.classic.deity.neutral.Human;
@@ -16,20 +17,28 @@ import org.bukkit.material.MaterialData;
 public enum Deity implements IDeity {
     // -- MORTAL -- //
 
-    HUMAN(new Human()), SATYR(new Satyr()),
+    HUMAN(new Human(), 0), SATYR(new Satyr(), 1),
 
     // -- OLYMPIAN -- //
 
-    ZEUS(new Zeus()), POSEIDON(new Poseidon()), HEPHAESTUS(new Hephaestus()),
+    // - Major - //
+
+    ZEUS(new Zeus(), 2), POSEIDON(new Poseidon(), 3), HADES(new Hades(), 7),
+
+    // - Minor - //
+
+    HEPHAESTUS(new Hephaestus(), 4),
 
     // -- TITAN -- //
 
-    CRONUS(new Cronus()), RHEA(new Rhea());
+    CRONUS(new Cronus(), 5), RHEA(new Rhea(), 6);
 
     private final IDeity deity;
+    private final int id;
 
-    private Deity(IDeity deity) {
+    private Deity(IDeity deity, int id) {
         this.deity = deity;
+        this.id = id;
     }
 
     @Override
@@ -78,6 +87,19 @@ public enum Deity implements IDeity {
 
     public Class<? extends IDeity> getParentObjectClass() {
         return deity.getClass();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public static Deity fromId(int id) {
+        for (Deity deity : values()) {
+            if (id == deity.id) {
+                return deity;
+            }
+        }
+        throw new NullPointerException();
     }
 
     public static boolean hasDeity(Player player, Deity deity) {

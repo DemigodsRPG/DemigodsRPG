@@ -12,6 +12,7 @@ import com.demigodsrpg.demigods.classic.util.ZoneUtil;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Lists;
+import net.minecraft.util.gnu.trove.iterator.TIntIterator;
 import net.minecraft.util.gnu.trove.map.hash.TIntDoubleHashMap;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
@@ -83,7 +84,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         devotion = new TIntDoubleHashMap(1);
         for (Map.Entry<String, Object> entry : conf.getSection("devotion").getValues().entrySet()) {
             try {
-                devotion.put(Deity.valueOf(entry.getKey()).ordinal(), Double.valueOf(entry.getValue().toString()));
+                devotion.put(Deity.valueOf(entry.getKey()).getId(), Double.valueOf(entry.getValue().toString()));
             } catch (Exception ignored) {
             }
         }
@@ -115,7 +116,16 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         map.put("binds", binds);
         map.put("max_health", maxHealth);
         map.put("favor", favor);
-        map.put("devotion", devotion);
+        Map<Integer, Double> devotionMap = new HashMap<>();
+        TIntIterator iterator = devotion.keySet().iterator();
+        while (iterator.hasNext()) {
+            int key = iterator.next();
+            try {
+                devotionMap.put(key, devotion.get(key));
+            } catch (Exception ignored) {
+            }
+        }
+        map.put("devotion", devotionMap);
         map.put("ascensions", ascensions);
         map.put("can_pvp", canPvp);
         map.put("kills", kills);
@@ -205,14 +215,14 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public double getDevotion(Deity deity) {
-        if (!devotion.containsKey(deity.ordinal())) {
+        if (!devotion.containsKey(deity.getId())) {
             return 0.0;
         }
-        return devotion.get(deity.ordinal());
+        return devotion.get(deity.getId());
     }
 
     double getDevotion(String deityName) {
-        int ordinal = Deity.valueOf(deityName).ordinal();
+        int ordinal = Deity.valueOf(deityName).getId();
         if (!devotion.containsKey(ordinal)) {
             return 0.0;
         }
@@ -228,13 +238,13 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public void setDevotion(Deity deity, double devotion) {
-        this.devotion.put(deity.ordinal(), devotion);
+        this.devotion.put(deity.getId(), devotion);
         calculateAscensions();
         DGClassic.PLAYER_R.register(this);
     }
 
     void setDevotion(String deityName, double devotion) {
-        int ordinal = Deity.valueOf(deityName).ordinal();
+        int ordinal = Deity.valueOf(deityName).getId();
         this.devotion.put(ordinal, devotion);
         calculateAscensions();
         DGClassic.PLAYER_R.register(this);

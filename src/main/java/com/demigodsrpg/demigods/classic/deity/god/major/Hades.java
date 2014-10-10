@@ -1,10 +1,26 @@
 package com.demigodsrpg.demigods.classic.deity.god.major;
 
+import com.demigodsrpg.demigods.classic.DGClassic;
+import com.demigodsrpg.demigods.classic.ability.Ability;
+import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import com.demigodsrpg.demigods.classic.model.PlayerModel;
+import com.demigodsrpg.demigods.classic.util.TargetingUtil;
+import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Hades implements IDeity {
     @Override
@@ -45,5 +61,116 @@ public class Hades implements IDeity {
     @Override
     public IDeity.Pantheon getPantheon() {
         return Pantheon.OLYMPIAN;
+    }
+
+    @Ability(name = "Mob Friendlies", info = "Undead monsters will not attack you.", type = Ability.Type.PLACEHOLDER)
+    public void friendlyAbility() {
+        // Do nothing, handled directly in the ability listener to save time
+    }
+
+    @Ability(name = "Chain", command = "chain", info = "Fire a chain of smoke that damages and blinds.", cost = 250, delay = 1500)
+    public void chainAbility(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
+
+        if (!model.getCanPvp()) {
+            player.sendMessage(ChatColor.YELLOW + "You can't do that from a no-PVP zone.");
+            return;
+        }
+
+        double devotion = model.getDevotion(Deity.HADES);
+        double damage = Math.round(5 * Math.pow(devotion, 0.20688));
+        int blindpower = (int) Math.round(1.26985 * Math.pow(devotion, 0.13047));
+        int blindduration = (int) Math.round(0.75 * Math.pow(devotion, 0.323999));
+        chain(player, damage, blindpower, blindduration);
+    }
+
+    @Ability(name = "Entomb", command = "entomb", info = "Entomb an entity in obsidian.", cost = 470, delay = 2000)
+    public void entombAbility(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
+
+        if (!model.getCanPvp()) {
+            player.sendMessage(ChatColor.YELLOW + "You can't do that from a no-PVP zone.");
+            return;
+        }
+
+        LivingEntity le = TargetingUtil.autoTarget(player);
+        if (le == null) return;
+        int duration = (int) Math.round(2.18678 * Math.pow(model.getDevotion(Deity.HADES), 0.24723)); // seconds
+        final ArrayList<Block> tochange = new ArrayList<Block>();
+        for (int x = -3; x <= 3; x++) {
+            for (int y = -3; y <= 3; y++) {
+                for (int z = -3; z <= 3; z++) {
+                    Block block = player.getWorld().getBlockAt(le.getLocation().getBlockX() + x, le.getLocation().getBlockY() + y, le.getLocation().getBlockZ() + z);
+                    if ((block.getLocation().distance(le.getLocation()) > 2) && (block.getLocation().distance(le.getLocation()) < 3.5))
+                        if ((block.getType() == Material.AIR) || (block.getType() == Material.WATER) || (block.getType() == Material.LAVA)) {
+                            block.setType(Material.OBSIDIAN);
+                            tochange.add(block);
+                        }
+                }
+            }
+        }
+
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGClassic.getInst(), new Runnable() {
+            @Override
+            public void run() {
+                for (Block b : tochange)
+                    if (b.getType() == Material.OBSIDIAN) b.setType(Material.AIR);
+            }
+        }, duration * 20);
+    }
+
+    @Ability(name = "Curse", command = "curse", info = "Turns day to night as Hades curses your enemies.", cost = 4000, cooldown = 600, type = Ability.Type.ULTIMATE)
+    public void curseAbility(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
+
+        if (!model.getCanPvp()) {
+            player.sendMessage(ChatColor.YELLOW + "You can't do that from a no-PVP zone.");
+            return;
+        }
+
+        int amt = tartarus(player, model);
+        if (amt > 0) {
+            player.sendMessage(ChatColor.DARK_RED + "Hades" + ChatColor.GRAY + " curses " + amt + " enemies.");
+            player.getWorld().setTime(18000);
+        } else {
+            player.sendMessage(ChatColor.YELLOW + "There were no valid targets or the ultimate could not be used.");
+        }
+    }
+
+    private boolean chain(Player p, double damage, int blindpower, int blindduration) {
+        LivingEntity target = TargetingUtil.autoTarget(p);
+        if (target == null) return false;
+        target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, blindduration, blindpower));
+        target.damage(damage);
+        target.setLastDamageCause(new EntityDamageByEntityEvent(p, target, EntityDamageEvent.DamageCause.ENTITY_ATTACK, damage));
+        for (BlockFace bf : BlockFace.values()) {
+            p.getWorld().playEffect(target.getLocation().getBlock().getRelative(bf).getLocation(), Effect.SMOKE, 1);
+        }
+        return true;
+    }
+
+    private int tartarus(Player p, PlayerModel m) {
+        int range = (int) Math.round(18.83043 * Math.pow(m.getDevotion(Deity.HADES), 0.088637));
+        List<LivingEntity> entitylist = new ArrayList<LivingEntity>();
+        Vector ploc = p.getLocation().toVector();
+        for (LivingEntity anEntity : p.getWorld().getLivingEntities()) {
+            if (anEntity instanceof Player)
+                if (m.getAlliance().equals(DGClassic.PLAYER_R.fromPlayer((Player) anEntity).getAlliance())) continue;
+            if (anEntity.getLocation().toVector().isInSphere(ploc, range)) entitylist.add(anEntity);
+        }
+        int duration = (int) Math.round(30 * Math.pow(m.getDevotion(Deity.HADES), 0.09)) * 20;
+        for (LivingEntity le : entitylist)
+            target(le, duration);
+        return entitylist.size();
+    }
+
+    private void target(LivingEntity le, int duration) {
+        le.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration, 5));
+        le.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, duration, 5));
+        le.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, duration, 5));
+        le.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, duration, 5));
     }
 }

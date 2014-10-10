@@ -7,14 +7,14 @@ import java.lang.reflect.Method;
 public class AbilityMetaData {
     // -- PRIVATE FIELDS -- //
 
-    private final Deity deity;
+    private final String deity;
     private final Method method;
     private final Ability ability;
 
     // -- CONSTRUCTOR -- //
 
     public AbilityMetaData(Deity deity, Method method, Ability ability) {
-        this.deity = deity;
+        this.deity = deity.name();
         this.method = method;
         this.ability = ability;
     }
@@ -22,7 +22,7 @@ public class AbilityMetaData {
     // -- GETTERS -- //
 
     public Deity getDeity() {
-        return deity;
+        return Deity.valueOf(deity);
     }
 
     public String getName() {

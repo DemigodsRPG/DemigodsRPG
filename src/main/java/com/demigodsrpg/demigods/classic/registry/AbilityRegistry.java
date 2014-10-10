@@ -13,13 +13,14 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -304,7 +305,7 @@ public class AbilityRegistry implements Listener {
     }
 
     /**
-     * Varius player move abilities, these must be done by hand, and directly in this method.
+     * Various player move abilities, these must be done by hand, and directly in this method.
      *
      * @param event The move event.
      */
@@ -319,6 +320,24 @@ public class AbilityRegistry implements Listener {
             if (player.isSneaking() && (locationMaterial.equals(Material.STATIONARY_WATER) || locationMaterial.equals(Material.WATER))) {
                 Vector victor = (player.getPassenger() != null && player.getLocation().getDirection().getY() > 0 ? player.getLocation().getDirection().clone().setY(0) : player.getLocation().getDirection()).normalize().multiply(1.3D);
                 player.setVelocity(victor);
+            }
+        }
+    }
+
+    /**
+     * Various entity target events, these must be done by hand, and directly in this method.
+     *
+     * @param event The target event.
+     */
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onEvent(EntityTargetEvent event) {
+        Entity entity = event.getEntity();
+
+        // HADES
+        if (entity instanceof LivingEntity) {
+            if ((entity instanceof Zombie) || (entity instanceof Skeleton)) {
+                if (!DGClassic.PLAYER_R.fromPlayer((Player) event.getTarget()).hasDeity(Deity.HADES)) return;
+                event.setCancelled(true);
             }
         }
     }
