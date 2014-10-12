@@ -38,7 +38,7 @@ public class DeityCommand extends BaseCommand {
         if (args.length == 0) {
             player.sendMessage(ChatColor.YELLOW + StringUtil2.chatTitle("Deity List"));
             for (Deity deity : Deity.values()) {
-                player.sendMessage(deity.getColor() + deity.getDeityName() + ": " + StringUtil2.beautify(deity.getDefaultAlliance().name()));
+                player.sendMessage(" - " + deity.getColor() + deity.getDeityName() + ": " + deity.getInfo() + " (" + StringUtil2.beautify(deity.getDefaultAlliance().name()) + ")");
             }
             return CommandResult.SUCCESS;
         }
