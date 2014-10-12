@@ -44,6 +44,13 @@ public class ChooseDeityGUI implements IInventoryGUI {
 
         // INVENTORY LIST
         INVENTORY_LIST = new ArrayList<>();
+
+        // Return if can't claim a new deity
+        if (model.costForNextDeity() > model.getAscensions()) {
+            return;
+        }
+
+        // Fill the inventory list
         List<ItemStack> items = new ArrayList<>();
         int count = 0, icount = 0;
         Iterator<Deity> deities = Collections2.filter(Arrays.asList(Deity.values()), new Predicate<Deity>() {

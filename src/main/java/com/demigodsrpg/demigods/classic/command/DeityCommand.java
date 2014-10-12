@@ -50,8 +50,12 @@ public class DeityCommand extends BaseCommand {
                     try {
                         Inventory inventory = new ChooseDeityGUI(player).getInventory();
                         if (inventory == null) {
-                            player.sendMessage(ChatColor.RED + "There are *currently* no deities you can choose from.");
-                            player.sendMessage(ChatColor.YELLOW + "You need " + model.costForNextDeity() + " ascensions to claim again."); // TODO Fix this for there being no more deities left
+                            if (model.getAlliance().equals(IDeity.Alliance.EXCOMMUNICATED)) {
+                                player.sendMessage(ChatColor.YELLOW + "Your current alliance prevents you from claiming new deities.");
+                            } else {
+                                player.sendMessage(ChatColor.RED + "There are *currently* no deities you can choose from.");
+                                player.sendMessage(ChatColor.YELLOW + "You need " + model.costForNextDeity() + " ascensions to claim again."); // TODO Fix this for there being no more deities left
+                            }
                             return CommandResult.QUIET_ERROR;
                         }
                         player.openInventory(inventory);
