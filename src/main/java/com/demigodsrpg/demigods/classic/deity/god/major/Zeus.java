@@ -2,6 +2,7 @@ package com.demigodsrpg.demigods.classic.deity.god.major;
 
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.ability.Ability;
+import com.demigodsrpg.demigods.classic.ability.AbilityResult;
 import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
@@ -61,13 +62,9 @@ public class Zeus implements IDeity {
     // -- ABILITIES -- //
 
     @Ability(name = "Lightning", command = "lightning", info = "Strike lightning at a target location.", cost = 140, delay = 1000)
-    public void lightningAbility(PlayerInteractEvent event) {
+    public AbilityResult lightningAbility(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
-        if (!model.getCanPvp()) {
-            player.sendMessage(ChatColor.YELLOW + "You can't do that from a no-PVP zone.");
-            return;
-        }
+
         // Define variables
         Location target;
         LivingEntity entity = TargetingUtil.autoTarget(player);
@@ -81,7 +78,7 @@ public class Zeus implements IDeity {
             notify = false;
         }
 
-        strikeLightning(player, target, notify);
+        return strikeLightning(player, target, notify) ? AbilityResult.SUCCESS : AbilityResult.OTHER_FAILURE;
     }
 
     private static boolean strikeLightning(Player player, Location target, boolean notify) {
@@ -117,7 +114,7 @@ public class Zeus implements IDeity {
     }
 
     @Ability(name = "Shove", command = "shove", info = "Use the force of wind to shove your enemies.", cost = 170, delay = 1500)
-    public void pullAbility(PlayerInteractEvent event) {
+    public AbilityResult pullAbility(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
 
@@ -133,11 +130,15 @@ public class Zeus implements IDeity {
             Vector victor = hit.getLocation().toVector().subtract(v);
             victor.multiply(multiply);
             hit.setVelocity(victor);
+
+            return AbilityResult.SUCCESS;
         }
+
+        return AbilityResult.NO_TARGET_FOUND;
     }
 
     @Ability(name = "Storm", command = "storm", info = "Strike fear into the hearts of your enemies.", cost = 3700, cooldown = 600000, type = Ability.Type.ULTIMATE)
-    public void stormAbility(PlayerInteractEvent event) {
+    public AbilityResult stormAbility(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
 
         // Define variables
@@ -180,6 +181,8 @@ public class Zeus implements IDeity {
                 }
             }, 15);
         }
+
+        return AbilityResult.SUCCESS;
     }
 
     private static void setWeather(final Player player, long ticks) {

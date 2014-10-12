@@ -1,5 +1,6 @@
 package com.demigodsrpg.demigods.classic.deity.titan;
 
+import com.demigodsrpg.demigods.classic.ability.Ability;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -45,5 +46,10 @@ public class Oceanus implements IDeity {
     @Override
     public IDeity.Pantheon getPantheon() {
         return Pantheon.TITAN;
+    }
+
+    @Ability(name = "Swim", info = "Swim like quickly poseidon through the water.", type = Ability.Type.PLACEHOLDER)
+    public void swimAbility() {
+        // Do nothing, handled directly in the ability listener to save time
     }
 }

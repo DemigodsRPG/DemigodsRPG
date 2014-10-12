@@ -2,6 +2,7 @@ package com.demigodsrpg.demigods.classic.deity.titan.major;
 
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.ability.Ability;
+import com.demigodsrpg.demigods.classic.ability.AbilityResult;
 import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import org.bukkit.*;
@@ -52,7 +53,7 @@ public class Cronus implements IDeity {
     }
 
     @Ability(name = "Cleave", info = "Attacking with a sickle (hoe) does extra damage.", type = Ability.Type.PASSIVE)
-    public void cleaveAbility(EntityDamageByEntityEvent event) {
+    public AbilityResult cleaveAbility(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
             Player player = (Player) event.getDamager();
             if (DGClassic.PLAYER_R.fromPlayer(player).getMajorDeity().equals(Deity.CRONUS)) {
@@ -75,6 +76,8 @@ public class Cronus implements IDeity {
                 }
             }
         }
+
+        return AbilityResult.SUCCESS;
     }
 
     @Ability(name = "Cheat Death", info = "Can only die while being attacked.", type = Ability.Type.PLACEHOLDER)
@@ -83,7 +86,7 @@ public class Cronus implements IDeity {
     }
 
     @Ability(name = "Warp Time", command = "warptime", info = "Warp time to your will.", cost = 700, cooldown = 150000, type = Ability.Type.ULTIMATE)
-    public void timeControlAbility(PlayerInteractEvent event) {
+    public AbilityResult timeControlAbility(PlayerInteractEvent event) {
         final World world = event.getPlayer().getWorld();
         long worldTime = world.getTime();
         long newTime = worldTime + 12000;
@@ -105,5 +108,7 @@ public class Cronus implements IDeity {
             }, count * 10);
         }
         event.getPlayer().sendMessage(ChatColor.RED + "With a mighty effort, you bend time to your will.");
+
+        return AbilityResult.SUCCESS;
     }
 }

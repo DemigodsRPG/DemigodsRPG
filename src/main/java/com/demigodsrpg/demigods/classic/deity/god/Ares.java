@@ -1,9 +1,16 @@
 package com.demigodsrpg.demigods.classic.deity.god;
 
+import com.demigodsrpg.demigods.classic.ability.Ability;
+import com.demigodsrpg.demigods.classic.ability.AbilityResult;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
+import com.demigodsrpg.demigods.classic.util.TargetingUtil;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
 
 public class Ares implements IDeity {
@@ -45,5 +52,28 @@ public class Ares implements IDeity {
     @Override
     public IDeity.Pantheon getPantheon() {
         return Pantheon.OLYMPIAN;
+    }
+
+    @Ability(name = "Blitz", command = "blitz", info = "Rush to a target entity and deal extra damage.", cost = 170, delay = 3000)
+    public AbilityResult blitzAbility(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+
+        LivingEntity target = TargetingUtil.autoTarget(player, 250);
+
+        if (target == null) return AbilityResult.NO_TARGET_FOUND;
+
+        if (player.getLocation().toVector().distance(target.getLocation().toVector()) > 2) {
+            float pitch = player.getLocation().getPitch();
+            float yaw = player.getLocation().getYaw();
+            Location tar = target.getLocation();
+            tar.setPitch(pitch);
+            tar.setYaw(yaw);
+            player.teleport(tar);
+            target.damage(2, player);
+
+            return AbilityResult.SUCCESS;
+        }
+        return AbilityResult.NO_TARGET_FOUND;
+
     }
 }

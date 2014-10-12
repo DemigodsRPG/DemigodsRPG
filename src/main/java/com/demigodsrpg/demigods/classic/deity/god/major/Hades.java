@@ -2,6 +2,7 @@ package com.demigodsrpg.demigods.classic.deity.god.major;
 
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.ability.Ability;
+import com.demigodsrpg.demigods.classic.ability.AbilityResult;
 import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
@@ -69,34 +70,26 @@ public class Hades implements IDeity {
     }
 
     @Ability(name = "Chain", command = "chain", info = "Fire a chain of smoke that damages and blinds.", cost = 250, delay = 1500)
-    public void chainAbility(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
+    public AbilityResult chainAbility(EntityDamageByEntityEvent event) {
+        Player player = (Player) event.getDamager();
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
-
-        if (!model.getCanPvp()) {
-            player.sendMessage(ChatColor.YELLOW + "You can't do that from a no-PVP zone.");
-            return;
-        }
 
         double devotion = model.getDevotion(Deity.HADES);
         double damage = Math.round(Math.pow(devotion, 0.20688));
         int blindpower = (int) Math.round(1.26985 * Math.pow(devotion, 0.13047));
         int blindduration = (int) Math.round(0.75 * Math.pow(devotion, 0.323999));
         chain(player, damage, blindpower, blindduration);
+
+        return AbilityResult.SUCCESS;
     }
 
     @Ability(name = "Entomb", command = "entomb", info = "Entomb an entity in obsidian.", cost = 470, cooldown = 20000)
-    public void entombAbility(PlayerInteractEvent event) {
+    public AbilityResult entombAbility(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
 
-        if (!model.getCanPvp()) {
-            player.sendMessage(ChatColor.YELLOW + "You can't do that from a no-PVP zone.");
-            return;
-        }
-
         LivingEntity le = TargetingUtil.autoTarget(player);
-        if (le == null) return;
+        if (le == null) return AbilityResult.NO_TARGET_FOUND;
         int duration = (int) Math.round(2.18678 * Math.pow(model.getDevotion(Deity.HADES), 0.24723)); // seconds
         final ArrayList<Block> tochange = new ArrayList<Block>();
         for (int x = -3; x <= 3; x++) {
@@ -119,25 +112,24 @@ public class Hades implements IDeity {
                     if (b.getType() == Material.OBSIDIAN) b.setType(Material.AIR);
             }
         }, duration * 20);
+
+        return AbilityResult.SUCCESS;
     }
 
     @Ability(name = "Curse", command = "curse", info = "Turns day to night as Hades curses your enemies.", cost = 4000, cooldown = 600000, type = Ability.Type.ULTIMATE)
-    public void curseAbility(PlayerInteractEvent event) {
+    public AbilityResult curseAbility(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
-
-        if (!model.getCanPvp()) {
-            player.sendMessage(ChatColor.YELLOW + "You can't do that from a no-PVP zone.");
-            return;
-        }
 
         int amt = tartarus(player, model);
         if (amt > 0) {
             player.sendMessage(ChatColor.DARK_RED + "Hades" + ChatColor.GRAY + " curses " + amt + " enemies.");
             player.getWorld().setTime(18000);
+            return AbilityResult.SUCCESS;
         } else {
             player.sendMessage(ChatColor.YELLOW + "There were no valid targets or the ultimate could not be used.");
         }
+        return AbilityResult.OTHER_FAILURE;
     }
 
     private boolean chain(Player p, double damage, int blindpower, int blindduration) {

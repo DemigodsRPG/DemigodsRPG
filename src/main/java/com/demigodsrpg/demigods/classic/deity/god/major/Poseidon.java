@@ -2,6 +2,7 @@ package com.demigodsrpg.demigods.classic.deity.god.major;
 
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.ability.Ability;
+import com.demigodsrpg.demigods.classic.ability.AbilityResult;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
 import com.demigodsrpg.demigods.classic.util.TargetingUtil;
@@ -62,14 +63,9 @@ public class Poseidon implements IDeity {
     }
 
     @Ability(name = "Drown", command = "drown", info = "Use the power of water for a stronger attack.", cost = 120, delay = 1500)
-    public void drownAbility(PlayerInteractEvent event) {
+    public AbilityResult drownAbility(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
-
-        if (!model.getCanPvp()) {
-            player.sendMessage(ChatColor.YELLOW + "You can't do that from a no-PVP zone.");
-            return;
-        }
 
         double damage = Math.ceil(0.37286 * Math.pow(model.getAscensions() * 100, 0.371238)); // TODO Make damage do more?
 
@@ -83,7 +79,11 @@ public class Poseidon implements IDeity {
             if (hit.getLocation().getBlock().getType().equals(Material.AIR)) {
                 hit.getLocation().getBlock().setTypeIdAndData(Material.WATER.getId(), (byte) 0x8, true);
             }
+
+            return AbilityResult.SUCCESS;
         }
+
+        return AbilityResult.NO_TARGET_FOUND;
     }
 
     @Ability(name = "No Drown Damage", info = "Take no drown damage.", type = Ability.Type.PLACEHOLDER)

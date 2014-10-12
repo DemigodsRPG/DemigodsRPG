@@ -1,12 +1,14 @@
 package com.demigodsrpg.demigods.classic.deity;
 
 import com.demigodsrpg.demigods.classic.DGClassic;
+import com.demigodsrpg.demigods.classic.deity.god.Ares;
 import com.demigodsrpg.demigods.classic.deity.god.Hephaestus;
 import com.demigodsrpg.demigods.classic.deity.god.major.Hades;
 import com.demigodsrpg.demigods.classic.deity.god.major.Poseidon;
 import com.demigodsrpg.demigods.classic.deity.god.major.Zeus;
 import com.demigodsrpg.demigods.classic.deity.neutral.Human;
 import com.demigodsrpg.demigods.classic.deity.neutral.Satyr;
+import com.demigodsrpg.demigods.classic.deity.titan.Oceanus;
 import com.demigodsrpg.demigods.classic.deity.titan.major.Cronus;
 import com.demigodsrpg.demigods.classic.deity.titan.major.Rhea;
 import org.bukkit.ChatColor;
@@ -27,11 +29,15 @@ public enum Deity implements IDeity {
 
     // - Minor - //
 
-    HEPHAESTUS(new Hephaestus(), 4),
+    HEPHAESTUS(new Hephaestus(), 4), ARES(new Ares(), 9),
 
     // -- TITAN -- //
 
-    CRONUS(new Cronus(), 5), RHEA(new Rhea(), 6);
+    CRONUS(new Cronus(), 5), RHEA(new Rhea(), 6),
+
+    // - Minor - //
+
+    OCEANUS(new Oceanus(), 8);
 
     private final IDeity deity;
     private final int id;

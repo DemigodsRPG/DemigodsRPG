@@ -4,6 +4,7 @@ import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.ability.Ability;
 import com.demigodsrpg.demigods.classic.ability.AbilityMetaData;
+import com.demigodsrpg.demigods.classic.ability.AbilityResult;
 import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
@@ -27,6 +28,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,8 +58,9 @@ public class AbilityRegistry implements Listener {
         for (AbilityMetaData ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
             try {
                 PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
-                if (processAbility(model, ability)) {
-                    ability.getMethod().invoke(ability.getDeity().getParentObject(), event);
+                if (processAbility1(model, ability)) {
+                    Object rawResult = ability.getMethod().invoke(ability.getDeity().getParentObject(), event);
+                    processAbility2(event.getPlayer(), model, ability, rawResult);
                     event.setCancelled(true);
                     return;
                 }
@@ -75,8 +78,9 @@ public class AbilityRegistry implements Listener {
                 if (event.getDamager() instanceof Player) {
                     Player player = (Player) event.getDamager();
                     PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
-                    if (processAbility(model, ability)) {
-                        ability.getMethod().invoke(ability.getDeity().getParentObject(), event);
+                    if (processAbility1(model, ability)) {
+                        Object rawResult = ability.getMethod().invoke(ability.getDeity().getParentObject(), event);
+                        processAbility2(player, model, ability, rawResult);
                     }
                 }
             } catch (Exception oops) {
@@ -91,8 +95,9 @@ public class AbilityRegistry implements Listener {
             for (PlayerModel model : DGClassic.PLAYER_R.fromDeity(ability.getDeity())) {
                 try {
                     if (model.getOnline() && model.getLocation().getWorld().equals(event.getBlock().getWorld()) && model.getLocation().distance(event.getBlock().getLocation()) < (int) Math.round(20 * Math.pow(model.getDevotion(Deity.HEPHAESTUS), 0.15))) {
-                        if (processAbility(model, ability)) {
-                            ability.getMethod().invoke(ability.getDeity().getParentObject(), event);
+                        if (processAbility1(model, ability)) {
+                            Object rawResult = ability.getMethod().invoke(ability.getDeity().getParentObject(), event);
+                            processAbility2(null, model, ability, rawResult);
                             return; // TODO
                         }
                     }
@@ -185,7 +190,7 @@ public class AbilityRegistry implements Listener {
         return false;
     }
 
-    boolean processAbility(PlayerModel model, AbilityMetaData ability) {
+    boolean processAbility1(PlayerModel model, AbilityMetaData ability) {
         if (ZoneUtil.isNoDGCWorld(model.getLocation().getWorld())) return false;
         if (!ability.getType().equals(Ability.Type.PASSIVE)) {
             if ((ability.getType().equals(Ability.Type.OFFENSIVE) || ability.getType().equals(Ability.Type.ULTIMATE)) && ZoneUtil.inNoPvpZone(model.getLocation())) {
@@ -210,8 +215,34 @@ public class AbilityRegistry implements Listener {
                 model.getOfflinePlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " is on a cooldown.");
                 return false;
             }
+        }
+        return true;
+    }
 
-            // Process it
+    void processAbility2(Player player, PlayerModel model, AbilityMetaData ability, @Nullable Object rawResult) {
+        // Check for result
+        if (rawResult == null) {
+            throw new NullPointerException("An ability returned null while casting.");
+        }
+
+        try {
+            // Process result
+            AbilityResult result = (AbilityResult) rawResult;
+            switch (result) {
+                case SUCCESS: {
+                    break;
+                }
+                case NO_TARGET_FOUND: {
+                    player.sendMessage(ChatColor.YELLOW + "No target found.");
+                    return;
+                }
+                case OTHER_FAILURE: {
+                    return;
+                }
+            }
+
+            // Process ability
+            double cost = ability.getCost();
             long delay = ability.getDelay();
             long cooldown = ability.getCooldown();
 
@@ -224,8 +255,8 @@ public class AbilityRegistry implements Listener {
             if (cost > 0) {
                 model.setFavor(model.getFavor() - cost);
             }
+        } catch (Exception ignored) {
         }
-        return true;
     }
 
     public void registerAbilities() {
@@ -291,11 +322,15 @@ public class AbilityRegistry implements Listener {
                     }
                 }
                 event.setDamage(event.getDamage() / 2);
-            } else if (Deity.hasDeity(player, Deity.ZEUS)) {
+            }
+
+            if (Deity.hasDeity(player, Deity.ZEUS)) {
                 if (EntityDamageEvent.DamageCause.FALL.equals(event.getCause())) {
                     event.setCancelled(true);
                 }
-            } else if (Deity.hasDeity(player, Deity.POSEIDON)) {
+            }
+
+            if (Deity.hasDeity(player, Deity.POSEIDON)) {
                 if (EntityDamageEvent.DamageCause.DROWNING.equals(event.getCause())) {
                     event.setCancelled(true);
                     player.setRemainingAir(player.getMaximumAir());
@@ -315,7 +350,7 @@ public class AbilityRegistry implements Listener {
 
         Player player = event.getPlayer();
 
-        if (Deity.hasDeity(player, Deity.POSEIDON)) {
+        if (Deity.hasDeity(player, Deity.POSEIDON) || Deity.hasDeity(player, Deity.OCEANUS)) {
             Material locationMaterial = player.getLocation().getBlock().getType();
             if (player.isSneaking() && (locationMaterial.equals(Material.STATIONARY_WATER) || locationMaterial.equals(Material.WATER))) {
                 Vector victor = (player.getPassenger() != null && player.getLocation().getDirection().getY() > 0 ? player.getLocation().getDirection().clone().setY(0) : player.getLocation().getDirection()).normalize().multiply(1.3D);
