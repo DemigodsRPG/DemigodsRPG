@@ -59,6 +59,7 @@ public class DeityCommand extends BaseCommand {
                             return CommandResult.QUIET_ERROR;
                         }
                         player.openInventory(inventory);
+                        return CommandResult.SUCCESS;
                     } catch (Exception oops) {
                         oops.printStackTrace();
                         return CommandResult.ERROR;
