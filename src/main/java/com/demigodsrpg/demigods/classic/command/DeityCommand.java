@@ -79,6 +79,9 @@ public class DeityCommand extends BaseCommand {
                     player.sendMessage(ability.getInfo());
 
                     player.sendMessage(" - Type: " + StringUtil2.beautify(ability.getType().name()));
+                    if (!ability.getCommand().equals("")) {
+                        player.sendMessage(" - Command: " + "/" + ability.getCommand());
+                    }
                     if (!ability.getType().equals(Ability.Type.PASSIVE)) {
                         player.sendMessage(" - Cost: " + ability.getCost());
                     }
