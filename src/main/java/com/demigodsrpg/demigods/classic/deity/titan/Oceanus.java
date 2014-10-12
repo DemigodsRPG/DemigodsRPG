@@ -19,6 +19,11 @@ public class Oceanus implements IDeity {
     }
 
     @Override
+    public String getInfo() {
+        return "Titan of the oceans.";
+    }
+
+    @Override
     public ChatColor getColor() {
         return ChatColor.DARK_AQUA;
     }

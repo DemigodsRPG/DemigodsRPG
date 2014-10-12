@@ -9,6 +9,8 @@ public interface IDeity {
 
     String getNomen();
 
+    String getInfo();
+
     ChatColor getColor();
 
     Sound getSound();

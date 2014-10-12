@@ -18,6 +18,11 @@ public class Rhea implements IDeity {
     }
 
     @Override
+    public String getInfo() {
+        return "Titaness of earth.";
+    }
+
+    @Override
     public ChatColor getColor() {
         return ChatColor.DARK_GREEN;
     }

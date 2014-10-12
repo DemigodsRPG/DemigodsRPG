@@ -23,6 +23,11 @@ public class Cronus implements IDeity {
     }
 
     @Override
+    public String getInfo() {
+        return "Titan of time.";
+    }
+
+    @Override
     public ChatColor getColor() {
         return ChatColor.GOLD;
     }

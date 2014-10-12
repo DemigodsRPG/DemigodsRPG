@@ -18,6 +18,11 @@ public class Hyperion implements IDeity {
     }
 
     @Override
+    public String getInfo() {
+        return "Titan of the sun.";
+    }
+
+    @Override
     public ChatColor getColor() {
         return ChatColor.GREEN;
     }

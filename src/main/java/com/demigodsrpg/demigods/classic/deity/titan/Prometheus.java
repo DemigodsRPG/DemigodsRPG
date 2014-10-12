@@ -18,6 +18,11 @@ public class Prometheus implements IDeity {
     }
 
     @Override
+    public String getInfo() {
+        return "Titan of humanity and forethought.";
+    }
+
+    @Override
     public ChatColor getColor() {
         return ChatColor.GOLD;
     }

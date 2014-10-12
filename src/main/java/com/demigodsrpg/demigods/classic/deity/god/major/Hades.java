@@ -35,6 +35,11 @@ public class Hades implements IDeity {
     }
 
     @Override
+    public String getInfo() {
+        return "God of the dead.";
+    }
+
+    @Override
     public ChatColor getColor() {
         return ChatColor.DARK_PURPLE;
     }

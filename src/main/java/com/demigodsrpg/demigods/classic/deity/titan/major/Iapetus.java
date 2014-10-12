@@ -18,6 +18,11 @@ public class Iapetus implements IDeity {
     }
 
     @Override
+    public String getInfo() {
+        return "Titan of mortality.";
+    }
+
+    @Override
     public ChatColor getColor() {
         return ChatColor.WHITE;
     }

@@ -259,6 +259,18 @@ public class AbilityRegistry implements Listener {
         }
     }
 
+    public List<AbilityMetaData> getAbilities(Deity deity) {
+        Class<? extends IDeity> deityClass = deity.getParentObjectClass();
+        List<AbilityMetaData> abilityMetaDatas = new ArrayList<>();
+        for (Method method : deityClass.getMethods()) {
+            if (method.isAnnotationPresent(Ability.class)) {
+                Ability ability = method.getAnnotation(Ability.class);
+                abilityMetaDatas.add(new AbilityMetaData(deity, method, ability));
+            }
+        }
+        return abilityMetaDatas;
+    }
+
     public void registerAbilities() {
         for (Deity deity : Deity.values()) {
             Class<? extends IDeity> deityClass = deity.getParentObjectClass();

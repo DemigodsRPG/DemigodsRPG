@@ -25,6 +25,11 @@ public class Ares implements IDeity {
     }
 
     @Override
+    public String getInfo() {
+        return "God of war.";
+    }
+
+    @Override
     public ChatColor getColor() {
         return ChatColor.RED;
     }

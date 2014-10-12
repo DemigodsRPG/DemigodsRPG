@@ -30,6 +30,11 @@ public class Zeus implements IDeity {
     }
 
     @Override
+    public String getInfo() {
+        return "God of the sky.";
+    }
+
+    @Override
     public ChatColor getColor() {
         return ChatColor.YELLOW;
     }

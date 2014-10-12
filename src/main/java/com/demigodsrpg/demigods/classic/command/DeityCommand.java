@@ -2,6 +2,8 @@ package com.demigodsrpg.demigods.classic.command;
 
 import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.demigods.classic.DGClassic;
+import com.demigodsrpg.demigods.classic.ability.Ability;
+import com.demigodsrpg.demigods.classic.ability.AbilityMetaData;
 import com.demigodsrpg.demigods.classic.command.type.BaseCommand;
 import com.demigodsrpg.demigods.classic.command.type.CommandResult;
 import com.demigodsrpg.demigods.classic.deity.Deity;
@@ -32,7 +34,17 @@ public class DeityCommand extends BaseCommand {
         final Player player = (Player) sender;
         final PlayerModel model = DGClassic.PLAYER_R.fromPlayer(player);
 
+        // Deity list
+        if (args.length == 0) {
+            player.sendMessage(ChatColor.YELLOW + StringUtil2.chatTitle("Deity List"));
+            for (Deity deity : Deity.values()) {
+                player.sendMessage(deity.getColor() + deity.getDeityName() + ": " + StringUtil2.beautify(deity.getDefaultAlliance().name()));
+            }
+            return CommandResult.SUCCESS;
+        }
+
         if (args.length == 1) {
+            // Claim
             switch (args[0].toLowerCase()) {
                 case "claim": {
                     try {
@@ -48,6 +60,30 @@ public class DeityCommand extends BaseCommand {
                         return CommandResult.ERROR;
                     }
                 }
+            }
+
+            // Deity info
+            try {
+                Deity deity = Deity.valueOf(args[0].toUpperCase());
+                player.sendMessage(deity.getColor() + StringUtil2.chatTitle(deity.getDeityName() + " Info"));
+                player.sendMessage(" - Info: " + deity.getInfo());
+                player.sendMessage(" - Alliance: " + StringUtil2.beautify(deity.getDefaultAlliance().name()));
+
+                for (AbilityMetaData ability : DGClassic.ABILITY_R.getAbilities(deity)) {
+                    player.sendMessage(ability.getName());
+                    player.sendMessage(ability.getInfo());
+                    player.sendMessage(" - Type: " + StringUtil2.beautify(ability.getType().name()));
+                    if (!ability.getType().equals(Ability.Type.PASSIVE)) {
+                        player.sendMessage(" - Cost: " + ability.getCost());
+                    }
+                    if (ability.getCooldown() > 0) {
+                        player.sendMessage(" - Cooldown (ms): " + ability.getCooldown());
+                    }
+                    player.sendMessage(" ");
+                }
+
+                return CommandResult.SUCCESS;
+            } catch (NullPointerException ignored) {
             }
         }
 

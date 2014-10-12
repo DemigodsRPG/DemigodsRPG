@@ -18,6 +18,11 @@ public class Human implements IDeity {
     }
 
     @Override
+    public String getInfo() {
+        return "Mortals who preside over the world.";
+    }
+
+    @Override
     public ChatColor getColor() {
         return ChatColor.GRAY;
     }

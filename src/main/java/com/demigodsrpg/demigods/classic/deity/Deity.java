@@ -58,6 +58,11 @@ public enum Deity implements IDeity {
     }
 
     @Override
+    public String getInfo() {
+        return deity.getInfo();
+    }
+
+    @Override
     public ChatColor getColor() {
         return deity.getColor();
     }

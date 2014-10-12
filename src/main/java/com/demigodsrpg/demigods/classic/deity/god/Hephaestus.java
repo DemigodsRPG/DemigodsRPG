@@ -21,6 +21,11 @@ public class Hephaestus implements IDeity {
     }
 
     @Override
+    public String getInfo() {
+        return "God of blacksmiths.";
+    }
+
+    @Override
     public ChatColor getColor() {
         return ChatColor.DARK_GRAY;
     }

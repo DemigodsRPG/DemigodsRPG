@@ -18,6 +18,11 @@ public class Atlas implements IDeity {
     }
 
     @Override
+    public String getInfo() {
+        return "Titan of strength.";
+    }
+
+    @Override
     public ChatColor getColor() {
         return ChatColor.BLUE;
     }

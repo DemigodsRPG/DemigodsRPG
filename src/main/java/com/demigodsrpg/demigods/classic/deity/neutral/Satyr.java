@@ -9,12 +9,17 @@ import org.bukkit.material.MaterialData;
 public class Satyr implements IDeity {
     @Override
     public String getDeityName() {
-        return "Pan";
+        return "Satyr";
     }
 
     @Override
     public String getNomen() {
         return "satyr";
+    }
+
+    @Override
+    public String getInfo() {
+        return "Mortal followers of Pan.";
     }
 
     @Override

@@ -28,6 +28,11 @@ public class Poseidon implements IDeity {
     }
 
     @Override
+    public String getInfo() {
+        return "God of the sea.";
+    }
+
+    @Override
     public ChatColor getColor() {
         return ChatColor.AQUA;
     }
