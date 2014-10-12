@@ -76,6 +76,8 @@ public class Ares implements IDeity {
             player.teleport(tar);
             target.damage(2, player);
 
+            player.sendMessage(getColor() + "*shooom*");
+
             return AbilityResult.SUCCESS;
         }
         return AbilityResult.NO_TARGET_FOUND;
