@@ -135,7 +135,7 @@ public class TributeModel extends AbstractPersistentModel<String> {
 
             for (TributeModel model : DGClassic.TRIBUTE_R.getRegistered()) {
                 // Trim the tribute times
-                if (model.tributeTimes.size() > 30) {
+                if (model.tributeTimes.size() > 300) {
                     model.tributeTimes = model.tributeTimes.subList(model.tributeTimes.size() - 31, model.tributeTimes.size() - 1);
                 }
 
