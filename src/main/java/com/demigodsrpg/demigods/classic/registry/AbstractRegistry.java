@@ -29,9 +29,9 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
     }
 
     public void register(T data) {
-        REGISTERED_DATA.put(data.getPersistantId(), data);
+        REGISTERED_DATA.put(data.getPersistentId(), data);
         synchronized (data) {
-            addToFile(data.getPersistantId(), data);
+            addToFile(data.getPersistentId(), data);
         }
     }
 
@@ -57,9 +57,9 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
     }
 
     void unregister(T data) {
-        REGISTERED_DATA.remove(data.getPersistantId());
+        REGISTERED_DATA.remove(data.getPersistentId());
         synchronized (data) {
-            deleteFromFile(data.getPersistantId());
+            deleteFromFile(data.getPersistentId());
         }
     }
 

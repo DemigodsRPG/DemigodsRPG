@@ -121,7 +121,7 @@ public class TributeModel extends AbstractPersistentModel<String> {
     }
 
     @Override
-    public String getPersistantId() {
+    public String getPersistentId() {
         return getMaterial().name();
     }
 

@@ -101,7 +101,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     @Override
-    public String getPersistantId() {
+    public String getPersistentId() {
         return mojangId;
     }
 

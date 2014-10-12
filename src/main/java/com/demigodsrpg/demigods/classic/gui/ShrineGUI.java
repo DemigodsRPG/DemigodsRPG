@@ -49,7 +49,7 @@ public class ShrineGUI implements IInventoryGUI {
         });
         while (shrines.hasNext()) {
             ShrineModel model = shrines.next();
-            final String name = model.getPersistantId();
+            final String name = model.getPersistentId();
             final String type = model.getShrineType().name();
             final String owner = DGClassic.PLAYER_R.fromId(model.getOwnerMojangId()).getLastKnownName();
 

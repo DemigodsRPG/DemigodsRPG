@@ -72,7 +72,7 @@ public class Territory extends AbstractPersistentModel<String> {
     }
 
     @Override
-    public String getPersistantId() {
+    public String getPersistentId() {
         return getAlliance().name();
     }
 

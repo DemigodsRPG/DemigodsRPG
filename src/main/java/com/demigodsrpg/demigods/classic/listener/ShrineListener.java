@@ -68,7 +68,7 @@ public class ShrineListener implements Listener {
                 }
             }
             for (ShrineModel shrine : DGClassic.SHRINE_R.getRegistered()) {
-                if (shrine.getPersistantId().equals(s.getLines()[3].trim())) {
+                if (shrine.getPersistentId().equals(s.getLines()[3].trim())) {
                     p.sendMessage(ChatColor.YELLOW + "A shrine with that name already exists.");
                     return;
                 }

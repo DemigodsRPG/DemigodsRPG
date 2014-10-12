@@ -71,7 +71,7 @@ public class ServerDataModel extends AbstractPersistentModel<String> {
     }
 
     @Override
-    public String getPersistantId() {
+    public String getPersistentId() {
         return id;
     }
 
