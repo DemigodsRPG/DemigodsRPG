@@ -75,8 +75,9 @@ public class DeityCommand extends BaseCommand {
                 player.sendMessage(" - Alliance: " + StringUtil2.beautify(deity.getDefaultAlliance().name()));
 
                 for (AbilityMetaData ability : DGClassic.ABILITY_R.getAbilities(deity)) {
-                    player.sendMessage(ability.getName());
+                    player.sendMessage(" " + ability.getName() + ":");
                     player.sendMessage(ability.getInfo());
+
                     player.sendMessage(" - Type: " + StringUtil2.beautify(ability.getType().name()));
                     if (!ability.getType().equals(Ability.Type.PASSIVE)) {
                         player.sendMessage(" - Cost: " + ability.getCost());
