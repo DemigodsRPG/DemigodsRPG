@@ -8,7 +8,7 @@ Overview
 
 DG3 was always meant to be the next edition of Demigods, but development limbo has taken control of the project. DG3 is in a nearly playable state, but it isn't fun... yet.
 
-After the whole Bukkit fiasco it became clear we'll be starting over *once again* on DG3 with some new API... and thus DG3 is not gong to be ready or even developed for in the near future (until we know what the landscape is gong to be like and what we want from it).
+After the whole Bukkit fiasco it became clear we'll be starting over *once again* on DG3 with some new API... and thus DG3 is not gong to be ready or even developed for in the near future (until we know what the landscape is going to be like and what we want from it).
 
 In the meantime, we've gotten tired of waiting for a fun, new, not buggy version of DG. So, Demigods Classic was born!
 
