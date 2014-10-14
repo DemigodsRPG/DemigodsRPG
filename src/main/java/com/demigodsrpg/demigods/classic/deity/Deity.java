@@ -30,7 +30,7 @@ public enum Deity implements IDeity {
 
     // - Minor - //
 
-    HEPHAESTUS(new Hephaestus(), 4), ARES(new Ares(), 9), PROMETHEUS(new Prometheus(), 9),
+    HEPHAESTUS(new Hephaestus(), 4), ARES(new Ares(), 9), PROMETHEUS(new Prometheus(), 10),
 
     // -- TITAN -- //
 
