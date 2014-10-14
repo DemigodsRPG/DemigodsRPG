@@ -85,7 +85,7 @@ public class ChooseDeityGUI implements IInventoryGUI {
                     inventory.setItem(i, items.get(i));
                 }
                 if (icount > 0) {
-                    inventory.setItem(25, new ItemStack(Material.BUCKET, 1) {
+                    inventory.setItem(25, new ItemStack(Material.PAPER, 1) {
                         {
                             ItemMeta meta = getItemMeta();
                             meta.setDisplayName(ChatColor.GOLD + "< BACK");
@@ -94,7 +94,7 @@ public class ChooseDeityGUI implements IInventoryGUI {
                     });
                 }
                 if (deities.hasNext()) {
-                    inventory.setItem(26, new ItemStack(Material.BUCKET, 1) {
+                    inventory.setItem(26, new ItemStack(Material.PAPER, 1) {
                         {
                             ItemMeta meta = getItemMeta();
                             meta.setDisplayName(ChatColor.GOLD + "NEXT >");

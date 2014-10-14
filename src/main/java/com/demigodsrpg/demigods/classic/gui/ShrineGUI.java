@@ -53,7 +53,7 @@ public class ShrineGUI implements IInventoryGUI {
             final String type = model.getShrineType().name();
             final String owner = DGClassic.PLAYER_R.fromId(model.getOwnerMojangId()).getLastKnownName();
 
-            items.add(count, new ItemStack(Material.GOLD_BLOCK, 1) {
+            items.add(count, new ItemStack(Material.ENCHANTED_BOOK, 1) {
                 {
                     ItemMeta meta = getItemMeta();
                     meta.setDisplayName(name);
@@ -71,7 +71,7 @@ public class ShrineGUI implements IInventoryGUI {
                     inventory.setItem(i, items.get(i));
                 }
                 if (icount > 0) {
-                    inventory.setItem(25, new ItemStack(Material.BUCKET, 1) {
+                    inventory.setItem(25, new ItemStack(Material.PAPER, 1) {
                         {
                             ItemMeta meta = getItemMeta();
                             meta.setDisplayName(ChatColor.GOLD + "< BACK");
@@ -80,7 +80,7 @@ public class ShrineGUI implements IInventoryGUI {
                     });
                 }
                 if (shrines.hasNext()) {
-                    inventory.setItem(26, new ItemStack(Material.BUCKET, 1) {
+                    inventory.setItem(26, new ItemStack(Material.PAPER, 1) {
                         {
                             ItemMeta meta = getItemMeta();
                             meta.setDisplayName(ChatColor.GOLD + "NEXT >");
