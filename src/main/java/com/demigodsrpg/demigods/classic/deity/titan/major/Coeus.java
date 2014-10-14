@@ -6,10 +6,10 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.material.MaterialData;
 
-public class Rhea implements IDeity {
+public class Coeus implements IDeity {
     @Override
     public String getDeityName() {
-        return "Rhea";
+        return "Coeus";
     }
 
     @Override
@@ -19,7 +19,7 @@ public class Rhea implements IDeity {
 
     @Override
     public String getInfo() {
-        return "Titaness of earth.";
+        return "Titan of rational knowledge, driven mad.";
     }
 
     @Override
@@ -34,7 +34,7 @@ public class Rhea implements IDeity {
 
     @Override
     public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.LOG);
+        return new MaterialData(Material.ENCHANTED_BOOK);
     }
 
     @Override
@@ -51,4 +51,6 @@ public class Rhea implements IDeity {
     public IDeity.Pantheon getPantheon() {
         return Pantheon.TITAN;
     }
+
+
 }
