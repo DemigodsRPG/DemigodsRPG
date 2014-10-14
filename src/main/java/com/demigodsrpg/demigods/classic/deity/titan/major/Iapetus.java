@@ -5,7 +5,7 @@ import com.demigodsrpg.demigods.classic.ability.Ability;
 import com.demigodsrpg.demigods.classic.ability.AbilityResult;
 import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
-import net.minecraft.util.com.google.common.util.concurrent.AtomicDouble;
+import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
