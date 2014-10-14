@@ -171,7 +171,7 @@ public class DGClassic extends JavaPlugin {
                 for (World world : Bukkit.getWorlds()) {
                     for (LivingEntity entity : world.getLivingEntities()) {
                         if (entity.getFireTicks() > 0) {
-                            for (Entity nearby : entity.getNearbyEntities(1.0, 1.0, 1.0)) {
+                            for (Entity nearby : entity.getNearbyEntities(1.1, 1.1, 1.1)) {
                                 if (nearby instanceof LivingEntity && !nearby.equals(entity)) {
                                     nearby.setFireTicks(100);
                                 }
@@ -197,7 +197,7 @@ public class DGClassic extends JavaPlugin {
         CONSOLE.info("Main Demigods ASYNC runnable enabled...");
 
         // Start sync fire runnable
-        scheduler.scheduleSyncRepeatingTask(this, FIRE_SPREAD, 5, 20);
+        scheduler.scheduleSyncRepeatingTask(this, FIRE_SPREAD, 3, 20);
         CONSOLE.info("Main Demigods FIRE_SPREAD runnable enabled...");
 
         // Start async value runnable
