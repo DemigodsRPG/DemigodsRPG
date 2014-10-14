@@ -285,7 +285,7 @@ public class AbilityRegistry implements Listener {
 
     @SuppressWarnings("unchecked")
     void register(Deity deity, Method method, Ability ability) {
-        if (Ability.Type.PLACEHOLDER.equals(ability.type())) return;
+        if (ability.placeholder()) return;
         Class<?>[] paramaters = method.getParameterTypes();
         try {
             if (paramaters.length < 1) {
@@ -344,6 +344,13 @@ public class AbilityRegistry implements Listener {
 
             if (Deity.hasDeity(player, Deity.POSEIDON)) {
                 if (EntityDamageEvent.DamageCause.DROWNING.equals(event.getCause())) {
+                    event.setCancelled(true);
+                    player.setRemainingAir(player.getMaximumAir());
+                }
+            }
+
+            if (Deity.hasDeity(player, Deity.PROMETHEUS)) {
+                if (EntityDamageEvent.DamageCause.FIRE.equals(event.getCause()) || EntityDamageEvent.DamageCause.FIRE_TICK.equals(event.getCause())) {
                     event.setCancelled(true);
                     player.setRemainingAir(player.getMaximumAir());
                 }

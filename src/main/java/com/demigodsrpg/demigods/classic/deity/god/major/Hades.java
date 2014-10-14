@@ -69,7 +69,7 @@ public class Hades implements IDeity {
         return Pantheon.OLYMPIAN;
     }
 
-    @Ability(name = "Mob Friendlies", info = "Undead monsters will not attack you.", type = Ability.Type.PLACEHOLDER)
+    @Ability(name = "Mob Friendlies", info = "Undead monsters will not attack you.", type = Ability.Type.PASSIVE, placeholder = true)
     public void friendlyAbility() {
         // Do nothing, handled directly in the ability listener to save time
     }

@@ -81,6 +81,5 @@ public class Ares implements IDeity {
             return AbilityResult.SUCCESS;
         }
         return AbilityResult.NO_TARGET_FOUND;
-
     }
 }

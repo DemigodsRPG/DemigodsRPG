@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 public @interface Ability {
     public enum Type {
-        PASSIVE, SUPPORT, OFFENSIVE, ULTIMATE, PLACEHOLDER
+        PASSIVE, SUPPORT, OFFENSIVE, ULTIMATE
     }
 
     String name();
@@ -31,4 +31,6 @@ public @interface Ability {
     long delay() default 0;
 
     long cooldown() default 0;
+
+    boolean placeholder() default false;
 }

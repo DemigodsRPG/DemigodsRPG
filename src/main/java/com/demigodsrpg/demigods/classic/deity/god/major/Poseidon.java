@@ -62,7 +62,7 @@ public class Poseidon implements IDeity {
         return Pantheon.OLYMPIAN;
     }
 
-    @Ability(name = "Swim", info = "Swim like quickly poseidon through the water.", type = Ability.Type.PLACEHOLDER)
+    @Ability(name = "Swim", info = "Swim like quickly poseidon through the water.", type = Ability.Type.SUPPORT, placeholder = true)
     public void swimAbility() {
         // Do nothing, handled directly in the ability listener to save time
     }
@@ -91,7 +91,7 @@ public class Poseidon implements IDeity {
         return AbilityResult.NO_TARGET_FOUND;
     }
 
-    @Ability(name = "No Drown Damage", info = "Take no drown damage.", type = Ability.Type.PLACEHOLDER)
+    @Ability(name = "No Drown Damage", info = "Take no drown damage.", type = Ability.Type.PASSIVE, placeholder = true)
     public void noDrownDamageAbility() {
         // Do nothing, handled directly in the ability listener to save time
     }

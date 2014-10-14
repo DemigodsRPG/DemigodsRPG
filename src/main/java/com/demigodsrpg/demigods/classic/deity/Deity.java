@@ -9,6 +9,7 @@ import com.demigodsrpg.demigods.classic.deity.god.major.Zeus;
 import com.demigodsrpg.demigods.classic.deity.neutral.Human;
 import com.demigodsrpg.demigods.classic.deity.neutral.Satyr;
 import com.demigodsrpg.demigods.classic.deity.titan.Oceanus;
+import com.demigodsrpg.demigods.classic.deity.titan.Prometheus;
 import com.demigodsrpg.demigods.classic.deity.titan.major.Cronus;
 import com.demigodsrpg.demigods.classic.deity.titan.major.Rhea;
 import org.bukkit.ChatColor;
@@ -29,7 +30,7 @@ public enum Deity implements IDeity {
 
     // - Minor - //
 
-    HEPHAESTUS(new Hephaestus(), 4), ARES(new Ares(), 9),
+    HEPHAESTUS(new Hephaestus(), 4), ARES(new Ares(), 9), PROMETHEUS(new Prometheus(), 9),
 
     // -- TITAN -- //
 
