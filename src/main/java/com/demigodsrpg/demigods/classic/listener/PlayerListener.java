@@ -11,12 +11,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.Random;
 import java.util.Set;
 
 public class PlayerListener implements Listener {
-    private final Random random = new Random();
-
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent event) {
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
