@@ -460,7 +460,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public int costForNextDeity() {
-        switch (contractedDeities.size()) {
+        switch (contractedDeities.size() + 1) {
             case 1:
                 return 2;
             case 2:
