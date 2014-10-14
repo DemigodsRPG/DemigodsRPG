@@ -2,6 +2,7 @@ package com.demigodsrpg.demigods.classic.gui;
 
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.deity.Deity;
+import com.demigodsrpg.demigods.classic.deity.IDeity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -46,7 +47,7 @@ public class ChooseDeityGUI implements IInventoryGUI {
         INVENTORY_LIST = new ArrayList<>();
 
         // Return if can't claim a new deity
-        if (model.costForNextDeity() > model.getAscensions()) {
+        if (!model.getAlliance().equals(IDeity.Alliance.NEUTRAL) && model.costForNextDeity() > model.getAscensions()) {
             return;
         }
 
