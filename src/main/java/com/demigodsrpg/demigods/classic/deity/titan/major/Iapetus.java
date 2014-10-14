@@ -100,6 +100,7 @@ public class Iapetus implements IDeity {
                     player.getLocation().setYaw(targets.get(ii).getLocation().getYaw());
                     if (targets.get(ii).getHealth() - damage.doubleValue() <= 0.0) {
                         damage.set(10.0 + deaths.incrementAndGet() * 1.2);
+                        player.sendMessage(getColor() + "Damage is now " + damage.doubleValue());
                     }
                     targets.get(ii).damage(damage.doubleValue(), player);
                 }
