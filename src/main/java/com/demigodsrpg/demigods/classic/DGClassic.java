@@ -12,6 +12,8 @@ import com.demigodsrpg.demigods.classic.registry.*;
 import com.demigodsrpg.demigods.classic.util.ZoneUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
@@ -140,7 +142,7 @@ public class DGClassic extends JavaPlugin {
 
     // -- TASK RELATED -- //
 
-    private static final BukkitRunnable SYNC, ASYNC, VALUE;
+    private static final BukkitRunnable SYNC, ASYNC, FIRE_SPREAD, VALUE;
 
     static {
         SYNC = new BukkitRunnable() {
@@ -163,6 +165,22 @@ public class DGClassic extends JavaPlugin {
                 SERV_R.clearExpired();
             }
         };
+        FIRE_SPREAD = new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (World world : Bukkit.getWorlds()) {
+                    for (LivingEntity entity : world.getLivingEntities()) {
+                        if (entity.getFireTicks() > 0) {
+                            for (Entity nearby : entity.getNearbyEntities(1.0, 1.0, 1.0)) {
+                                if (nearby instanceof LivingEntity && !nearby.equals(entity)) {
+                                    nearby.setFireTicks(100);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
         VALUE = new TributeModel.ValueTask();
     }
 
@@ -177,6 +195,10 @@ public class DGClassic extends JavaPlugin {
         // Start async demigods runnable
         scheduler.scheduleAsyncRepeatingTask(this, ASYNC, 20, 20);
         CONSOLE.info("Main Demigods ASYNC runnable enabled...");
+
+        // Start sync fire runnable
+        scheduler.scheduleSyncRepeatingTask(this, FIRE_SPREAD, 5, 20);
+        CONSOLE.info("Main Demigods FIRE_SPREAD runnable enabled...");
 
         // Start async value runnable
         scheduler.scheduleAsyncRepeatingTask(this, VALUE, 60, 400);
