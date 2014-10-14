@@ -13,7 +13,8 @@ public enum Setting {
     ALLOW_PVP_EVERYWHERE(Boolean.class, getConfig().getBoolean("allow_skills_everywhere", false)),
     MAX_TEAM_KILLS(Integer.class, getConfig().getInt("max_team_kills", 10)),
     FRIENDLY_FIRE(Boolean.class, getConfig().getBoolean("friendly_fire", false)),
-    EXP_MULTIPLIER(Double.class, getConfig().getDouble("globalexpmultiplier", 4.0));
+    EXP_MULTIPLIER(Double.class, getConfig().getDouble("globalexpmultiplier", 4.0)),
+    NO_COST_DEITY_MODE(Boolean.class, getConfig().getBoolean("no_cost_deity_mode", false));
 
     private final Class<?> clazz;
     private final Object setting;

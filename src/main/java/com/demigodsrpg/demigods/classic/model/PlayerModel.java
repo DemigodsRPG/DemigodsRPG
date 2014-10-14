@@ -12,8 +12,8 @@ import com.demigodsrpg.demigods.classic.util.ZoneUtil;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Lists;
-import net.minecraft.util.gnu.trove.iterator.TIntIterator;
-import net.minecraft.util.gnu.trove.map.hash.TIntDoubleHashMap;
+import gnu.trove.iterator.TIntIterator;
+import gnu.trove.map.hash.TIntDoubleHashMap;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -460,6 +460,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public int costForNextDeity() {
+        if (Setting.NO_COST_DEITY_MODE.get()) return 0;
         switch (contractedDeities.size() + 1) {
             case 1:
                 return 2;
