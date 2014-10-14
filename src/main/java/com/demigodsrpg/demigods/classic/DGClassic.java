@@ -171,7 +171,7 @@ public class DGClassic extends JavaPlugin {
                 for (World world : Bukkit.getWorlds()) {
                     for (LivingEntity entity : world.getLivingEntities()) {
                         if (entity.getFireTicks() > 0) {
-                            for (Entity nearby : entity.getNearbyEntities(1.1, 1.1, 1.1)) {
+                            for (Entity nearby : entity.getNearbyEntities(0.5, 0.5, 0.5)) {
                                 if (nearby instanceof LivingEntity && !nearby.equals(entity)) {
                                     nearby.setFireTicks(100);
                                 }
