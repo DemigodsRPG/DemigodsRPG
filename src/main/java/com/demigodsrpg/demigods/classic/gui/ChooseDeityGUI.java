@@ -67,6 +67,9 @@ public class ChooseDeityGUI implements IInventoryGUI {
             final ChatColor color = deity.getColor();
             final String alliance = deity.getDefaultAlliance().name();
 
+            // Ignore deities that aren't important
+            if (IDeity.Importance.NONE.equals(deity.getImportance())) continue;
+
             items.add(count, new ItemStack(deity.getClaimMaterial().getItemType(), 1, (short) 0, deity.getClaimMaterial().getData()) {
                 {
                     ItemMeta meta = getItemMeta();

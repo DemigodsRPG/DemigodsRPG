@@ -34,7 +34,7 @@ public class Human implements IDeity {
 
     @Override
     public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.AIR);
+        return new MaterialData(Material.POTATO);
     }
 
     @Override
