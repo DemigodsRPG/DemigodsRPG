@@ -14,7 +14,8 @@ public enum Setting {
     MAX_TEAM_KILLS(Integer.class, getConfig().getInt("max_team_kills", 10)),
     FRIENDLY_FIRE(Boolean.class, getConfig().getBoolean("friendly_fire", false)),
     EXP_MULTIPLIER(Double.class, getConfig().getDouble("globalexpmultiplier", 4.0)),
-    NO_COST_DEITY_MODE(Boolean.class, getConfig().getBoolean("no_cost_deity_mode", false));
+    NO_COST_DEITY_MODE(Boolean.class, getConfig().getBoolean("no_cost_deity_mode", false)),
+    NO_ALLIANCE_DEITY_MODE(Boolean.class, getConfig().getBoolean("no_alliance_deity_mode", false));
 
     private final Class<?> clazz;
     private final Object setting;

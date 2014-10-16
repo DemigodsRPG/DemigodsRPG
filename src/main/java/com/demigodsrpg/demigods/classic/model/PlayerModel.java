@@ -438,6 +438,9 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         if (acceptedAlliance.equals(IDeity.Alliance.NEUTRAL)) {
             return !hasDeity(deity) && IDeity.Importance.MAJOR.equals(deity.getImportance());
         }
+        if (Setting.NO_ALLIANCE_DEITY_MODE.get()) {
+            return costForNextDeity() <= ascensions && !hasDeity(deity);
+        }
         return costForNextDeity() <= ascensions && !hasDeity(deity) && deity.getDefaultAlliance().equals(acceptedAlliance);
     }
 
