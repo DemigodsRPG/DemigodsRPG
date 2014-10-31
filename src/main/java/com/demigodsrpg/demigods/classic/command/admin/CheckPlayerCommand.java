@@ -1,12 +1,12 @@
 package com.demigodsrpg.demigods.classic.command.admin;
 
-import com.censoredsoftware.library.util.ColorUtil;
 import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.command.type.AdminPlayerCommand;
 import com.demigodsrpg.demigods.classic.command.type.CommandResult;
 import com.demigodsrpg.demigods.classic.deity.Deity;
 import com.demigodsrpg.demigods.classic.model.PlayerModel;
+import com.demigodsrpg.demigods.classic.util.ColorUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;

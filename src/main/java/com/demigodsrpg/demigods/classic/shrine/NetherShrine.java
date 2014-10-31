@@ -10,22 +10,22 @@ public class NetherShrine extends Schematic implements IShrine {
         super("Nether Shrine", "HmmmQuestionMark", 6);
 
         // Create the main block
-        add(new Selection(0, 1, 0, Material.GOLD_BLOCK));
+        add(new Selection(0, 1, 0, Material.GOLD_BLOCK.name()));
 
         // Create the ender chest and the block below
-        add(new Selection(0, 0, 0, Material.ENDER_CHEST));
-        add(new Selection(0, -1, 0, Material.NETHER_BRICK));
+        add(new Selection(0, 0, 0, Material.ENDER_CHEST.name()));
+        add(new Selection(0, -1, 0, Material.NETHER_BRICK.name()));
 
         // Create the rest
-        add(new Selection(-1, 0, 0, Material.NETHER_BRICK_STAIRS));
-        add(new Selection(1, 0, 0, Material.NETHER_BRICK_STAIRS, (byte) 1));
-        add(new Selection(0, 0, -1, Material.NETHER_BRICK_STAIRS, (byte) 2));
-        add(new Selection(0, 0, 1, Material.NETHER_BRICK_STAIRS, (byte) 3));
+        add(new Selection(-1, 0, 0, Material.NETHER_BRICK_STAIRS.name()));
+        add(new Selection(1, 0, 0, Material.NETHER_BRICK_STAIRS.name(), (byte) 1));
+        add(new Selection(0, 0, -1, Material.NETHER_BRICK_STAIRS.name(), (byte) 2));
+        add(new Selection(0, 0, 1, Material.NETHER_BRICK_STAIRS.name(), (byte) 3));
 
         // Safe zone
-        add(new Selection(1, -1, 1, Material.NETHER_BRICK));
-        add(new Selection(1, 0, 1, Material.AIR));
-        add(new Selection(1, 1, 1, Material.AIR));
+        add(new Selection(1, -1, 1, Material.NETHER_BRICK.name()));
+        add(new Selection(1, 0, 1, Material.AIR.name()));
+        add(new Selection(1, 1, 1, Material.AIR.name()));
     }
 
     @Override

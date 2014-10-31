@@ -1,11 +1,12 @@
 package com.demigodsrpg.demigods.classic.shrine;
 
+import com.censoredsoftware.library.schematic.Point;
 import org.bukkit.Location;
 
 import java.util.Collection;
 
 interface IShrine {
-    void generate(Location reference);
+    void generate(Point reference);
 
     Location getClickable(Location reference);
 
@@ -13,5 +14,5 @@ interface IShrine {
 
     int getGroundRadius();
 
-    Collection<Location> getLocations(Location reference);
+    Collection<Point> getLocations(Point reference);
 }

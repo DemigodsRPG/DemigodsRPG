@@ -1,5 +1,6 @@
 package com.demigodsrpg.demigods.classic.shrine;
 
+import com.censoredsoftware.library.schematic.Point;
 import org.bukkit.Location;
 
 import java.util.Collection;
@@ -13,7 +14,7 @@ public enum Shrine implements IShrine {
         this.parent = parent;
     }
 
-    public void generate(Location reference) {
+    public void generate(Point reference) {
         parent.generate(reference);
     }
 
@@ -30,7 +31,7 @@ public enum Shrine implements IShrine {
     }
 
     @Override
-    public Collection<Location> getLocations(Location reference) {
+    public Collection<Point> getLocations(Point reference) {
         return parent.getLocations(reference);
     }
 

@@ -1,6 +1,5 @@
 package com.demigodsrpg.demigods.classic.util;
 
-import com.censoredsoftware.library.util.WorldGuardUtil;
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Sets;

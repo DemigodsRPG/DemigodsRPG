@@ -90,7 +90,7 @@ public class ShrineListener implements Listener {
         }
         ShrineModel shrine = new ShrineModel(shrinename, p, deity, type, e.getClickedBlock().getLocation());
         DGClassic.SHRINE_R.register(shrine);
-        shrine.getShrineType().generate(shrine.getLocation());
+        shrine.getShrineType().generate(shrine.getPoint());
         e.getClickedBlock().getWorld().strikeLightningEffect(e.getClickedBlock().getLocation());
         p.sendMessage("You have dedicated this shrine to " + deity.getColor() + deity.getDeityName() + ChatColor.WHITE + ".");
         p.sendMessage(ChatColor.YELLOW + "Warp here at any time with /shrine.");
@@ -198,7 +198,7 @@ public class ShrineListener implements Listener {
             @Override
             public void run() {
                 for (final ShrineModel save : saves)
-                    save.getShrineType().generate(save.getLocation());
+                    save.getShrineType().generate(save.getPoint());
             }
         }, 30);
     }
