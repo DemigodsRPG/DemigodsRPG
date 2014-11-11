@@ -94,7 +94,7 @@ public class Prometheus implements IDeity {
         fireball.setShooter(shooter);
     }
 
-    @Ability(name = "No Fire Damage", info = "Fire will not damage you.", type = Ability.Type.PASSIVE)
+    @Ability(name = "No Fire Damage", info = "Fire will not damage you.", type = Ability.Type.PASSIVE, placeholder = true)
     public void noFireDamageAbility() {
         // Do nothing, handled directly in the ability listener to save time
     }

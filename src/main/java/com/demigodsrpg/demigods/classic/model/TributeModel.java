@@ -4,6 +4,7 @@ import com.censoredsoftware.library.util.MapUtil2;
 import com.demigodsrpg.demigods.classic.DGClassic;
 import com.demigodsrpg.demigods.classic.registry.TributeRegistry;
 import com.demigodsrpg.demigods.classic.util.JsonSection;
+import com.google.common.collect.Lists;
 import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -42,9 +43,10 @@ public class TributeModel extends AbstractPersistentModel<String> {
 
     List<Double> getTributeTimes() {
         long twoWeeksAgo = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(14);
+        final List<Double> tributeTimes = Lists.newArrayList(this.tributeTimes);
         for (Double time : tributeTimes) {
             if (time < twoWeeksAgo) {
-                tributeTimes.remove(time);
+                this.tributeTimes.remove(time);
             }
         }
         return tributeTimes;

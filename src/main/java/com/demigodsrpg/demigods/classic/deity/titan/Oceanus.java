@@ -53,7 +53,7 @@ public class Oceanus implements IDeity {
         return Pantheon.TITAN;
     }
 
-    @Ability(name = "Swim", info = "Swim quickly through the water.", type = Ability.Type.SUPPORT)
+    @Ability(name = "Swim", info = "Swim quickly through the water.", type = Ability.Type.SUPPORT, placeholder = true)
     public void swimAbility() {
         // Do nothing, handled directly in the ability listener to save time
     }

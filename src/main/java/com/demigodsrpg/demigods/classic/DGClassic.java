@@ -37,11 +37,11 @@ public class DGClassic extends JavaPlugin {
     public static final PlayerRegistry PLAYER_R = new PlayerRegistry();
     public static final ShrineRegistry SHRINE_R = new ShrineRegistry();
     public static final TributeRegistry TRIBUTE_R = new TributeRegistry();
-    private static final SpawnRegistry SPAWN_R = new SpawnRegistry();
+    public static final SpawnRegistry SPAWN_R = new SpawnRegistry();
     public static final BattleRegistry BATTLE_R = new BattleRegistry();
     public static final AbilityRegistry ABILITY_R = new AbilityRegistry();
     public static final ServerDataRegistry SERV_R = new ServerDataRegistry();
-    private static final ConcurrentMap<String, TerritoryRegistry> TERR_R = new ConcurrentHashMap<>();
+    public static final ConcurrentMap<String, TerritoryRegistry> TERR_R = new ConcurrentHashMap<>();
 
     // -- PLUGIN RELATED INSTANCE METHODS -- //
 
