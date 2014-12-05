@@ -14,7 +14,7 @@
 
     <properties> <!-- It is important to keep up to date manually. -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>1.7.10-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>latest</spigot.version>
         <censoredlib.version>1.0.0-SNAPSHOT</censoredlib.version>
         <worldguard.version>5.8.1-SNAPSHOT</worldguard.version>
     </properties>
@@ -71,6 +71,8 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>${spigot.version}</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/spigot-api.jar</systemPath>
         </dependency>
 
         <!-- Apache Lang
@@ -217,10 +219,11 @@
                                     <pattern>com.google.common.util.concurrent</pattern>
                                     <shadedPattern>net.minecraft.util.com.google.common.util.concurrent</shadedPattern>
                                 </relocation>
+                                <!-- Spigot doesn't relocate this since 1.8
                                 <relocation>
                                     <pattern>gnu.trove</pattern>
                                     <shadedPattern>net.minecraft.util.gnu.trove</shadedPattern>
-                                </relocation>
+                                </relocation> -->
                                 <relocation>
                                     <pattern>com.google.gson</pattern>
                                     <shadedPattern>org.bukkit.craftbukkit.libs.com.google.gson</shadedPattern>
