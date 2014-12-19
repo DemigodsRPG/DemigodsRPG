@@ -14,7 +14,7 @@
 
     <properties> <!-- It is important to keep up to date manually. -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>latest</spigot.version>
+        <spigot.version>1.8-R0.1-SNAPSHOT</spigot.version>
         <censoredlib.version>1.0.0-SNAPSHOT</censoredlib.version>
         <worldguard.version>5.8.1-SNAPSHOT</worldguard.version>
     </properties>
@@ -56,12 +56,8 @@
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
         <repository>
-            <id>md5-repo</id>
-            <url>http://repo.md-5.net/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
-            <id>fanciful-mvn-repo</id>
-            <url>https://raw.github.com/mkremins/fanciful/mvn-repo/</url>
+            <id>spigot-releases</id>
+            <url>http://hub.spigotmc.org/nexus/content/repositories/public</url>
         </repository>
     </repositories>
 
@@ -71,8 +67,6 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>${spigot.version}</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/spigot-api.jar</systemPath>
         </dependency>
 
         <!-- Apache Lang
