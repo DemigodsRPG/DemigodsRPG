@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.Set;
@@ -26,10 +27,10 @@ public class ZoneUtil {
         ENABLED_WORLDS.addAll(enabledWorlds);
 
         // Init WorldGuard stuff
-        WorldGuardUtil.setWhenToOverridePVP(DGClassic.getInst(), new Predicate<EntityDamageByEntityEvent>() {
+        WorldGuardUtil.setWhenToOverridePVP(DGClassic.getInst(), new Predicate<Event>() {
             @Override
-            public boolean apply(EntityDamageByEntityEvent event) {
-                return !inNoDGCZone(event.getEntity().getLocation());
+            public boolean apply(Event event) {
+                return event instanceof EntityDamageByEntityEvent && !inNoDGCZone(((EntityDamageByEntityEvent) event).getEntity().getLocation());
             }
         });
 

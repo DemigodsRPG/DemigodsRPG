@@ -3,7 +3,7 @@ main: com.demigodsrpg.demigods.classic.DGClassic
 version: ${project.version}
 description: Ally yourself with mythical deities and battle in the name of the Gods or Titans.
 authors: [marinating, HmmmQuestionMark, _Alex, TheFatDemon, janie177]
-softdepend: [WorldGuard, WorldEdit, Multiverse-Core]
+softdepend: [Chitchat, WorldGuard]
 commands:
   ## Everyday Commands
   alliance:

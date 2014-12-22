@@ -1,7 +1,10 @@
 package com.demigodsrpg.demigods.classic;
 
+import com.demigodsrpg.chitchat.Chitchat;
 import com.demigodsrpg.demigods.classic.command.*;
 import com.demigodsrpg.demigods.classic.command.admin.*;
+import com.demigodsrpg.demigods.classic.integration.chitchat.AllianceChatTag;
+import com.demigodsrpg.demigods.classic.integration.chitchat.AllianceDeityIdTag;
 import com.demigodsrpg.demigods.classic.listener.InventoryListener;
 import com.demigodsrpg.demigods.classic.listener.PlayerListener;
 import com.demigodsrpg.demigods.classic.listener.ShrineListener;
@@ -108,6 +111,12 @@ public class DGClassic extends JavaPlugin {
 
         // Enable ZoneUtil
         ZoneUtil.init();
+
+        // Handle Chitchat integration
+        if (manager.isPluginEnabled("Chitchat")) {
+            Chitchat.getChatFormat().add(new AllianceChatTag());
+            Chitchat.getChatFormat().add(new AllianceDeityIdTag());
+        }
 
         // Let the console know
         CONSOLE.info("Enabled and ready for battle.");

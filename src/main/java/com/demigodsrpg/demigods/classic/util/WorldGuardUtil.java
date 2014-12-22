@@ -28,10 +28,10 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
@@ -174,7 +174,7 @@ public class WorldGuardUtil implements Listener {
         return checkStateFlagAllows(DefaultFlag.PVP, location);
     }
 
-    public static void setWhenToOverridePVP(Plugin plugin, Predicate<EntityDamageByEntityEvent> checkPVP) {
+    public static void setWhenToOverridePVP(Plugin plugin, Predicate<Event> checkPVP) {
         if (!worldGuardEnabled()) protoPVPListeners.put(plugin.getName(), new ProtoPVPListener(plugin, checkPVP));
         else new WorldGuardPVPListener(plugin, checkPVP);
     }
@@ -199,9 +199,9 @@ public class WorldGuardUtil implements Listener {
 
     static class ProtoPVPListener {
         private Plugin plugin;
-        private Predicate<EntityDamageByEntityEvent> checkPVP;
+        private Predicate<Event> checkPVP;
 
-        ProtoPVPListener(Plugin plugin, Predicate<EntityDamageByEntityEvent> checkPVP) {
+        ProtoPVPListener(Plugin plugin, Predicate<Event> checkPVP) {
             this.plugin = plugin;
             this.checkPVP = checkPVP;
         }
@@ -212,9 +212,9 @@ public class WorldGuardUtil implements Listener {
     }
 
     public static class WorldGuardPVPListener implements Listener {
-        private Predicate<EntityDamageByEntityEvent> checkPVP;
+        private Predicate<Event> checkPVP;
 
-        WorldGuardPVPListener(Plugin plugin, Predicate<EntityDamageByEntityEvent> checkPVP) {
+        WorldGuardPVPListener(Plugin plugin, Predicate<Event> checkPVP) {
             this.checkPVP = checkPVP;
             Bukkit.getPluginManager().registerEvents(this, plugin);
         }

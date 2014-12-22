@@ -24,20 +24,15 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         PlayerModel model = DGClassic.PLAYER_R.fromPlayer(event.getPlayer());
-        String format = event.getFormat();
-        char symbol = !IDeity.Alliance.EXCOMMUNICATED.equals(model.getAlliance()) ? model.getAlliance().name().charAt(0) : 'X';
         if (DGClassic.SERV_R.contains("alliance_chat", event.getPlayer().getUniqueId().toString()) && !IDeity.Alliance.NEUTRAL.equals(model.getAlliance()) && !IDeity.Alliance.EXCOMMUNICATED.equals(model.getAlliance())) {
             event.getRecipients().clear();
             Set<PlayerModel> playerModelSet = DGClassic.PLAYER_R.getOnlineInAlliance(model.getAlliance());
             for (PlayerModel playerModel : playerModelSet) {
                 event.getRecipients().add(playerModel.getOfflinePlayer().getPlayer());
             }
-            event.setFormat(ChatColor.DARK_GRAY + "[.]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + symbol + "]" + ChatColor.RESET + format);
-        } else {
-            event.setFormat(ChatColor.DARK_RED + "[!]" + model.getMajorDeity().getColor() + "[" + model.getMajorDeity().getColor() + symbol + "]" + ChatColor.RESET + format);
         }
     }
 }
