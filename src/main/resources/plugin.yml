@@ -1,5 +1,5 @@
 name: DemigodsRPG
-main: com.demigodsrpg.demigods.classic.DGClassic
+main: DGClassic
 version: ${project.version}
 description: Ally yourself with mythical deities and battle in the name of the Gods or Titans.
 authors: [marinating, HmmmQuestionMark, _Alex, TheFatDemon, janie177]
