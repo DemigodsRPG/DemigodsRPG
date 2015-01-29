@@ -19,4 +19,4 @@ If it helps, think of this as a total remake of DG2 with brand new lore and spec
 Platforms
 =========
 
-Currently, DGC only runs on servers implementng the Bukkit API.  We plan to port over to the new leading API once they have been established (probably Sponge).
+Currently, DG only runs on servers implementng the Bukkit API.  We plan to port over to the new leading API once they have been established (probably Sponge).
