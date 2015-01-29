@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.demigodsrpg</groupId>
-    <artifactId>demigods-classic</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <artifactId>demigodsrpg</artifactId>
+    <version>4.0.0-SNAPSHOT</version>
 
-    <name>DemigodsClassic</name>
-    <description>Demigods Classic (based on v2) for Bukkit/Spigot Minecraft Servers.</description>
-    <url>http://github.com/CensoredSoftware/DemigodsClassic</url>
+    <name>Demigods RPG</name>
+    <description>Demigods RPG for Bukkit/Spigot Minecraft Servers.</description>
+    <url>http://github.com/DemigodsRPG/DemigodsRPG</url>
 
     <properties> <!-- It is important to keep up to date manually. -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -181,7 +181,7 @@
     </dependencies>
 
     <build>
-        <finalName>DemigodsClassic</finalName>
+        <finalName>DemigodsRPG</finalName>
         <defaultGoal>clean install</defaultGoal>
         <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
         <resources>
@@ -231,12 +231,12 @@
                                 </relocation>
                                 <!--<relocation>
                                     <pattern>org.apache.commons.lang</pattern>
-                                    <shadedPattern>com.demigodsrpg.demigods.classic.org.apache.commons.lang</shadedPattern>
+                                    <shadedPattern>com.demigodsrpg.demigods.org.apache.commons.lang</shadedPattern>
                                 </relocation> -->
                                 <!-- Shaded into the jar -->
                                 <relocation>
                                     <pattern>com.censoredsoftware.library</pattern>
-                                    <shadedPattern>com.demigodsrpg.demigods.classic.com.censoredsoftware.library
+                                    <shadedPattern>com.demigodsrpg.demigods.com.censoredsoftware.library
                                     </shadedPattern>
                                 </relocation>
                             </relocations>
