@@ -231,12 +231,12 @@
                                 </relocation>
                                 <!--<relocation>
                                     <pattern>org.apache.commons.lang</pattern>
-                                    <shadedPattern>com.demigodsrpg.demigods.org.apache.commons.lang</shadedPattern>
+                                    <shadedPattern>com.demigodsrpg.game.org.apache.commons.lang</shadedPattern>
                                 </relocation> -->
                                 <!-- Shaded into the jar -->
                                 <relocation>
                                     <pattern>com.censoredsoftware.library</pattern>
-                                    <shadedPattern>com.demigodsrpg.demigods.com.censoredsoftware.library
+                                    <shadedPattern>com.demigodsrpg.game.com.censoredsoftware.library
                                     </shadedPattern>
                                 </relocation>
                             </relocations>
