@@ -4,10 +4,11 @@ import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityMetaData;
+import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.aspect.IAspect;
 import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
-import com.demigodsrpg.game.deity.Deity;
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.gui.ChooseDeityGUI;
 import com.demigodsrpg.game.model.PlayerModel;
 import org.bukkit.Bukkit;
@@ -22,7 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class DeityCommand extends BaseCommand {
+public class AspectCommand extends BaseCommand {
     @Override
     protected CommandResult onCommand(CommandSender sender, Command command, String[] args) {
         // Player only
@@ -36,9 +37,10 @@ public class DeityCommand extends BaseCommand {
 
         // Deity list
         if (args.length == 0) {
+            // FIXME Display the deities not aspects
             player.sendMessage(ChatColor.YELLOW + StringUtil2.chatTitle("Deity List"));
-            for (Deity deity : Deity.values()) {
-                player.sendMessage(" - " + deity.getColor() + deity.getDeityName() + ": " + deity.getInfo() + " (" + StringUtil2.beautify(deity.getDefaultAlliance().name()) + ")");
+            for (Aspect aspect : Aspect.values()) {
+                player.sendMessage(" - " + aspect.getColor() + aspect.getName() + ": " + aspect.getInfo() /* FIXME + " (" + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + ")" */);
             }
             return CommandResult.SUCCESS;
         }
@@ -50,7 +52,7 @@ public class DeityCommand extends BaseCommand {
                     try {
                         Inventory inventory = new ChooseDeityGUI(player).getInventory();
                         if (inventory == null) {
-                            if (model.getAlliance().equals(IDeity.Alliance.EXCOMMUNICATED)) {
+                            if (model.getFaction().equals(Faction.EXCOMMUNICATED)) {
                                 player.sendMessage(ChatColor.YELLOW + "Your current alliance prevents you from claiming new deities.");
                             } else {
                                 player.sendMessage(ChatColor.RED + "There are *currently* no deities you can choose from.");
@@ -69,12 +71,12 @@ public class DeityCommand extends BaseCommand {
 
             // Deity info
             try {
-                Deity deity = Deity.valueOf(args[0].toUpperCase());
-                player.sendMessage(deity.getColor() + StringUtil2.chatTitle(deity.getDeityName() + " Info"));
-                player.sendMessage(" - Info: " + deity.getInfo());
-                player.sendMessage(" - Alliance: " + StringUtil2.beautify(deity.getDefaultAlliance().name()));
+                Aspect aspect = Aspect.valueOf(args[0].toUpperCase());
+                player.sendMessage(aspect.getColor() + StringUtil2.chatTitle(aspect.getName() + " Info"));
+                player.sendMessage(" - Info: " + aspect.getInfo());
+                // FIXME player.sendMessage(" - Alliance: " + StringUtil2.beautify(aspect.getDefaultAlliance().name()));
 
-                for (AbilityMetaData ability : DGGame.ABILITY_R.getAbilities(deity)) {
+                for (AbilityMetaData ability : DGGame.ABILITY_R.getAbilities(aspect)) {
                     player.sendMessage(" " + ability.getName() + ":");
                     player.sendMessage(ability.getInfo());
 
@@ -101,12 +103,12 @@ public class DeityCommand extends BaseCommand {
             switch (args[0].toLowerCase()) {
                 case "claim": {
                     String deityName = args[1];
-                    final Deity deity = Deity.valueOf(deityName.toUpperCase());
+                    final Aspect aspect = Aspect.valueOf(deityName.toUpperCase());
 
-                    if (deity != null && model.canClaim(deity)) {
+                    if (aspect != null && model.canClaim(aspect)) {
                         // Check if the importance is none
-                        if (IDeity.Importance.NONE.equals(deity.getImportance())) {
-                            // TODO CANNOT CLAIM DEITIES THAT AREN'T IMPORTANT
+                        if (IAspect.Strength.NONE.equals(aspect.getStrength())) {
+                            // TODO CANNOT CLAIM ASPECTS THAT AREN'T STRONG
                             player.sendMessage(ChatColor.RED + "You cannot claim this deity.");
                             return CommandResult.QUIET_ERROR;
 
@@ -121,9 +123,9 @@ public class DeityCommand extends BaseCommand {
                             //    player.getWorld().spawn(player.getLocation(), ExperienceOrb.class);
                         }
                         // Check if the importance is major
-                        else if (IDeity.Importance.MAJOR.equals(deity.getImportance()) && !model.getMajorDeity().getImportance().equals(IDeity.Importance.MAJOR)) {
+                        else if (IAspect.Strength.LARGE.equals(aspect.getStrength()) /* && FIXME!model.getMajorDeity().getImportance().equals(IAspect.Strength.MAJOR) */) {
                             // Pondering message
-                            player.sendMessage(deity.getColor() + deity.getDeityName() + ChatColor.GRAY + " is pondering your choice...");
+                            player.sendMessage(aspect.getColor() + aspect.getName() + ChatColor.GRAY + " is pondering your choice...");
 
                             // Play scary sound
                             player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 0.6F, 1F);
@@ -132,14 +134,14 @@ public class DeityCommand extends BaseCommand {
                             Bukkit.getScheduler().scheduleSyncDelayedTask(DGGame.getInst(), new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    // Give the deity
-                                    model.giveMajorDeity(deity, true);
+                                    // Give the aspect
+                                    // FIXME model.giveFirstAspect(hero, aspect);
 
                                     // Play acceptance sound
                                     player.playSound(player.getLocation(), Sound.ENDERDRAGON_DEATH, 1F, 1F);
 
                                     // Message them and do cool things
-                                    player.sendMessage(deity.getColor() + "The " + StringUtil2.beautify(deity.getDefaultAlliance().name()) + " alliance welcomes you, " + deity.getNomen() + ".");
+                                    // FIXME player.sendMessage(aspect.getColor() + "The " + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + " alliance welcomes you, " + aspect.getNomen() + ".");
                                     player.getWorld().strikeLightningEffect(player.getLocation());
 
                                     // Fancy particles
@@ -149,7 +151,8 @@ public class DeityCommand extends BaseCommand {
                             }, 60);
                         } else {
                             // Pondering message
-                            player.sendMessage(deity.getColor() + deity.getDeityName() + ChatColor.GRAY + " is pondering your choice...");
+                            // FIXME Display a more fitting message
+                            player.sendMessage(aspect.getColor() + aspect.getName() + ChatColor.GRAY + " is pondering your choice...");
 
                             // Play scary sound
                             player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 0.6F, 1F);
@@ -159,13 +162,13 @@ public class DeityCommand extends BaseCommand {
                                 @Override
                                 public void run() {
                                     // Give the deity
-                                    model.giveDeity(deity);
+                                    model.giveAspect(aspect);
 
                                     // Play acceptance sound
                                     player.playSound(player.getLocation(), Sound.ENDERDRAGON_DEATH, 1F, 1F);
 
                                     // Message them and do cool things
-                                    player.sendMessage(deity.getColor() + "You have been accepted as an " + deity.getNomen() + ".");
+                                    // FIXME player.sendMessage(aspect.getColor() + "You have been accepted as an " + aspect.getNomen() + ".");
                                     player.getWorld().playEffect(player.getLocation(), Effect.EXPLOSION_HUGE, 4F);
 
                                     // Fancy particles

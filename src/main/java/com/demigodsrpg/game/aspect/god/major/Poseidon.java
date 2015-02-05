@@ -1,9 +1,9 @@
-package com.demigodsrpg.game.deity.god.major;
+package com.demigodsrpg.game.aspect.god.major;
 
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityResult;
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.aspect.IAspect;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.util.TargetingUtil;
 import org.bukkit.ChatColor;
@@ -16,7 +16,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
 
-public class Poseidon implements IDeity {
+public class Poseidon implements IAspect {
     @Override
     public String getDeityName() {
         return "Poseidon";
@@ -48,8 +48,8 @@ public class Poseidon implements IDeity {
     }
 
     @Override
-    public Importance getImportance() {
-        return Importance.MAJOR;
+    public Strength getImportance() {
+        return Strength.MAJOR;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class Poseidon implements IDeity {
         Player player = event.getPlayer();
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
 
-        double damage = Math.ceil(0.37286 * Math.pow(model.getAscensions() * 100, 0.371238)); // TODO Make damage do more?
+        double damage = Math.ceil(0.37286 * Math.pow(model.getLevel() * 100, 0.371238)); // TODO Make damage do more?
 
         LivingEntity hit = TargetingUtil.autoTarget(player);
 

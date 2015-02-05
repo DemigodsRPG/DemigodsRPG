@@ -1,8 +1,8 @@
-package com.demigodsrpg.game.deity.god;
+package com.demigodsrpg.game.aspect.god;
 
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityResult;
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.aspect.IAspect;
 import com.demigodsrpg.game.util.TargetingUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
 
-public class Ares implements IDeity {
+public class Ares implements IAspect {
     @Override
     public String getDeityName() {
         return "Ares";
@@ -45,17 +45,17 @@ public class Ares implements IDeity {
     }
 
     @Override
-    public IDeity.Importance getImportance() {
-        return Importance.MINOR;
+    public Strength getImportance() {
+        return Strength.MINOR;
     }
 
     @Override
-    public IDeity.Alliance getDefaultAlliance() {
+    public IAspect.Alliance getDefaultAlliance() {
         return Alliance.OLYMPIAN;
     }
 
     @Override
-    public IDeity.Pantheon getPantheon() {
+    public IAspect.Pantheon getPantheon() {
         return Pantheon.OLYMPIAN;
     }
 

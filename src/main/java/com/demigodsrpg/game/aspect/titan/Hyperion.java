@@ -1,15 +1,15 @@
-package com.demigodsrpg.game.deity.titan;
+package com.demigodsrpg.game.aspect.titan;
 
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.aspect.IAspect;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.material.MaterialData;
 
-public class Atlas implements IDeity {
+public class Hyperion implements IAspect {
     @Override
     public String getDeityName() {
-        return "Altas";
+        return "Hyperion";
     }
 
     @Override
@@ -19,36 +19,36 @@ public class Atlas implements IDeity {
 
     @Override
     public String getInfo() {
-        return "Titan of strength.";
+        return "Titan of the sun.";
     }
 
     @Override
     public ChatColor getColor() {
-        return ChatColor.BLUE;
+        return ChatColor.GREEN;
     }
 
     @Override
     public Sound getSound() {
-        return Sound.FIREWORK_LAUNCH;
+        return Sound.WITHER_IDLE;
     }
 
     @Override
     public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.FIREWORK);
+        return new MaterialData(Material.GOLD_BOOTS);
     }
 
     @Override
-    public IDeity.Importance getImportance() {
-        return Importance.MINOR;
+    public Strength getImportance() {
+        return Strength.MINOR;
     }
 
     @Override
-    public IDeity.Alliance getDefaultAlliance() {
+    public IAspect.Alliance getDefaultAlliance() {
         return Alliance.TITAN;
     }
 
     @Override
-    public IDeity.Pantheon getPantheon() {
+    public IAspect.Pantheon getPantheon() {
         return Pantheon.TITAN;
     }
 }

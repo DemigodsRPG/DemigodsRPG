@@ -3,10 +3,11 @@ package com.demigodsrpg.game.model;
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.Setting;
 import com.demigodsrpg.game.ability.AbilityMetaData;
+import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.battle.BattleMetaData;
 import com.demigodsrpg.game.battle.Participant;
 import com.demigodsrpg.game.deity.Deity;
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.util.JsonSection;
 import com.demigodsrpg.game.util.ZoneUtil;
 import com.google.common.collect.BiMap;
@@ -27,18 +28,18 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     private final String mojangId;
     private String lastKnownName;
 
-    private String majorDeity;
-    private final List<String> contractedDeities = new ArrayList<>(1);
-    private IDeity.Alliance acceptedAlliance;
-    private final BiMap<String, String> binds = HashBiMap.create();
+    private String god, hero;
 
-    private final TIntDoubleHashMap devotion;
+    private final List<String> aspects = new ArrayList<>(1);
+    private Faction faction;
+    private final BiMap<String, String> binds = HashBiMap.create();
+    private final TIntDoubleHashMap experience;
 
     private long lastLoginTime;
 
     private double maxHealth;
     private double favor;
-    private int ascensions;
+    private int level;
 
     private boolean canPvp;
 
@@ -52,15 +53,15 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         lastKnownName = player.getName();
         lastLoginTime = System.currentTimeMillis();
 
-        majorDeity = Deity.HUMAN.name();
-        devotion = new TIntDoubleHashMap(1);
+        // FIXME majorDeity = Aspect.HUMAN.name();
+        experience = new TIntDoubleHashMap(1);
 
-        acceptedAlliance = IDeity.Alliance.NEUTRAL;
+        faction = Faction.NEUTRAL;
 
         maxHealth = 20.0;
 
         favor = 700.0;
-        ascensions = 0;
+        level = 0;
 
         canPvp = true;
 
@@ -73,22 +74,21 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         this.mojangId = mojangId;
         lastKnownName = conf.getString("last_known_name");
         lastLoginTime = conf.getLong("last_login_time");
-        majorDeity = conf.getString("major_deity");
-        for (String name : conf.getStringList("contracted_deities")) {
-            contractedDeities.add(name);
+        for (String name : conf.getStringList("aspects")) {
+            aspects.add(name);
         }
-        acceptedAlliance = IDeity.Alliance.valueOf(conf.getString("alliance"));
+        // FIXME faction = Faction.valueOf(conf.getString("faction"));
         binds.putAll((Map) conf.getSection("binds").getValues());
         maxHealth = conf.getDouble("max_health");
         favor = conf.getDouble("favor");
-        devotion = new TIntDoubleHashMap(1);
-        for (Map.Entry<String, Object> entry : conf.getSection("devotion").getValues().entrySet()) {
+        experience = new TIntDoubleHashMap(1);
+        for (Map.Entry<String, Object> entry : conf.getSection("experience").getValues().entrySet()) {
             try {
-                devotion.put(Deity.valueOf(entry.getKey()).getId(), Double.valueOf(entry.getValue().toString()));
+                experience.put(Aspect.valueOf(entry.getKey()).getId(), Double.valueOf(entry.getValue().toString()));
             } catch (Exception ignored) {
             }
         }
-        ascensions = conf.getInt("ascensions");
+        level = conf.getInt("level");
         canPvp = conf.getBoolean("can_pvp", true);
         kills = conf.getInt("kills");
         deaths = conf.getInt("deaths");
@@ -110,23 +110,22 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         Map<String, Object> map = new HashMap<>();
         map.put("last_known_name", lastKnownName);
         map.put("last_login_time", lastLoginTime);
-        map.put("major_deity", majorDeity);
-        map.put("contracted_deities", Lists.newArrayList(contractedDeities));
-        map.put("alliance", acceptedAlliance.name());
+        map.put("contracted_deities", Lists.newArrayList(aspects));
+        map.put("faction", faction.getName());
         map.put("binds", binds);
         map.put("max_health", maxHealth);
         map.put("favor", favor);
         Map<Integer, Double> devotionMap = new HashMap<>();
-        TIntIterator iterator = devotion.keySet().iterator();
+        TIntIterator iterator = experience.keySet().iterator();
         while (iterator.hasNext()) {
             int key = iterator.next();
             try {
-                devotionMap.put(key, devotion.get(key));
+                devotionMap.put(key, experience.get(key));
             } catch (Exception ignored) {
             }
         }
         map.put("devotion", devotionMap);
-        map.put("ascensions", ascensions);
+        map.put("level", level);
         map.put("can_pvp", canPvp);
         map.put("kills", kills);
         map.put("deaths", deaths);
@@ -156,43 +155,27 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         DGGame.PLAYER_R.register(this);
     }
 
-    public Deity getMajorDeity() {
-        return Deity.valueOf(majorDeity);
+    public List<String> getAspects() {
+        return aspects;
     }
 
-    public void setMajorDeity(Deity majorDeity) {
-        this.majorDeity = majorDeity.name();
+    public void addAspect(Aspect aspect) {
+        aspects.add(aspect.name());
         DGGame.PLAYER_R.register(this);
     }
 
-    public Set<String> getAllDeities() {
-        Set<String> deities = new HashSet<>();
-        deities.addAll(getContractedDeities());
-        deities.add(majorDeity);
-        return deities;
-    }
-
-    public List<String> getContractedDeities() {
-        return contractedDeities;
-    }
-
-    public void addContractedDeity(Deity deity) {
-        contractedDeities.add(deity.name());
-        DGGame.PLAYER_R.register(this);
-    }
-
-    public void removeContractedDeity(Deity deity) {
-        contractedDeities.remove(deity.name());
+    public void removeAspect(Aspect aspect) {
+        aspects.remove(aspect.name());
         DGGame.PLAYER_R.register(this);
     }
 
     @Override
-    public IDeity.Alliance getAlliance() {
-        return acceptedAlliance;
+    public Faction getFaction() {
+        return faction;
     }
 
-    public void setAlliance(IDeity.Alliance acceptedAlliance) {
-        this.acceptedAlliance = acceptedAlliance;
+    public void setFaction(Faction faction) {
+        this.faction = faction;
         DGGame.PLAYER_R.register(this);
     }
 
@@ -214,48 +197,48 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         DGGame.PLAYER_R.register(this);
     }
 
-    public double getDevotion(Deity deity) {
-        if (!devotion.containsKey(deity.getId())) {
+    public double getExperience(Aspect aspect) {
+        if (!experience.containsKey(aspect.getId())) {
             return 0.0;
         }
-        return devotion.get(deity.getId());
+        return experience.get(aspect.getId());
     }
 
-    double getDevotion(String deityName) {
-        int ordinal = Deity.valueOf(deityName).getId();
-        if (!devotion.containsKey(ordinal)) {
+    double getExperience(String aspectName) {
+        int ordinal = Aspect.valueOf(aspectName).getId();
+        if (!experience.containsKey(ordinal)) {
             return 0.0;
         }
-        return devotion.get(ordinal);
+        return experience.get(ordinal);
     }
 
-    public Double getTotalDevotion() {
-        double total = getDevotion(majorDeity);
-        for (String deity : contractedDeities) {
-            total += getDevotion(deity);
+    public Double getTotalExperience() {
+        double total = 0.0;
+        for (String aspect : aspects) {
+            total += getExperience(aspect);
         }
         return total;
     }
 
-    public void setDevotion(Deity deity, double devotion) {
-        this.devotion.put(deity.getId(), devotion);
+    public void setExperience(Aspect aspect, double experience) {
+        this.experience.put(aspect.getId(), experience);
         calculateAscensions();
         DGGame.PLAYER_R.register(this);
     }
 
-    void setDevotion(String deityName, double devotion) {
-        int ordinal = Deity.valueOf(deityName).getId();
-        this.devotion.put(ordinal, devotion);
+    void setExperience(String aspectName, double experience) {
+        int ordinal = Aspect.valueOf(aspectName).getId();
+        this.experience.put(ordinal, experience);
         calculateAscensions();
         DGGame.PLAYER_R.register(this);
     }
 
-    public int getAscensions() {
-        return ascensions;
+    public int getLevel() {
+        return level;
     }
 
-    void setAscensions(int ascensions) {
-        this.ascensions = ascensions;
+    void setLevel(int level) {
+        this.level = level;
         DGGame.PLAYER_R.register(this);
     }
 
@@ -368,14 +351,18 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         throw new UnsupportedOperationException("We don't support finding locations for players who aren't online.");
     }
 
-    public boolean hasDeity(Deity deity) {
-        return getMajorDeity().equals(deity) || getContractedDeities().contains(deity.name());
+    public boolean isDemigod() {
+        return hero != null && god != null;
+    }
+
+    public boolean hasAspect(Aspect aspect) {
+        return getAspects().contains(aspect.name());
     }
 
     @SuppressWarnings("RedundantCast")
     @Override
     public boolean reward(BattleMetaData data) {
-        double devotion = getTotalDevotion();
+        double experience = getTotalExperience();
         teamKills += data.getTeamKills();
 
         if (checkTeamKills()) {
@@ -384,79 +371,77 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
             score += data.getKills() * 2;
             score -= data.getDeaths() * 1.5;
             score *= (double) Setting.EXP_MULTIPLIER.get();
-            score /= contractedDeities.size() + 1;
-            setDevotion(majorDeity, getDevotion(majorDeity) + score);
-            for (String deity : contractedDeities) {
-                setDevotion(deity, getDevotion(deity) + score);
+            score /= aspects.size() + 1;
+            for (String aspect : aspects) {
+                setExperience(aspect, getExperience(aspect) + score);
             }
         }
 
         DGGame.PLAYER_R.register(this);
 
-        return devotion > getTotalDevotion();
+        return experience > getTotalExperience();
     }
 
     boolean checkTeamKills() {
         int maxTeamKills = Setting.MAX_TEAM_KILLS.get();
         if (maxTeamKills <= teamKills) {
             // Reset them to excommunicated
-            setAlliance(IDeity.Alliance.EXCOMMUNICATED);
+            setFaction(Faction.EXCOMMUNICATED);
             resetTeamKills();
-            double former = getTotalDevotion();
-            setDevotion(majorDeity, 0.0);
+            double former = getTotalExperience();
             if (getOnline()) {
                 Player player = getOfflinePlayer().getPlayer();
-                player.sendMessage(ChatColor.RED + "Your former alliance has just excommunicated you.");
-                player.sendMessage(ChatColor.RED + "You will no longer respawn at the alliance spawn.");
+                player.sendMessage(ChatColor.RED + "Your former faction has just excommunicated you.");
+                player.sendMessage(ChatColor.RED + "You will no longer respawn at the faction spawn.");
                 player.sendMessage(ChatColor.RED + "You have lost " +
-                        ChatColor.GOLD + DecimalFormat.getCurrencyInstance().format(former - getTotalDevotion()) +
-                        ChatColor.RED + " devotion.");
-                player.sendMessage(ChatColor.YELLOW + "To join an alliance, "); // TODO
+                        ChatColor.GOLD + DecimalFormat.getCurrencyInstance().format(former - getTotalExperience()) +
+                        ChatColor.RED + " experience.");
+                player.sendMessage(ChatColor.YELLOW + "To join a faction, "); // TODO
             }
             return false;
         }
         return true;
     }
 
-    public void giveMajorDeity(Deity deity, boolean firstTime) {
-        setMajorDeity(deity);
-        if (firstTime) {
-            setAlliance(deity.getDefaultAlliance());
-            setMaxHealth(25.0);
-            setAscensions(1);
-        }
-        setDevotion(deity, 20.0);
+    public void giveFirstAspect(Deity hero, Aspect aspect) {
+        giveAspect(aspect);
+        setFaction(hero.getFaction());
+        setMaxHealth(25.0);
+        setLevel(1);
+        setExperience(aspect, 20.0);
         calculateAscensions();
     }
 
-    public void giveDeity(Deity deity) {
-        contractedDeities.add(deity.name());
-        setDevotion(deity, 20.0);
+    public void giveAspect(Aspect aspect) {
+        aspects.add(aspect.name());
+        setExperience(aspect, 20.0);
     }
 
-    public boolean canClaim(Deity deity) {
-        if (acceptedAlliance.equals(IDeity.Alliance.NEUTRAL)) {
-            return !hasDeity(deity) && IDeity.Importance.MAJOR.equals(deity.getImportance());
+    public boolean canClaim(Aspect aspect) {
+        if (faction.equals(Faction.NEUTRAL)) {
+            return !hasAspect(aspect);
         }
         if (Setting.NO_ALLIANCE_DEITY_MODE.get()) {
-            return costForNextDeity() <= ascensions && !hasDeity(deity);
+            return costForNextDeity() <= level && !hasAspect(aspect);
         }
-        return costForNextDeity() <= ascensions && !hasDeity(deity) && deity.getDefaultAlliance().equals(acceptedAlliance);
+
+        // TODO Decide how to check if they can claim an aspect.
+        return costForNextDeity() <= level && !hasAspect(aspect);
     }
 
     void calculateAscensions() {
         Player player = getOfflinePlayer().getPlayer();
-        if (getAscensions() >= (int) Setting.ASCENSION_CAP.get()) return;
-        while (getTotalDevotion() >= (int) Math.ceil(500 * Math.pow(getAscensions() + 1, 2.02)) && getAscensions() < (int) Setting.ASCENSION_CAP.get()) {
+        if (getLevel() >= (int) Setting.ASCENSION_CAP.get()) return;
+        while (getTotalExperience() >= (int) Math.ceil(500 * Math.pow(getLevel() + 1, 2.02)) && getLevel() < (int) Setting.ASCENSION_CAP.get()) {
             setMaxHealth(getMaxHealth() + 10.0);
             player.setMaxHealth(getMaxHealth());
             player.setHealthScale(20.0);
             player.setHealthScaled(true);
             player.setHealth(getMaxHealth());
 
-            setAscensions(getAscensions() + 1);
+            setLevel(getLevel() + 1);
 
-            player.sendMessage(ChatColor.AQUA + "Congratulations! Your Ascensions increased to " + getAscensions() + ".");
+            player.sendMessage(ChatColor.AQUA + "Congratulations! Your Ascensions increased to " + getLevel() + ".");
             player.sendMessage(ChatColor.YELLOW + "Your maximum HP has increased to " + getMaxHealth() + ".");
         }
         DGGame.PLAYER_R.register(this);
@@ -464,7 +449,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
     public int costForNextDeity() {
         if (Setting.NO_COST_DEITY_MODE.get()) return 0;
-        switch (contractedDeities.size() + 1) {
+        switch (aspects.size() + 1) {
             case 1:
                 return 2;
             case 2:

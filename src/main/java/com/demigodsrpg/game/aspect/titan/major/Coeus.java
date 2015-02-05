@@ -1,12 +1,12 @@
-package com.demigodsrpg.game.deity.titan.major;
+package com.demigodsrpg.game.aspect.titan.major;
 
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.aspect.IAspect;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.material.MaterialData;
 
-public class Coeus implements IDeity {
+public class Coeus implements IAspect {
     @Override
     public String getDeityName() {
         return "Coeus";
@@ -38,17 +38,17 @@ public class Coeus implements IDeity {
     }
 
     @Override
-    public IDeity.Importance getImportance() {
-        return Importance.MAJOR;
+    public Strength getImportance() {
+        return Strength.MAJOR;
     }
 
     @Override
-    public IDeity.Alliance getDefaultAlliance() {
+    public IAspect.Alliance getDefaultAlliance() {
         return Alliance.TITAN;
     }
 
     @Override
-    public IDeity.Pantheon getPantheon() {
+    public IAspect.Pantheon getPantheon() {
         return Pantheon.TITAN;
     }
 

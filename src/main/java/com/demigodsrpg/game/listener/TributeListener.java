@@ -2,8 +2,7 @@ package com.demigodsrpg.game.listener;
 
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.Setting;
-import com.demigodsrpg.game.deity.Deity;
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.model.ShrineModel;
 import com.demigodsrpg.game.util.ZoneUtil;
@@ -43,7 +42,7 @@ public class TributeListener implements Listener {
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(event.getPlayer());
 
         // Return if the player is mortal
-        if (IDeity.Pantheon.MORTAL.equals(model.getMajorDeity().getPantheon())) return;
+        if (!model.isDemigod()) return;
 
         // Define the shrine
         ShrineModel shrine = DGGame.SHRINE_R.getShrine(location);
@@ -51,9 +50,9 @@ public class TributeListener implements Listener {
             // Cancel the interaction
             event.setCancelled(true);
 
-            Deity deity = shrine.getDeity();
-            if (shrine.getOwnerMojangId() != null && !Deity.hasDeity(event.getPlayer(), deity)) {
-                event.getPlayer().sendMessage(ChatColor.YELLOW + "You must be allied with " + deity.getColor() + deity.getDeityName() + ChatColor.YELLOW + " to tribute here.");
+            Aspect aspect = shrine.getAspect();
+            if (shrine.getOwnerMojangId() != null && !Aspect.hasDeity(event.getPlayer(), aspect)) {
+                event.getPlayer().sendMessage(ChatColor.YELLOW + "You must be allied with " + aspect.getColor() + aspect.getName() + ChatColor.YELLOW + " to tribute here.");
                 return;
             }
             tribute(event.getPlayer(), shrine);
@@ -70,7 +69,7 @@ public class TributeListener implements Listener {
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
 
         // Make sure they are immortal
-        if (IDeity.Pantheon.MORTAL.equals(model.getMajorDeity().getPantheon())) return;
+        if (!model.isDemigod()) return;
 
         // Get the shrine
         ShrineModel save = DGGame.SHRINE_R.getShrine(player.getTargetBlock(null, 10).getLocation());
@@ -96,11 +95,11 @@ public class TributeListener implements Listener {
 
         // Get the current favor for comparison
         double favorBefore = model.getFavor();
-        double devotionBefore = model.getDevotion(save.getDeity());
+        double devotionBefore = model.getExperience(save.getAspect());
 
         // Update the character's favor
         model.setFavor(favorBefore + tributeValue);
-        model.setDevotion(save.getDeity(), devotionBefore + tributeValue);
+        model.setExperience(save.getAspect(), devotionBefore + tributeValue);
 
         DGGame.PLAYER_R.register(model);
 
@@ -115,7 +114,7 @@ public class TributeListener implements Listener {
 
                 // Message them
                 if (shrineOwnerPlayer.isOnline()) {
-                    ((Player) shrineOwnerPlayer).sendMessage(save.getDeity().getColor() + "Another " + save.getDeity().getNomen() + " has recently paid tribute at a shrine you own.");
+                    // FIXME ((Player) shrineOwnerPlayer).sendMessage(save.getAspect().getColor() + "Another " + save.getAspect().getNomen() + " has recently paid tribute at a shrine you own.");
                 }
 
                 if (model.getFavor() > favorBefore && !model.getMojangId().equals(shrineOwner.getMojangId())) {
@@ -127,7 +126,7 @@ public class TributeListener implements Listener {
 
                     // Message them
                     if (shrineOwnerPlayer.isOnline()) {
-                        ((Player) shrineOwnerPlayer).sendMessage(save.getDeity().getColor() + "Another " + save.getDeity().getNomen() + " has recently paid tribute at a shrine you own.");
+                        // FIXME ((Player) shrineOwnerPlayer).sendMessage(save.getAspect().getColor() + "Another " + save.getAspect().getNomen() + " has recently paid tribute at a shrine you own.");
                         if (shrineOwner.getFavor() > ownerFavorBefore)
                             ((Player) shrineOwnerPlayer).sendMessage(ChatColor.YELLOW + "Your favor has increased to " + shrineOwner.getFavor() + "!");
                     }
@@ -140,17 +139,17 @@ public class TributeListener implements Listener {
         // Handle messaging and Shrine owner updating
         if (tributeValue < 1) {
             // They aren't good enough, let them know!
-            player.sendMessage(ChatColor.RED + "Your tributes were insufficient for " + save.getDeity().getColor() + save.getDeity().getDeityName() + "'s" + ChatColor.RED + " blessings.");
+            player.sendMessage(ChatColor.RED + "Your tributes were insufficient for " + save.getAspect().getColor() + save.getAspect().getName() + "'s" + ChatColor.RED + " blessings.");
         } else {
-            player.sendMessage(save.getDeity().getColor() + save.getDeity().getDeityName() + " is pleased with your tribute.");
+            player.sendMessage(save.getAspect().getColor() + save.getAspect().getName() + " is pleased with your tribute.");
         }
         if (model.getFavor() < (int) Setting.FAVOR_CAP.get()) {
             if (model.getFavor() > favorBefore)
                 player.sendMessage(ChatColor.YELLOW + "You have been blessed with " + ChatColor.ITALIC + (model.getFavor() - favorBefore) + ChatColor.YELLOW + " favor.");
         } else {
-            if (model.getDevotion(save.getDeity()) > devotionBefore) {
+            if (model.getExperience(save.getAspect()) > devotionBefore) {
                 // Message the tributer
-                player.sendMessage(save.getDeity().getColor() + "Your devotion to " + save.getDeity().getDeityName() + " has increased by " + ChatColor.ITALIC + (model.getDevotion(save.getDeity()) - devotionBefore) + "!");
+                player.sendMessage(save.getAspect().getColor() + "Your devotion to " + save.getAspect().getName() + " has increased by " + ChatColor.ITALIC + (model.getExperience(save.getAspect()) - devotionBefore) + "!");
             }
         }
 
@@ -159,10 +158,10 @@ public class TributeListener implements Listener {
     }
 
     private static void tribute(Player player, ShrineModel save) {
-        Deity shrineDeity = save.getDeity();
+        Aspect shrineAspect = save.getAspect();
 
         // Open the tribute inventory
-        Inventory ii = Bukkit.getServer().createInventory(player, 27, "Tribute to " + shrineDeity.getColor() + shrineDeity.getDeityName() + ChatColor.RESET + ".");
+        Inventory ii = Bukkit.getServer().createInventory(player, 27, "Tribute to " + shrineAspect.getColor() + shrineAspect.getName() + ChatColor.RESET + ".");
         player.openInventory(ii);
     }
 }

@@ -1,10 +1,10 @@
-package com.demigodsrpg.game.deity.god.major;
+package com.demigodsrpg.game.aspect.god.major;
 
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityResult;
-import com.demigodsrpg.game.deity.Deity;
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.aspect.IAspect;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.util.TargetingUtil;
 import org.bukkit.*;
@@ -18,7 +18,7 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public class Zeus implements IDeity {
+public class Zeus implements IAspect {
     @Override
     public String getDeityName() {
         return "Zeus";
@@ -50,8 +50,8 @@ public class Zeus implements IDeity {
     }
 
     @Override
-    public Importance getImportance() {
-        return Importance.MAJOR;
+    public Strength getImportance() {
+        return Strength.MAJOR;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class Zeus implements IDeity {
                 if (!DGGame.BATTLE_R.canTarget(entity)) continue;
                 LivingEntity livingEntity = (LivingEntity) entity;
                 if (livingEntity.equals(player)) continue;
-                double damage = 10 * model.getAscensions();
+                double damage = 10 * model.getLevel();
                 if ((toHit.getBlock().getType().equals(Material.WATER) || toHit.getBlock().getType().equals(Material.STATIONARY_WATER)) && livingEntity.getLocation().distance(toHit) < 8) {
                     damage += 4;
                     livingEntity.damage(damage);
@@ -123,7 +123,7 @@ public class Zeus implements IDeity {
         Player player = event.getPlayer();
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
 
-        double devotion = model.getDevotion(Deity.ZEUS);
+        double devotion = model.getExperience(Aspect.ZEUS);
         double multiply = 0.1753 * Math.pow(devotion, 0.322917);
 
         LivingEntity hit = TargetingUtil.autoTarget(player);
@@ -150,8 +150,8 @@ public class Zeus implements IDeity {
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(event.getPlayer());
 
         // Define variables
-        final int ultimateSkillLevel = model.getAscensions();
-        final int damage = 10 * model.getAscensions();
+        final int ultimateSkillLevel = model.getLevel();
+        final int damage = 10 * model.getLevel();
         final int radius = (int) Math.log10(10 * ultimateSkillLevel) * 25;
 
         // Make it stormy for the caster
@@ -163,7 +163,7 @@ public class Zeus implements IDeity {
             if (!(entity instanceof LivingEntity)) continue;
             if (entity instanceof Player) {
                 PlayerModel opponent = DGGame.PLAYER_R.fromPlayer((Player) entity);
-                if (opponent != null && model.getAlliance().equals(opponent.getAlliance())) continue;
+                if (opponent != null && model.getFaction().equals(opponent.getFaction())) continue;
             }
             if (DGGame.BATTLE_R.canParticipate(entity) && !DGGame.BATTLE_R.canTarget(entity)) continue;
 

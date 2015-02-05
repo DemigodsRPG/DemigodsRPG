@@ -1,6 +1,6 @@
 package com.demigodsrpg.game.territory;
 
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.model.AbstractPersistentModel;
 import com.demigodsrpg.game.util.JsonSection;
 import com.demigodsrpg.game.util.LocationUtil;
@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Map;
 
 public class Territory extends AbstractPersistentModel<String> {
-    private final IDeity.Alliance alliance;
+    private final Faction alliance;
     private final Priority priority;
     private final List<Location> corners;
     private final Polygon shape;
 
-    private Territory(IDeity.Alliance alliance, Priority priority, java.util.List<Location> corners) {
+    private Territory(Faction alliance, Priority priority, java.util.List<Location> corners) {
         this.alliance = alliance;
         this.priority = priority;
         int[] x = new int[corners.size()];
@@ -33,7 +33,7 @@ public class Territory extends AbstractPersistentModel<String> {
         shape = new Polygon(x, z, corners.size());
     }
 
-    public Territory(IDeity.Alliance alliance, final JsonSection conf) {
+    public Territory(Faction alliance, final JsonSection conf) {
         this(alliance, Priority.valueOf(conf.getString("priority")), new ArrayList<Location>() {
             {
                 for (String locString : conf.getStringList("locations")) {
@@ -47,7 +47,7 @@ public class Territory extends AbstractPersistentModel<String> {
         return shape.contains(location.getX(), location.getZ());
     }
 
-    IDeity.Alliance getAlliance() {
+    Faction getAlliance() {
         return alliance;
     }
 
@@ -73,7 +73,7 @@ public class Territory extends AbstractPersistentModel<String> {
 
     @Override
     public String getPersistentId() {
-        return getAlliance().name();
+        return getAlliance().getName();
     }
 
     public enum Priority {

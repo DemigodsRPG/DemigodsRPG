@@ -1,8 +1,8 @@
-package com.demigodsrpg.game.deity.titan;
+package com.demigodsrpg.game.aspect.titan;
 
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityResult;
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.aspect.IAspect;
 import com.demigodsrpg.game.util.TargetingUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
-public class Prometheus implements IDeity {
+public class Prometheus implements IAspect {
     @Override
     public String getDeityName() {
         return "Prometheus";
@@ -48,8 +48,8 @@ public class Prometheus implements IDeity {
     }
 
     @Override
-    public Importance getImportance() {
-        return Importance.MINOR;
+    public Strength getImportance() {
+        return Strength.MINOR;
     }
 
     @Override

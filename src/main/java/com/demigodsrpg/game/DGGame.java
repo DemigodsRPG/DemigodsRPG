@@ -93,10 +93,10 @@ public class DGGame extends JavaPlugin {
         manager.registerEvents(ABILITY_R, this);
 
         // Register commands
-        getCommand("alliance").setExecutor(new AllianceCommand());
+        getCommand("alliance").setExecutor(new FactionCommand());
         getCommand("binds").setExecutor(new BindsCommand());
         getCommand("check").setExecutor(new CheckCommand());
-        getCommand("deity").setExecutor(new DeityCommand());
+        getCommand("deity").setExecutor(new AspectCommand());
         getCommand("forsake").setExecutor(new ForsakeCommand());
         getCommand("shrine").setExecutor(new ShrineCommand());
         getCommand("values").setExecutor(new ValuesCommand());

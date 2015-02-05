@@ -1,28 +1,28 @@
 package com.demigodsrpg.game.ability;
 
-import com.demigodsrpg.game.deity.Deity;
+import com.demigodsrpg.game.aspect.Aspect;
 
 import java.lang.reflect.Method;
 
 public class AbilityMetaData {
     // -- PRIVATE FIELDS -- //
 
-    private final String deity;
+    private final String aspect;
     private final Method method;
     private final Ability ability;
 
     // -- CONSTRUCTOR -- //
 
-    public AbilityMetaData(Deity deity, Method method, Ability ability) {
-        this.deity = deity.name();
+    public AbilityMetaData(Aspect aspect, Method method, Ability ability) {
+        this.aspect = aspect.name();
         this.method = method;
         this.ability = ability;
     }
 
     // -- GETTERS -- //
 
-    public Deity getDeity() {
-        return Deity.valueOf(deity);
+    public Aspect getAspect() {
+        return Aspect.valueOf(aspect);
     }
 
     public String getName() {

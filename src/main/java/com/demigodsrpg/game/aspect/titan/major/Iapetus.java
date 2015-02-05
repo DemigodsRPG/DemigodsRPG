@@ -1,9 +1,9 @@
-package com.demigodsrpg.game.deity.titan.major;
+package com.demigodsrpg.game.aspect.titan.major;
 
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityResult;
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.aspect.IAspect;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.ChatColor;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Iapetus implements IDeity {
+public class Iapetus implements IAspect {
     @Override
     public String getDeityName() {
         return "Iapetus";
@@ -51,17 +51,17 @@ public class Iapetus implements IDeity {
     }
 
     @Override
-    public IDeity.Importance getImportance() {
-        return Importance.MAJOR;
+    public Strength getImportance() {
+        return Strength.MAJOR;
     }
 
     @Override
-    public IDeity.Alliance getDefaultAlliance() {
+    public IAspect.Alliance getDefaultAlliance() {
         return Alliance.TITAN;
     }
 
     @Override
-    public IDeity.Pantheon getPantheon() {
+    public IAspect.Pantheon getPantheon() {
         return Pantheon.TITAN;
     }
 
@@ -78,7 +78,7 @@ public class Iapetus implements IDeity {
         for (LivingEntity e : player.getWorld().getLivingEntities()) {
             if (e.getLocation().toVector().isInSphere(player.getLocation().toVector(), 35) && !targets.contains(e)) // jumps to the nearest entity
             {
-                if (e instanceof Player && DGGame.PLAYER_R.fromPlayer((Player) e).getAlliance().equals(model.getAlliance()))
+                if (e instanceof Player && DGGame.PLAYER_R.fromPlayer((Player) e).getFaction().equals(model.getFaction()))
                     continue;
                 targets.add(e);
             }

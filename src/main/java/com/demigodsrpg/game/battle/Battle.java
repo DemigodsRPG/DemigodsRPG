@@ -1,6 +1,6 @@
 package com.demigodsrpg.game.battle;
 
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.deity.Faction;
 import org.bukkit.Location;
 
 import java.util.List;
@@ -16,8 +16,8 @@ class Battle {
     private long startTimeMillis;
     private long endTimeMillis;
 
-    private IDeity.Alliance won;
-    private IDeity.Alliance lost;
+    private Faction won;
+    private Faction lost;
 
     // -- CONSTRUCTORS -- //
 
@@ -37,7 +37,7 @@ class Battle {
 
     public void hit(Participant attacking, Participant hit) {
         putIfAbsent(attacking, hit);
-        if (!attacking.getAlliance().equals(hit.getAlliance())) {
+        if (!attacking.getFaction().equals(hit.getFaction())) {
             involved.get(attacking).hits++;
         }
     }
@@ -50,11 +50,11 @@ class Battle {
     // -- PRIVATE HELPER METHODS -- //
 
     private boolean okayToHit(Participant attacking, Participant defending) {
-        return IDeity.Alliance.NEUTRAL.equals(attacking.getAlliance()) ||
-                IDeity.Alliance.NEUTRAL.equals(defending.getAlliance()) ||
-                IDeity.Alliance.EXCOMMUNICATED.equals(attacking.getAlliance()) ||
-                IDeity.Alliance.EXCOMMUNICATED.equals(defending.getAlliance()) ||
-                !attacking.getAlliance().equals(defending.getAlliance());
+        return Faction.NEUTRAL.equals(attacking.getFaction()) ||
+                Faction.NEUTRAL.equals(defending.getFaction()) ||
+                Faction.EXCOMMUNICATED.equals(attacking.getFaction()) ||
+                Faction.EXCOMMUNICATED.equals(defending.getFaction()) ||
+                !attacking.getFaction().equals(defending.getFaction());
     }
 
     private void putIfAbsent(Participant... toPut) {

@@ -1,6 +1,6 @@
 package com.demigodsrpg.game.registry;
 
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.model.SpawnModel;
 import com.demigodsrpg.game.util.JsonSection;
 import com.google.common.base.Predicate;
@@ -11,7 +11,7 @@ import org.bukkit.Location;
 public class SpawnRegistry extends AbstractRegistry<SpawnModel> {
     private static final String FILE_NAME = "spawns.dgc";
 
-    public Location getSpawn(final IDeity.Alliance alliance) {
+    public Location getSpawn(final Faction alliance) {
         SpawnModel point = Iterables.find(getRegistered(), new Predicate<SpawnModel>() {
             @Override
             public boolean apply(SpawnModel spawnPoint) {
@@ -26,7 +26,8 @@ public class SpawnRegistry extends AbstractRegistry<SpawnModel> {
 
     @Override
     public SpawnModel valueFromData(String stringKey, JsonSection data) {
-        return new SpawnModel(IDeity.Alliance.valueOf(stringKey), data);
+        // FIXME return better faction
+        return new SpawnModel(Faction.NEUTRAL, data);
     }
 
     @Override

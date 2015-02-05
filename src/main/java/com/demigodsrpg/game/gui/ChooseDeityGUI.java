@@ -1,8 +1,9 @@
 package com.demigodsrpg.game.gui;
 
 import com.demigodsrpg.game.DGGame;
-import com.demigodsrpg.game.deity.Deity;
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.aspect.IAspect;
+import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -47,34 +48,34 @@ public class ChooseDeityGUI implements IInventoryGUI {
         INVENTORY_LIST = new ArrayList<>();
 
         // Return if can't claim a new deity
-        if (!model.getAlliance().equals(IDeity.Alliance.NEUTRAL) && model.costForNextDeity() > model.getAscensions()) {
+        if (!model.getFaction().equals(Faction.NEUTRAL) && model.costForNextDeity() > model.getLevel()) {
             return;
         }
 
         // Fill the inventory list
         List<ItemStack> items = new ArrayList<>();
         int count = 0, icount = 0;
-        Iterator<Deity> deities = Collections2.filter(Arrays.asList(Deity.values()), new Predicate<Deity>() {
+        Iterator<Aspect> deities = Collections2.filter(Arrays.asList(Aspect.values()), new Predicate<Aspect>() {
             @Override
-            public boolean apply(Deity deity) {
+            public boolean apply(Aspect deity) {
                 return model.canClaim(deity);
             }
         }).iterator();
 
         while (deities.hasNext()) {
-            Deity deity = deities.next();
-            final String name = deity.name();
-            final ChatColor color = deity.getColor();
-            final String alliance = deity.getDefaultAlliance().name();
+            Aspect aspect = deities.next();
+            final String name = aspect.name();
+            final ChatColor color = aspect.getColor();
+            // FIXME final String alliance = aspect.getDefaultAlliance().name();
 
             // Ignore deities that aren't important
-            if (IDeity.Importance.NONE.equals(deity.getImportance())) continue;
+            if (IAspect.Strength.NONE.equals(aspect.getStrength())) continue;
 
-            items.add(count, new ItemStack(deity.getClaimMaterial().getItemType(), 1, (short) 0, deity.getClaimMaterial().getData()) {
+            items.add(count, new ItemStack(aspect.getClaimMaterial().getItemType(), 1, (short) 0, aspect.getClaimMaterial().getData()) {
                 {
                     ItemMeta meta = getItemMeta();
                     meta.setDisplayName(color + name);
-                    List<String> lore = Lists.newArrayList(color + alliance);
+                    List<String> lore = Lists.newArrayList(/* FIXME color + alliance */);
                     meta.setLore(lore);
                     setItemMeta(meta);
                 }

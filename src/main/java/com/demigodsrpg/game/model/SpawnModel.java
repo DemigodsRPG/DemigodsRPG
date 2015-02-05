@@ -1,6 +1,6 @@
 package com.demigodsrpg.game.model;
 
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.util.JsonSection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -10,15 +10,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SpawnModel extends AbstractPersistentModel<String> {
-    private final IDeity.Alliance alliance;
+    private final Faction alliance;
     private Location location;
 
-    public SpawnModel(IDeity.Alliance alliance, Location location) {
+    public SpawnModel(Faction alliance, Location location) {
         this.alliance = alliance;
         this.location = location;
     }
 
-    public SpawnModel(IDeity.Alliance alliance, JsonSection conf) {
+    public SpawnModel(Faction alliance, JsonSection conf) {
         this.alliance = alliance;
 
         World world = Bukkit.getWorld(conf.getString("world_name"));
@@ -31,7 +31,7 @@ public class SpawnModel extends AbstractPersistentModel<String> {
             location = new Location(world, x, y, z, yaw, pitch);
         }
 
-        throw new NullPointerException("World not found for the " + alliance.name() + " spawn location.");
+        throw new NullPointerException("World not found for the " + alliance.getName() + " spawn location.");
     }
 
     @Override
@@ -46,7 +46,7 @@ public class SpawnModel extends AbstractPersistentModel<String> {
         return map;
     }
 
-    public IDeity.Alliance getAlliance() {
+    public Faction getAlliance() {
         return alliance;
     }
 
@@ -56,6 +56,6 @@ public class SpawnModel extends AbstractPersistentModel<String> {
 
     @Override
     public String getPersistentId() {
-        return getAlliance().name();
+        return getAlliance().getName();
     }
 }

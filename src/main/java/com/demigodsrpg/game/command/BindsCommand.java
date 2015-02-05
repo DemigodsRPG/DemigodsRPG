@@ -29,7 +29,7 @@ public class BindsCommand extends BaseCommand {
                 AbilityMetaData ability = DGGame.ABILITY_R.fromCommand(bind.getKey());
                 if (ability != null) {
                     String materialName = bind.getValue();
-                    sender.sendMessage(" - " + ability.getDeity().getColor() + ability.getName() +
+                    sender.sendMessage(" - " + ability.getAspect().getColor() + ability.getName() +
                             ChatColor.WHITE + ", bound to " + StringUtil2.beautify(materialName) + ".");
                 }
             }

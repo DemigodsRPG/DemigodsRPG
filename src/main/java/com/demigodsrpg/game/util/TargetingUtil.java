@@ -55,7 +55,7 @@ public class TargetingUtil {
                     if (entity instanceof LivingEntity && entity.getLocation().distance(block.getLocation()) <= correction) {
                         if (entity instanceof Player) {
                             PlayerModel target = DGGame.PLAYER_R.fromPlayer((Player) entity);
-                            if (looking.getAlliance().equals(target.getAlliance()) || ((Player) entity).getGameMode().equals(GameMode.CREATIVE))
+                            if (looking.getFaction().equals(target.getFaction()) || ((Player) entity).getGameMode().equals(GameMode.CREATIVE))
                                 return false;
                         }
                         return true;

@@ -1,8 +1,9 @@
 package com.demigodsrpg.game.listener;
 
+// FIXME Shrines and tributing need to be completely redone to reflect that each player only has 1 god and 1 hero.
 
 import com.demigodsrpg.game.DGGame;
-import com.demigodsrpg.game.deity.Deity;
+import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.model.ShrineModel;
 import com.demigodsrpg.game.shrine.Shrine;
@@ -34,17 +35,17 @@ public class ShrineListener implements Listener {
         Sign s = (Sign) e.getClickedBlock().getState();
         if (!s.getLines()[0].trim().equalsIgnoreCase("shrine")) return;
         if (!s.getLines()[1].trim().equalsIgnoreCase("dedicate")) return;
-        Deity deity = null;
+        Aspect aspect = null;
         Player p = e.getPlayer();
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(p);
-        for (String dN : model.getAllDeities()) {
-            Deity d = Deity.valueOf(dN);
-            if (s.getLines()[2].trim().equalsIgnoreCase(d.getDeityName())) {
-                deity = d;
+        for (String dN : model.getAspects()) {
+            Aspect d = Aspect.valueOf(dN);
+            if (s.getLines()[2].trim().equalsIgnoreCase(d.getName())) {
+                aspect = d;
                 break;
             }
         }
-        if (deity == null) {
+        if (aspect == null) {
             p.sendMessage(ChatColor.YELLOW + "There is no deity by that name.");
             return;
         }
@@ -61,8 +62,8 @@ public class ShrineListener implements Listener {
                 p.sendMessage(ChatColor.YELLOW + "The shrine's name cannot contain a space.");
                 return;
             }
-            for (Deity d : Deity.values()) {
-                if (s.getLines()[3].trim().equalsIgnoreCase(d.getDeityName())) {
+            for (Aspect d : Aspect.values()) {
+                if (s.getLines()[3].trim().equalsIgnoreCase(d.getName())) {
                     p.sendMessage(ChatColor.YELLOW + "The shrine's name cannot be the same as a deity.");
                     return;
                 }
@@ -88,11 +89,11 @@ public class ShrineListener implements Listener {
         if (e.getClickedBlock().getLocation().getWorld().getEnvironment().equals(World.Environment.NETHER)) {
             type = Shrine.NETHER;
         }
-        ShrineModel shrine = new ShrineModel(shrinename, p, deity, type, e.getClickedBlock().getLocation());
+        ShrineModel shrine = new ShrineModel(shrinename, p, aspect, type, e.getClickedBlock().getLocation());
         DGGame.SHRINE_R.register(shrine);
         shrine.getShrineType().generate(shrine.getPoint());
         e.getClickedBlock().getWorld().strikeLightningEffect(e.getClickedBlock().getLocation());
-        p.sendMessage("You have dedicated this shrine to " + deity.getColor() + deity.getDeityName() + ChatColor.WHITE + ".");
+        p.sendMessage("You have dedicated this shrine to " + aspect.getColor() + aspect.getName() + ChatColor.WHITE + ".");
         p.sendMessage(ChatColor.YELLOW + "Warp here at any time with /shrine.");
     }
 

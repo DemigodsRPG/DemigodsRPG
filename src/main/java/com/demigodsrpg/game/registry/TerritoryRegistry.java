@@ -1,6 +1,6 @@
 package com.demigodsrpg.game.registry;
 
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.territory.Territory;
 import com.demigodsrpg.game.util.JsonSection;
 import org.bukkit.World;
@@ -20,7 +20,7 @@ public class TerritoryRegistry extends AbstractRegistry<Territory> {
 
     @Override
     public Territory valueFromData(String stringKey, JsonSection data) {
-        return new Territory(IDeity.Alliance.valueOf(stringKey), data);
+        return new Territory(Faction.NEUTRAL, data);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.demigodsrpg.game.listener;
 
 import com.demigodsrpg.game.DGGame;
-import com.demigodsrpg.game.deity.Deity;
+import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.gui.ChooseDeityGUI;
 import com.demigodsrpg.game.gui.ShrineGUI;
 import com.demigodsrpg.game.gui.SlotFunction;
@@ -72,8 +72,8 @@ public class InventoryListener implements Listener {
                             break;
                         case RUN_COMMAND:
                             String deityName = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
-                            Deity deity = Deity.valueOf(deityName);
-                            if (deity != null) {
+                            Aspect aspect = Aspect.valueOf(deityName);
+                            if (aspect != null) {
                                 player.closeInventory();
                                 player.performCommand("deity claim " + deityName);
                             } else {

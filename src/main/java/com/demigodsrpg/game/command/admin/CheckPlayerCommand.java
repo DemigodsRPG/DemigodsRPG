@@ -2,9 +2,9 @@ package com.demigodsrpg.game.command.admin;
 
 import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.game.DGGame;
+import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.command.type.AdminPlayerCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
-import com.demigodsrpg.game.deity.Deity;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.util.ColorUtil;
 import org.bukkit.ChatColor;
@@ -36,21 +36,21 @@ public class CheckPlayerCommand extends AdminPlayerCommand {
         PlayerModel model = DGGame.PLAYER_R.fromId(p.getUniqueId().toString());
         s.sendMessage(StringUtil2.chatTitle("Player Stats"));
         s.sendMessage(p.getName() + " is a " + model.getMajorDeity().getColor() + model.getMajorDeity().getNomen());
-        s.sendMessage(p.getName() + " is allied with the " + StringUtil2.beautify(model.getAlliance().name()) + " alliance.");
+        s.sendMessage(p.getName() + " is allied with the " + StringUtil2.beautify(model.getFaction().name()) + " alliance.");
         if (p.isOnline())
             s.sendMessage(p.getName() + " has " + ColorUtil.getColor(p.getPlayer().getHealth(), p.getPlayer().getMaxHealth()) + ChatColor.ITALIC + p.getPlayer().getHealth() + " / " + p.getPlayer().getMaxHealth() + ChatColor.YELLOW + " health.");
-        if (!model.getContractedDeities().isEmpty()) {
+        if (!model.getAspects().isEmpty()) {
             StringBuilder builder = new StringBuilder();
-            for (String deityName : model.getContractedDeities()) {
-                Deity deity = Deity.valueOf(deityName);
-                builder.append(deity.getColor()).append(deity.getDeityName()).append(ChatColor.RESET).append(", ");
+            for (String deityName : model.getAspects()) {
+                Aspect aspect = Aspect.valueOf(deityName);
+                builder.append(aspect.getColor()).append(aspect.getDeityName()).append(ChatColor.RESET).append(", ");
             }
             String minorDeities = builder.toString();
             minorDeities = minorDeities.substring(0, minorDeities.length() - 4);
             s.sendMessage(p.getName() + " is also allied with: " + minorDeities);
         }
         s.sendMessage("Favor: " + model.getFavor());
-        s.sendMessage("Total Devotion: " + model.getTotalDevotion());
-        s.sendMessage("Number of ascensions: " + model.getAscensions());
+        s.sendMessage("Total Devotion: " + model.getTotalExperience());
+        s.sendMessage("Number of ascensions: " + model.getLevel());
     }
 }

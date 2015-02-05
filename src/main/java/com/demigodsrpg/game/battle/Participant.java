@@ -1,6 +1,6 @@
 package com.demigodsrpg.game.battle;
 
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.deity.Faction;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
@@ -11,7 +11,7 @@ public interface Participant {
 
     Location getLocation();
 
-    IDeity.Alliance getAlliance();
+    Faction getFaction();
 
     boolean reward(BattleMetaData data);
 }

@@ -1,7 +1,7 @@
 package com.demigodsrpg.game.registry;
 
-import com.demigodsrpg.game.deity.Deity;
-import com.demigodsrpg.game.deity.IDeity;
+import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.util.JsonSection;
 import com.google.common.base.Predicate;
@@ -44,22 +44,22 @@ public class PlayerRegistry extends AbstractRegistry<PlayerModel> {
         return offlinePlayers;
     }
 
-    public Set<PlayerModel> getOnlineInAlliance(IDeity.Alliance alliance) {
+    public Set<PlayerModel> getOnlineInAlliance(Faction alliance) {
         Set<PlayerModel> players = new HashSet<>();
         for (Player player : Bukkit.getOnlinePlayers()) {
             PlayerModel model = fromPlayer(player);
-            if (model.getAlliance().equals(alliance)) {
+            if (model.getFaction().equals(alliance)) {
                 players.add(model);
             }
         }
         return players;
     }
 
-    public Collection<PlayerModel> fromDeity(final Deity deity) {
+    public Collection<PlayerModel> fromAspect(final Aspect aspect) {
         return Collections2.filter(getRegistered(), new Predicate<PlayerModel>() {
             @Override
             public boolean apply(PlayerModel model) {
-                return model.getMajorDeity().equals(deity) || model.getContractedDeities().contains(deity.name());
+                return model.getAspects().contains(aspect.name());
             }
         });
     }

@@ -15,8 +15,8 @@ commands:
   check:
     usage: /check
     aliases: [c]
-  deity:
-    usage: /deity [subcommand] [args...]
+  aspect:
+    usage: /aspect [subcommand] [args...]
   demigods:
     usage: /demigods [subject]
     aliases: [d, dg, demigod]
@@ -33,17 +33,17 @@ commands:
     usage: /checkplayer [player]
     permissions: demigods.admin.check
   adddevotion:
-    usage: /adddevotion [player] [deity] [amount]
+    usage: /adddevotion [player] [aspect] [amount]
     permission: demigods.admin.devotion
   removedevotion:
-    usage: /removedevotion [player] [deity] [amount]
+    usage: /removedevotion [player] [aspect] [amount]
     permission: demigods.admin.devotion
   givedeity:
-    usage: /givedeity [player] [deity] [major|minor]
-    permission: demigods.admin.deity
+    usage: /givedeity [player] [aspect] [major|minor]
+    permission: demigods.admin.aspect
   removedeity:
-    usage: /removedeity [player] [deity]
-    permission: demigods.admin.deity
+    usage: /removedeity [player] [aspect]
+    permission: demigods.admin.aspect
   setalliance:
     usage: /setalliance [player] [alliance]
     permission: demigods.admin.alliance
@@ -52,7 +52,7 @@ permisions:
     default: op
   demigods.admin.devotion:
     default: op
-  demigods.admin.deity:
+  demigods.admin.aspect:
     default: op
   demigods.admin.alliance:
     default: op
