@@ -1,13 +1,13 @@
 package com.demigodsrpg.game.aspect.titan;
 
 import com.demigodsrpg.game.ability.Ability;
-import com.demigodsrpg.game.aspect.IAspect;
+import com.demigodsrpg.game.aspect.Aspect;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.material.MaterialData;
 
-public class Oceanus implements IAspect {
+public class Oceanus implements Aspect {
     @Override
     public String getDeityName() {
         return "Oceanus";
@@ -39,17 +39,17 @@ public class Oceanus implements IAspect {
     }
 
     @Override
-    public Strength getImportance() {
-        return Strength.MINOR;
+    public Tier getImportance() {
+        return Tier.MINOR;
     }
 
     @Override
-    public IAspect.Alliance getDefaultAlliance() {
+    public Aspect.Alliance getDefaultAlliance() {
         return Alliance.TITAN;
     }
 
     @Override
-    public IAspect.Pantheon getPantheon() {
+    public Aspect.Pantheon getPantheon() {
         return Pantheon.TITAN;
     }
 

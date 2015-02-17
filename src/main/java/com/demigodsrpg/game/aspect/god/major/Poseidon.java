@@ -3,7 +3,7 @@ package com.demigodsrpg.game.aspect.god.major;
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityResult;
-import com.demigodsrpg.game.aspect.IAspect;
+import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.util.TargetingUtil;
 import org.bukkit.ChatColor;
@@ -16,7 +16,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
 
-public class Poseidon implements IAspect {
+public class Poseidon implements Aspect {
     @Override
     public String getDeityName() {
         return "Poseidon";
@@ -48,8 +48,8 @@ public class Poseidon implements IAspect {
     }
 
     @Override
-    public Strength getImportance() {
-        return Strength.MAJOR;
+    public Tier getImportance() {
+        return Tier.MAJOR;
     }
 
     @Override

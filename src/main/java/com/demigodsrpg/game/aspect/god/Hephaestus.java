@@ -1,7 +1,7 @@
 package com.demigodsrpg.game.aspect.god;
 
 import com.demigodsrpg.game.ability.Ability;
-import com.demigodsrpg.game.aspect.IAspect;
+import com.demigodsrpg.game.aspect.Aspect;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -9,7 +9,7 @@ import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-public class Hephaestus implements IAspect {
+public class Hephaestus implements Aspect {
     @Override
     public String getDeityName() {
         return "Hephaestus";
@@ -41,8 +41,8 @@ public class Hephaestus implements IAspect {
     }
 
     @Override
-    public Strength getImportance() {
-        return Strength.MINOR;
+    public Tier getImportance() {
+        return Tier.MINOR;
     }
 
     @Override

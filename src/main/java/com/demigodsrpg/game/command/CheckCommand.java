@@ -3,6 +3,7 @@ package com.demigodsrpg.game.command;
 import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
 import com.demigodsrpg.game.model.PlayerModel;
@@ -28,7 +29,7 @@ public class CheckCommand extends BaseCommand {
         if (!model.getAspects().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for (String deityName : model.getAspects()) {
-                Aspect aspect = Aspect.valueOf(deityName);
+                Aspect aspect = Aspects.valueOf(deityName);
                 builder.append(aspect.getColor()).append(aspect.getName()).append(ChatColor.RESET).append(", ");
             }
             String minorDeities = builder.toString();

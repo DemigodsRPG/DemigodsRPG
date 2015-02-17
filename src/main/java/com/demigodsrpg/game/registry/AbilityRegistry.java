@@ -6,7 +6,7 @@ import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityMetaData;
 import com.demigodsrpg.game.ability.AbilityResult;
 import com.demigodsrpg.game.aspect.Aspect;
-import com.demigodsrpg.game.aspect.IAspect;
+import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.util.ZoneUtil;
 import com.google.common.base.Supplier;
@@ -59,7 +59,7 @@ public class AbilityRegistry implements Listener {
             try {
                 PlayerModel model = DGGame.PLAYER_R.fromPlayer(event.getPlayer());
                 if (processAbility1(model, ability)) {
-                    Object rawResult = ability.getMethod().invoke(ability.getAspect().getParentObject(), event);
+                    Object rawResult = ability.getMethod().invoke(ability.getAspect(), event);
                     processAbility2(event.getPlayer(), model, ability, rawResult);
                     event.setCancelled(true);
                     return;
@@ -79,7 +79,7 @@ public class AbilityRegistry implements Listener {
                     Player player = (Player) event.getDamager();
                     PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
                     if (processAbility1(model, ability)) {
-                        Object rawResult = ability.getMethod().invoke(ability.getAspect().getParentObject(), event);
+                        Object rawResult = ability.getMethod().invoke(ability.getAspect(), event);
                         processAbility2(player, model, ability, rawResult);
                     }
                 }
@@ -92,11 +92,11 @@ public class AbilityRegistry implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     private void onEvent(FurnaceSmeltEvent event) {
         for (AbilityMetaData ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
-            for (PlayerModel model : DGGame.PLAYER_R.fromDeity(ability.getAspect())) {
+            for (PlayerModel model : DGGame.PLAYER_R.fromAspect(ability.getAspect())) {
                 try {
-                    if (model.getOnline() && model.getLocation().getWorld().equals(event.getBlock().getWorld()) && model.getLocation().distance(event.getBlock().getLocation()) < (int) Math.round(20 * Math.pow(model.getExperience(Aspect.HEPHAESTUS), 0.15))) {
+                    if (model.getOnline() && model.getLocation().getWorld().equals(event.getBlock().getWorld()) && model.getLocation().distance(event.getBlock().getLocation()) < (int) Math.round(20 * Math.pow(model.getExperience(Aspects.HEPHAESTUS), 0.15))) {
                         if (processAbility1(model, ability)) {
-                            Object rawResult = ability.getMethod().invoke(ability.getAspect().getParentObject(), event);
+                            Object rawResult = ability.getMethod().invoke(ability.getAspect(), event);
                             processAbility2(null, model, ability, rawResult);
                             return; // TODO
                         }
@@ -260,7 +260,7 @@ public class AbilityRegistry implements Listener {
     }
 
     public List<AbilityMetaData> getAbilities(Aspect aspect) {
-        Class<? extends IAspect> deityClass = aspect.getParentObjectClass();
+        Class<? extends Aspect> deityClass = aspect.getClass();
         List<AbilityMetaData> abilityMetaDatas = new ArrayList<>();
         for (Method method : deityClass.getMethods()) {
             if (method.isAnnotationPresent(Ability.class)) {
@@ -272,8 +272,8 @@ public class AbilityRegistry implements Listener {
     }
 
     public void registerAbilities() {
-        for (Aspect aspect : Aspect.values()) {
-            Class<? extends IAspect> deityClass = aspect.getParentObjectClass();
+        for (Aspect aspect : Aspects.values()) {
+            Class<? extends Aspect> deityClass = aspect.getClass();
             for (Method method : deityClass.getMethods()) {
                 if (method.isAnnotationPresent(Ability.class)) {
                     Ability ability = method.getAnnotation(Ability.class);
@@ -320,7 +320,7 @@ public class AbilityRegistry implements Listener {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
 
-            if (Aspect.hasDeity(player, Aspect.CRONUS)) {
+            if (Aspects.hasAspect(player, Aspects.CRONUS)) {
                 if (player.getHealth() <= event.getDamage()) {
                     switch (event.getCause()) {
                         case ENTITY_ATTACK:
@@ -336,20 +336,20 @@ public class AbilityRegistry implements Listener {
                 event.setDamage(event.getDamage() / 2);
             }
 
-            if (Aspect.hasDeity(player, Aspect.ZEUS)) {
+            if (Aspects.hasAspect(player, Aspects.LIGHTNING_ASPECT_II)) {
                 if (EntityDamageEvent.DamageCause.FALL.equals(event.getCause())) {
                     event.setCancelled(true);
                 }
             }
 
-            if (Aspect.hasDeity(player, Aspect.POSEIDON)) {
+            if (Aspects.hasAspect(player, Aspects.POSEIDON)) {
                 if (EntityDamageEvent.DamageCause.DROWNING.equals(event.getCause())) {
                     event.setCancelled(true);
                     player.setRemainingAir(player.getMaximumAir());
                 }
             }
 
-            if (Aspect.hasDeity(player, Aspect.PROMETHEUS)) {
+            if (Aspects.hasAspect(player, Aspects.PROMETHEUS)) {
                 if (EntityDamageEvent.DamageCause.FIRE.equals(event.getCause()) || EntityDamageEvent.DamageCause.FIRE_TICK.equals(event.getCause())) {
                     event.setCancelled(true);
                     player.setRemainingAir(player.getMaximumAir());
@@ -369,7 +369,7 @@ public class AbilityRegistry implements Listener {
 
         Player player = event.getPlayer();
 
-        if (Aspect.hasDeity(player, Aspect.POSEIDON) || Aspect.hasDeity(player, Aspect.OCEANUS)) {
+        if (Aspects.hasAspect(player, Aspects.POSEIDON) || Aspects.hasAspect(player, Aspects.OCEANUS)) {
             Material locationMaterial = player.getLocation().getBlock().getType();
             if (player.isSneaking() && (locationMaterial.equals(Material.STATIONARY_WATER) || locationMaterial.equals(Material.WATER))) {
                 Vector victor = (player.getPassenger() != null && player.getLocation().getDirection().getY() > 0 ? player.getLocation().getDirection().clone().setY(0) : player.getLocation().getDirection()).normalize().multiply(1.3D);
@@ -390,7 +390,7 @@ public class AbilityRegistry implements Listener {
         // HADES
         if (entity instanceof LivingEntity) {
             if ((entity instanceof Zombie) || (entity instanceof Skeleton)) {
-                if (!DGGame.PLAYER_R.fromPlayer((Player) event.getTarget()).hasAspect(Aspect.HADES)) return;
+                if (!DGGame.PLAYER_R.fromPlayer((Player) event.getTarget()).hasAspect(Aspects.HADES)) return;
                 event.setCancelled(true);
             }
         }

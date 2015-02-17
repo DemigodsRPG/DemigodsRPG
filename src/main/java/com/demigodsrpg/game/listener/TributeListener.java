@@ -3,6 +3,7 @@ package com.demigodsrpg.game.listener;
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.Setting;
 import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.model.ShrineModel;
 import com.demigodsrpg.game.util.ZoneUtil;
@@ -20,6 +21,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Set;
+
+@SuppressWarnings("unchecked")
 public class TributeListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onTributeInteract(PlayerInteractEvent event) {
@@ -31,7 +35,7 @@ public class TributeListener implements Listener {
         // Return from actions we don't care about
         if (!Action.RIGHT_CLICK_BLOCK.equals(event.getAction())) {
             if (Action.RIGHT_CLICK_AIR.equals(event.getAction())) {
-                location = event.getPlayer().getTargetBlock(null, 10).getLocation();
+                location = event.getPlayer().getTargetBlock((Set) null, 10).getLocation();
             } else {
                 return;
             }
@@ -51,7 +55,7 @@ public class TributeListener implements Listener {
             event.setCancelled(true);
 
             Aspect aspect = shrine.getAspect();
-            if (shrine.getOwnerMojangId() != null && !Aspect.hasDeity(event.getPlayer(), aspect)) {
+            if (shrine.getOwnerMojangId() != null && !Aspects.hasAspect(event.getPlayer(), aspect)) {
                 event.getPlayer().sendMessage(ChatColor.YELLOW + "You must be allied with " + aspect.getColor() + aspect.getName() + ChatColor.YELLOW + " to tribute here.");
                 return;
             }
@@ -72,7 +76,7 @@ public class TributeListener implements Listener {
         if (!model.isDemigod()) return;
 
         // Get the shrine
-        ShrineModel save = DGGame.SHRINE_R.getShrine(player.getTargetBlock(null, 10).getLocation());
+        ShrineModel save = DGGame.SHRINE_R.getShrine(player.getTargetBlock((Set) null, 10).getLocation());
 
         // If it isn't a tribute chest then break the method
         if (!event.getInventory().getName().contains("Tribute to") || save == null)

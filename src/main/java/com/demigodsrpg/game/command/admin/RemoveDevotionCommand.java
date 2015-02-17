@@ -1,7 +1,7 @@
 package com.demigodsrpg.game.command.admin;
 
 import com.demigodsrpg.game.DGGame;
-import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.command.type.AdminPlayerCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
 import com.demigodsrpg.game.model.PlayerModel;
@@ -19,7 +19,7 @@ public class RemoveDevotionCommand extends AdminPlayerCommand {
                 Player p = DGGame.PLAYER_R.fromName(args[0]).getOfflinePlayer().getPlayer();
                 double amount = Double.parseDouble(args[2]);
                 m = DGGame.PLAYER_R.fromPlayer(p);
-                Aspect aspect = Aspect.valueOf(args[1].toUpperCase());
+                Aspects aspect = Aspects.valueOf(args[1].toUpperCase());
                 if (!m.getAllDeities().contains(aspect)) {
                     sender.sendMessage(ChatColor.RED + "The player you are accessing does not have that deity.");
                     return CommandResult.QUIET_ERROR;

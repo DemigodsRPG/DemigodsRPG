@@ -4,6 +4,7 @@ import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.Setting;
 import com.demigodsrpg.game.ability.AbilityMetaData;
 import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.battle.BattleMetaData;
 import com.demigodsrpg.game.battle.Participant;
 import com.demigodsrpg.game.deity.Deity;
@@ -84,7 +85,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         experience = new TIntDoubleHashMap(1);
         for (Map.Entry<String, Object> entry : conf.getSection("experience").getValues().entrySet()) {
             try {
-                experience.put(Aspect.valueOf(entry.getKey()).getId(), Double.valueOf(entry.getValue().toString()));
+                experience.put(Aspects.valueOf(entry.getKey()).getId(), Double.valueOf(entry.getValue().toString()));
             } catch (Exception ignored) {
             }
         }
@@ -205,7 +206,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     double getExperience(String aspectName) {
-        int ordinal = Aspect.valueOf(aspectName).getId();
+        int ordinal = Aspects.valueOf(aspectName).getId();
         if (!experience.containsKey(ordinal)) {
             return 0.0;
         }
@@ -227,7 +228,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     void setExperience(String aspectName, double experience) {
-        int ordinal = Aspect.valueOf(aspectName).getId();
+        int ordinal = Aspects.valueOf(aspectName).getId();
         this.experience.put(ordinal, experience);
         calculateAscensions();
         DGGame.PLAYER_R.register(this);

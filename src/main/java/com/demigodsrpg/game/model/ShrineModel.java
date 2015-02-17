@@ -3,6 +3,7 @@ package com.demigodsrpg.game.model;
 import com.censoredsoftware.library.schematic.Point;
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.shrine.Shrine;
 import com.demigodsrpg.game.shrine.ShrineWorld;
@@ -35,7 +36,7 @@ public class ShrineModel extends AbstractPersistentModel<String> {
     public ShrineModel(String shrineId, JsonSection conf) {
         this.shrineId = shrineId;
         ownerMojangId = conf.getString("owner_id");
-        aspect = Aspect.valueOf(conf.getString("deity"));
+        aspect = Aspects.valueOf(conf.getString("deity"));
         shrine = Shrine.valueOf(conf.getString("type"));
 
         World world = Bukkit.getWorld(conf.getString("world_name"));

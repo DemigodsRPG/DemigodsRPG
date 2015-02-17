@@ -2,9 +2,10 @@ package com.demigodsrpg.game.command.admin;
 
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.aspect.Aspect;
-import com.demigodsrpg.game.aspect.IAspect;
+import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
+import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.model.PlayerModel;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -40,26 +41,20 @@ public class ForsakeCommand extends BaseCommand {
             // Do '/forsake all'
             if ("all".equalsIgnoreCase(args[0])) {
                 // Loop over the player's deities
-                for (String deityName : playerModel.getAllDeities()) {
+                for (String deityName : playerModel.getAspects()) {
                     // Get the deity object
-                    Aspect aspect = Aspect.valueOf(deityName.toUpperCase());
+                    Aspect aspect = Aspects.valueOf(deityName.toUpperCase());
                     if (aspect == null) {
                         sender.sendMessage(ChatColor.RED + deityName + " does not exist, something is wrong with the player data...");
                         return CommandResult.QUIET_ERROR;
                     }
 
-                    // Check if the deity is major or minor
-                    if (playerModel.getMajorDeity().equals(aspect)) {
-                        playerModel.setMajorDeity(Aspect.HUMAN);
-                        sender.sendMessage(ChatColor.YELLOW + "You have forsaken " + aspect.getDeityName());
-                    } else {
-                        playerModel.removeAspect(aspect);
-                        sender.sendMessage(ChatColor.YELLOW + "You have forsaken " + aspect.getDeityName());
-                    }
+                    playerModel.removeAspect(aspect);
+                    sender.sendMessage(ChatColor.YELLOW + "You have forsaken " + aspect.getName());
                 }
 
                 // Set the alliance to neutral
-                playerModel.setFaction(IAspect.Alliance.NEUTRAL);
+                playerModel.setFaction(Faction.NEUTRAL);
                 return CommandResult.SUCCESS;
             } else {
                 // TODO Check for individual deity forsake requests.
@@ -84,23 +79,18 @@ public class ForsakeCommand extends BaseCommand {
                 }
 
                 // Loop over the target's deities
-                for (String deityName : playerModel.getAllDeities()) {
+                for (String deityName : playerModel.getAspects()) {
                     // Get the deity from the name
-                    Aspect aspect = Aspect.valueOf(deityName);
+                    Aspect aspect = Aspects.valueOf(deityName);
                     if (aspect == null) {
                         continue;
                     }
 
-                    // Check if the deity is major or minor
-                    if (playerModel.getMajorDeity().equals(aspect)) {
-                        playerModel.setMajorDeity(Aspect.HUMAN);
-                    } else {
-                        playerModel.removeAspect(aspect);
-                    }
+                    playerModel.removeAspect(aspect);
                 }
 
                 // Set the target's alliance to neutral.
-                playerModel.setFaction(IAspect.Alliance.NEUTRAL);
+                playerModel.setFaction(Faction.NEUTRAL);
                 sender.sendMessage(ChatColor.YELLOW + "You have removed all deities from " + playerModel.getLastKnownName());
 
                 return CommandResult.SUCCESS;

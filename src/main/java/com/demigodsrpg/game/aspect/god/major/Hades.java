@@ -4,7 +4,7 @@ import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityResult;
 import com.demigodsrpg.game.aspect.Aspect;
-import com.demigodsrpg.game.aspect.IAspect;
+import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.util.TargetingUtil;
 import org.bukkit.*;
@@ -23,7 +23,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Hades implements IAspect {
+public class Hades implements Aspect {
     @Override
     public String getDeityName() {
         return "Hades";
@@ -55,17 +55,17 @@ public class Hades implements IAspect {
     }
 
     @Override
-    public Strength getImportance() {
-        return Strength.MAJOR;
+    public Tier getImportance() {
+        return Tier.MAJOR;
     }
 
     @Override
-    public IAspect.Alliance getDefaultAlliance() {
+    public Aspect.Alliance getDefaultAlliance() {
         return Alliance.OLYMPIAN;
     }
 
     @Override
-    public IAspect.Pantheon getPantheon() {
+    public Aspect.Pantheon getPantheon() {
         return Pantheon.OLYMPIAN;
     }
 
@@ -79,7 +79,7 @@ public class Hades implements IAspect {
         Player player = (Player) event.getDamager();
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
 
-        double devotion = model.getExperience(Aspect.HADES);
+        double devotion = model.getExperience(Aspects.HADES);
         double damage = Math.round(Math.pow(devotion, 0.20688));
         int blindpower = (int) Math.round(1.26985 * Math.pow(devotion, 0.13047));
         int blindduration = (int) Math.round(0.75 * Math.pow(devotion, 0.323999));
@@ -95,7 +95,7 @@ public class Hades implements IAspect {
 
         LivingEntity le = TargetingUtil.autoTarget(player);
         if (le == null) return AbilityResult.NO_TARGET_FOUND;
-        int duration = (int) Math.round(2.18678 * Math.pow(model.getExperience(Aspect.HADES), 0.24723)); // seconds
+        int duration = (int) Math.round(2.18678 * Math.pow(model.getExperience(Aspects.HADES), 0.24723)); // seconds
         final ArrayList<Block> tochange = new ArrayList<Block>();
         for (int x = -3; x <= 3; x++) {
             for (int y = -3; y <= 3; y++) {
@@ -150,7 +150,7 @@ public class Hades implements IAspect {
     }
 
     private int tartarus(Player p, PlayerModel m) {
-        int range = (int) Math.round(18.83043 * Math.pow(m.getExperience(Aspect.HADES), 0.088637));
+        int range = (int) Math.round(18.83043 * Math.pow(m.getExperience(Aspects.HADES), 0.088637));
         List<LivingEntity> entitylist = new ArrayList<>();
         for (Entity anEntity : p.getNearbyEntities(range, range, range)) {
             if (anEntity instanceof Player && m.getFaction().equals(DGGame.PLAYER_R.fromPlayer((Player) anEntity).getFaction())) {
@@ -160,7 +160,7 @@ public class Hades implements IAspect {
                 entitylist.add((LivingEntity) anEntity);
             }
         }
-        int duration = (int) Math.round(30 * Math.pow(m.getExperience(Aspect.HADES), 0.09)) * 20;
+        int duration = (int) Math.round(30 * Math.pow(m.getExperience(Aspects.HADES), 0.09)) * 20;
         for (LivingEntity le : entitylist) {
             target(le, duration);
         }

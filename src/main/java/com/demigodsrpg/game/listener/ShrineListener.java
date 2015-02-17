@@ -3,7 +3,7 @@ package com.demigodsrpg.game.listener;
 // FIXME Shrines and tributing need to be completely redone to reflect that each player only has 1 god and 1 hero.
 
 import com.demigodsrpg.game.DGGame;
-import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.model.ShrineModel;
 import com.demigodsrpg.game.shrine.Shrine;
@@ -35,11 +35,11 @@ public class ShrineListener implements Listener {
         Sign s = (Sign) e.getClickedBlock().getState();
         if (!s.getLines()[0].trim().equalsIgnoreCase("shrine")) return;
         if (!s.getLines()[1].trim().equalsIgnoreCase("dedicate")) return;
-        Aspect aspect = null;
+        Aspects aspect = null;
         Player p = e.getPlayer();
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(p);
         for (String dN : model.getAspects()) {
-            Aspect d = Aspect.valueOf(dN);
+            Aspects d = Aspects.valueOf(dN);
             if (s.getLines()[2].trim().equalsIgnoreCase(d.getName())) {
                 aspect = d;
                 break;
@@ -62,7 +62,7 @@ public class ShrineListener implements Listener {
                 p.sendMessage(ChatColor.YELLOW + "The shrine's name cannot contain a space.");
                 return;
             }
-            for (Aspect d : Aspect.values()) {
+            for (Aspects d : Aspects.values()) {
                 if (s.getLines()[3].trim().equalsIgnoreCase(d.getName())) {
                     p.sendMessage(ChatColor.YELLOW + "The shrine's name cannot be the same as a deity.");
                     return;

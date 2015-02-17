@@ -2,7 +2,7 @@ package com.demigodsrpg.game.gui;
 
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.aspect.Aspect;
-import com.demigodsrpg.game.aspect.IAspect;
+import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.google.common.base.Predicate;
@@ -55,21 +55,21 @@ public class ChooseDeityGUI implements IInventoryGUI {
         // Fill the inventory list
         List<ItemStack> items = new ArrayList<>();
         int count = 0, icount = 0;
-        Iterator<Aspect> deities = Collections2.filter(Arrays.asList(Aspect.values()), new Predicate<Aspect>() {
+        Iterator<Aspects> deities = Collections2.filter(Arrays.asList(Aspects.values()), new Predicate<Aspects>() {
             @Override
-            public boolean apply(Aspect deity) {
+            public boolean apply(Aspects deity) {
                 return model.canClaim(deity);
             }
         }).iterator();
 
         while (deities.hasNext()) {
-            Aspect aspect = deities.next();
+            Aspects aspect = deities.next();
             final String name = aspect.name();
             final ChatColor color = aspect.getColor();
             // FIXME final String alliance = aspect.getDefaultAlliance().name();
 
             // Ignore deities that aren't important
-            if (IAspect.Strength.NONE.equals(aspect.getStrength())) continue;
+            if (Aspect.Tier.NONE.equals(aspect.getTier())) continue;
 
             items.add(count, new ItemStack(aspect.getClaimMaterial().getItemType(), 1, (short) 0, aspect.getClaimMaterial().getData()) {
                 {

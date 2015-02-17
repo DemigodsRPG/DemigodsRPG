@@ -1,7 +1,7 @@
 package com.demigodsrpg.game.command.admin;
 
 import com.demigodsrpg.game.DGGame;
-import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.command.type.AdminPlayerCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
 import com.demigodsrpg.game.model.PlayerModel;
@@ -13,11 +13,11 @@ public class GiveDeityCommand extends AdminPlayerCommand {
     public CommandResult onCommand(CommandSender sender, PlayerModel model, String[] args) {
         if (args.length == 3) {
             PlayerModel p = null;
-            Aspect aspect = null;
+            Aspects aspect = null;
             boolean major = true;
             try {
                 major = args[2].equalsIgnoreCase("major");
-                aspect = Aspect.valueOf(args[1].toUpperCase());
+                aspect = Aspects.valueOf(args[1].toUpperCase());
                 p = DGGame.PLAYER_R.fromName(args[0]);
             } catch (Exception ignored) {
             }

@@ -5,7 +5,7 @@ import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityMetaData;
 import com.demigodsrpg.game.aspect.Aspect;
-import com.demigodsrpg.game.aspect.IAspect;
+import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
 import com.demigodsrpg.game.deity.Faction;
@@ -39,7 +39,7 @@ public class AspectCommand extends BaseCommand {
         if (args.length == 0) {
             // FIXME Display the deities not aspects
             player.sendMessage(ChatColor.YELLOW + StringUtil2.chatTitle("Deity List"));
-            for (Aspect aspect : Aspect.values()) {
+            for (Aspect aspect : Aspects.values()) {
                 player.sendMessage(" - " + aspect.getColor() + aspect.getName() + ": " + aspect.getInfo() /* FIXME + " (" + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + ")" */);
             }
             return CommandResult.SUCCESS;
@@ -71,7 +71,7 @@ public class AspectCommand extends BaseCommand {
 
             // Deity info
             try {
-                Aspect aspect = Aspect.valueOf(args[0].toUpperCase());
+                Aspect aspect = Aspects.valueOf(args[0].toUpperCase());
                 player.sendMessage(aspect.getColor() + StringUtil2.chatTitle(aspect.getName() + " Info"));
                 player.sendMessage(" - Info: " + aspect.getInfo());
                 // FIXME player.sendMessage(" - Alliance: " + StringUtil2.beautify(aspect.getDefaultAlliance().name()));
@@ -103,13 +103,13 @@ public class AspectCommand extends BaseCommand {
             switch (args[0].toLowerCase()) {
                 case "claim": {
                     String deityName = args[1];
-                    final Aspect aspect = Aspect.valueOf(deityName.toUpperCase());
+                    final Aspect aspect = Aspects.valueOf(deityName.toUpperCase());
 
                     if (aspect != null && model.canClaim(aspect)) {
                         // Check if the importance is none
-                        if (IAspect.Strength.NONE.equals(aspect.getStrength())) {
-                            // TODO CANNOT CLAIM ASPECTS THAT AREN'T STRONG
-                            player.sendMessage(ChatColor.RED + "You cannot claim this deity.");
+                        if (Aspect.Tier.NONE.equals(aspect.getTier())) {
+                            // TODO CANNOT CLAIM ASPECTS THAT AREN'T IN A TIER
+                            player.sendMessage(ChatColor.RED + "You cannot claim this aspect.");
                             return CommandResult.QUIET_ERROR;
 
                             // Give the deity
@@ -122,8 +122,8 @@ public class AspectCommand extends BaseCommand {
                             // for (int i = 0; i < 20; i++)
                             //    player.getWorld().spawn(player.getLocation(), ExperienceOrb.class);
                         }
-                        // Check if the importance is major
-                        else if (IAspect.Strength.LARGE.equals(aspect.getStrength()) /* && FIXME!model.getMajorDeity().getImportance().equals(IAspect.Strength.MAJOR) */) {
+                        // Check if the tier is I
+                        else if (Aspect.Tier.I.equals(aspect.getTier()) /* && FIXME!model.getMajorDeity().getImportance().equals(IAspect.Strength.MAJOR) */) {
                             // Pondering message
                             player.sendMessage(aspect.getColor() + aspect.getName() + ChatColor.GRAY + " is pondering your choice...");
 

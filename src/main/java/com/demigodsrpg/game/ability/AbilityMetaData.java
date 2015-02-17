@@ -1,6 +1,7 @@
 package com.demigodsrpg.game.ability;
 
 import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.aspect.Aspects;
 
 import java.lang.reflect.Method;
 
@@ -22,7 +23,7 @@ public class AbilityMetaData {
     // -- GETTERS -- //
 
     public Aspect getAspect() {
-        return Aspect.valueOf(aspect);
+        return Aspects.valueOf(aspect);
     }
 
     public String getName() {

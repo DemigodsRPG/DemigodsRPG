@@ -2,7 +2,7 @@ package com.demigodsrpg.game.aspect.god;
 
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityResult;
-import com.demigodsrpg.game.aspect.IAspect;
+import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.util.TargetingUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
 
-public class Ares implements IAspect {
+public class Ares implements Aspect {
     @Override
     public String getDeityName() {
         return "Ares";
@@ -45,17 +45,17 @@ public class Ares implements IAspect {
     }
 
     @Override
-    public Strength getImportance() {
-        return Strength.MINOR;
+    public Tier getImportance() {
+        return Tier.MINOR;
     }
 
     @Override
-    public IAspect.Alliance getDefaultAlliance() {
+    public Aspect.Alliance getDefaultAlliance() {
         return Alliance.OLYMPIAN;
     }
 
     @Override
-    public IAspect.Pantheon getPantheon() {
+    public Aspect.Pantheon getPantheon() {
         return Pantheon.OLYMPIAN;
     }
 

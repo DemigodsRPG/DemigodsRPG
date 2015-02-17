@@ -4,14 +4,14 @@ import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityResult;
 import com.demigodsrpg.game.aspect.Aspect;
-import com.demigodsrpg.game.aspect.IAspect;
+import com.demigodsrpg.game.aspect.Aspects;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
 
-public class Cronus implements IAspect {
+public class Cronus implements Aspect {
     @Override
     public String getDeityName() {
         return "Cronus";
@@ -43,17 +43,17 @@ public class Cronus implements IAspect {
     }
 
     @Override
-    public Strength getImportance() {
-        return Strength.MAJOR;
+    public Tier getImportance() {
+        return Tier.MAJOR;
     }
 
     @Override
-    public IAspect.Alliance getDefaultAlliance() {
+    public Aspect.Alliance getDefaultAlliance() {
         return Alliance.TITAN;
     }
 
     @Override
-    public IAspect.Pantheon getPantheon() {
+    public Aspect.Pantheon getPantheon() {
         return Pantheon.TITAN;
     }
 
@@ -61,7 +61,7 @@ public class Cronus implements IAspect {
     public AbilityResult cleaveAbility(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
             Player player = (Player) event.getDamager();
-            if (DGGame.PLAYER_R.fromPlayer(player).getMajorDeity().equals(Aspect.CRONUS)) {
+            if (DGGame.PLAYER_R.fromPlayer(player).getMajorDeity().equals(Aspects.CRONUS)) {
                 switch (player.getItemInHand().getType()) {
                     case WOOD_HOE:
                         event.setDamage(7.0);

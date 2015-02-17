@@ -3,7 +3,7 @@ package com.demigodsrpg.game.aspect.titan.major;
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityResult;
-import com.demigodsrpg.game.aspect.IAspect;
+import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.ChatColor;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Iapetus implements IAspect {
+public class Iapetus implements Aspect {
     @Override
     public String getDeityName() {
         return "Iapetus";
@@ -51,17 +51,17 @@ public class Iapetus implements IAspect {
     }
 
     @Override
-    public Strength getImportance() {
-        return Strength.MAJOR;
+    public Tier getImportance() {
+        return Tier.MAJOR;
     }
 
     @Override
-    public IAspect.Alliance getDefaultAlliance() {
+    public Aspect.Alliance getDefaultAlliance() {
         return Alliance.TITAN;
     }
 
     @Override
-    public IAspect.Pantheon getPantheon() {
+    public Aspect.Pantheon getPantheon() {
         return Pantheon.TITAN;
     }
 
