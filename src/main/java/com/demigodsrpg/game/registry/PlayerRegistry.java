@@ -59,7 +59,7 @@ public class PlayerRegistry extends AbstractRegistry<PlayerModel> {
         return Collections2.filter(getRegistered(), new Predicate<PlayerModel>() {
             @Override
             public boolean apply(PlayerModel model) {
-                return model.getAspects().contains(aspect.name());
+                return model.getAspects().contains(aspect.getName());
             }
         });
     }

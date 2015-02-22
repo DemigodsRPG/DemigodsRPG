@@ -56,7 +56,7 @@ public class TributeListener implements Listener {
 
             Aspect aspect = shrine.getAspect();
             if (shrine.getOwnerMojangId() != null && !Aspects.hasAspect(event.getPlayer(), aspect)) {
-                event.getPlayer().sendMessage(ChatColor.YELLOW + "You must be allied with " + aspect.getColor() + aspect.getName() + ChatColor.YELLOW + " to tribute here.");
+                event.getPlayer().sendMessage(ChatColor.YELLOW + "You must be allied with " + aspect.getColor() + aspect.getGroup() + ChatColor.YELLOW + " to tribute here.");
                 return;
             }
             tribute(event.getPlayer(), shrine);
@@ -143,9 +143,9 @@ public class TributeListener implements Listener {
         // Handle messaging and Shrine owner updating
         if (tributeValue < 1) {
             // They aren't good enough, let them know!
-            player.sendMessage(ChatColor.RED + "Your tributes were insufficient for " + save.getAspect().getColor() + save.getAspect().getName() + "'s" + ChatColor.RED + " blessings.");
+            player.sendMessage(ChatColor.RED + "Your tributes were insufficient for " + save.getAspect().getColor() + save.getAspect().getGroup() + "'s" + ChatColor.RED + " blessings.");
         } else {
-            player.sendMessage(save.getAspect().getColor() + save.getAspect().getName() + " is pleased with your tribute.");
+            player.sendMessage(save.getAspect().getColor() + save.getAspect().getGroup() + " is pleased with your tribute.");
         }
         if (model.getFavor() < (int) Setting.FAVOR_CAP.get()) {
             if (model.getFavor() > favorBefore)
@@ -153,7 +153,7 @@ public class TributeListener implements Listener {
         } else {
             if (model.getExperience(save.getAspect()) > devotionBefore) {
                 // Message the tributer
-                player.sendMessage(save.getAspect().getColor() + "Your devotion to " + save.getAspect().getName() + " has increased by " + ChatColor.ITALIC + (model.getExperience(save.getAspect()) - devotionBefore) + "!");
+                player.sendMessage(save.getAspect().getColor() + "Your devotion to " + save.getAspect().getGroup() + " has increased by " + ChatColor.ITALIC + (model.getExperience(save.getAspect()) - devotionBefore) + "!");
             }
         }
 
@@ -165,7 +165,7 @@ public class TributeListener implements Listener {
         Aspect shrineAspect = save.getAspect();
 
         // Open the tribute inventory
-        Inventory ii = Bukkit.getServer().createInventory(player, 27, "Tribute to " + shrineAspect.getColor() + shrineAspect.getName() + ChatColor.RESET + ".");
+        Inventory ii = Bukkit.getServer().createInventory(player, 27, "Tribute to " + shrineAspect.getColor() + shrineAspect.getGroup() + ChatColor.RESET + ".");
         player.openInventory(ii);
     }
 }

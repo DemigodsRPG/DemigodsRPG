@@ -13,12 +13,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class ForsakeCommand extends BaseCommand {
+public class CleanseCommand extends BaseCommand {
     @Override
     protected CommandResult onCommand(CommandSender sender, Command command, String[] args) {
         // Check for no args
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.YELLOW + "To forsake all, do /forsake all");
+            sender.sendMessage(ChatColor.YELLOW + "To cleanse all, do /cleanse all");
             return CommandResult.SUCCESS;
         }
         // Check for only 1 arg
@@ -50,7 +50,7 @@ public class ForsakeCommand extends BaseCommand {
                     }
 
                     playerModel.removeAspect(aspect);
-                    sender.sendMessage(ChatColor.YELLOW + "You have forsaken " + aspect.getName());
+                    sender.sendMessage(ChatColor.YELLOW + "You have cleansed " + aspect.getGroup().getName());
                 }
 
                 // Set the alliance to neutral
@@ -58,14 +58,14 @@ public class ForsakeCommand extends BaseCommand {
                 return CommandResult.SUCCESS;
             } else {
                 // TODO Check for individual deity forsake requests.
-                sender.sendMessage(ChatColor.YELLOW + "To forsake all do /forsake all");
+                sender.sendMessage(ChatColor.YELLOW + "To cleanse all do /cleanse all");
                 return CommandResult.SUCCESS;
             }
         }
         // Handle admin command to forsake other players
         else if (args.length == 2) {
             // Check if the sender has permission to do the forsaking.
-            if (!sender.hasPermission("demigods.admin.forsake")) {
+            if (!sender.hasPermission("demigods.admin.cleanse")) {
                 return CommandResult.NO_PERMISSIONS;
             }
 
@@ -91,7 +91,7 @@ public class ForsakeCommand extends BaseCommand {
 
                 // Set the target's alliance to neutral.
                 playerModel.setFaction(Faction.NEUTRAL);
-                sender.sendMessage(ChatColor.YELLOW + "You have removed all deities from " + playerModel.getLastKnownName());
+                sender.sendMessage(ChatColor.YELLOW + "You have removed all aspects from " + playerModel.getLastKnownName());
 
                 return CommandResult.SUCCESS;
             } else {

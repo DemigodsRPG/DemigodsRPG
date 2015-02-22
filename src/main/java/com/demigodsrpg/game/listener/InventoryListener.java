@@ -1,8 +1,9 @@
 package com.demigodsrpg.game.listener;
 
 import com.demigodsrpg.game.DGGame;
+import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.aspect.Aspects;
-import com.demigodsrpg.game.gui.ChooseDeityGUI;
+import com.demigodsrpg.game.gui.ChooseAspectGUI;
 import com.demigodsrpg.game.gui.ShrineGUI;
 import com.demigodsrpg.game.gui.SlotFunction;
 import com.demigodsrpg.game.model.ShrineModel;
@@ -55,11 +56,11 @@ public class InventoryListener implements Listener {
             }
         }
 
-        // Deity Select
-        if (event.getInventory().getName().startsWith(ChooseDeityGUI.INVENTORY_NAME)) {
+        // Aspect Select
+        if (event.getInventory().getName().startsWith(ChooseAspectGUI.INVENTORY_NAME)) {
             try {
                 int count = Integer.parseInt(event.getInventory().getName().split(" ")[2]);
-                ChooseDeityGUI gui = new ChooseDeityGUI(player);
+                ChooseAspectGUI gui = new ChooseAspectGUI(player);
                 SlotFunction function = gui.getFunction(event.getSlot());
                 if (!SlotFunction.NO_FUNCTION.equals(function) && event.getCurrentItem() != null && !event.getCurrentItem().getType().equals(Material.AIR)) {
                     event.setCancelled(true);
@@ -71,14 +72,14 @@ public class InventoryListener implements Listener {
                             player.openInventory(gui.getInventory(count - 1));
                             break;
                         case RUN_COMMAND:
-                            String deityName = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
-                            Aspects aspect = Aspects.valueOf(deityName);
+                            String aspectName = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
+                            Aspect aspect = Aspects.valueOf(aspectName);
                             if (aspect != null) {
                                 player.closeInventory();
-                                player.performCommand("deity claim " + deityName);
+                                player.performCommand("aspect claim " + aspectName);
                             } else {
                                 player.closeInventory();
-                                player.sendMessage(ChatColor.RED + "Something is wrong with " + deityName + "...");
+                                player.sendMessage(ChatColor.RED + "Something is wrong with " + aspectName + "...");
                             }
                             break;
                     }

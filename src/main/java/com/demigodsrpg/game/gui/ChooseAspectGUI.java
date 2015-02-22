@@ -22,13 +22,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public class ChooseDeityGUI implements IInventoryGUI {
-    public static final String INVENTORY_NAME = "Choose Deity";
+public class ChooseAspectGUI implements IInventoryGUI {
+    public static final String INVENTORY_NAME = "Choose Aspect";
 
     private final List<Inventory> INVENTORY_LIST;
     private final ImmutableMap<Integer, SlotFunction> FUNCTION_MAP;
 
-    public ChooseDeityGUI(final Player player) {
+    public ChooseAspectGUI(final Player player) {
         // Get the player model
         final PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
 
@@ -55,23 +55,23 @@ public class ChooseDeityGUI implements IInventoryGUI {
         // Fill the inventory list
         List<ItemStack> items = new ArrayList<>();
         int count = 0, icount = 0;
-        Iterator<Aspects> deities = Collections2.filter(Arrays.asList(Aspects.values()), new Predicate<Aspects>() {
+        Iterator<Aspect> aspects = Collections2.filter(Arrays.asList(Aspects.values()), new Predicate<Aspect>() {
             @Override
-            public boolean apply(Aspects deity) {
-                return model.canClaim(deity);
+            public boolean apply(Aspect aspect) {
+                return model.canClaim(aspect);
             }
         }).iterator();
 
-        while (deities.hasNext()) {
-            Aspects aspect = deities.next();
-            final String name = aspect.name();
-            final ChatColor color = aspect.getColor();
+        while (aspects.hasNext()) {
+            Aspect aspect = aspects.next();
+            final String name = aspect.getGroup().getName();
+            final ChatColor color = aspect.getGroup().getColor();
             // FIXME final String alliance = aspect.getDefaultAlliance().name();
 
             // Ignore deities that aren't important
             if (Aspect.Tier.NONE.equals(aspect.getTier())) continue;
 
-            items.add(count, new ItemStack(aspect.getClaimMaterial().getItemType(), 1, (short) 0, aspect.getClaimMaterial().getData()) {
+            items.add(count, new ItemStack(aspect.getGroup().getClaimMaterial().getItemType(), 1, (short) 0, aspect.getGroup().getClaimMaterial().getData()) {
                 {
                     ItemMeta meta = getItemMeta();
                     meta.setDisplayName(color + name);
@@ -83,7 +83,7 @@ public class ChooseDeityGUI implements IInventoryGUI {
 
             count++;
 
-            if (count % 19 == 0 || !deities.hasNext()) {
+            if (count % 19 == 0 || !aspects.hasNext()) {
                 Inventory inventory = Bukkit.createInventory(player, 27, INVENTORY_NAME + " " + icount);
                 for (int i = 0; i < items.size(); i++) {
                     inventory.setItem(i, items.get(i));
@@ -97,7 +97,7 @@ public class ChooseDeityGUI implements IInventoryGUI {
                         }
                     });
                 }
-                if (deities.hasNext()) {
+                if (aspects.hasNext()) {
                     inventory.setItem(26, new ItemStack(Material.PAPER, 1) {
                         {
                             ItemMeta meta = getItemMeta();

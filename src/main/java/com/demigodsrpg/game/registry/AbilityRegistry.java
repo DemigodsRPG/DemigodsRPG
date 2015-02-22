@@ -9,7 +9,6 @@ import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.util.ZoneUtil;
-import com.google.common.base.Supplier;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import org.bukkit.ChatColor;
@@ -31,7 +30,6 @@ import org.bukkit.util.Vector;
 import javax.annotation.Nullable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -41,12 +39,7 @@ public class AbilityRegistry implements Listener {
     // FIXME Do we really need two collections for the same data? This is expensive...
 
     private static final ConcurrentMap<String, AbilityMetaData> REGISTERED_COMMANDS = new ConcurrentHashMap<>();
-    private static final Multimap<String, AbilityMetaData> REGISTERED_ABILITIES = Multimaps.newListMultimap(new ConcurrentHashMap<String, Collection<AbilityMetaData>>(), new Supplier<List<AbilityMetaData>>() {
-        @Override
-        public List<AbilityMetaData> get() {
-            return new ArrayList<>(0);
-        }
-    });
+    private static final Multimap<String, AbilityMetaData> REGISTERED_ABILITIES = Multimaps.newListMultimap(new ConcurrentHashMap<>(), () -> new ArrayList<>(0));
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onEvent(PlayerInteractEvent event) {
@@ -94,7 +87,7 @@ public class AbilityRegistry implements Listener {
         for (AbilityMetaData ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
             for (PlayerModel model : DGGame.PLAYER_R.fromAspect(ability.getAspect())) {
                 try {
-                    if (model.getOnline() && model.getLocation().getWorld().equals(event.getBlock().getWorld()) && model.getLocation().distance(event.getBlock().getLocation()) < (int) Math.round(20 * Math.pow(model.getExperience(Aspects.HEPHAESTUS), 0.15))) {
+                    if (model.getOnline() && model.getLocation().getWorld().equals(event.getBlock().getWorld()) && model.getLocation().distance(event.getBlock().getLocation()) < (int) Math.round(20 * Math.pow(model.getExperience(Aspects.CRAFTING_ASPECT_I), 0.15))) {
                         if (processAbility1(model, ability)) {
                             Object rawResult = ability.getMethod().invoke(ability.getAspect(), event);
                             processAbility2(null, model, ability, rawResult);
@@ -140,7 +133,7 @@ public class AbilityRegistry implements Listener {
         for (AbilityMetaData ability : REGISTERED_ABILITIES.values()) {
             if (ability.getCommand().equals(command)) {
                 player.sendMessage(StringUtil2.chatTitle(ability.getName()));
-                player.sendMessage(" - Aspect: " + ability.getAspect().getColor() + ability.getAspect().getName());
+                player.sendMessage(" - Aspect: " + ability.getAspect().getGroup().getColor() + ability.getAspect().getGroup().getName() + " " + ability.getAspect().getTier().name());
                 player.sendMessage(" - Type: " + StringUtil2.beautify(ability.getType().name()));
                 if (!ability.getType().equals(Ability.Type.PASSIVE)) {
                     player.sendMessage(" - Cost: " + ability.getCost());
@@ -181,7 +174,7 @@ public class AbilityRegistry implements Listener {
             }
         } else {
             AbilityMetaData ability = fromCommand(command);
-            if (ability.getCommand().equals(command) && model.getAspects().contains(ability.getAspect().name()) && ability.getCommand().equals(command)) {
+            if (ability.getCommand().equals(command) && model.getAspects().contains(ability.getAspect().getGroup().getName() + " " + ability.getAspect().getTier().name()) && ability.getCommand().equals(command)) {
                 model.bind(ability, material);
                 player.sendMessage(ChatColor.YELLOW + ability.getName() + " has been bound to " + StringUtil2.beautify(material.name()) + ".");
                 return true;
@@ -320,7 +313,7 @@ public class AbilityRegistry implements Listener {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
 
-            if (Aspects.hasAspect(player, Aspects.CRONUS)) {
+            if (Aspects.hasAspect(player, Aspects.BLOODLUST_ASPECT_III)) {
                 if (player.getHealth() <= event.getDamage()) {
                     switch (event.getCause()) {
                         case ENTITY_ATTACK:
@@ -342,14 +335,14 @@ public class AbilityRegistry implements Listener {
                 }
             }
 
-            if (Aspects.hasAspect(player, Aspects.POSEIDON)) {
+            if (Aspects.hasAspect(player, Aspects.WATER_ASPECT_II)) {
                 if (EntityDamageEvent.DamageCause.DROWNING.equals(event.getCause())) {
                     event.setCancelled(true);
                     player.setRemainingAir(player.getMaximumAir());
                 }
             }
 
-            if (Aspects.hasAspect(player, Aspects.PROMETHEUS)) {
+            if (Aspects.hasAspect(player, Aspects.FIRE_ASPECT_I)) {
                 if (EntityDamageEvent.DamageCause.FIRE.equals(event.getCause()) || EntityDamageEvent.DamageCause.FIRE_TICK.equals(event.getCause())) {
                     event.setCancelled(true);
                     player.setRemainingAir(player.getMaximumAir());
@@ -369,7 +362,7 @@ public class AbilityRegistry implements Listener {
 
         Player player = event.getPlayer();
 
-        if (Aspects.hasAspect(player, Aspects.POSEIDON) || Aspects.hasAspect(player, Aspects.OCEANUS)) {
+        if (Aspects.hasAspect(player, Aspects.WATER_ASPECT_II)) {
             Material locationMaterial = player.getLocation().getBlock().getType();
             if (player.isSneaking() && (locationMaterial.equals(Material.STATIONARY_WATER) || locationMaterial.equals(Material.WATER))) {
                 Vector victor = (player.getPassenger() != null && player.getLocation().getDirection().getY() > 0 ? player.getLocation().getDirection().clone().setY(0) : player.getLocation().getDirection()).normalize().multiply(1.3D);
@@ -387,10 +380,10 @@ public class AbilityRegistry implements Listener {
     private void onEvent(EntityTargetEvent event) {
         Entity entity = event.getEntity();
 
-        // HADES
+        // Demon Aspect III
         if (entity instanceof LivingEntity) {
             if ((entity instanceof Zombie) || (entity instanceof Skeleton)) {
-                if (!DGGame.PLAYER_R.fromPlayer((Player) event.getTarget()).hasAspect(Aspects.HADES)) return;
+                if (!DGGame.PLAYER_R.fromPlayer((Player) event.getTarget()).hasAspect(Aspects.DEMON_ASPECT_III)) return;
                 event.setCancelled(true);
             }
         }

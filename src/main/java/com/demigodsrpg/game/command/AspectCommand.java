@@ -9,7 +9,7 @@ import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
 import com.demigodsrpg.game.deity.Faction;
-import com.demigodsrpg.game.gui.ChooseDeityGUI;
+import com.demigodsrpg.game.gui.ChooseAspectGUI;
 import com.demigodsrpg.game.model.PlayerModel;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -40,7 +40,7 @@ public class AspectCommand extends BaseCommand {
             // FIXME Display the deities not aspects
             player.sendMessage(ChatColor.YELLOW + StringUtil2.chatTitle("Deity List"));
             for (Aspect aspect : Aspects.values()) {
-                player.sendMessage(" - " + aspect.getColor() + aspect.getName() + ": " + aspect.getInfo() /* FIXME + " (" + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + ")" */);
+                player.sendMessage(" - " + aspect.getColor() + aspect.getGroup() + ": " + aspect.getInfo() /* FIXME + " (" + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + ")" */);
             }
             return CommandResult.SUCCESS;
         }
@@ -50,7 +50,7 @@ public class AspectCommand extends BaseCommand {
             switch (args[0].toLowerCase()) {
                 case "claim": {
                     try {
-                        Inventory inventory = new ChooseDeityGUI(player).getInventory();
+                        Inventory inventory = new ChooseAspectGUI(player).getInventory();
                         if (inventory == null) {
                             if (model.getFaction().equals(Faction.EXCOMMUNICATED)) {
                                 player.sendMessage(ChatColor.YELLOW + "Your current alliance prevents you from claiming new deities.");
@@ -72,7 +72,7 @@ public class AspectCommand extends BaseCommand {
             // Deity info
             try {
                 Aspect aspect = Aspects.valueOf(args[0].toUpperCase());
-                player.sendMessage(aspect.getColor() + StringUtil2.chatTitle(aspect.getName() + " Info"));
+                player.sendMessage(aspect.getColor() + StringUtil2.chatTitle(aspect.getGroup() + " Info"));
                 player.sendMessage(" - Info: " + aspect.getInfo());
                 // FIXME player.sendMessage(" - Alliance: " + StringUtil2.beautify(aspect.getDefaultAlliance().name()));
 
@@ -125,7 +125,7 @@ public class AspectCommand extends BaseCommand {
                         // Check if the tier is I
                         else if (Aspect.Tier.I.equals(aspect.getTier()) /* && FIXME!model.getMajorDeity().getImportance().equals(IAspect.Strength.MAJOR) */) {
                             // Pondering message
-                            player.sendMessage(aspect.getColor() + aspect.getName() + ChatColor.GRAY + " is pondering your choice...");
+                            player.sendMessage(aspect.getColor() + aspect.getGroup() + ChatColor.GRAY + " is pondering your choice...");
 
                             // Play scary sound
                             player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 0.6F, 1F);
@@ -152,7 +152,7 @@ public class AspectCommand extends BaseCommand {
                         } else {
                             // Pondering message
                             // FIXME Display a more fitting message
-                            player.sendMessage(aspect.getColor() + aspect.getName() + ChatColor.GRAY + " is pondering your choice...");
+                            player.sendMessage(aspect.getColor() + aspect.getGroup() + ChatColor.GRAY + " is pondering your choice...");
 
                             // Play scary sound
                             player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 0.6F, 1F);

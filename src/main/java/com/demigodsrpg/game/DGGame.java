@@ -3,8 +3,8 @@ package com.demigodsrpg.game;
 import com.demigodsrpg.chitchat.Chitchat;
 import com.demigodsrpg.game.command.*;
 import com.demigodsrpg.game.command.admin.*;
-import com.demigodsrpg.game.integration.chitchat.AllianceChatTag;
-import com.demigodsrpg.game.integration.chitchat.AllianceDeityIdTag;
+import com.demigodsrpg.game.integration.chitchat.FactionChatTag;
+import com.demigodsrpg.game.integration.chitchat.FactionIdTag;
 import com.demigodsrpg.game.listener.InventoryListener;
 import com.demigodsrpg.game.listener.PlayerListener;
 import com.demigodsrpg.game.listener.ShrineListener;
@@ -15,7 +15,6 @@ import com.demigodsrpg.game.registry.*;
 import com.demigodsrpg.game.util.ZoneUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -93,11 +92,11 @@ public class DGGame extends JavaPlugin {
         manager.registerEvents(ABILITY_R, this);
 
         // Register commands
-        getCommand("alliance").setExecutor(new FactionCommand());
+        getCommand("faction").setExecutor(new FactionCommand());
         getCommand("binds").setExecutor(new BindsCommand());
         getCommand("check").setExecutor(new CheckCommand());
         getCommand("deity").setExecutor(new AspectCommand());
-        getCommand("forsake").setExecutor(new ForsakeCommand());
+        getCommand("cleanse").setExecutor(new CleanseCommand());
         getCommand("shrine").setExecutor(new ShrineCommand());
         getCommand("values").setExecutor(new ValuesCommand());
 
@@ -105,17 +104,17 @@ public class DGGame extends JavaPlugin {
         getCommand("checkplayer").setExecutor(new CheckPlayerCommand());
         getCommand("adddevotion").setExecutor(new AddDevotionCommand());
         getCommand("removedevotion").setExecutor(new RemoveDevotionCommand());
-        getCommand("givedeity").setExecutor(new GiveDeityCommand());
-        getCommand("removedeity").setExecutor(new RemoveDeityCommand());
-        getCommand("setalliance").setExecutor(new SetAllianceCommand());
+        getCommand("giveaspect").setExecutor(new GiveAspectCommand());
+        getCommand("removeaspect").setExecutor(new RemoveAspectCommand());
+        getCommand("setfaction").setExecutor(new SetFactionCommand());
 
         // Enable ZoneUtil
         ZoneUtil.init();
 
         // Handle Chitchat integration
         if (manager.isPluginEnabled("Chitchat")) {
-            Chitchat.getChatFormat().add(new AllianceChatTag());
-            Chitchat.getChatFormat().add(new AllianceDeityIdTag());
+            Chitchat.getChatFormat().add(new FactionChatTag());
+            Chitchat.getChatFormat().add(new FactionIdTag());
         }
 
         // Let the console know
@@ -178,15 +177,11 @@ public class DGGame extends JavaPlugin {
             @Override
             public void run() {
                 for (World world : Bukkit.getWorlds()) {
-                    for (LivingEntity entity : world.getLivingEntities()) {
-                        if (entity.getFireTicks() > 0) {
-                            for (Entity nearby : entity.getNearbyEntities(0.5, 0.5, 0.5)) {
-                                if (nearby instanceof LivingEntity && !nearby.equals(entity)) {
-                                    nearby.setFireTicks(100);
-                                }
-                            }
-                        }
-                    }
+                    world.getLivingEntities().stream().filter(entity -> entity.getFireTicks() > 0).forEach(entity -> {
+                        entity.getNearbyEntities(0.5, 0.5, 0.5).stream().filter(nearby -> nearby instanceof LivingEntity && !nearby.equals(entity)).forEach(nearby -> {
+                            nearby.setFireTicks(100);
+                        });
+                    });
                 }
             }
         };

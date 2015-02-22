@@ -30,7 +30,7 @@ public class CheckCommand extends BaseCommand {
             StringBuilder builder = new StringBuilder();
             for (String deityName : model.getAspects()) {
                 Aspect aspect = Aspects.valueOf(deityName);
-                builder.append(aspect.getColor()).append(aspect.getName()).append(ChatColor.RESET).append(", ");
+                builder.append(aspect.getColor()).append(aspect.getGroup()).append(ChatColor.RESET).append(", ");
             }
             String minorDeities = builder.toString();
             minorDeities = minorDeities.substring(0, minorDeities.length() - 4) + ".";

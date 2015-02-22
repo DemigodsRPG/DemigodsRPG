@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Territory extends AbstractPersistentModel<String> {
     private final Faction alliance;
@@ -36,9 +37,7 @@ public class Territory extends AbstractPersistentModel<String> {
     public Territory(Faction alliance, final JsonSection conf) {
         this(alliance, Priority.valueOf(conf.getString("priority")), new ArrayList<Location>() {
             {
-                for (String locString : conf.getStringList("locations")) {
-                    add(LocationUtil.locationFromString(locString));
-                }
+                addAll(conf.getStringList("locations").stream().map(LocationUtil::locationFromString).collect(Collectors.toList()));
             }
         });
     }

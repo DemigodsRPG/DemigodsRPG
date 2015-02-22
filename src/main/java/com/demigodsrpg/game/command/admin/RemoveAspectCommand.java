@@ -8,7 +8,7 @@ import com.demigodsrpg.game.model.PlayerModel;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-public class RemoveDeityCommand extends AdminPlayerCommand {
+public class RemoveAspectCommand extends AdminPlayerCommand {
 
     @Override
     public CommandResult onCommand(CommandSender sender, PlayerModel model, String[] args) {

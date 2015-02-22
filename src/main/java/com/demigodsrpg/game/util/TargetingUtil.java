@@ -17,6 +17,7 @@ import org.bukkit.util.BlockIterator;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class TargetingUtil {
     private static final int TARGET_OFFSET = 5;
@@ -37,7 +38,7 @@ public class TargetingUtil {
         final int correction = 3;
         Location target = null;
         try {
-            target = player.getTargetBlock(null, range).getLocation();
+            target = player.getTargetBlock((Set) null, range).getLocation();
         } catch (Exception ignored) {
         }
         if (target == null) return null;
@@ -79,7 +80,7 @@ public class TargetingUtil {
     }
 
     public static Location directTarget(Player player) {
-        return player.getTargetBlock(null, 140).getLocation();
+        return player.getTargetBlock((Set) null, 140).getLocation();
     }
 
     /**

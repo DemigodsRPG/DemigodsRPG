@@ -5,23 +5,25 @@ import org.bukkit.Sound;
 import org.bukkit.material.MaterialData;
 
 public interface Aspect {
-    String getName();
-
-    String name();
+    Group getGroup();
 
     int getId();
 
     String getInfo();
 
-    ChatColor getColor();
-
-    Sound getSound();
-
-    MaterialData getClaimMaterial();
-
     Tier getTier();
 
     public enum Tier {
         NONE, I, II, III
+    }
+
+    public interface Group {
+        public String getName();
+
+        public ChatColor getColor();
+
+        public Sound getSound();
+
+        public MaterialData getClaimMaterial();
     }
 }

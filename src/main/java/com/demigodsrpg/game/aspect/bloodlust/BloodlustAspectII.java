@@ -1,68 +1,40 @@
-package com.demigodsrpg.game.aspect.titan.major;
+package com.demigodsrpg.game.aspect.bloodlust;
 
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityResult;
 import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.google.common.util.concurrent.AtomicDouble;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.material.MaterialData;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Iapetus implements Aspect {
+public class BloodlustAspectII implements Aspect {
     @Override
-    public String getDeityName() {
-        return "Iapetus";
+    public Group getGroup() {
+        return Groups.BLOODLUST_ASPECT;
     }
 
     @Override
-    public String getNomen() {
-        return "spawn of " + getDeityName();
+    public int getId() {
+        return 11;
     }
 
     @Override
     public String getInfo() {
-        return "Titan of mortality.";
+        return "Expert level power over bloodlust.";
     }
 
     @Override
-    public ChatColor getColor() {
-        return ChatColor.WHITE;
-    }
-
-    @Override
-    public Sound getSound() {
-        return Sound.GHAST_SCREAM;
-    }
-
-    @Override
-    public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.ROTTEN_FLESH);
-    }
-
-    @Override
-    public Tier getImportance() {
-        return Tier.MAJOR;
-    }
-
-    @Override
-    public Aspect.Alliance getDefaultAlliance() {
-        return Alliance.TITAN;
-    }
-
-    @Override
-    public Aspect.Pantheon getPantheon() {
-        return Pantheon.TITAN;
+    public Tier getTier() {
+        return Tier.II;
     }
 
     @Ability(name = "Deathblow", command = "deathblow", info = "Deal massive amounts of damage, increasing with each kill.", cost = 3500, cooldown = 200000, type = Ability.Type.ULTIMATE)
@@ -92,27 +64,23 @@ public class Iapetus implements Aspect {
 
         for (int i = 0; i < targets.size(); i++) {
             final int ii = i;
-            DGGame.getInst().getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getInst(), new Runnable() {
-                public void run() {
-                    player.teleport(targets.get(ii));
-                    player.setHealth(savedHealth);
-                    player.getLocation().setPitch(targets.get(ii).getLocation().getPitch());
-                    player.getLocation().setYaw(targets.get(ii).getLocation().getYaw());
-                    if (targets.get(ii).getHealth() - damage.doubleValue() <= 0.0) {
-                        damage.set(10.0 + deaths.incrementAndGet() * 1.2);
-                        player.sendMessage(getColor() + "Damage is now " + damage.doubleValue());
-                    }
-                    targets.get(ii).damage(damage.doubleValue(), player);
+            DGGame.getInst().getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getInst(), () -> {
+                player.teleport(targets.get(ii));
+                player.setHealth(savedHealth);
+                player.getLocation().setPitch(targets.get(ii).getLocation().getPitch());
+                player.getLocation().setYaw(targets.get(ii).getLocation().getYaw());
+                if (targets.get(ii).getHealth() - damage.doubleValue() <= 0.0) {
+                    damage.set(10.0 + deaths.incrementAndGet() * 1.2);
+                    player.sendMessage(getGroup().getColor() + "Damage is now " + damage.doubleValue());
                 }
+                targets.get(ii).damage(damage.doubleValue(), player);
             }, i * 10);
         }
 
-        DGGame.getInst().getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getInst(), new Runnable() {
-            public void run() {
-                player.teleport(startloc);
-                player.setHealth(savedHealth);
-                player.sendMessage(targets.size() + " targets were struck with the fury of " + ChatColor.GOLD + "Iapetus" + ChatColor.WHITE + ".");
-            }
+        DGGame.getInst().getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getInst(), () -> {
+            player.teleport(startloc);
+            player.setHealth(savedHealth);
+            player.sendMessage(targets.size() + " targets were struck with the power of bloodlust.");
         }, targets.size() * 10);
 
         return AbilityResult.SUCCESS;

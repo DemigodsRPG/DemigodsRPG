@@ -1,66 +1,43 @@
-package com.demigodsrpg.game.aspect.titan;
+package com.demigodsrpg.game.aspect.fire;
 
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityResult;
 import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.util.TargetingUtil;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
-public class Prometheus implements Aspect {
+public class FireAspectI implements Aspect {
+
+    // -- ASPECT META -- //
+
     @Override
-    public String getDeityName() {
-        return "Prometheus";
+    public Group getGroup() {
+        return Groups.FIRE_ASPECT;
     }
 
     @Override
-    public String getNomen() {
-        return "agent of " + getDeityName();
+    public int getId() {
+        return 4;
     }
 
     @Override
     public String getInfo() {
-        return "Titan of humanity and forethought.";
+        return "Adept level power over fire.";
     }
 
     @Override
-    public ChatColor getColor() {
-        return ChatColor.GOLD;
+    public Tier getTier() {
+        return Tier.I;
     }
 
-    @Override
-    public Sound getSound() {
-        return Sound.FIRE;
-    }
-
-    @Override
-    public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.FIREBALL);
-    }
-
-    @Override
-    public Tier getImportance() {
-        return Tier.MINOR;
-    }
-
-    @Override
-    public Alliance getDefaultAlliance() {
-        return Alliance.OLYMPIAN;
-    }
-
-    @Override
-    public Pantheon getPantheon() {
-        return Pantheon.TITAN;
-    }
+    // -- ABILITIES -- //
 
     @Ability(name = "Fireball", command = "fireball", info = "Bring fire to your enemies.", cost = 120, delay = 2000)
     public AbilityResult fireballAbility(PlayerInteractEvent event) {
@@ -77,7 +54,7 @@ public class Prometheus implements Aspect {
 
         shootFireball(player.getEyeLocation(), target, player);
 
-        player.sendMessage(getColor() + "*fhhoom*");
+        player.sendMessage(getGroup().getColor() + "*fhhoom*");
 
         return AbilityResult.SUCCESS;
     }

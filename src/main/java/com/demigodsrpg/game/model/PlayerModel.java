@@ -24,6 +24,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class PlayerModel extends AbstractPersistentModel<String> implements Participant {
     private final String mojangId;
@@ -75,9 +76,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         this.mojangId = mojangId;
         lastKnownName = conf.getString("last_known_name");
         lastLoginTime = conf.getLong("last_login_time");
-        for (String name : conf.getStringList("aspects")) {
-            aspects.add(name);
-        }
+        aspects.addAll(conf.getStringList("aspects").stream().collect(Collectors.toList()));
         // FIXME faction = Faction.valueOf(conf.getString("faction"));
         binds.putAll((Map) conf.getSection("binds").getValues());
         maxHealth = conf.getDouble("max_health");
@@ -161,12 +160,12 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public void addAspect(Aspect aspect) {
-        aspects.add(aspect.name());
+        aspects.add(getAspectName(aspect));
         DGGame.PLAYER_R.register(this);
     }
 
     public void removeAspect(Aspect aspect) {
-        aspects.remove(aspect.name());
+        aspects.remove(getAspectName(aspect));
         DGGame.PLAYER_R.register(this);
     }
 
@@ -357,7 +356,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public boolean hasAspect(Aspect aspect) {
-        return getAspects().contains(aspect.name());
+        return getAspects().contains(getAspectName(aspect));
     }
 
     @SuppressWarnings("RedundantCast")
@@ -414,7 +413,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public void giveAspect(Aspect aspect) {
-        aspects.add(aspect.name());
+        aspects.add(getAspectName(aspect));
         setExperience(aspect, 20.0);
     }
 
@@ -422,7 +421,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         if (faction.equals(Faction.NEUTRAL)) {
             return !hasAspect(aspect);
         }
-        if (Setting.NO_ALLIANCE_DEITY_MODE.get()) {
+        if (Setting.NO_ALLIANCE_ASPECT_MODE.get()) {
             return costForNextDeity() <= level && !hasAspect(aspect);
         }
 
@@ -449,7 +448,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public int costForNextDeity() {
-        if (Setting.NO_COST_DEITY_MODE.get()) return 0;
+        if (Setting.NO_COST_ASPECT_MODE.get()) return 0;
         switch (aspects.size() + 1) {
             case 1:
                 return 2;
@@ -512,5 +511,9 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
                 }
             }, (delay * 20));
         }
+    }
+
+    private String getAspectName(Aspect aspect) {
+        return aspect.getGroup() + " " + aspect.getTier().name();
     }
 }

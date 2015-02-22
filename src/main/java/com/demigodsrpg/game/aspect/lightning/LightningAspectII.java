@@ -1,30 +1,26 @@
-package com.demigodsrpg.game.aspect.ii;
+package com.demigodsrpg.game.aspect.lightning;
 
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityResult;
 import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.aspect.Aspects;
+import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.util.TargetingUtil;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
 public class LightningAspectII implements Aspect {
-    @Override
-    public String getName() {
-        return "Lightning II";
-    }
+
+    // -- ASPECT META -- //
 
     @Override
-    public String name() {
-        return "LIGHTNING_ASPECT_II";
+    public Group getGroup() {
+        return Groups.LIGHTNING_ASPECT;
     }
 
     @Override
@@ -34,22 +30,7 @@ public class LightningAspectII implements Aspect {
 
     @Override
     public String getInfo() {
-        return "Power over lightning";
-    }
-
-    @Override
-    public ChatColor getColor() {
-        return ChatColor.YELLOW;
-    }
-
-    @Override
-    public Sound getSound() {
-        return Sound.AMBIENCE_THUNDER;
-    }
-
-    @Override
-    public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.FEATHER);
+        return "Expert level power over lightning";
     }
 
     @Override

@@ -7,7 +7,7 @@ import com.demigodsrpg.game.model.PlayerModel;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public class AllianceChatTag extends PlayerTag {
+public class FactionChatTag extends PlayerTag {
     @Override
     public String getName() {
         return "alliance_chat";
@@ -33,6 +33,6 @@ public class AllianceChatTag extends PlayerTag {
 
     private boolean isInChat(Player player) {
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
-        return DGGame.SERV_R.contains("alliance_chat", player.getUniqueId().toString()) && !Faction.NEUTRAL.equals(model.getFaction()) && !Faction.EXCOMMUNICATED.equals(model.getFaction());
+        return DGGame.SERV_R.contains("faction_chat", player.getUniqueId().toString()) && !Faction.NEUTRAL.equals(model.getFaction()) && !Faction.EXCOMMUNICATED.equals(model.getFaction());
     }
 }

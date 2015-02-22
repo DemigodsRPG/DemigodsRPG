@@ -1,29 +1,29 @@
-package com.demigodsrpg.game.aspect.iii;
+package com.demigodsrpg.game.aspect.lightning;
 
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityResult;
 import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.model.PlayerModel;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.WeatherType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.material.MaterialData;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class LightningAspectIII implements Aspect {
-    @Override
-    public String getName() {
-        return "Lightning III";
-    }
+
+    // -- ASPECT META -- //
 
     @Override
-    public String name() {
-        return "LIGHTNING_ASPECT_III";
+    public Group getGroup() {
+        return Groups.LIGHTNING_ASPECT;
     }
 
     @Override
@@ -31,25 +31,9 @@ public class LightningAspectIII implements Aspect {
         return 3;
     }
 
-
     @Override
     public String getInfo() {
-        return "Power over lightning";
-    }
-
-    @Override
-    public ChatColor getColor() {
-        return ChatColor.YELLOW;
-    }
-
-    @Override
-    public Sound getSound() {
-        return Sound.AMBIENCE_THUNDER;
-    }
-
-    @Override
-    public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.FEATHER);
+        return "Mastery over lightning";
     }
 
     @Override
