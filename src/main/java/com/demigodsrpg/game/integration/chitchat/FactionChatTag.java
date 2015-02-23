@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class FactionChatTag extends PlayerTag {
     @Override
     public String getName() {
-        return "alliance_chat";
+        return "faction_chat";
     }
 
     @Override
