@@ -6,9 +6,9 @@ authors: [marinating, HmmmQuestionMark, _Alex, TheFatDemon, janie177]
 softdepend: [Chitchat, WorldGuard]
 commands:
   ## Everyday Commands
-  alliance:
-    usage: /alliance message
-    aliases: [a]
+  faction:
+    usage: /faction
+    aliases: [f]
   binds:
     usage: /binds
     aliases: [b]
@@ -20,8 +20,8 @@ commands:
   demigods:
     usage: /demigods [subject]
     aliases: [d, dg, demigod]
-  forsake:
-    usage: /fosake [all|player] [all]
+  cleanse:
+    usage: /cleanse [all|player] [all]
   shrine:
     usage: /shrine
     aliases: [s, sh, shrines]
@@ -38,13 +38,13 @@ commands:
   removedevotion:
     usage: /removedevotion [player] [aspect] [amount]
     permission: demigods.admin.devotion
-  givedeity:
+  giveaspect:
     usage: /givedeity [player] [aspect] [major|minor]
     permission: demigods.admin.aspect
-  removedeity:
+  removeaspect:
     usage: /removedeity [player] [aspect]
     permission: demigods.admin.aspect
-  setalliance:
+  setfaction:
     usage: /setalliance [player] [alliance]
     permission: demigods.admin.alliance
 permisions:
@@ -54,7 +54,7 @@ permisions:
     default: op
   demigods.admin.aspect:
     default: op
-  demigods.admin.alliance:
+  demigods.admin.faction:
     default: op
-  demigods.admin.forsake:
+  demigods.admin.cleanse:
     default: op
