@@ -1,6 +1,7 @@
 package com.demigodsrpg.game.registry;
 
 import com.demigodsrpg.game.DGGame;
+import com.demigodsrpg.game.Setting;
 import com.demigodsrpg.game.model.AbstractPersistentModel;
 import com.demigodsrpg.game.util.JsonFileUtil;
 import com.demigodsrpg.game.util.JsonSection;
@@ -40,9 +41,7 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
     }
 
     final void register(Collection<T> data) {
-        for (T data_ : data) {
-            register(data_);
-        }
+        data.forEach(this::register);
     }
 
     public final synchronized void registerFromFile() {
@@ -79,6 +78,9 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
             currentFile.remove(key);
 
             // Save the file!
+            if (Setting.SAVE_PRETTY.get()) {
+                return JsonFileUtil.saveFilePretty(DGGame.SAVE_PATH, getFileName(), currentFile);
+            }
             return JsonFileUtil.saveFile(DGGame.SAVE_PATH, getFileName(), currentFile);
         }
 
@@ -94,6 +96,9 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
             currentFile.createSection(key, data.serialize());
 
             // Save the file!
+            if (Setting.SAVE_PRETTY.get()) {
+                return JsonFileUtil.saveFilePretty(DGGame.SAVE_PATH, getFileName(), currentFile);
+            }
             return JsonFileUtil.saveFile(DGGame.SAVE_PATH, getFileName(), currentFile);
         }
 

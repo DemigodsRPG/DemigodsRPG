@@ -4,33 +4,27 @@ import com.censoredsoftware.library.schematic.Point;
 import com.demigodsrpg.game.model.ShrineModel;
 import com.demigodsrpg.game.shrine.ShrineWorld;
 import com.demigodsrpg.game.util.JsonSection;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Iterables;
 import org.bukkit.Location;
 
 import java.util.Collection;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class ShrineRegistry extends AbstractRegistry<ShrineModel> {
     private static final String FILE_NAME = "shrines.dgc";
 
     public Collection<ShrineModel> getShrines(final Location location, final int range) {
-        return Collections2.filter(getRegistered(), new Predicate<ShrineModel>() {
-            @Override
-            public boolean apply(ShrineModel shrineModel) {
-                return shrineModel.getLocation().getWorld().equals(location.getWorld()) && shrineModel.getLocation().distance(location) <= range;
-            }
-        });
+        return getRegistered().stream().filter(model -> model.getLocation().getWorld().equals(location.getWorld()) && model.getLocation().distance(location) <= range).collect(Collectors.toList());
     }
 
     public ShrineModel getShrine(final Location location) {
-        return Iterables.find(getRegistered(), new Predicate<ShrineModel>() {
+        return getRegistered().stream().filter(new Predicate<ShrineModel>() {
             @Override
-            public boolean apply(ShrineModel shrineModel) {
+            public boolean test(ShrineModel model) {
                 Point point = new Point(location.getBlockX(), location.getBlockY(), location.getBlockZ(), new ShrineWorld(location.getWorld()));
-                return shrineModel.getShrineType().getLocations(shrineModel.getPoint()).contains(point);
+                return model.getShrineType().getLocations(model.getPoint()).contains(point);
             }
-        }, null);
+        }).findAny().get();
     }
 
     public void generate() {

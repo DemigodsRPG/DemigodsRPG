@@ -14,7 +14,7 @@ public interface Aspect {
     Tier getTier();
 
     public enum Tier {
-        NONE, I, II, III
+        I, II, III, HERO
     }
 
     public interface Group {

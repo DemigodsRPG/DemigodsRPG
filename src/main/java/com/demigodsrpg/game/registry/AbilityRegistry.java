@@ -313,7 +313,7 @@ public class AbilityRegistry implements Listener {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
 
-            if (Aspects.hasAspect(player, Aspects.BLOODLUST_ASPECT_III)) {
+            if (Aspects.hasAspect(player, Aspects.BLOODLUST_ASPECT_HERO)) {
                 if (player.getHealth() <= event.getDamage()) {
                     switch (event.getCause()) {
                         case ENTITY_ATTACK:

@@ -42,6 +42,7 @@ public class DGGame extends JavaPlugin {
     public static final SpawnRegistry SPAWN_R = new SpawnRegistry();
     public static final BattleRegistry BATTLE_R = new BattleRegistry();
     public static final AbilityRegistry ABILITY_R = new AbilityRegistry();
+    public static final DeityRegistry DEITY_R = new DeityRegistry();
     public static final ServerDataRegistry SERV_R = new ServerDataRegistry();
     public static final ConcurrentMap<String, TerritoryRegistry> TERR_R = new ConcurrentHashMap<>();
 
@@ -143,9 +144,7 @@ public class DGGame extends JavaPlugin {
         SPAWN_R.clearCache();
         SERV_R.clearCache();
 
-        for (TerritoryRegistry terr_r : TERR_R.values()) {
-            terr_r.clearCache();
-        }
+        TERR_R.values().forEach(com.demigodsrpg.game.registry.TerritoryRegistry::clearCache);
     }
 
     // -- TASK RELATED -- //

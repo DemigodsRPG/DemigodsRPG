@@ -111,60 +111,6 @@
             <version>${worldguard.version}</version>
             <scope>compile</scope>
             <type>jar</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.spout</groupId>
-                    <artifactId>spoutapi</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>de.schlichtherle</groupId>
-                    <artifactId>truezip</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>rhino</groupId>
-                    <artifactId>js</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sk89q</groupId>
-                    <artifactId>jchronic</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sk89q</groupId>
-                    <artifactId>dummypermscompat</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>craftbukkit</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.mockito</groupId>
-                    <artifactId>mockito-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sk89q</groupId>
-                    <artifactId>commandbook</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.nijikokun</groupId>
-                    <artifactId>iconomy</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.khelekore</groupId>
-                    <artifactId>prtree</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>net.sf.opencsv</groupId>
-                    <artifactId>opencsv</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- CensoredLib -->

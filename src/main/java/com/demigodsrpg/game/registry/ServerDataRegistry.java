@@ -2,12 +2,10 @@ package com.demigodsrpg.game.registry;
 
 import com.demigodsrpg.game.model.ServerDataModel;
 import com.demigodsrpg.game.util.JsonSection;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Sets;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class ServerDataRegistry extends AbstractRegistry<ServerDataModel> {
     private static final String FILE_NAME = "misc.dgc";
@@ -94,12 +92,7 @@ public class ServerDataRegistry extends AbstractRegistry<ServerDataModel> {
     }
 
     Set<ServerDataModel> findByRow(final String row) {
-        return Sets.newHashSet(Collections2.filter(getRegistered(), new Predicate<ServerDataModel>() {
-            @Override
-            public boolean apply(ServerDataModel ServerDataModel) {
-                return ServerDataModel.getRow().equals(row);
-            }
-        }));
+        return getRegistered().stream().filter(model -> model.getRow().equals(row)).collect(Collectors.toSet());
     }
 
     public void remove(String row, String column) {
@@ -110,13 +103,7 @@ public class ServerDataRegistry extends AbstractRegistry<ServerDataModel> {
      * Clears all expired timed value.
      */
     public void clearExpired() {
-        for (ServerDataModel data : Collections2.filter(getRegistered(), new Predicate<ServerDataModel>() {
-            @Override
-            public boolean apply(ServerDataModel data) {
-                return ServerDataModel.DataType.TIMED.equals(data.getDataType()) && data.getExpiration() <= System.currentTimeMillis();
-            }
-        }))
-            unregister(data);
+        getRegistered().stream().filter(model -> ServerDataModel.DataType.TIMED.equals(model.getDataType()) && model.getExpiration() <= System.currentTimeMillis()).collect(Collectors.toList()).forEach(this::unregister);
     }
 
     @Override

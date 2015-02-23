@@ -1,6 +1,7 @@
 package com.demigodsrpg.game.aspect;
 
 import com.demigodsrpg.game.DGGame;
+import com.demigodsrpg.game.aspect.bloodlust.BloodlustAspectHero;
 import com.demigodsrpg.game.aspect.bloodlust.BloodlustAspectI;
 import com.demigodsrpg.game.aspect.bloodlust.BloodlustAspectII;
 import com.demigodsrpg.game.aspect.bloodlust.BloodlustAspectIII;
@@ -28,6 +29,7 @@ public class Aspects {
     public static final WaterAspectI WATER_ASPECT_I = new WaterAspectI();
     public static final WaterAspectII WATER_ASPECT_II = new WaterAspectII();
 
+    public static final BloodlustAspectHero BLOODLUST_ASPECT_HERO = new BloodlustAspectHero();
     public static final BloodlustAspectI BLOODLUST_ASPECT_I = new BloodlustAspectI();
     public static final BloodlustAspectII BLOODLUST_ASPECT_II = new BloodlustAspectII();
     public static final BloodlustAspectIII BLOODLUST_ASPECT_III = new BloodlustAspectIII();
@@ -53,7 +55,7 @@ public class Aspects {
             WATER_ASPECT_I, WATER_ASPECT_II,
 
             // Bloodlust Aspect
-            BLOODLUST_ASPECT_I, BLOODLUST_ASPECT_II, BLOODLUST_ASPECT_III,
+            BLOODLUST_ASPECT_HERO, BLOODLUST_ASPECT_I, BLOODLUST_ASPECT_II, BLOODLUST_ASPECT_III,
 
             // Crafting Aspect
             CRAFTING_ASPECT_I,

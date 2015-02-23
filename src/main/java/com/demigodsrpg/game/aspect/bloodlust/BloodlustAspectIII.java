@@ -31,11 +31,6 @@ public class BloodlustAspectIII implements Aspect {
         return Tier.III;
     }
 
-    @Ability(name = "Cheat Death", info = "Can only die while being attacked.", type = Ability.Type.PASSIVE, placeholder = true)
-    public void cheatDeathAbility() {
-        // Do nothing, handled directly in the ability listener to save time
-    }
-
     @Ability(name = "Mighty Fists", info = "Attacking with no item does extra damage.", type = Ability.Type.PASSIVE)
     public AbilityResult fistsAbility(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {

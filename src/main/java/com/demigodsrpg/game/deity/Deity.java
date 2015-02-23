@@ -1,10 +1,13 @@
 package com.demigodsrpg.game.deity;
 
-public class Deity {
+import com.demigodsrpg.game.aspect.Aspect;
 
-    private Faction faction;
+public interface Deity {
+    String getName();
 
-    public Faction getFaction() {
-        return faction;
-    }
+    Faction getFaction();
+
+    boolean isEnabled();
+
+    Aspect.Group getAspectGroup();
 }

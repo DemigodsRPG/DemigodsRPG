@@ -7,15 +7,16 @@ active_worlds:
 - world
 - world_nether
 - world_the_end
-inactive_worlds:
+inactive_worlds: []
 globalfavormultiplier: 1.0
 globalexpmultiplier: 1.0
 globalfavorcap: 140000
+save_pretty: false
 max_devotion_lost_on_death: 15000
 max_target_range: 100
 max_hp: 3000
 pvp_exp_bonus: 1.5
-broadcast_new_deities: true
+broadcast_new_aspects: true
 stat_display_frequency_in_seconds: 0
 confirm_time: 10
 pvp_area_delay_time: 10
@@ -30,8 +31,8 @@ use_new_pvp_zones: true
 friendly_fire: false
 friendly_fire_message: true
 noob_level: 25000
-no_cost_deity_mode: false
-no_alliance_deity_mode: false
+no_cost_aspect_mode: false
+no_alliance_aspect_mode: false
 #Deity specific
 #Ares
 #Hades

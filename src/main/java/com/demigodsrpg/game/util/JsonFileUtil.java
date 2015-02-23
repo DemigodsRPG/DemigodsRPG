@@ -87,4 +87,18 @@ public class JsonFileUtil {
         if (!(dataFile.exists())) createFile(dataFile);
         return section.save(dataFile);
     }
+
+    /**
+     * Save a JsonSection as a json file in a pretty format.
+     *
+     * @param path     The path to the json file.
+     * @param fileName The filename (incl. file extension).
+     * @param section  The JsonSection to be saved.
+     * @return Save success or failure.
+     */
+    public static boolean saveFilePretty(String path, String fileName, JsonSection section) {
+        File dataFile = new File(path + fileName);
+        if (!(dataFile.exists())) createFile(dataFile);
+        return section.savePretty(dataFile);
+    }
 }

@@ -3,18 +3,13 @@ package com.demigodsrpg.game.registry;
 import com.censoredsoftware.library.util.RandomUtil;
 import com.demigodsrpg.game.model.TributeModel;
 import com.demigodsrpg.game.util.JsonSection;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Iterators;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TributeRegistry extends AbstractRegistry<TributeModel> {
     private final String FILE_NAME = "tributes.dgc";
@@ -54,12 +49,7 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
     }
 
     public Collection<TributeModel> find(final Category category) {
-        return Collections2.filter(getRegistered(), new Predicate<TributeModel>() {
-            @Override
-            public boolean apply(TributeModel tributeModel) {
-                return category.equals(tributeModel.getCategory());
-            }
-        });
+        return getRegistered().stream().filter(model -> category.equals(model.getCategory())).collect(Collectors.toList());
     }
 
     /**
@@ -245,13 +235,12 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
                     return Category.LEATHER;
                 }
 
-                if (Iterators.any(Bukkit.recipeIterator(), new Predicate<Recipe>() {
-                    @Override
-                    public boolean apply(Recipe recipe) {
-                        return recipe.getResult().getType().equals(material);
+                Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
+                while (recipeIterator.hasNext()) {
+                    Recipe recipe = recipeIterator.next();
+                    if (recipe.getResult().getType().equals(material)) {
+                        return Category.MANUFACTURED;
                     }
-                })) {
-                    return Category.MANUFACTURED;
                 }
 
                 // TODO More

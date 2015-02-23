@@ -9,6 +9,8 @@ import com.demigodsrpg.game.battle.BattleMetaData;
 import com.demigodsrpg.game.battle.Participant;
 import com.demigodsrpg.game.deity.Deity;
 import com.demigodsrpg.game.deity.Faction;
+import com.demigodsrpg.game.deity.God;
+import com.demigodsrpg.game.deity.Hero;
 import com.demigodsrpg.game.util.JsonSection;
 import com.demigodsrpg.game.util.ZoneUtil;
 import com.google.common.collect.BiMap;
@@ -30,7 +32,9 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     private final String mojangId;
     private String lastKnownName;
 
-    private String god, hero;
+    // -- PARENTS -- //
+    private God god;
+    private Hero hero;
 
     private final List<String> aspects = new ArrayList<>(1);
     private Faction faction;

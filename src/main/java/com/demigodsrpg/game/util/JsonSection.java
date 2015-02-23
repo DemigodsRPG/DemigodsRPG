@@ -60,6 +60,26 @@ public class JsonSection {
         return false;
     }
 
+    /**
+     * Save this section to a json file in a pretty format.
+     *
+     * @param dataFile The file to hold the section data.
+     * @return Save success or failure.
+     */
+    public boolean savePretty(File dataFile) {
+        try {
+            Gson gson = new GsonBuilder().setPrettyPrinting().enableComplexMapKeySerialization().create();
+            String json = gson.toJson(SECTION_DATA, Map.class);
+            PrintWriter writer = new PrintWriter(dataFile);
+            writer.print(json);
+            writer.close();
+            return true;
+        } catch (Exception oops) {
+            oops.printStackTrace();
+        }
+        return false;
+    }
+
     // -- GETTERS -- //
 
     // TODO Add documentation for the methods below.
