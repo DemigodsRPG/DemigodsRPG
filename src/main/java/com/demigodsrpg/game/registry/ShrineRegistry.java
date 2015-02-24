@@ -1,8 +1,6 @@
 package com.demigodsrpg.game.registry;
 
-import com.censoredsoftware.library.schematic.Point;
 import com.demigodsrpg.game.model.ShrineModel;
-import com.demigodsrpg.game.shrine.ShrineWorld;
 import com.demigodsrpg.game.util.JsonSection;
 import org.bukkit.Location;
 
@@ -22,8 +20,7 @@ public class ShrineRegistry extends AbstractRegistry<ShrineModel> {
         Optional<ShrineModel> model = getRegistered().stream().filter(new Predicate<ShrineModel>() {
             @Override
             public boolean test(ShrineModel model) {
-                Point point = new Point(location.getBlockX(), location.getBlockY(), location.getBlockZ(), new ShrineWorld(location.getWorld()));
-                return model.getShrineType().getLocations(model.getPoint()).contains(point);
+                return model.getShrineType().getLocations(model.getLocation()).contains(location);
             }
         }).findAny();
 
@@ -35,7 +32,7 @@ public class ShrineRegistry extends AbstractRegistry<ShrineModel> {
 
     public void generate() {
         for (ShrineModel model : getRegistered()) {
-            model.getShrineType().generate(model.getPoint());
+            model.getShrineType().generate(model.getLocation());
         }
     }
 

@@ -59,9 +59,20 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
         experience = new TIntDoubleHashMap(1);
 
-        god = Deity.LOREM;
-        hero = Deity.IPSUM;
+        // Neutral faction
         faction = Faction.NEUTRAL;
+
+        // Debug data
+        if (Setting.DEBUG_DATA.get()) {
+            // Debug deities
+            god = Deity.LOREM;
+            hero = Deity.IPSUM;
+
+            // Debug aspects
+            addAspect(Aspects.BLOODLUST_ASPECT_HERO);
+            addAspect(Aspects.WATER_ASPECT_I);
+            addAspect(Aspects.WATER_ASPECT_II);
+        }
 
         maxHealth = 20.0;
 
@@ -533,6 +544,6 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     private String getAspectName(Aspect aspect) {
-        return aspect.getGroup() + " " + aspect.getTier().name();
+        return aspect.getGroup().getName() + " " + aspect.getTier().name();
     }
 }

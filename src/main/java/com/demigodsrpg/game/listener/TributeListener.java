@@ -8,10 +8,7 @@ import com.demigodsrpg.game.deity.Deity;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.model.ShrineModel;
 import com.demigodsrpg.game.util.ZoneUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -38,7 +35,7 @@ public class TributeListener implements Listener {
         // Return from actions we don't care about
         if (!Action.RIGHT_CLICK_BLOCK.equals(event.getAction())) {
             if (Action.RIGHT_CLICK_AIR.equals(event.getAction())) {
-                location = event.getPlayer().getTargetBlock((Set) null, 10).getLocation();
+                location = event.getPlayer().getTargetBlock((Set<Material>) null, 10).getLocation();
             } else {
                 return;
             }
@@ -79,7 +76,7 @@ public class TributeListener implements Listener {
         if (!model.isDemigod()) return;
 
         // Get the shrine
-        ShrineModel save = DGGame.SHRINE_R.getShrine(player.getTargetBlock((Set) null, 10).getLocation());
+        ShrineModel save = DGGame.SHRINE_R.getShrine(player.getTargetBlock((Set<Material>) null, 10).getLocation());
 
         // If it isn't a tribute chest then break the method
         if (!event.getInventory().getName().contains("Tribute to") || save == null)

@@ -5,10 +5,7 @@ import com.demigodsrpg.game.model.PlayerModel;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -38,7 +35,7 @@ public class TargetingUtil {
         final int correction = 3;
         Location target = null;
         try {
-            target = player.getTargetBlock((Set) null, range).getLocation();
+            target = player.getTargetBlock((Set<Material>) null, range).getLocation();
         } catch (Exception ignored) {
         }
         if (target == null) return null;
@@ -80,7 +77,7 @@ public class TargetingUtil {
     }
 
     public static Location directTarget(Player player) {
-        return player.getTargetBlock((Set) null, 140).getLocation();
+        return player.getTargetBlock((Set<Material>) null, 140).getLocation();
     }
 
     /**

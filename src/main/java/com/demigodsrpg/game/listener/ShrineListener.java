@@ -84,7 +84,7 @@ public class ShrineListener implements Listener {
         }
         ShrineModel shrine = new ShrineModel(shrinename, p, deity, type, e.getClickedBlock().getLocation());
         DGGame.SHRINE_R.register(shrine);
-        shrine.getShrineType().generate(shrine.getPoint());
+        shrine.getShrineType().generate(shrine.getLocation());
         e.getClickedBlock().getWorld().strikeLightningEffect(e.getClickedBlock().getLocation());
         p.sendMessage("You have dedicated this shrine to " + deity.getFaction().getColor() + deity.getName() + ChatColor.WHITE + ".");
         p.sendMessage(ChatColor.YELLOW + "Warp here at any time with /shrine.");
@@ -174,24 +174,18 @@ public class ShrineListener implements Listener {
         if (event.getEntity() == null || ZoneUtil.inNoDGZone(event.getEntity().getLocation())) return;
         final List<ShrineModel> saves = Lists.newArrayList(DGGame.SHRINE_R.getShrines(event.getLocation(), 10));
 
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getInst(), new Runnable() {
-            @Override
-            public void run() {
-                // Remove all drops from explosion zone
-                for (final ShrineModel save : saves)
-                    event.getLocation().getWorld().getEntitiesByClass(Item.class).stream().filter(drop -> drop.getLocation().distance(save.getLocation()) <= save.getShrineType().getGroundRadius()).forEach(org.bukkit.entity.Item::remove);
-            }
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getInst(), () -> {
+            // Remove all drops from explosion zone
+            for (final ShrineModel save : saves)
+                event.getLocation().getWorld().getEntitiesByClass(Item.class).stream().filter(drop -> drop.getLocation().distance(save.getLocation()) <= save.getShrineType().getGroundRadius()).forEach(org.bukkit.entity.Item::remove);
         }, 1);
 
         if (DGGame.SERVER_R.contains("explode-structure", "blaam")) return;
         DGGame.SERVER_R.put("explode-structure", "blaam", true, 2, TimeUnit.SECONDS);
 
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getInst(), new Runnable() {
-            @Override
-            public void run() {
-                for (final ShrineModel save : saves)
-                    save.getShrineType().generate(save.getPoint());
-            }
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getInst(), () -> {
+            for (final ShrineModel save : saves)
+                save.getShrineType().generate(save.getLocation());
         }, 30);
     }
 }
