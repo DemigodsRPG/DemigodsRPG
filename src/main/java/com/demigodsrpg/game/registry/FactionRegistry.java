@@ -3,12 +3,18 @@ package com.demigodsrpg.game.registry;
 import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.util.JsonSection;
 
+import java.util.Optional;
+
 public class FactionRegistry extends AbstractRegistry<Faction> {
 
     private static final String FILE_NAME = "factions.dgcfg";
 
     public Faction factionFromName(final String name) {
-        return getRegistered().stream().filter(faction -> faction.getName().equals(name)).findAny().get();
+        Optional<Faction> found = getRegistered().stream().filter(faction -> faction.getName().equals(name)).findAny();
+        if (found.isPresent()) {
+            return found.get();
+        }
+        return null;
     }
 
     @Override

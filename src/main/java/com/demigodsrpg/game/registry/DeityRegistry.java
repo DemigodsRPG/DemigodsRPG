@@ -3,11 +3,17 @@ package com.demigodsrpg.game.registry;
 import com.demigodsrpg.game.deity.Deity;
 import com.demigodsrpg.game.util.JsonSection;
 
+import java.util.Optional;
+
 public class DeityRegistry extends AbstractRegistry<Deity> {
     private static final String FILE_NAME = "deities.dgcfg";
 
     public Deity deityFromName(String name) {
-        return getRegistered().stream().filter(deity -> deity.getName().equals(name)).findAny().get();
+        Optional<Deity> found = getRegistered().stream().filter(deity -> deity.getName().equals(name)).findAny();
+        if (found.isPresent()) {
+            return found.get();
+        }
+        return null;
     }
 
     @Override

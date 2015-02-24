@@ -6,15 +6,17 @@ import com.demigodsrpg.game.util.JsonSection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+import java.util.Optional;
+
 public class SpawnRegistry extends AbstractRegistry<SpawnModel> {
     private static final String FILE_NAME = "spawns.dgdat";
 
     public Location getSpawn(final Faction alliance) {
-        SpawnModel point = getRegistered().stream().filter(model -> model.getAlliance().equals(alliance)).findAny().get();
-        if (point == null) {
+        Optional<SpawnModel> point = getRegistered().stream().filter(model -> model.getAlliance().equals(alliance)).findAny();
+        if (!point.isPresent()) {
             return Bukkit.getWorlds().get(0).getSpawnLocation();
         }
-        return point.getLocation();
+        return point.get().getLocation();
     }
 
     @Override

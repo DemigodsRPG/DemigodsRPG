@@ -8,10 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -20,7 +17,11 @@ public class PlayerRegistry extends AbstractRegistry<PlayerModel> {
 
     @Deprecated
     public PlayerModel fromName(final String name) {
-        return getRegistered().stream().filter(model -> model.getLastKnownName().equalsIgnoreCase(name)).findAny().get();
+        Optional<PlayerModel> player = getRegistered().stream().filter(model -> model.getLastKnownName().equalsIgnoreCase(name)).findAny();
+        if (player.isPresent()) {
+            return player.get();
+        }
+        return null;
     }
 
     public PlayerModel fromPlayer(Player player) {

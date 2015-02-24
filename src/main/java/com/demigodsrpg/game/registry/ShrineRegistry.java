@@ -7,6 +7,7 @@ import com.demigodsrpg.game.util.JsonSection;
 import org.bukkit.Location;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -18,13 +19,18 @@ public class ShrineRegistry extends AbstractRegistry<ShrineModel> {
     }
 
     public ShrineModel getShrine(final Location location) {
-        return getRegistered().stream().filter(new Predicate<ShrineModel>() {
+        Optional<ShrineModel> model = getRegistered().stream().filter(new Predicate<ShrineModel>() {
             @Override
             public boolean test(ShrineModel model) {
                 Point point = new Point(location.getBlockX(), location.getBlockY(), location.getBlockZ(), new ShrineWorld(location.getWorld()));
                 return model.getShrineType().getLocations(model.getPoint()).contains(point);
             }
-        }).findAny().get();
+        }).findAny();
+
+        if (model.isPresent()) {
+            return model.get();
+        }
+        return null;
     }
 
     public void generate() {
