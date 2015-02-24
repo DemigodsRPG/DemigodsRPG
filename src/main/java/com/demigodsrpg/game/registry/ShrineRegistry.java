@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ShrineRegistry extends AbstractRegistry<ShrineModel> {
-    private static final String FILE_NAME = "shrines.dgc";
+    private static final String FILE_NAME = "shrines.dgdat";
 
     public Collection<ShrineModel> getShrines(final Location location, final int range) {
         return getRegistered().stream().filter(model -> model.getLocation().getWorld().equals(location.getWorld()) && model.getLocation().distance(location) <= range).collect(Collectors.toList());

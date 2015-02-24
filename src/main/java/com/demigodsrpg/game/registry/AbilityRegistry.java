@@ -108,7 +108,7 @@ public class AbilityRegistry implements Listener {
         String[] args = message.split("\\s+");
         Player player = event.getPlayer();
 
-        if (!ZoneUtil.inNoDGCZone(event.getPlayer().getLocation())) {
+        if (!ZoneUtil.inNoDGZone(event.getPlayer().getLocation())) {
             // Process the command
             try {
                 if (args.length == 2 && "info".equals(args[1])) {
@@ -184,7 +184,7 @@ public class AbilityRegistry implements Listener {
     }
 
     boolean processAbility1(PlayerModel model, AbilityMetaData ability) {
-        if (ZoneUtil.isNoDGCWorld(model.getLocation().getWorld())) return false;
+        if (ZoneUtil.isNoDGWorld(model.getLocation().getWorld())) return false;
         if (!ability.getType().equals(Ability.Type.PASSIVE)) {
             if ((ability.getType().equals(Ability.Type.OFFENSIVE) || ability.getType().equals(Ability.Type.ULTIMATE)) && ZoneUtil.inNoPvpZone(model.getLocation())) {
                 return false;
@@ -201,10 +201,10 @@ public class AbilityRegistry implements Listener {
                 model.getOfflinePlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " requires more favor.");
                 return false;
             }
-            if (DGGame.SERV_R.contains(model.getMojangId(), ability + ":delay")) {
+            if (DGGame.SERVER_R.contains(model.getMojangId(), ability + ":delay")) {
                 return false;
             }
-            if (DGGame.SERV_R.contains(model.getMojangId(), ability + ":cooldown")) {
+            if (DGGame.SERVER_R.contains(model.getMojangId(), ability + ":cooldown")) {
                 model.getOfflinePlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " is on a cooldown.");
                 return false;
             }
@@ -240,10 +240,10 @@ public class AbilityRegistry implements Listener {
             long cooldown = ability.getCooldown();
 
             if (delay > 0) {
-                DGGame.SERV_R.put(model.getMojangId(), ability + ":delay", true, delay, TimeUnit.MILLISECONDS);
+                DGGame.SERVER_R.put(model.getMojangId(), ability + ":delay", true, delay, TimeUnit.MILLISECONDS);
             }
             if (cooldown > 0) {
-                DGGame.SERV_R.put(model.getMojangId(), ability + ":cooldown", true, cooldown, TimeUnit.MILLISECONDS);
+                DGGame.SERVER_R.put(model.getMojangId(), ability + ":cooldown", true, cooldown, TimeUnit.MILLISECONDS);
             }
             if (cost > 0) {
                 model.setFavor(model.getFavor() - cost);
@@ -358,7 +358,7 @@ public class AbilityRegistry implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onPlayerMoveEvent(PlayerMoveEvent event) {
-        if (ZoneUtil.inNoDGCZone(event.getPlayer().getLocation())) return;
+        if (ZoneUtil.inNoDGZone(event.getPlayer().getLocation())) return;
 
         Player player = event.getPlayer();
 

@@ -8,8 +8,6 @@ import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
-import com.demigodsrpg.game.deity.Faction;
-import com.demigodsrpg.game.gui.ChooseAspectGUI;
 import com.demigodsrpg.game.model.PlayerModel;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,7 +18,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class AspectCommand extends BaseCommand {
@@ -40,41 +37,18 @@ public class AspectCommand extends BaseCommand {
             // FIXME Display the deities not aspects
             player.sendMessage(ChatColor.YELLOW + StringUtil2.chatTitle("Deity List"));
             for (Aspect aspect : Aspects.values()) {
-                player.sendMessage(" - " + aspect.getColor() + aspect.getGroup() + ": " + aspect.getInfo() /* FIXME + " (" + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + ")" */);
+                player.sendMessage(" - " + aspect.getGroup().getColor() + aspect.getGroup().getName() + ": " + aspect.getInfo() /* FIXME + " (" + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + ")" */);
             }
             return CommandResult.SUCCESS;
         }
 
         if (args.length == 1) {
-            // Claim
-            switch (args[0].toLowerCase()) {
-                case "claim": {
-                    try {
-                        Inventory inventory = new ChooseAspectGUI(player).getInventory();
-                        if (inventory == null) {
-                            if (model.getFaction().equals(Faction.EXCOMMUNICATED)) {
-                                player.sendMessage(ChatColor.YELLOW + "Your current alliance prevents you from claiming new deities.");
-                            } else {
-                                player.sendMessage(ChatColor.RED + "There are *currently* no deities you can choose from.");
-                                player.sendMessage(ChatColor.YELLOW + "You need " + model.costForNextDeity() + " ascensions to claim again."); // TODO Fix this for there being no more deities left
-                            }
-                            return CommandResult.QUIET_ERROR;
-                        }
-                        player.openInventory(inventory);
-                        return CommandResult.SUCCESS;
-                    } catch (Exception oops) {
-                        oops.printStackTrace();
-                        return CommandResult.ERROR;
-                    }
-                }
-            }
-
-            // Deity info
+            // Aspect info
             try {
                 Aspect aspect = Aspects.valueOf(args[0].toUpperCase());
-                player.sendMessage(aspect.getColor() + StringUtil2.chatTitle(aspect.getGroup() + " Info"));
+                player.sendMessage(aspect.getGroup().getColor() + StringUtil2.chatTitle(aspect.getGroup() + " Info"));
                 player.sendMessage(" - Info: " + aspect.getInfo());
-                // FIXME player.sendMessage(" - Alliance: " + StringUtil2.beautify(aspect.getDefaultAlliance().name()));
+                // FIXME player.sendMessage(" - Deity: " + StringUtil2.beautify(aspect.getDefaultAlliance().name()));
 
                 for (AbilityMetaData ability : DGGame.ABILITY_R.getAbilities(aspect)) {
                     player.sendMessage(" " + ability.getName() + ":");
@@ -106,26 +80,15 @@ public class AspectCommand extends BaseCommand {
                     final Aspect aspect = Aspects.valueOf(deityName.toUpperCase());
 
                     if (aspect != null && model.canClaim(aspect)) {
-                        // Check if the importance is none
-                        if (Aspect.Tier.NONE.equals(aspect.getTier())) {
-                            // TODO CANNOT CLAIM ASPECTS THAT AREN'T IN A TIER
+                        // Check if the aspect is a hero tier
+                        if (Aspect.Tier.HERO.equals(aspect.getTier())) {
                             player.sendMessage(ChatColor.RED + "You cannot claim this aspect.");
                             return CommandResult.QUIET_ERROR;
-
-                            // Give the deity
-                            // model.giveMajorDeity(deity, true);
-
-                            // Message them
-                            // player.sendMessage(deity.getColor() + "The " + StringUtil2.beautify(deity.getDefaultAlliance().name()) + " alliance welcomes you, " + deity.getNomen() + ".");
-
-                            // Fancy particles
-                            // for (int i = 0; i < 20; i++)
-                            //    player.getWorld().spawn(player.getLocation(), ExperienceOrb.class);
                         }
                         // Check if the tier is I
-                        else if (Aspect.Tier.I.equals(aspect.getTier()) /* && FIXME!model.getMajorDeity().getImportance().equals(IAspect.Strength.MAJOR) */) {
+                        else if (Aspect.Tier.I.equals(aspect.getTier())) {
                             // Pondering message
-                            player.sendMessage(aspect.getColor() + aspect.getGroup() + ChatColor.GRAY + " is pondering your choice...");
+                            player.sendMessage(aspect.getGroup().getColor() + aspect.getGroup().getName() + ChatColor.GRAY + " is pondering your choice...");
 
                             // Play scary sound
                             player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 0.6F, 1F);
@@ -152,7 +115,7 @@ public class AspectCommand extends BaseCommand {
                         } else {
                             // Pondering message
                             // FIXME Display a more fitting message
-                            player.sendMessage(aspect.getColor() + aspect.getGroup() + ChatColor.GRAY + " is pondering your choice...");
+                            player.sendMessage(aspect.getGroup().getColor() + aspect.getGroup().getName() + ChatColor.GRAY + " is pondering your choice...");
 
                             // Play scary sound
                             player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 0.6F, 1F);

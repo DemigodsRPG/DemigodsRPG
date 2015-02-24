@@ -9,8 +9,6 @@ import com.demigodsrpg.game.battle.BattleMetaData;
 import com.demigodsrpg.game.battle.Participant;
 import com.demigodsrpg.game.deity.Deity;
 import com.demigodsrpg.game.deity.Faction;
-import com.demigodsrpg.game.deity.God;
-import com.demigodsrpg.game.deity.Hero;
 import com.demigodsrpg.game.util.JsonSection;
 import com.demigodsrpg.game.util.ZoneUtil;
 import com.google.common.collect.BiMap;
@@ -33,8 +31,8 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     private String lastKnownName;
 
     // -- PARENTS -- //
-    private God god;
-    private Hero hero;
+    private Deity god;
+    private Deity hero;
 
     private final List<String> aspects = new ArrayList<>(1);
     private Faction faction;
@@ -181,6 +179,18 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     public void setFaction(Faction faction) {
         this.faction = faction;
         DGGame.PLAYER_R.register(this);
+    }
+
+    public Deity getGod() {
+        return god;
+    }
+
+    public Deity getHero() {
+        return hero;
+    }
+
+    public boolean hasDeity(Deity deity) {
+        return deity.equals(god) || deity.equals(hero);
     }
 
     double getMaxHealth() {
@@ -499,10 +509,10 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
             player.sendMessage(ChatColor.GRAY + "You can now enter in a battle.");
         } else if (!inNoPvpZone) {
             setCanPvp(true);
-            DGGame.SERV_R.remove(player.getName(), "pvp_cooldown");
-        } else if (getCanPvp() && !DGGame.SERV_R.contains(player.getName(), "pvp_cooldown")) {
+            DGGame.SERVER_R.remove(player.getName(), "pvp_cooldown");
+        } else if (getCanPvp() && !DGGame.SERVER_R.contains(player.getName(), "pvp_cooldown")) {
             int delay = 10;
-            DGGame.SERV_R.put(player.getName(), "pvp_cooldown", true, delay, TimeUnit.SECONDS);
+            DGGame.SERVER_R.put(player.getName(), "pvp_cooldown", true, delay, TimeUnit.SECONDS);
             final PlayerModel THIS = this;
             Bukkit.getScheduler().scheduleSyncDelayedTask(DGGame.getInst(), new BukkitRunnable() {
                 @Override

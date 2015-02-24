@@ -35,7 +35,7 @@ public class ShrineModel extends AbstractPersistentModel<String> {
     public ShrineModel(String shrineId, JsonSection conf) {
         this.shrineId = shrineId;
         ownerMojangId = conf.getString("owner_id");
-        deity = DGGame.DEITY_R.fromName(conf.getString("deity"));
+        deity = DGGame.DEITY_R.deityFromName(conf.getString("deity"));
         shrine = Shrine.valueOf(conf.getString("type"));
 
         World world = Bukkit.getWorld(conf.getString("world_name"));

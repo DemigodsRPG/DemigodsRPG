@@ -26,11 +26,11 @@ public class FactionCommand extends BaseCommand {
             return CommandResult.QUIET_ERROR;
         }
 
-        if (DGGame.SERV_R.contains("alliance_chat", player.getUniqueId().toString())) {
-            DGGame.SERV_R.remove("alliance_chat", player.getUniqueId().toString());
+        if (DGGame.SERVER_R.contains("alliance_chat", player.getUniqueId().toString())) {
+            DGGame.SERVER_R.remove("alliance_chat", player.getUniqueId().toString());
             player.sendMessage(ChatColor.YELLOW + "You just disabled alliance chat.");
         } else {
-            DGGame.SERV_R.put("alliance_chat", player.getUniqueId().toString(), true);
+            DGGame.SERVER_R.put("alliance_chat", player.getUniqueId().toString(), true);
             player.sendMessage(ChatColor.YELLOW + "You just enabled alliance chat.");
         }
         return CommandResult.SUCCESS;

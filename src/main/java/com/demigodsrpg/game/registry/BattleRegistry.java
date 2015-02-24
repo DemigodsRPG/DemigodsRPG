@@ -23,7 +23,7 @@ public class BattleRegistry {
     }
 
     public boolean canTarget(Entity entity) {
-        if (ZoneUtil.isNoDGCWorld(entity.getWorld())) return false;
+        if (ZoneUtil.isNoDGWorld(entity.getWorld())) return false;
         Participant participant = defineParticipant(entity);
         return participant == null || participant.getCanPvp();
     }

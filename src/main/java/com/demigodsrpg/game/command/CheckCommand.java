@@ -23,14 +23,14 @@ public class CheckCommand extends BaseCommand {
         Player player = (Player) sender;
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
         player.sendMessage(StringUtil2.chatTitle("Player Stats"));
-        // FIXME player.sendMessage(ChatColor.YELLOW + "You are " + (StringUtil2.beginsWithVowel(nomen) ? "an " : "a ") + model.getMajorDeity().getColor() + nomen + ".");
-        player.sendMessage(ChatColor.YELLOW + "You are allied with the " + StringUtil2.beautify(model.getFaction().getName()) + " alliance.");
+        player.sendMessage(ChatColor.YELLOW + "You are the offspring of " + model.getGod().getName() + " and " + model.getHero().getName() + "."); // TODO Colors
+        player.sendMessage(ChatColor.YELLOW + "You are allied with the " + StringUtil2.beautify(model.getFaction().getName()) + " faction.");
         player.sendMessage(ChatColor.YELLOW + "You have " + ColorUtil.getColor(player.getHealth(), player.getMaxHealth()) + ChatColor.ITALIC + player.getHealth() + " / " + player.getMaxHealth() + ChatColor.YELLOW + " health.");
         if (!model.getAspects().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for (String deityName : model.getAspects()) {
                 Aspect aspect = Aspects.valueOf(deityName);
-                builder.append(aspect.getColor()).append(aspect.getGroup()).append(ChatColor.RESET).append(", ");
+                builder.append(aspect.getGroup().getColor()).append(aspect.getGroup().getName()).append(ChatColor.RESET).append(", ");
             }
             String minorDeities = builder.toString();
             minorDeities = minorDeities.substring(0, minorDeities.length() - 4) + ".";

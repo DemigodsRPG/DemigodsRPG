@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class ServerDataRegistry extends AbstractRegistry<ServerDataModel> {
-    private static final String FILE_NAME = "misc.dgc";
+    private static final String FILE_NAME = "misc.dgdat";
 
     public void put(String row, String column, String value) {
         // Remove the value if it exists already

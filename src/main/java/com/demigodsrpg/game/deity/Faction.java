@@ -1,8 +1,13 @@
 package com.demigodsrpg.game.deity;
 
+import com.demigodsrpg.game.model.AbstractPersistentModel;
+import com.demigodsrpg.game.util.JsonSection;
 import org.bukkit.ChatColor;
 
-public class Faction {
+import java.util.HashMap;
+import java.util.Map;
+
+public class Faction extends AbstractPersistentModel<String> {
 
     // -- ALWAYS EXISTING FACTIONS -- //
 
@@ -15,12 +20,18 @@ public class Faction {
     private ChatColor color;
     private String chatSymbol;
 
-    // -- CONSTRUCTOR -- //
+    // -- CONSTRUCTORS -- //
 
     public Faction(String name, ChatColor color, String chatSymbol) {
         this.name = name;
         this.color = color;
         this.chatSymbol = chatSymbol;
+    }
+
+    public Faction(String stringKey, JsonSection conf) {
+        name = stringKey;
+        color = ChatColor.valueOf(conf.getString("color"));
+        chatSymbol = conf.getString("chat-symbol");
     }
 
     // -- GETTERS -- //
@@ -35,5 +46,18 @@ public class Faction {
 
     public String getChatSymbol() {
         return chatSymbol;
+    }
+
+    @Override
+    public String getPersistentId() {
+        return name;
+    }
+
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("color", color.name());
+        map.put("chat-symbol", chatSymbol);
+        return map;
     }
 }

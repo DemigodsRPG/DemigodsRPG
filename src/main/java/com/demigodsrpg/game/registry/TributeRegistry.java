@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TributeRegistry extends AbstractRegistry<TributeModel> {
-    private final String FILE_NAME = "tributes.dgc";
+    private final String FILE_NAME = "tributes.dgdat";
 
     @Override
     public TributeModel valueFromData(String stringKey, JsonSection data) {

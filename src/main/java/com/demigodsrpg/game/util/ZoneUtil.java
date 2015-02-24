@@ -1,13 +1,11 @@
 package com.demigodsrpg.game.util;
 
 import com.demigodsrpg.game.DGGame;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Sets;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.Set;
@@ -27,12 +25,7 @@ public class ZoneUtil {
         ENABLED_WORLDS.addAll(enabledWorlds);
 
         // Init WorldGuard stuff
-        WorldGuardUtil.setWhenToOverridePVP(DGGame.getInst(), new Predicate<Event>() {
-            @Override
-            public boolean apply(Event event) {
-                return event instanceof EntityDamageByEntityEvent && !inNoDGCZone(((EntityDamageByEntityEvent) event).getEntity().getLocation());
-            }
-        });
+        WorldGuardUtil.setWhenToOverridePVP(DGGame.getInst(), event -> event instanceof EntityDamageByEntityEvent && !inNoDGZone(((EntityDamageByEntityEvent) event).getEntity().getLocation()));
 
         return erroredWorlds;
     }
@@ -47,11 +40,11 @@ public class ZoneUtil {
         return !PLUGIN_CONFIG.getBoolean("zones.allow_skills_anywhere") && WorldGuardUtil.worldGuardEnabled() && !WorldGuardUtil.canPVP(location);
     }
 
-    public static boolean inNoDGCZone(Location location) {
-        return isNoDGCWorld(location.getWorld());
+    public static boolean inNoDGZone(Location location) {
+        return isNoDGWorld(location.getWorld());
     }
 
-    public static boolean isNoDGCWorld(World world) {
+    public static boolean isNoDGWorld(World world) {
         return !ENABLED_WORLDS.contains(world.getName());
     }
 

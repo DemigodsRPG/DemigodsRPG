@@ -1,6 +1,7 @@
 package com.demigodsrpg.game.command.admin;
 
 import com.demigodsrpg.game.DGGame;
+import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.command.type.AdminPlayerCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
@@ -16,17 +17,17 @@ public class AddDevotionCommand extends AdminPlayerCommand {
             try {
                 Player p = DGGame.PLAYER_R.fromName(args[0]).getOfflinePlayer().getPlayer();
                 double amount = Double.parseDouble(args[2]);
-                Aspects aspect = Aspects.valueOf(args[1].toUpperCase());
-                if (!DGGame.PLAYER_R.fromPlayer(p).getAllDeities().contains(aspect)) {
-                    sender.sendMessage(ChatColor.RED + "The player you are accessing does not have that deity.");
+                Aspect aspect = Aspects.valueOf(args[1].toUpperCase());
+                if (!DGGame.PLAYER_R.fromPlayer(p).getAspects().contains(aspect.getGroup().getName() + " " + aspect.getTier().name())) {
+                    sender.sendMessage(ChatColor.RED + "The player you are accessing does not have that aspect.");
                     return CommandResult.QUIET_ERROR;
                 }
 
                 DGGame.PLAYER_R.fromPlayer(p).setExperience(aspect, DGGame.PLAYER_R.fromPlayer(p).getExperience(aspect) + amount);
 
-                sender.sendMessage(ChatColor.YELLOW + "You added " + amount + " devotion to " + p.getName() + " in the deity " + aspect.getNomen() + ".");
+                sender.sendMessage(ChatColor.YELLOW + "You added " + amount + " devotion to " + p.getName() + " to the " + aspect.getGroup().getName() + " " + aspect.getTier().name() + " aspect.");
             } catch (Exception ignored) {
-                sender.sendMessage(ChatColor.RED + "Invalid syntax! /AddDevotion [Name, Deity, Amount]");
+                sender.sendMessage(ChatColor.RED + "Invalid syntax! /AddDevotion [Name, Aspect, Amount]");
                 return CommandResult.QUIET_ERROR;
             }
             return CommandResult.SUCCESS;

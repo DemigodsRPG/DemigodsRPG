@@ -33,6 +33,6 @@ public class FactionChatTag extends PlayerTag {
 
     private boolean isInChat(Player player) {
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
-        return DGGame.SERV_R.contains("faction_chat", player.getUniqueId().toString()) && !Faction.NEUTRAL.equals(model.getFaction()) && !Faction.EXCOMMUNICATED.equals(model.getFaction());
+        return DGGame.SERVER_R.contains("faction_chat", player.getUniqueId().toString()) && !Faction.NEUTRAL.equals(model.getFaction()) && !Faction.EXCOMMUNICATED.equals(model.getFaction());
     }
 }

@@ -1,5 +1,5 @@
 package com.demigodsrpg.game.deity;
 
-public class Hero implements Deity {
-
+public enum DeityType {
+    GOD, HERO
 }

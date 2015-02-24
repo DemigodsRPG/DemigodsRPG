@@ -26,7 +26,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(event.getPlayer());
-        if (DGGame.SERV_R.contains("alliance_chat", event.getPlayer().getUniqueId().toString()) && !Faction.NEUTRAL.equals(model.getFaction()) && !Faction.EXCOMMUNICATED.equals(model.getFaction())) {
+        if (DGGame.SERVER_R.contains("faction_chat", event.getPlayer().getUniqueId().toString()) && !Faction.NEUTRAL.equals(model.getFaction()) && !Faction.EXCOMMUNICATED.equals(model.getFaction())) {
             event.getRecipients().clear();
             Set<PlayerModel> playerModelSet = DGGame.PLAYER_R.getOnlineInAlliance(model.getFaction());
             for (PlayerModel playerModel : playerModelSet) {

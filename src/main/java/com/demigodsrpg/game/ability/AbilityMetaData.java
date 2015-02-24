@@ -15,7 +15,7 @@ public class AbilityMetaData {
     // -- CONSTRUCTOR -- //
 
     public AbilityMetaData(Aspect aspect, Method method, Ability ability) {
-        this.aspect = aspect.getName();
+        this.aspect = aspect.getGroup() + " " + aspect.getTier().name();
         this.method = method;
         this.ability = ability;
     }

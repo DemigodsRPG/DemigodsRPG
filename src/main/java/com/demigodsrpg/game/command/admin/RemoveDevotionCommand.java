@@ -1,6 +1,7 @@
 package com.demigodsrpg.game.command.admin;
 
 import com.demigodsrpg.game.DGGame;
+import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.command.type.AdminPlayerCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
@@ -19,8 +20,8 @@ public class RemoveDevotionCommand extends AdminPlayerCommand {
                 Player p = DGGame.PLAYER_R.fromName(args[0]).getOfflinePlayer().getPlayer();
                 double amount = Double.parseDouble(args[2]);
                 m = DGGame.PLAYER_R.fromPlayer(p);
-                Aspects aspect = Aspects.valueOf(args[1].toUpperCase());
-                if (!m.getAllDeities().contains(aspect)) {
+                Aspect aspect = Aspects.valueOf(args[1].toUpperCase());
+                if (!m.getAspects().contains(aspect.getGroup().getName() + " " + aspect.getTier().name())) {
                     sender.sendMessage(ChatColor.RED + "The player you are accessing does not have that deity.");
                     return CommandResult.QUIET_ERROR;
                 }
@@ -29,7 +30,7 @@ public class RemoveDevotionCommand extends AdminPlayerCommand {
 
                 m.setExperience(aspect, newAmount);
 
-                sender.sendMessage(ChatColor.YELLOW + "You removed " + amount + " devotion from " + p.getName() + " in the deity " + aspect.getNomen() + ".");
+                sender.sendMessage(ChatColor.YELLOW + "You removed " + amount + " devotion from " + p.getName() + " in the aspect group " + aspect.getGroup().getName() + ".");
             } catch (Exception ignored) {
                 sender.sendMessage(ChatColor.RED + "Invalid syntax! /RemoveDevotion [Name, Deity, Amount]");
                 return CommandResult.QUIET_ERROR;

@@ -1,20 +1,27 @@
 package com.demigodsrpg.game.registry;
 
 import com.demigodsrpg.game.deity.Deity;
-import com.demigodsrpg.game.deity.Faction;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
+import com.demigodsrpg.game.util.JsonSection;
 
-import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
+public class DeityRegistry extends AbstractRegistry<Deity> {
+    private static final String FILE_NAME = "deities.dgcfg";
 
-public class DeityRegistry {
+    public Deity deityFromName(String name) {
+        return getRegistered().stream().filter(deity -> deity.getName().equals(name)).findAny().get();
+    }
 
-    // -- REGISTRY DATA -- //
+    @Override
+    protected Deity valueFromData(String stringKey, JsonSection data) {
+        return new Deity(stringKey, data);
+    }
 
-    private static final Multimap<Faction, Deity> REGISTERED_DEITIES = Multimaps.newListMultimap(new ConcurrentHashMap<>(), () -> new ArrayList<>(0));
+    @Override
+    protected String getFileName() {
+        return FILE_NAME;
+    }
 
-    public Deity fromName(String name) {
-        return REGISTERED_DEITIES.values().stream().filter(deity -> deity.getName().equals(name)).findAny().get();
+    @Override
+    protected boolean isPretty() {
+        return true;
     }
 }

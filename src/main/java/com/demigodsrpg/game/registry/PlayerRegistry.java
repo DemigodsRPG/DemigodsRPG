@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class PlayerRegistry extends AbstractRegistry<PlayerModel> {
-    private static final String FILE_NAME = "players.dgc";
+    private static final String FILE_NAME = "players.dgdat";
 
     @Deprecated
     public PlayerModel fromName(final String name) {

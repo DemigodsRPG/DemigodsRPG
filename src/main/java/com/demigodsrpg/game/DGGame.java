@@ -5,10 +5,7 @@ import com.demigodsrpg.game.command.*;
 import com.demigodsrpg.game.command.admin.*;
 import com.demigodsrpg.game.integration.chitchat.FactionChatTag;
 import com.demigodsrpg.game.integration.chitchat.FactionIdTag;
-import com.demigodsrpg.game.listener.InventoryListener;
-import com.demigodsrpg.game.listener.PlayerListener;
-import com.demigodsrpg.game.listener.ShrineListener;
-import com.demigodsrpg.game.listener.TributeListener;
+import com.demigodsrpg.game.listener.*;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.model.TributeModel;
 import com.demigodsrpg.game.registry.*;
@@ -40,11 +37,12 @@ public class DGGame extends JavaPlugin {
     public static final ShrineRegistry SHRINE_R = new ShrineRegistry();
     public static final TributeRegistry TRIBUTE_R = new TributeRegistry();
     public static final SpawnRegistry SPAWN_R = new SpawnRegistry();
+    public static final FactionRegistry FACTION_R = new FactionRegistry();
     public static final BattleRegistry BATTLE_R = new BattleRegistry();
     public static final AbilityRegistry ABILITY_R = new AbilityRegistry();
     public static final DeityRegistry DEITY_R = new DeityRegistry();
-    public static final ServerDataRegistry SERV_R = new ServerDataRegistry();
-    public static final ConcurrentMap<String, TerritoryRegistry> TERR_R = new ConcurrentHashMap<>();
+    public static final ServerDataRegistry SERVER_R = new ServerDataRegistry();
+    public static final ConcurrentMap<String, AreaRegistry> AREA_R = new ConcurrentHashMap<>();
 
     // -- PLUGIN RELATED INSTANCE METHODS -- //
 
@@ -65,9 +63,9 @@ public class DGGame extends JavaPlugin {
 
         // Determine territory registries
         for (World world : Bukkit.getWorlds()) {
-            TerritoryRegistry terr_r = new TerritoryRegistry(world);
-            terr_r.registerFromFile();
-            TERR_R.put(world.getName(), new TerritoryRegistry(world));
+            AreaRegistry area_r = new AreaRegistry(world);
+            area_r.registerFromFile();
+            AREA_R.put(world.getName(), new AreaRegistry(world));
         }
 
         // Register the abilities
@@ -90,6 +88,7 @@ public class DGGame extends JavaPlugin {
         manager.registerEvents(new PlayerListener(), this);
         manager.registerEvents(new ShrineListener(), this);
         manager.registerEvents(new TributeListener(), this);
+        manager.registerEvents(new AreaListener(), this);
         manager.registerEvents(ABILITY_R, this);
 
         // Register commands
@@ -142,9 +141,9 @@ public class DGGame extends JavaPlugin {
         SHRINE_R.clearCache();
         TRIBUTE_R.clearCache();
         SPAWN_R.clearCache();
-        SERV_R.clearCache();
+        SERVER_R.clearCache();
 
-        TERR_R.values().forEach(com.demigodsrpg.game.registry.TerritoryRegistry::clearCache);
+        AREA_R.values().forEach(AreaRegistry::clearCache);
     }
 
     // -- TASK RELATED -- //
@@ -157,7 +156,7 @@ public class DGGame extends JavaPlugin {
             public void run() {
                 // Update online players
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (ZoneUtil.inNoDGCZone(player.getLocation())) continue;
+                    if (ZoneUtil.inNoDGZone(player.getLocation())) continue;
                     PlayerModel model = PLAYER_R.fromPlayer(player);
                     if (model != null) {
                         model.updateCanPvp();
@@ -169,7 +168,7 @@ public class DGGame extends JavaPlugin {
             @Override
             public void run() {
                 // Update Timed Data
-                SERV_R.clearExpired();
+                SERVER_R.clearExpired();
             }
         };
         FIRE_SPREAD = new BukkitRunnable() {
