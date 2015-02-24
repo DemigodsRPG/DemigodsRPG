@@ -95,7 +95,7 @@ public class DGGame extends JavaPlugin {
         getCommand("faction").setExecutor(new FactionCommand());
         getCommand("binds").setExecutor(new BindsCommand());
         getCommand("check").setExecutor(new CheckCommand());
-        getCommand("deity").setExecutor(new AspectCommand());
+        getCommand("aspect").setExecutor(new AspectCommand());
         getCommand("cleanse").setExecutor(new CleanseCommand());
         getCommand("shrine").setExecutor(new ShrineCommand());
         getCommand("values").setExecutor(new ValuesCommand());
