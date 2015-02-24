@@ -16,7 +16,8 @@ public enum Setting {
     EXP_MULTIPLIER(Double.class, getConfig().getDouble("globalexpmultiplier", 4.0)),
     NO_COST_ASPECT_MODE(Boolean.class, getConfig().getBoolean("no_cost_aspect_mode", false)),
     NO_ALLIANCE_ASPECT_MODE(Boolean.class, getConfig().getBoolean("no_faction_aspect_mode", false)),
-    SAVE_PRETTY(Boolean.class, getConfig().getBoolean("save_pretty", false));
+    SAVE_PRETTY(Boolean.class, getConfig().getBoolean("save_pretty", false)),
+    DEBUG_DATA(Boolean.class, getConfig().getBoolean("debug_data", false));
 
     private final Class<?> clazz;
     private final Object setting;

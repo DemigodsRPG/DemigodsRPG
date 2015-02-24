@@ -57,9 +57,10 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         lastKnownName = player.getName();
         lastLoginTime = System.currentTimeMillis();
 
-        // FIXME majorDeity = Aspect.HUMAN.name();
         experience = new TIntDoubleHashMap(1);
 
+        god = Deity.LOREM;
+        hero = Deity.IPSUM;
         faction = Faction.NEUTRAL;
 
         maxHealth = 20.0;
@@ -79,7 +80,9 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         lastKnownName = conf.getString("last_known_name");
         lastLoginTime = conf.getLong("last_login_time");
         aspects.addAll(conf.getStringList("aspects").stream().collect(Collectors.toList()));
-        // FIXME faction = Faction.valueOf(conf.getString("faction"));
+        god = DGGame.DEITY_R.deityFromName(conf.getString("god"));
+        hero = DGGame.DEITY_R.deityFromName(conf.getString("hero"));
+        faction = DGGame.FACTION_R.factionFromName(conf.getString("faction"));
         binds.putAll((Map) conf.getSection("binds").getValues());
         maxHealth = conf.getDouble("max_health");
         favor = conf.getDouble("favor");
@@ -112,7 +115,9 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         Map<String, Object> map = new HashMap<>();
         map.put("last_known_name", lastKnownName);
         map.put("last_login_time", lastLoginTime);
-        map.put("contracted_deities", Lists.newArrayList(aspects));
+        map.put("aspects", Lists.newArrayList(aspects));
+        map.put("god", god.getName());
+        map.put("hero", hero.getName());
         map.put("faction", faction.getName());
         map.put("binds", binds);
         map.put("max_health", maxHealth);

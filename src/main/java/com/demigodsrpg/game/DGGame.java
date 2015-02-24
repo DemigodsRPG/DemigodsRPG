@@ -3,6 +3,8 @@ package com.demigodsrpg.game;
 import com.demigodsrpg.chitchat.Chitchat;
 import com.demigodsrpg.game.command.*;
 import com.demigodsrpg.game.command.admin.*;
+import com.demigodsrpg.game.deity.Deity;
+import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.integration.chitchat.FactionChatTag;
 import com.demigodsrpg.game.integration.chitchat.FactionIdTag;
 import com.demigodsrpg.game.listener.*;
@@ -60,6 +62,17 @@ public class DGGame extends JavaPlugin {
 
         // Define the save path
         SAVE_PATH = getDataFolder().getPath() + "/data/";
+
+        // Register default factions
+        FACTION_R.register(Faction.NEUTRAL);
+        FACTION_R.register(Faction.EXCOMMUNICATED);
+
+        // Debug data
+        if (Setting.DEBUG_DATA.get()) {
+            // Debug deities
+            DEITY_R.register(Deity.LOREM);
+            DEITY_R.register(Deity.IPSUM);
+        }
 
         // Determine territory registries
         for (World world : Bukkit.getWorlds()) {
@@ -139,8 +152,10 @@ public class DGGame extends JavaPlugin {
     private static void clearCache() {
         PLAYER_R.clearCache();
         SHRINE_R.clearCache();
+        FACTION_R.clearCache();
         TRIBUTE_R.clearCache();
         SPAWN_R.clearCache();
+        DEITY_R.clearCache();
         SERVER_R.clearCache();
 
         AREA_R.values().forEach(AreaRegistry::clearCache);

@@ -35,9 +35,9 @@ public class AspectCommand extends BaseCommand {
         // Deity list
         if (args.length == 0) {
             // FIXME Display the deities not aspects
-            player.sendMessage(ChatColor.YELLOW + StringUtil2.chatTitle("Deity List"));
+            player.sendMessage(ChatColor.YELLOW + StringUtil2.chatTitle("Aspect List"));
             for (Aspect aspect : Aspects.values()) {
-                player.sendMessage(" - " + aspect.getGroup().getColor() + aspect.getGroup().getName() + ": " + aspect.getInfo() /* FIXME + " (" + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + ")" */);
+                player.sendMessage(" - " + aspect.getGroup().getColor() + aspect.getGroup().getName() + " " + aspect.getTier().name() + ": " + aspect.getInfo() /* FIXME + " (" + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + ")" */);
             }
             return CommandResult.SUCCESS;
         }

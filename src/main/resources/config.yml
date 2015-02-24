@@ -33,6 +33,7 @@ friendly_fire_message: true
 noob_level: 25000
 no_cost_aspect_mode: false
 no_faction_aspect_mode: false
+debug_data: false
 #Deity specific
 #Ares
 #Hades
