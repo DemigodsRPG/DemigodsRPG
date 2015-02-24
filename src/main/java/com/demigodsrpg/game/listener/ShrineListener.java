@@ -4,7 +4,6 @@ package com.demigodsrpg.game.listener;
 
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.deity.Deity;
-import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.model.ShrineModel;
 import com.demigodsrpg.game.shrine.Shrine;
 import com.demigodsrpg.game.util.ZoneUtil;
@@ -35,20 +34,14 @@ public class ShrineListener implements Listener {
         Sign s = (Sign) e.getClickedBlock().getState();
         if (!s.getLines()[0].trim().equalsIgnoreCase("shrine")) return;
         if (!s.getLines()[1].trim().equalsIgnoreCase("dedicate")) return;
-        Deity deity = null;
         Player p = e.getPlayer();
-        PlayerModel model = DGGame.PLAYER_R.fromPlayer(p);
-        for (String dN : model.getAspects()) {
-            Deity d = DGGame.DEITY_R.deityFromName(dN);
-            if (s.getLines()[2].trim().equalsIgnoreCase(d.getName())) {
-                deity = d;
-                break;
-            }
-        }
+        Deity deity = DGGame.DEITY_R.deityFromName(s.getLines()[2].trim());
+
         if (deity == null) {
             p.sendMessage(ChatColor.YELLOW + "There is no deity by that name.");
             return;
         }
+
         String shrinename;
         if (s.getLines()[3].trim().length() == 0) {
             p.sendMessage(ChatColor.YELLOW + "The shrine requires a name.");

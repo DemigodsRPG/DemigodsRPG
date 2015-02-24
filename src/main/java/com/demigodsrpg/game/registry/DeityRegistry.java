@@ -9,7 +9,7 @@ public class DeityRegistry extends AbstractRegistry<Deity> {
     private static final String FILE_NAME = "deities.dgcfg";
 
     public Deity deityFromName(String name) {
-        Optional<Deity> found = getRegistered().stream().filter(deity -> deity.getName().equals(name)).findAny();
+        Optional<Deity> found = getRegistered().stream().filter(deity -> deity.getName().equalsIgnoreCase(name)).findAny();
         if (found.isPresent()) {
             return found.get();
         }

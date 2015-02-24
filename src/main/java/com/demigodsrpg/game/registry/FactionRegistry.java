@@ -10,7 +10,7 @@ public class FactionRegistry extends AbstractRegistry<Faction> {
     private static final String FILE_NAME = "factions.dgcfg";
 
     public Faction factionFromName(final String name) {
-        Optional<Faction> found = getRegistered().stream().filter(faction -> faction.getName().equals(name)).findAny();
+        Optional<Faction> found = getRegistered().stream().filter(faction -> faction.getName().equalsIgnoreCase(name)).findAny();
         if (found.isPresent()) {
             return found.get();
         }
