@@ -30,11 +30,11 @@ public class CheckCommand extends BaseCommand {
             StringBuilder builder = new StringBuilder();
             for (String deityName : model.getAspects()) {
                 Aspect aspect = Aspects.valueOf(deityName);
-                builder.append(aspect.getGroup().getColor()).append(aspect.getGroup().getName()).append(ChatColor.RESET).append(", ");
+                builder.append(aspect.getGroup().getColor()).append(aspect.getGroup().getName()).append(" ").append(aspect.getTier().name()).append(ChatColor.RESET).append(", ");
             }
-            String minorDeities = builder.toString();
-            minorDeities = minorDeities.substring(0, minorDeities.length() - 4) + ".";
-            player.sendMessage("You have also allied with: " + minorDeities);
+            String aspects = builder.toString();
+            aspects = aspects.substring(0, aspects.length() - 4) + ".";
+            player.sendMessage("Your aspects: " + aspects);
         }
         player.sendMessage("Favor: " + model.getFavor());
         player.sendMessage("Total Devotion: " + model.getTotalExperience());
