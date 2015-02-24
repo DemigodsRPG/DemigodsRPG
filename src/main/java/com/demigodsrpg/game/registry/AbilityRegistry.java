@@ -13,7 +13,10 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -380,11 +383,12 @@ public class AbilityRegistry implements Listener {
     private void onEvent(EntityTargetEvent event) {
         Entity entity = event.getEntity();
 
-        // Demon Aspect III
-        if (entity instanceof LivingEntity) {
-            if ((entity instanceof Zombie) || (entity instanceof Skeleton)) {
-                if (!DGGame.PLAYER_R.fromPlayer((Player) event.getTarget()).hasAspect(Aspects.DEMON_ASPECT_III)) return;
-                event.setCancelled(true);
+        if (event.getTarget() instanceof Player) {
+            // Demon Aspect III
+            if (entity instanceof Zombie || entity instanceof Skeleton) {
+                if (DGGame.PLAYER_R.fromPlayer((Player) event.getTarget()).hasAspect(Aspects.DEMON_ASPECT_III)) {
+                    event.setCancelled(true);
+                }
             }
         }
     }
