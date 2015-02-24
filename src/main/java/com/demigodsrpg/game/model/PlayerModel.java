@@ -87,7 +87,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         maxHealth = conf.getDouble("max_health");
         favor = conf.getDouble("favor");
         experience = new TIntDoubleHashMap(1);
-        for (Map.Entry<String, Object> entry : conf.getSection("experience").getValues().entrySet()) {
+        for (Map.Entry<String, Object> entry : conf.getSection("devotion").getValues().entrySet()) {
             try {
                 experience.put(Aspects.valueOf(entry.getKey()).getId(), Double.valueOf(entry.getValue().toString()));
             } catch (Exception ignored) {
