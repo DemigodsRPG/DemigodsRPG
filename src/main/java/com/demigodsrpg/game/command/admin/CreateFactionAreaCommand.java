@@ -52,6 +52,8 @@ public class CreateFactionAreaCommand extends BaseCommand {
 
                             // Notify the admin
                             sender.sendMessage(ChatColor.YELLOW + "Faction territory for " + faction.getName() + " has been created.");
+
+                            return CommandResult.SUCCESS;
                         } else {
                             sender.sendMessage(ChatColor.RED + "The selection was empty, try again.");
                             return CommandResult.QUIET_ERROR;
