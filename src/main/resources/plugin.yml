@@ -29,32 +29,22 @@ commands:
     usage: /values
     aliases: [v]
   ## Admin Commands
+  adminmode:
+    usage: /adminmode
+    permissions: demigods.admin
+    aliases: [am, dga, dgam]
   checkplayer:
     usage: /checkplayer [player]
-    permissions: demigods.admin.check
   adddevotion:
     usage: /adddevotion [player] [aspect] [amount]
-    permission: demigods.admin.devotion
   removedevotion:
     usage: /removedevotion [player] [aspect] [amount]
-    permission: demigods.admin.devotion
   giveaspect:
     usage: /givedeity [player] [aspect] [major|minor]
-    permission: demigods.admin.aspect
   removeaspect:
     usage: /removedeity [player] [aspect]
-    permission: demigods.admin.aspect
   setfaction:
     usage: /setalliance [player] [alliance]
-    permission: demigods.admin.alliance
 permisions:
-  demigods.admin.check:
-    default: op
-  demigods.admin.devotion:
-    default: op
-  demigods.admin.aspect:
-    default: op
-  demigods.admin.faction:
-    default: op
-  demigods.admin.cleanse:
+  demigods.admin:
     default: op

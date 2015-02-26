@@ -10,6 +10,7 @@ import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.registry.AreaRegistry;
 import com.demigodsrpg.game.util.ZoneUtil;
 import net.md_5.bungee.api.ChatColor;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -18,13 +19,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class AreaListener implements Listener {
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerMove(final PlayerMoveEvent event) {
         // Get the world
         World world = event.getTo().getWorld();
@@ -49,7 +51,7 @@ public class AreaListener implements Listener {
                     if (area instanceof FactionTerritory) {
                         // Handle the faction territory, check if it should cancel the event
                         FactionTerritory factionArea = (FactionTerritory) area;
-                        if (!handleFactionAreas(factionArea, event.getPlayer(), event.getTo())) {
+                        if (!handleFactionAreas(factionArea, event.getPlayer(), event.getTo(), !(event instanceof PlayerTeleportEvent))) {
                             event.setCancelled(true);
                         }
                     }
@@ -66,13 +68,13 @@ public class AreaListener implements Listener {
 
     // -- HELPER METHODS -- //
 
-    private boolean handleFactionAreas(FactionTerritory area, Player player, Location forward) {
+    private boolean handleFactionAreas(FactionTerritory area, Player player, Location forward, boolean block) {
         // Important info
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
         Faction faction = area.getFaction();
 
         // Check to make sure the player is in the right faction
-        if (!faction.equals(model.getFaction())) {
+        if (!faction.equals(model.getFaction()) && !model.getAdminMode()) {
             // Throttle the warning message
             if (!DGGame.SERVER_R.contains(model.getMojangId(), "faction-area")) {
                 player.sendMessage(ChatColor.RED + "You are not a member of the " + faction.getColor() + faction.getName() + org.bukkit.ChatColor.RED + " faction.");
@@ -80,9 +82,11 @@ public class AreaListener implements Listener {
             }
 
             // Send a fake invisible wall to prevent the player from moving forward
-            Location forwardBottom = forward.clone().add(0, -1, 0);
-            player.sendBlockChange(forward, Material.BARRIER, (byte) 0);
-            player.sendBlockChange(forwardBottom, Material.BARRIER, (byte) 0);
+            if (block) {
+                Location forwardBottom = forward.clone().add(0, -1, 0);
+                player.sendBlockChange(forward, Material.BARRIER, (byte) 0);
+                player.sendBlockChange(forwardBottom, Material.BARRIER, (byte) 0);
+            }
 
             // Cancel the event
             return false;
@@ -115,7 +119,7 @@ public class AreaListener implements Listener {
             case HERO:
                 model.setHero(deity);
                 endMessage += deity.getFaction().getColor() + deity.getName() + ChatColor.YELLOW + " as your parent Hero.";
-                factionMessage = ChatColor.YELLOW + deity.getPronouns()[0] + " has placed you in the " + deity.getFaction().getColor() + deity.getFaction().getName() + ChatColor.YELLOW + " faction.";
+                factionMessage = ChatColor.YELLOW + StringUtils.capitalize(deity.getPronouns()[0]) + " has placed you in the " + deity.getFaction().getColor() + deity.getFaction().getName() + ChatColor.YELLOW + " faction.";
                 model.setFaction(deity.getFaction());
                 break;
         }

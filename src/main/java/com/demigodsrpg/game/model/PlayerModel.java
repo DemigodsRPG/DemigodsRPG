@@ -47,6 +47,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     private int level;
 
     private boolean canPvp;
+    private boolean adminMode;
 
     private int kills;
     private int deaths;
@@ -81,6 +82,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         level = 0;
 
         canPvp = true;
+        adminMode = false;
 
         kills = 0;
         deaths = 0;
@@ -107,6 +109,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         }
         level = conf.getInt("level");
         canPvp = conf.getBoolean("can_pvp", true);
+        adminMode = conf.getBoolean("admin_mode", false);
         kills = conf.getInt("kills");
         deaths = conf.getInt("deaths");
         teamKills = conf.getInt("team_kills");
@@ -146,6 +149,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         map.put("devotion", devotionMap);
         map.put("level", level);
         map.put("can_pvp", canPvp);
+        map.put("admin_mode", adminMode);
         map.put("kills", kills);
         map.put("deaths", deaths);
         map.put("team_kills", teamKills);
@@ -341,6 +345,15 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
     void setCanPvp(Boolean canPvp) {
         this.canPvp = canPvp;
+        DGGame.PLAYER_R.register(this);
+    }
+
+    public boolean getAdminMode() {
+        return adminMode;
+    }
+
+    public void setAdminMode(Boolean adminMode) {
+        this.adminMode = adminMode;
         DGGame.PLAYER_R.register(this);
     }
 
