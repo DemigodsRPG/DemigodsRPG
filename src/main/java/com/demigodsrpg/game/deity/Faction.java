@@ -11,27 +11,30 @@ public class Faction extends AbstractPersistentModel<String> {
 
     // -- ALWAYS EXISTING FACTIONS -- //
 
-    public static final Faction NEUTRAL = new Faction("Neutral", ChatColor.GRAY, "N");
-    public static final Faction EXCOMMUNICATED = new Faction("Excommunicated", ChatColor.DARK_GRAY, "X");
+    public static final Faction NEUTRAL = new Faction("Neutral", ChatColor.GRAY, "N", "Welcome to neutral ground.");
+    public static final Faction EXCOMMUNICATED = new Faction("Excommunicated", ChatColor.DARK_GRAY, "X", "Something has gone horribly wrong, alert an admin.");
 
     // -- FACTION META DATA -- //
 
     private String name;
     private ChatColor color;
     private String chatSymbol;
+    private String welcomeMessage;
 
     // -- CONSTRUCTORS -- //
 
-    public Faction(String name, ChatColor color, String chatSymbol) {
+    public Faction(String name, ChatColor color, String chatSymbol, String welcomeMessage) {
         this.name = name;
         this.color = color;
         this.chatSymbol = chatSymbol;
+        this.welcomeMessage = welcomeMessage;
     }
 
     public Faction(String stringKey, JsonSection conf) {
         name = stringKey;
         color = ChatColor.valueOf(conf.getString("color"));
         chatSymbol = conf.getString("chat-symbol");
+        welcomeMessage = conf.getString("welcome-message");
     }
 
     // -- GETTERS -- //
@@ -48,6 +51,10 @@ public class Faction extends AbstractPersistentModel<String> {
         return chatSymbol;
     }
 
+    public String getWelcomeMessage() {
+        return welcomeMessage;
+    }
+
     @Override
     public String getPersistentId() {
         return name;
@@ -58,6 +65,7 @@ public class Faction extends AbstractPersistentModel<String> {
         Map<String, Object> map = new HashMap<>();
         map.put("color", color.name());
         map.put("chat-symbol", chatSymbol);
+        map.put("welcome-message", welcomeMessage);
         return map;
     }
 }

@@ -8,6 +8,7 @@ import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.battle.BattleMetaData;
 import com.demigodsrpg.game.battle.Participant;
 import com.demigodsrpg.game.deity.Deity;
+import com.demigodsrpg.game.deity.DeityType;
 import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.util.JsonSection;
 import com.demigodsrpg.game.util.ZoneUtil;
@@ -195,6 +196,21 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     public void setFaction(Faction faction) {
         this.faction = faction;
         DGGame.PLAYER_R.register(this);
+    }
+
+
+    public void setGod(Deity god) {
+        if (DeityType.GOD.equals(god.getDeityType())) {
+            this.god = god;
+        }
+        throw new IllegalArgumentException("Cannot set a non-god deity as a god.");
+    }
+
+    public void setHero(Deity hero) {
+        if (DeityType.HERO.equals(hero.getDeityType())) {
+            this.hero = hero;
+        }
+        throw new IllegalArgumentException("Cannot set a non-hero deity as a hero.");
     }
 
     public Deity getGod() {

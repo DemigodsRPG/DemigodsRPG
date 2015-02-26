@@ -29,7 +29,7 @@ public class FactionTerritory extends Area {
         this.faction = DGGame.FACTION_R.factionFromName(id.split("\\$")[1]);
     }
 
-    Faction getFaction() {
+    public Faction getFaction() {
         return faction;
     }
 
