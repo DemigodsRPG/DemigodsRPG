@@ -47,7 +47,7 @@ public class AreaSelection implements Listener {
             event.setCancelled(true);
 
             // Either add or remove the point
-            if (points.contains(point)) {
+            if (!points.contains(point)) {
                 points.add(point);
                 event.getPlayer().sendMessage(ChatColor.YELLOW + "Point " + points.size() + " has been marked.");
             } else {
