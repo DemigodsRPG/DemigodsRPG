@@ -63,6 +63,7 @@ public class AreaListener implements Listener {
                             // Bounce back
                             Vector victor = event.getPlayer().getVelocity();
                             victor.multiply(-8); // TODO This is wonky
+                            victor.setY(0.5);
                             event.getPlayer().setVelocity(victor);
                         }
                     }

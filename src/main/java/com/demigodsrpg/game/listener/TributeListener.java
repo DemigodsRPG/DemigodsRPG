@@ -164,7 +164,7 @@ public class TributeListener implements Listener {
         Deity shrineDeity = save.getDeity();
 
         // Open the tribute inventory
-        Inventory ii = Bukkit.getServer().createInventory(player, 27, "Tribute to " + shrineDeity.getFaction().getChatSymbol() + shrineDeity.getName() + ChatColor.RESET + ".");
+        Inventory ii = Bukkit.getServer().createInventory(player, 27, "Tribute to " + shrineDeity.getFaction().getColor() + shrineDeity.getName() + ChatColor.RESET + ".");
         player.openInventory(ii);
     }
 }
