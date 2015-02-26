@@ -17,7 +17,8 @@ public enum Setting {
     NO_COST_ASPECT_MODE(Boolean.class, getConfig().getBoolean("no_cost_aspect_mode", false)),
     NO_FACTION_ASPECT_MODE(Boolean.class, getConfig().getBoolean("no_faction_aspect_mode", false)),
     SAVE_PRETTY(Boolean.class, getConfig().getBoolean("save_pretty", false)),
-    DEBUG_DATA(Boolean.class, getConfig().getBoolean("debug_data", false));
+    DEBUG_DATA(Boolean.class, getConfig().getBoolean("debug_data", false)),
+    DEBUG_INVISIBLE_WALLS(Boolean.class, getConfig().getBoolean("debug_invisible_walls", false));
 
     private final Class<?> clazz;
     private final Object setting;

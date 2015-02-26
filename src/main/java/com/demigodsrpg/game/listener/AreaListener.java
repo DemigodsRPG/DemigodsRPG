@@ -1,6 +1,7 @@
 package com.demigodsrpg.game.listener;
 
 import com.demigodsrpg.game.DGGame;
+import com.demigodsrpg.game.Setting;
 import com.demigodsrpg.game.area.Area;
 import com.demigodsrpg.game.area.ClaimRoom;
 import com.demigodsrpg.game.area.FactionTerritory;
@@ -23,6 +24,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.util.Vector;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -55,7 +57,13 @@ public class AreaListener implements Listener {
                         // Handle the faction territory, check if it should cancel the event
                         FactionTerritory factionArea = (FactionTerritory) area;
                         if (!handleFactionAreas(factionArea, event.getPlayer(), event.getTo(), !(event instanceof PlayerTeleportEvent))) {
+                            // Cancel the event
                             event.setCancelled(true);
+
+                            // Bounce back
+                            Vector victor = event.getPlayer().getVelocity();
+                            victor.multiply(-8); // TODO This is wonky
+                            event.getPlayer().setVelocity(victor);
                         }
                     }
 
@@ -86,9 +94,10 @@ public class AreaListener implements Listener {
 
             // Send a fake invisible wall to prevent the player from moving forward
             if (block) {
-                Location forwardBottom = forward.clone().add(0, -1, 0);
-                player.sendBlockChange(forward, Material.BARRIER, (byte) 0);
-                player.sendBlockChange(forwardBottom, Material.BARRIER, (byte) 0);
+                Material wall = Setting.DEBUG_INVISIBLE_WALLS.get() ? Material.BRICK : Material.BARRIER;
+                Location forwardTop = forward.clone().add(0, 1, 0);
+                player.sendBlockChange(forward, wall, (byte) 0);
+                player.sendBlockChange(forwardTop, wall, (byte) 0);
             }
 
             // Cancel the event
