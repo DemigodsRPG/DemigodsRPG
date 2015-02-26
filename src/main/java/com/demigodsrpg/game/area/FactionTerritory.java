@@ -15,7 +15,7 @@ public class FactionTerritory extends Area {
     private final String uuid;
     private final Faction faction;
 
-    private FactionTerritory(Faction faction, AreaPriority priority, List<Location> corners) {
+    public FactionTerritory(Faction faction, AreaPriority priority, List<Location> corners) {
         super(priority, corners);
         this.uuid = UUID.randomUUID().toString();
         this.faction = faction;

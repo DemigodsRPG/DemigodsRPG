@@ -33,6 +33,12 @@ commands:
     usage: /adminmode
     permissions: demigods.admin
     aliases: [am, dga, dgam]
+  selectarea:
+    usage: /selectarea
+    aliases: [sa, areaselect]
+  createfactionarea:
+    usage: /createfactionarea [faction]
+    aliases: [makefactionarea]
   checkplayer:
     usage: /checkplayer [player]
   adddevotion:

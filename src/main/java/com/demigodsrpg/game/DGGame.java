@@ -115,6 +115,8 @@ public class DGGame extends JavaPlugin {
 
         // Admin commands
         getCommand("adminmode").setExecutor(new AdminModeComand());
+        getCommand("selectarea").setExecutor(new SelectAreaCommand());
+        getCommand("createfactionarea").setExecutor(new CreateFactionAreaCommand());
         getCommand("checkplayer").setExecutor(new CheckPlayerCommand());
         getCommand("adddevotion").setExecutor(new AddDevotionCommand());
         getCommand("removedevotion").setExecutor(new RemoveDevotionCommand());
