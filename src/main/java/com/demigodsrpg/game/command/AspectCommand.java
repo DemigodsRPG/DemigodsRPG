@@ -98,7 +98,7 @@ public class AspectCommand extends BaseCommand {
                                 @Override
                                 public void run() {
                                     // Give the aspect
-                                    // FIXME model.giveFirstAspect(hero, aspect);
+                                    // FIXME model.giveHeroAspect(hero, aspect);
 
                                     // Play acceptance sound
                                     player.playSound(player.getLocation(), Sound.ENDERDRAGON_DEATH, 1F, 1F);

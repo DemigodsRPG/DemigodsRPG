@@ -15,6 +15,8 @@ import com.demigodsrpg.game.aspect.lightning.LightningAspectII;
 import com.demigodsrpg.game.aspect.lightning.LightningAspectIII;
 import com.demigodsrpg.game.aspect.water.WaterAspectI;
 import com.demigodsrpg.game.aspect.water.WaterAspectII;
+import com.demigodsrpg.game.deity.Deity;
+import com.demigodsrpg.game.deity.Faction;
 import org.bukkit.entity.Player;
 
 public class Aspects {
@@ -83,5 +85,16 @@ public class Aspects {
 
     public static boolean hasAspect(Player player, Aspect aspect) {
         return DGGame.PLAYER_R.fromPlayer(player).hasAspect(aspect);
+    }
+
+    public static boolean isInFaction(Faction faction, Aspect aspect) {
+        for (Deity inFaction : DGGame.DEITY_R.deitiesInFaction(faction)) {
+            for (Aspect.Group group : inFaction.getAspectGroups()) {
+                if (Groups.aspectsInGroup(group).contains(aspect)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

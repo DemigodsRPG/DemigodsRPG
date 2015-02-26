@@ -418,6 +418,18 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return getAspects().contains(getAspectName(aspect));
     }
 
+    public boolean hasPrereqs(Aspect aspect) {
+        Aspect.Group group = aspect.getGroup();
+        int tier = aspect.getTier().ordinal();
+        for (String hasName : getAspects()) {
+            Aspect has = Aspects.valueOf(hasName);
+            if (has.getGroup().equals(group) && !Aspect.Tier.HERO.equals(has.getTier()) && (tier == 1 || has.getTier().ordinal() + 1 == tier)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @SuppressWarnings("RedundantCast")
     @Override
     public boolean reward(BattleMetaData data) {
@@ -462,7 +474,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return true;
     }
 
-    public void giveFirstAspect(Deity hero, Aspect aspect) {
+    public void giveHeroAspect(Deity hero, Aspect aspect) {
         giveAspect(aspect);
         setFaction(hero.getFaction());
         setMaxHealth(25.0);
@@ -477,15 +489,12 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public boolean canClaim(Aspect aspect) {
-        if (faction.equals(Faction.NEUTRAL)) {
-            return !hasAspect(aspect);
-        }
-        if (Setting.NO_ALLIANCE_ASPECT_MODE.get()) {
-            return costForNextDeity() <= level && !hasAspect(aspect);
+        if (Setting.NO_FACTION_ASPECT_MODE.get()) {
+            return costForNextAspect() <= level && !hasAspect(aspect) && hasPrereqs(aspect);
         }
 
         // TODO Decide how to check if they can claim an aspect.
-        return costForNextDeity() <= level && !hasAspect(aspect);
+        return costForNextAspect() <= level && !hasAspect(aspect) && hasPrereqs(aspect) && Aspects.isInFaction(faction, aspect);
     }
 
     void calculateAscensions() {
@@ -500,13 +509,13 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
             setLevel(getLevel() + 1);
 
-            player.sendMessage(ChatColor.AQUA + "Congratulations! Your Ascensions increased to " + getLevel() + ".");
+            player.sendMessage(ChatColor.AQUA + "Congratulations! Your Ascensions have increased to " + getLevel() + ".");
             player.sendMessage(ChatColor.YELLOW + "Your maximum HP has increased to " + getMaxHealth() + ".");
         }
         DGGame.PLAYER_R.register(this);
     }
 
-    public int costForNextDeity() {
+    public int costForNextAspect() {
         if (Setting.NO_COST_ASPECT_MODE.get()) return 0;
         switch (aspects.size() + 1) {
             case 1:

@@ -4,7 +4,10 @@ import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.area.Area;
 import com.demigodsrpg.game.area.ClaimRoom;
 import com.demigodsrpg.game.area.FactionTerritory;
+import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.deity.Deity;
+import com.demigodsrpg.game.deity.DeityType;
 import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.registry.AreaRegistry;
@@ -108,7 +111,6 @@ public class AreaListener implements Listener {
         Deity deity = area.getDeity();
 
         String endMessage = ChatColor.YELLOW + "You have chosen ";
-        String factionMessage = "";
 
         // Set the correct type (and potentially faction if the deity is a hero)
         switch (deity.getDeityType()) {
@@ -119,15 +121,28 @@ public class AreaListener implements Listener {
             case HERO:
                 model.setHero(deity);
                 endMessage += deity.getFaction().getColor() + deity.getName() + ChatColor.YELLOW + " as your parent Hero.";
-                factionMessage = ChatColor.YELLOW + StringUtils.capitalize(deity.getPronouns()[0]) + " has placed you in the " + deity.getFaction().getColor() + deity.getFaction().getName() + ChatColor.YELLOW + " faction.";
-                model.setFaction(deity.getFaction());
                 break;
         }
 
         // Send the appropriate messages
         player.sendMessage(endMessage);
-        if (!"".equals(factionMessage)) {
-            player.sendMessage(factionMessage);
+
+        // Add starting aspects
+        for (Aspect.Group group : deity.getAspectGroups()) {
+            List<Aspect> inGroup = Groups.aspectsInGroup(group);
+            for (Aspect aspect : inGroup) {
+                // Hero aspect
+                if (DeityType.HERO.equals(deity.getDeityType()) && Aspect.Tier.HERO.equals(aspect.getTier())) {
+                    model.giveHeroAspect(deity, aspect);
+                    player.sendMessage(ChatColor.YELLOW + StringUtils.capitalize(deity.getPronouns()[0]) + " has placed you in the " + deity.getFaction().getColor() + deity.getFaction().getName() + ChatColor.YELLOW + " faction.");
+                    break;
+                }
+
+                // God tier I aspect
+                else if (DeityType.GOD.equals(deity.getDeityType()) && Aspect.Tier.I.equals(aspect.getTier())) {
+                    model.giveAspect(aspect);
+                }
+            }
         }
 
         // If there is a next location, teleport the player to it
