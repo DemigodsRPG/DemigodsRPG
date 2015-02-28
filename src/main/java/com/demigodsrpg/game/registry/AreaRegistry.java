@@ -42,7 +42,7 @@ public class AreaRegistry extends AbstractRegistry<Area> {
     }
 
     public List<Area> fromLocation(final Location location) {
-        return getRegistered().stream().filter(area -> area.contains(location)).collect(Collectors.toList());
+        return getRegistered().parallelStream().filter(area -> area.contains(location)).collect(Collectors.toList());
     }
 
     @Override

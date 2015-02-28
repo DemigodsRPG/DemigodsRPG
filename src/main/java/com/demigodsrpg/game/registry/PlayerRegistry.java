@@ -1,6 +1,7 @@
 package com.demigodsrpg.game.registry;
 
 import com.demigodsrpg.game.aspect.Aspect;
+import com.demigodsrpg.game.deity.Deity;
 import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.util.JsonSection;
@@ -46,6 +47,10 @@ public class PlayerRegistry extends AbstractRegistry<PlayerModel> {
             }
         }
         return players;
+    }
+
+    public Set<PlayerModel> fromDeity(Deity deity) {
+        return getRegistered().parallelStream().filter(model -> model.hasDeity(deity)).collect(Collectors.toSet());
     }
 
     public Collection<PlayerModel> fromAspect(final Aspect aspect) {
