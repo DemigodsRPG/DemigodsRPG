@@ -3,8 +3,8 @@ package com.demigodsrpg.game.registry;
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.battle.Participant;
 import com.demigodsrpg.game.util.ZoneUtil;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.player.Player;
 
 public class BattleRegistry {
     public boolean isInBattle(Participant participant) {

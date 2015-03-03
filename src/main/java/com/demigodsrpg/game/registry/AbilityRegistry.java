@@ -9,26 +9,27 @@ import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.util.ZoneUtil;
+import com.flowpowered.math.vector.Vector3d;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.Zombie;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.inventory.FurnaceSmeltEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.util.Vector;
+import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.monster.Skeleton;
+import org.spongepowered.api.entity.living.monster.Zombie;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.event.block.data.FurnaceSmeltItemEvent;
+import org.spongepowered.api.event.entity.EntityTargetEntityEvent;
+import org.spongepowered.api.event.entity.living.player.PlayerChangeHealthEvent;
+import org.spongepowered.api.event.entity.living.player.PlayerChatEvent;
+import org.spongepowered.api.event.entity.living.player.PlayerInteractEvent;
+import org.spongepowered.api.event.entity.living.player.PlayerMoveEvent;
+import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.util.event.Event;
+import org.spongepowered.api.util.event.Order;
+import org.spongepowered.api.util.event.Subscribe;
+import org.spongepowered.api.world.World;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Method;
@@ -38,17 +39,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
-public class AbilityRegistry implements Listener {
+public class AbilityRegistry {
     // FIXME Do we really need two collections for the same data? This is expensive...
 
     private static final ConcurrentMap<String, AbilityMetaData> REGISTERED_COMMANDS = new ConcurrentHashMap<>();
     private static final Multimap<String, AbilityMetaData> REGISTERED_ABILITIES = Multimaps.newListMultimap(new ConcurrentHashMap<>(), () -> new ArrayList<>(0));
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @Subscribe(order = Order.FIRST)
     private void onEvent(PlayerInteractEvent event) {
-        switch (event.getAction()) {
-            case LEFT_CLICK_BLOCK:
-            case LEFT_CLICK_AIR:
+        switch (event.getInteractionType()) {
+            case LEFT_CLICK:
                 return;
         }
         for (AbilityMetaData ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
@@ -67,30 +67,32 @@ public class AbilityRegistry implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    private void onEvent(EntityDamageByEntityEvent event) {
-        for (AbilityMetaData ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
-            try {
-                if (event.getDamager() instanceof Player) {
-                    Player player = (Player) event.getDamager();
-                    PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
-                    if (processAbility1(model, ability)) {
-                        Object rawResult = ability.getMethod().invoke(ability.getAspect(), event);
-                        processAbility2(player, model, ability, rawResult);
+    @Subscribe(order = Order.FIRST)
+    private void onEvent(PlayerChangeHealthEvent event) {
+        if (event.getCause().isPresent() && event.getCause().get().getCause() instanceof Entity) {
+            for (AbilityMetaData ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
+                try {
+                    if (event.getCause().get().getCause() instanceof Player) {
+                        Player player = (Player) event.getCause().get().getCause();
+                        PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
+                        if (processAbility1(model, ability)) {
+                            Object rawResult = ability.getMethod().invoke(ability.getAspect(), event);
+                            processAbility2(player, model, ability, rawResult);
+                        }
                     }
+                } catch (Exception oops) {
+                    oops.printStackTrace();
                 }
-            } catch (Exception oops) {
-                oops.printStackTrace();
             }
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    private void onEvent(FurnaceSmeltEvent event) {
+    @Subscribe(order = Order.EARLY)
+    private void onEvent(FurnaceSmeltItemEvent event) {
         for (AbilityMetaData ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
             for (PlayerModel model : DGGame.PLAYER_R.fromAspect(ability.getAspect())) {
                 try {
-                    if (model.getOnline() && model.getLocation().getWorld().equals(event.getBlock().getWorld()) && model.getLocation().distance(event.getBlock().getLocation()) < (int) Math.round(20 * Math.pow(model.getExperience(Aspects.CRAFTING_ASPECT_I), 0.15))) {
+                    if (model.getOnline() && model.getLocation().getExtent().equals(event.getBlock().getExtent()) && model.getLocation().getBlock().getPosition().distance(event.getBlock().getPosition()) < (int) Math.round(20 * Math.pow(model.getExperience(Aspects.CRAFTING_ASPECT_I), 0.15))) {
                         if (processAbility1(model, ability)) {
                             Object rawResult = ability.getMethod().invoke(ability.getAspect(), event);
                             processAbility2(null, model, ability, rawResult);
@@ -104,30 +106,33 @@ public class AbilityRegistry implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    private void bindCommands(PlayerCommandPreprocessEvent event) {
-        String message = event.getMessage();
-        message = message.substring(1);
-        String[] args = message.split("\\s+");
-        Player player = event.getPlayer();
+    @Subscribe(order = Order.LATE)
+    private void bindCommands(PlayerChatEvent event) {
+        String message = event.getMessage().toLegacy(); // TODO Does this work?
 
-        if (!ZoneUtil.inNoDGZone(event.getPlayer().getLocation())) {
-            // Process the command
-            try {
-                if (args.length == 2 && "info".equals(args[1])) {
-                    if (abilityInfo(player, args[0].toLowerCase())) {
+        if (message.startsWith("/")) {
+            message = message.substring(1);
+            String[] args = message.split("\\s+");
+            Player player = event.getPlayer();
+
+            if (!ZoneUtil.inNoDGZone(event.getPlayer().getLocation())) {
+                // Process the command
+                try {
+                    if (args.length == 2 && "info".equals(args[1])) {
+                        if (abilityInfo(player, args[0].toLowerCase())) {
+                            DGGame.CONSOLE.info(event.getPlayer().getName() + " used the command: /" + message);
+                            event.setCancelled(true);
+                            return;
+                        }
+                    }
+                    if (bindAbility(player, args[0].toLowerCase())) {
                         DGGame.CONSOLE.info(event.getPlayer().getName() + " used the command: /" + message);
                         event.setCancelled(true);
-                        return;
                     }
+                } catch (Exception errored) {
+                    // Not a command
+                    errored.printStackTrace();
                 }
-                if (bindAbility(player, args[0].toLowerCase())) {
-                    DGGame.CONSOLE.info(event.getPlayer().getName() + " used the command: /" + message);
-                    event.setCancelled(true);
-                }
-            } catch (Exception errored) {
-                // Not a command
-                errored.printStackTrace();
             }
         }
     }
@@ -158,28 +163,28 @@ public class AbilityRegistry implements Listener {
         }
 
         // Can't bind to air.
-        if (player.getItemInHand() == null || Material.AIR.equals(player.getItemInHand().getType())) {
+        if (player.getItemInHand().isPresent()) {
             abilityInfo(player, command);
             return true;
         }
 
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
-        Material material = player.getItemInHand().getType();
+        ItemType material = player.getItemInHand().get().getItem();
         AbilityMetaData bound = model.getBound(material);
         if (bound != null) {
             if (!bound.getCommand().equals(command)) {
-                player.sendMessage(ChatColor.RED + "This item already has /" + bound.getCommand() + " bound to it.");
+                player.sendMessage(TextColors.RED + "This item already has /" + bound.getCommand() + " bound to it.");
                 return true;
             } else {
                 model.unbind(bound);
-                player.sendMessage(ChatColor.YELLOW + bound.getName() + " has been unbound.");
+                player.sendMessage(TextColors.YELLOW + bound.getName() + " has been unbound.");
                 return true;
             }
         } else {
             AbilityMetaData ability = fromCommand(command);
             if (ability.getCommand().equals(command) && model.getAspects().contains(ability.getAspect().getGroup().getName() + " " + ability.getAspect().getTier().name()) && ability.getCommand().equals(command)) {
                 model.bind(ability, material);
-                player.sendMessage(ChatColor.YELLOW + ability.getName() + " has been bound to " + StringUtil2.beautify(material.name()) + ".");
+                player.sendMessage(TextColors.YELLOW + ability.getName() + " has been bound to " + StringUtil2.beautify(material.getId()) + ".");
                 return true;
             }
         }
@@ -187,7 +192,7 @@ public class AbilityRegistry implements Listener {
     }
 
     boolean processAbility1(PlayerModel model, AbilityMetaData ability) {
-        if (ZoneUtil.isNoDGWorld(model.getLocation().getWorld())) return false;
+        if (ZoneUtil.isNoDGWorld((World) model.getLocation().getExtent())) return false;
         if (!ability.getType().equals(Ability.Type.PASSIVE)) {
             if ((ability.getType().equals(Ability.Type.OFFENSIVE) || ability.getType().equals(Ability.Type.ULTIMATE)) && ZoneUtil.inNoPvpZone(model.getLocation())) {
                 return false;
@@ -195,20 +200,23 @@ public class AbilityRegistry implements Listener {
             if (model.getBound(ability) == null) {
                 return false;
             }
-            if (!model.getPlayer().getPlayer().getItemInHand().getType().equals(model.getBound(ability))) {
+            if (!model.getPlayer().getItemInHand().isPresent()) {
+                return false;
+            }
+            if (!model.getPlayer().getItemInHand().get().getItem().equals(model.getBound(ability))) {
                 return false;
             }
 
             double cost = ability.getCost();
             if (model.getFavor() < cost) {
-                model.getPlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " requires more favor.");
+                model.getPlayer().sendMessage(TextColors.YELLOW + ability.getName() + " requires more favor.");
                 return false;
             }
             if (DGGame.MISC_R.contains(model.getMojangId(), ability + ":delay")) {
                 return false;
             }
             if (DGGame.MISC_R.contains(model.getMojangId(), ability + ":cooldown")) {
-                model.getPlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " is on a cooldown.");
+                model.getPlayer().sendMessage(TextColors.YELLOW + ability.getName() + " is on a cooldown.");
                 return false;
             }
         }
@@ -229,7 +237,7 @@ public class AbilityRegistry implements Listener {
                     break;
                 }
                 case NO_TARGET_FOUND: {
-                    player.sendMessage(ChatColor.YELLOW + "No target found.");
+                    player.sendMessage(TextColors.YELLOW + "No target found.");
                     return;
                 }
                 case OTHER_FAILURE: {
@@ -285,7 +293,7 @@ public class AbilityRegistry implements Listener {
         Class<?>[] paramaters = method.getParameterTypes();
         try {
             if (paramaters.length < 1) {
-                DGGame.CONSOLE.severe("An ability (" + ability.name() + ") tried to register without any parameters.");
+                DGGame.CONSOLE.error("An ability (" + ability.name() + ") tried to register without any parameters.");
                 return;
             }
             Class<? extends Event> eventClass = (Class<? extends Event>) paramaters[0];
@@ -311,47 +319,46 @@ public class AbilityRegistry implements Listener {
      *
      * @param event The damage event.
      */
-    @EventHandler(priority = EventPriority.LOWEST)
-    private void onNoDamageAbilities(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
+    @Subscribe(order = Order.FIRST)
+    private void onNoDamageAbilities(PlayerChangeHealthEvent event) {
+        Player player = event.getEntity();
 
-            if (Aspects.hasAspect(player, Aspects.BLOODLUST_ASPECT_HERO)) {
-                if (player.getHealth() <= event.getDamage()) {
-                    switch (event.getCause()) {
-                        case ENTITY_ATTACK:
-                            break;
-                        case PROJECTILE:
-                            break;
-                        case CUSTOM:
-                            break;
-                        default:
-                            event.setDamage(player.getHealth() - 1);
-                    }
-                }
-                event.setDamage(event.getDamage() / 2);
-            }
+        if (!event.getCause().isPresent()) {
+            return;
+        }
 
-            if (Aspects.hasAspect(player, Aspects.LIGHTNING_ASPECT_II)) {
-                if (EntityDamageEvent.DamageCause.FALL.equals(event.getCause())) {
-                    event.setCancelled(true);
-                }
-            }
+        Object cause = event.getCause().get().getCause();
 
-            if (Aspects.hasAspect(player, Aspects.WATER_ASPECT_II)) {
-                if (EntityDamageEvent.DamageCause.DROWNING.equals(event.getCause())) {
-                    event.setCancelled(true);
-                    player.setRemainingAir(player.getMaximumAir());
-                }
-            }
-
-            if (Aspects.hasAspect(player, Aspects.FIRE_ASPECT_I)) {
-                if (EntityDamageEvent.DamageCause.FIRE.equals(event.getCause()) || EntityDamageEvent.DamageCause.FIRE_TICK.equals(event.getCause())) {
-                    event.setCancelled(true);
-                    player.setRemainingAir(player.getMaximumAir());
+        if (Aspects.hasAspect(player, Aspects.BLOODLUST_ASPECT_HERO)) {
+            double damage = player.getHealth() - event.getOldHealth();
+            if (player.getHealth() <= damage) {
+                if (cause instanceof Entity) {
+                    event.setNewHealth(player.getHealth() - 1);
                 }
             }
         }
+
+        /* FIXME Other damage causes aren't in Sponge yet
+        if (Aspects.hasAspect(player, Aspects.LIGHTNING_ASPECT_II)) {
+            if ()
+                event.setCancelled(true);
+            }
+        }
+
+        if (Aspects.hasAspect(player, Aspects.WATER_ASPECT_II)) {
+            if (EntityDamageEvent.DamageCause.DROWNING.equals(event.getCause())) {
+                event.setCancelled(true);
+                player.setRemainingAir(player.getMaximumAir());
+            }
+        }
+
+        if (Aspects.hasAspect(player, Aspects.FIRE_ASPECT_I)) {
+            if (EntityDamageEvent.DamageCause.FIRE.equals(event.getCause()) || EntityDamageEvent.DamageCause.FIRE_TICK.equals(event.getCause())) {
+                event.setCancelled(true);
+                player.setRemainingAir(player.getMaximumAir());
+            }
+        }
+        */
     }
 
     /**
@@ -359,16 +366,17 @@ public class AbilityRegistry implements Listener {
      *
      * @param event The move event.
      */
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @Subscribe(order = Order.LATE)
     private void onPlayerMoveEvent(PlayerMoveEvent event) {
         if (ZoneUtil.inNoDGZone(event.getPlayer().getLocation())) return;
 
         Player player = event.getPlayer();
 
         if (Aspects.hasAspect(player, Aspects.WATER_ASPECT_II)) {
-            Material locationMaterial = player.getLocation().getBlock().getType();
-            if (player.isSneaking() && (locationMaterial.equals(Material.STATIONARY_WATER) || locationMaterial.equals(Material.WATER))) {
-                Vector victor = (player.getPassenger() != null && player.getLocation().getDirection().getY() > 0 ? player.getLocation().getDirection().clone().setY(0) : player.getLocation().getDirection()).normalize().multiply(1.3D);
+            BlockType locationMaterial = player.getLocation().getBlock().getType();
+            if (/* player.isSneaking() && */ (locationMaterial.equals(BlockTypes.WATER))) {
+                Vector3d position = player.getLocation().getPosition();
+                Vector3d victor = (player.getPassenger().isPresent() && position.getY() > 0 ? new Vector3d(position.getX(), 0, position.getZ()) : position.normalize().mul(1.3D));
                 player.setVelocity(victor);
             }
         }
@@ -379,14 +387,14 @@ public class AbilityRegistry implements Listener {
      *
      * @param event The target event.
      */
-    @EventHandler(priority = EventPriority.HIGHEST)
-    private void onEvent(EntityTargetEvent event) {
+    @Subscribe(order = Order.LATE)
+    private void onEvent(EntityTargetEntityEvent event) {
         Entity entity = event.getEntity();
 
-        if (event.getTarget() instanceof Player) {
+        if (event.getTargetedEntity().get() instanceof Player) {
             // Demon Aspect III
             if (entity instanceof Zombie || entity instanceof Skeleton) {
-                if (DGGame.PLAYER_R.fromPlayer((Player) event.getTarget()).hasAspect(Aspects.DEMON_ASPECT_III)) {
+                if (DGGame.PLAYER_R.fromPlayer((Player) event.getTargetedEntity().get()).hasAspect(Aspects.DEMON_ASPECT_III)) {
                     event.setCancelled(true);
                 }
             }

@@ -7,42 +7,46 @@ import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.deity.Deity;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.model.ShrineModel;
+import com.demigodsrpg.game.util.TargetingUtil;
 import com.demigodsrpg.game.util.ZoneUtil;
-import org.bukkit.*;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+import com.google.common.base.Optional;
+import org.spongepowered.api.entity.EntityInteractionType;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.event.entity.living.player.PlayerInteractEvent;
+import org.spongepowered.api.event.inventory.InventoryCloseEvent;
+import org.spongepowered.api.item.inventory.Inventories;
+import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.format.TextStyles;
+import org.spongepowered.api.util.event.Order;
+import org.spongepowered.api.util.event.Subscribe;
+import org.spongepowered.api.world.Location;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unchecked")
-public class TributeListener implements Listener {
-    @EventHandler(priority = EventPriority.HIGHEST)
+public class TributeListener {
+    @Subscribe(order = Order.LAST)
     public void onTributeInteract(PlayerInteractEvent event) {
         if (ZoneUtil.inNoDGZone(event.getPlayer().getLocation())) return;
 
         // Define the location
-        Location location = null;
+        Location location;
 
         // Return from actions we don't care about
-        if (!Action.RIGHT_CLICK_BLOCK.equals(event.getAction())) {
-            if (Action.RIGHT_CLICK_AIR.equals(event.getAction())) {
-                location = event.getPlayer().getTargetBlock((Set<Material>) null, 10).getLocation();
-            } else {
-                return;
-            }
+        if (!EntityInteractionType.RIGHT_CLICK.equals(event.getInteractionType())) {
+            return;
         }
 
-        // Define variables
-        if (location == null) location = event.getClickedBlock().getLocation();
+        // Define location
+        if (!event.getClickedPosition().isPresent()) {
+            location = TargetingUtil.directTarget(event.getPlayer());
+        } else {
+            location = new Location(event.getPlayer().getLocation().getExtent(), event.getClickedPosition().get().toDouble());
+        }
+
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(event.getPlayer());
 
         // Return if the player is mortal
@@ -56,7 +60,7 @@ public class TributeListener implements Listener {
 
             Deity deity = shrine.getDeity();
             if (shrine.getOwnerMojangId() != null && !model.hasDeity(deity)) {
-                event.getPlayer().sendMessage(ChatColor.YELLOW + "You must be allied with " + deity.getFaction().getColor() + deity.getName() + ChatColor.YELLOW + " to tribute here.");
+                event.getPlayer().sendMessage(TextColors.YELLOW + "You must be allied with " + deity.getFaction().getColor() + deity.getName() + TextColors.YELLOW + " to tribute here.");
                 return;
             }
             tribute(event.getPlayer(), shrine);
@@ -64,30 +68,32 @@ public class TributeListener implements Listener {
     }
 
     @SuppressWarnings("RedundantCast")
-    @EventHandler(priority = EventPriority.MONITOR)
+    @Subscribe(order = Order.LAST)
     public void onPlayerTribute(InventoryCloseEvent event) {
-        if (ZoneUtil.inNoDGZone(event.getPlayer().getLocation())) return;
+        if (ZoneUtil.inNoDGZone(event.getViewer().getLocation())) return;
 
         // Define player and character
-        Player player = (Player) event.getPlayer();
+        Player player = (Player) event.getViewer();
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
 
         // Make sure they are immortal
         if (!model.isDemigod()) return;
 
         // Get the shrine
-        ShrineModel save = DGGame.SHRINE_R.getShrine(player.getTargetBlock((Set<Material>) null, 10).getLocation());
+        ShrineModel save = DGGame.SHRINE_R.getShrine(TargetingUtil.directTarget(player));
 
         // If it isn't a tribute chest then break the method
-        if (!event.getInventory().getName().contains("Tribute to") || save == null)
+        if (!event.getContainer().getName().getTranslation().get().contains("Tribute to") || save == null)
             return;
 
         // Calculate the tribute value
         int tributeValue = 0, items = 0;
-        for (ItemStack item : event.getInventory().getContents()) {
-            if (item != null) {
-                tributeValue += DGGame.TRIBUTE_R.processTribute(item);
-                items += item.getAmount();
+        Inventory inventory = event.getContainer();
+        while (inventory.peek().isPresent()) {
+            Optional<ItemStack> item = inventory.poll();
+            if (item.isPresent()) {
+                tributeValue += DGGame.TRIBUTE_R.processTribute(item.get());
+                items += item.get().getQuantity();
             }
         }
 
@@ -118,11 +124,11 @@ public class TributeListener implements Listener {
 
                 if (model.getFavor() < (int) Setting.FAVOR_CAP.get()) {
                     if (model.getFavor() > favorBefore)
-                        player.sendMessage(ChatColor.YELLOW + "You have been blessed with " + ChatColor.ITALIC + (model.getFavor() - favorBefore) + ChatColor.YELLOW + " favor.");
+                        player.sendMessage(TextColors.YELLOW + "You have been blessed with " + TextStyles.ITALIC + (model.getFavor() - favorBefore) + TextColors.YELLOW + " favor.");
                 } else {
                     if (model.getExperience(aspect) > devotionBefore) {
                         // Message the tributer
-                        player.sendMessage(save.getDeity().getFaction().getColor() + "Your devotion for " + aspect.getGroup() + " " + aspect.getTier().name() + " has increased by " + ChatColor.ITALIC + (model.getExperience(aspect) - devotionBefore) + "!");
+                        player.sendMessage(save.getDeity().getFaction().getColor() + "Your devotion for " + aspect.getGroup() + " " + aspect.getTier().name() + " has increased by " + TextStyles.ITALIC + (model.getExperience(aspect) - devotionBefore) + "!");
                     }
                 }
             }
@@ -132,7 +138,7 @@ public class TributeListener implements Listener {
             // Define the shrine owner
             if (save.getOwnerMojangId() != null && DGGame.PLAYER_R.fromId(save.getOwnerMojangId()) != null) {
                 PlayerModel shrineOwner = DGGame.PLAYER_R.fromId(save.getOwnerMojangId());
-                OfflinePlayer shrineOwnerPlayer = shrineOwner.getPlayer();
+                Player shrineOwnerPlayer = shrineOwner.getPlayer();
 
                 if (shrineOwner.getFavor() < (int) Setting.FAVOR_CAP.get() && !model.getMojangId().equals(shrineOwner.getMojangId())) {
                     // Give them some of the blessings
@@ -140,7 +146,7 @@ public class TributeListener implements Listener {
 
                     // Message them
                     if (shrineOwnerPlayer.isOnline()) {
-                        ((Player) shrineOwnerPlayer).sendMessage(save.getDeity().getFaction().getColor() + "Someone has recently paid tribute at a shrine you own.");
+                        shrineOwnerPlayer.sendMessage(save.getDeity().getFaction().getColor() + "Someone has recently paid tribute at a shrine you own.");
                     }
                 }
 
@@ -151,20 +157,21 @@ public class TributeListener implements Listener {
         // Handle messaging and Shrine owner updating
         if (tributeValue < 1) {
             // They aren't good enough, let them know!
-            player.sendMessage(ChatColor.RED + "Your tributes were insufficient for " + save.getDeity().getFaction().getColor() + save.getDeity().getName() + "'s" + ChatColor.RED + " blessings.");
+            player.sendMessage(TextColors.RED + "Your tributes were insufficient for " + save.getDeity().getFaction().getColor() + save.getDeity().getName() + "'s" + TextColors.RED + " blessings.");
         } else {
             player.sendMessage(save.getDeity().getFaction().getColor() + save.getDeity().getName() + " is pleased with your tribute.");
         }
 
         // Clear the tribute case
-        event.getInventory().clear();
+        event.getContainer().clear();
     }
 
     private static void tribute(Player player, ShrineModel save) {
         Deity shrineDeity = save.getDeity();
 
         // Open the tribute inventory
-        Inventory ii = Bukkit.getServer().createInventory(player, 27, "Tribute to " + shrineDeity.getFaction().getColor() + shrineDeity.getName() + ChatColor.RESET + ".");
+        Inventory ii = Inventories.customInventoryBuilder().size(27)/*.name("Tribute to " + shrineDeity.getFaction().getColor() + shrineDeity.getName() + ChatColor.RESET + "." */.build();
+
         player.openInventory(ii);
     }
 }

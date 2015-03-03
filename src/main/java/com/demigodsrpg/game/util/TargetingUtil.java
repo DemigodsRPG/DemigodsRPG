@@ -2,27 +2,24 @@ package com.demigodsrpg.game.util;
 
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.model.PlayerModel;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
-import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.util.BlockIterator;
+import com.flowpowered.math.vector.Vector3d;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
-import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 public class TargetingUtil {
     private static final int TARGET_OFFSET = 5;
 
     @Deprecated
-    public static LivingEntity autoTarget(Player player) {
+    public static Entity autoTarget(Player player) {
         return autoTarget(player, 140);
     }
+
+    // FIXME Line of sight is missing from the Sponge API still
 
     /**
      * Returns the LivingEntity that <code>player</code> is target.
@@ -30,9 +27,9 @@ public class TargetingUtil {
      * @param player the player
      * @return the targeted LivingEntity
      */
-    public static LivingEntity autoTarget(Player player, int range) {
+    public static Entity autoTarget(Player player, int range) {
         // Define variables
-        final int correction = 3;
+        /* final int correction = 3;
         Location target = null;
         try {
             target = player.getTargetBlock((Set<Material>) null, range).getLocation();
@@ -73,11 +70,13 @@ public class TargetingUtil {
         } catch (Exception ignored) {
         }
 
-        return null;
+        return null; */
+
+        return player; // FIXME
     }
 
     public static Location directTarget(Player player) {
-        return player.getTargetBlock((Set<Material>) null, 140).getLocation();
+        return player. /*getTargetBlock((Set<Material>) null, 140). */ getLocation();
     }
 
     /**
@@ -91,7 +90,7 @@ public class TargetingUtil {
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
         Location toHit = adjustedAimLocation(model, target);
         if (isHit(target, toHit)) return true;
-        if (notify) player.sendMessage(ChatColor.RED + "Missed..."); // TODO Better message.
+        if (notify) player.sendMessage(TextColors.RED + "Missed..."); // TODO Better message.
         return false;
     }
 
@@ -108,18 +107,18 @@ public class TargetingUtil {
 
         int accuracy = 15;
 
-        int offset = (int) (TARGET_OFFSET + player.getPlayer().getPlayer().getLocation().distance(target));
+        int offset = (int) (TARGET_OFFSET + player.getPlayer().getVelocity().distance(target.getPosition()));
         int adjustedOffset = offset / accuracy;
         if (adjustedOffset < 1) adjustedOffset = 1;
         Random random = new Random();
-        World world = target.getWorld();
+        World world = (World) target.getExtent();
 
         int randomInt = random.nextInt(adjustedOffset);
         int sampleSpace = random.nextInt(3);
 
-        double X = target.getX();
-        double Z = target.getZ();
-        double Y = target.getY();
+        double X = target.getPosition().getX();
+        double Z = target.getPosition().getZ();
+        double Y = target.getPosition().getY();
 
         if (sampleSpace == 0) {
             X += randomInt;
@@ -135,7 +134,7 @@ public class TargetingUtil {
             Z -= randomInt;
         }
 
-        return new Location(world, X, Y, Z);
+        return new Location(world, new Vector3d(X, Y, Z));
     }
 
     /**
@@ -146,6 +145,6 @@ public class TargetingUtil {
      * @return true/false if <code>target</code> is hit
      */
     public static boolean isHit(Location target, Location hit) {
-        return hit.distance(target) <= 2;
+        return hit.getPosition().distance(target.getPosition()) <= 2;
     }
 }

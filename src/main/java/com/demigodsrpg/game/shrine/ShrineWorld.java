@@ -3,40 +3,44 @@ package com.demigodsrpg.game.shrine;
 import com.censoredsoftware.library.schematic.Point;
 import com.censoredsoftware.library.schematic.PotentialMaterial;
 import com.censoredsoftware.library.schematic.World;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
+import com.demigodsrpg.game.DGGame;
+import org.spongepowered.api.block.BlockLoc;
+import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.world.extent.Extent;
 
 public class ShrineWorld implements World {
-    private final org.bukkit.World world;
+    private Extent world;
 
-    public ShrineWorld(org.bukkit.World world) {
+    public ShrineWorld(Extent world) {
         this.world = world;
     }
 
     public ShrineWorld(String worldName) {
-        this.world = Bukkit.getWorld(worldName);
+        if (DGGame.SERVER.getWorld(worldName).isPresent()) {
+            this.world = DGGame.SERVER.getWorld(worldName).get();
+        }
     }
 
     @Override
     public PotentialMaterial getMaterialAt(int x, int y, int z) {
-        Block block = world.getBlockAt(x, y, z);
-        return new PotentialMaterial(block.getType().name(), block.getData());
+        BlockLoc block = world.getBlock(x, y, z);
+        return new PotentialMaterial(block.getType().getId(), block.getState().getDataValue());
     }
 
     @Override
     public void setPoint(Point point, PotentialMaterial material) {
-        Block block = world.getBlockAt(point.getX(), point.getY(), point.getZ());
-        block.setType(Material.valueOf(material.getMaterial()));
-        block.setData(material.getData());
+        BlockLoc block = world.getBlock(point.getX(), point.getY(), point.getZ());
+        BlockType type = DGGame.GAME.getRegistry().getBlock(material.getMaterial()).get();
+        block.replaceWith(type);
+        block.replaceWith(type.getStateFromDataValue(material.getData()));
     }
 
     @Override
     public String getName() {
-        return world.getName();
+        return getSpongeWorld().getName();
     }
 
-    public org.bukkit.World getBukkitWorld() {
-        return world;
+    public org.spongepowered.api.world.World getSpongeWorld() {
+        return (org.spongepowered.api.world.World) world;
     }
 }

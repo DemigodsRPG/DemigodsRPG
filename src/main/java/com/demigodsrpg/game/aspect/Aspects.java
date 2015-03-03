@@ -17,7 +17,7 @@ import com.demigodsrpg.game.aspect.water.WaterAspectI;
 import com.demigodsrpg.game.aspect.water.WaterAspectII;
 import com.demigodsrpg.game.deity.Deity;
 import com.demigodsrpg.game.deity.Faction;
-import org.bukkit.entity.Player;
+import org.spongepowered.api.entity.player.Player;
 
 public class Aspects {
     // -- PUBLIC RELEASE -- //

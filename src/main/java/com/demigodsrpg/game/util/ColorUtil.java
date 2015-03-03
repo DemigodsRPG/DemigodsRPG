@@ -17,48 +17,24 @@
 package com.demigodsrpg.game.util;
 
 import com.google.common.collect.ImmutableBiMap;
-import com.google.common.collect.Maps;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.material.MaterialData;
+import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.text.format.TextColor;
+import org.spongepowered.api.text.format.TextColors;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ColorUtil {
     /**
-     * Linking ChatColor objects to the corresponding Color.
-     */
-    public static final ImmutableBiMap<ChatColor, Color> CHAT_COLOR;
-
-    static {
-        Map<ChatColor, Color> chatColorColor = Maps.newHashMap();
-        chatColorColor.put(ChatColor.BLACK, new Color(0, 0, 0));
-        chatColorColor.put(ChatColor.DARK_BLUE, new Color(0, 0, 170));
-        chatColorColor.put(ChatColor.DARK_GREEN, new Color(0, 170, 0));
-        chatColorColor.put(ChatColor.DARK_AQUA, new Color(0, 170, 170));
-        chatColorColor.put(ChatColor.DARK_RED, new Color(170, 0, 0));
-        chatColorColor.put(ChatColor.DARK_PURPLE, new Color(170, 0, 170));
-        chatColorColor.put(ChatColor.GOLD, new Color(255, 170, 0));
-        chatColorColor.put(ChatColor.GRAY, new Color(170, 170, 170));
-        chatColorColor.put(ChatColor.DARK_GRAY, new Color(85, 85, 85));
-        chatColorColor.put(ChatColor.BLUE, new Color(85, 85, 255));
-        chatColorColor.put(ChatColor.GREEN, new Color(85, 255, 85));
-        chatColorColor.put(ChatColor.AQUA, new Color(85, 255, 255));
-        chatColorColor.put(ChatColor.RED, new Color(255, 85, 85));
-        chatColorColor.put(ChatColor.LIGHT_PURPLE, new Color(255, 85, 255));
-        chatColorColor.put(ChatColor.YELLOW, new Color(255, 255, 85));
-        chatColorColor.put(ChatColor.WHITE, new Color(255, 255, 255));
-        CHAT_COLOR = ImmutableBiMap.copyOf(chatColorColor);
-    }
-
-    /**
      * Linking block materials to their corresponding Color.
      */
-    public static ImmutableBiMap<MaterialData, Color> BLOCK_COLOR;
+    public static ImmutableBiMap<BlockType, Color> BLOCK_COLOR;
 
     static {
-        Map<MaterialData, Color> blockColor = Maps.newHashMap();
+        Map<BlockType, Color> blockColor = new HashMap<>();
+
+        /* FIXME Not all block types are in Sponge yet
 
         // WOOL
         blockColor.put(new MaterialData(Material.WOOL, (byte) 0), new Color(238, 238, 238));
@@ -126,6 +102,8 @@ public class ColorUtil {
         // EMERALD
         blockColor.put(new MaterialData(Material.EMERALD_BLOCK, (byte) 0), new Color(0, 217, 58));
 
+        */
+
         BLOCK_COLOR = ImmutableBiMap.copyOf(blockColor);
     }
 
@@ -148,24 +126,24 @@ public class ColorUtil {
     }
 
     /**
-     * Get a ChatColor that is best related to a given Color.
+     * Get a TextColor that is best related to a given Color.
      *
      * @param color Color to be matched.
      * @return Best ChatColor found.
      */
-    public static ChatColor getChatColor(final Color color) {
-        Color nearestColor = Color.WHITE;
+    public static TextColor getChatColor(final Color color) {
+        TextColor nearestColor = TextColors.WHITE;
         double bestDistance = Double.MAX_VALUE;
 
-        for (Color chatColor : CHAT_COLOR.values()) {
-            double distance = getColorDistance(chatColor, color);
+        for (TextColor chatColor : TextColors.getValues()) {
+            double distance = getColorDistance(chatColor.getColor(), color);
             if (distance < bestDistance) {
                 nearestColor = chatColor;
                 bestDistance = distance;
             }
         }
 
-        return CHAT_COLOR.inverse().get(nearestColor);
+        return nearestColor;
     }
 
     /**
@@ -174,8 +152,8 @@ public class ColorUtil {
      * @param color ChatColor to be matched.
      * @return Best Color found.
      */
-    public static Color getColor(final ChatColor color) {
-        return CHAT_COLOR.get(color);
+    public static Color getColor(final TextColor color) {
+        return color.getColor();
     }
 
     /**
@@ -184,7 +162,7 @@ public class ColorUtil {
      * @param color ChatColor to be matched.
      * @return Best MaterialData found.
      */
-    public static MaterialData getMaterial(final ChatColor color) {
+    public static BlockType getMaterial(final TextColor color) {
         return getMaterial(Color.WHITE, getColor(color));
     }
 
@@ -194,7 +172,7 @@ public class ColorUtil {
      * @param color Color to be matched.
      * @return Best MaterialData found.
      */
-    public static MaterialData getMaterial(Color average, final Color color) {
+    public static BlockType getMaterial(Color average, final Color color) {
         Color nearestColor = average;
         double bestDistance = Double.MAX_VALUE;
 
@@ -215,11 +193,11 @@ public class ColorUtil {
      * @param value the actual value.
      * @param max   the maximum value possible.
      */
-    public static ChatColor getColor(double value, double max) {
-        ChatColor color = ChatColor.RESET;
-        if (value < Math.ceil(0.33 * max)) color = ChatColor.RED;
-        else if (value < Math.ceil(0.66 * max) && value > Math.ceil(0.33 * max)) color = ChatColor.YELLOW;
-        if (value > Math.ceil(0.66 * max)) color = ChatColor.GREEN;
+    public static TextColor getColor(double value, double max) {
+        TextColor color = TextColors.RESET;
+        if (value < Math.ceil(0.33 * max)) color = TextColors.RED;
+        else if (value < Math.ceil(0.66 * max) && value > Math.ceil(0.33 * max)) color = TextColors.YELLOW;
+        if (value > Math.ceil(0.66 * max)) color = TextColors.GREEN;
         return color;
     }
 }

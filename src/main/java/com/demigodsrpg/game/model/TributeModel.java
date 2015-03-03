@@ -4,7 +4,7 @@ import com.censoredsoftware.library.util.MapUtil2;
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.registry.TributeRegistry;
 import com.demigodsrpg.game.util.JsonSection;
-import org.bukkit.Material;
+import org.spongepowered.api.item.ItemType;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -13,13 +13,13 @@ public class TributeModel extends AbstractPersistentModel<String> {
     private static final double VALUE_K = 14.286;
     private static double OFFSET = 1.0;
 
-    private final Material material;
+    private final ItemType material;
     private List<Double> tributeTimes;
     private int fitness;
     private final TributeRegistry.Category category;
     private double lastKnownValue;
 
-    public TributeModel(Material material, JsonSection conf) {
+    public TributeModel(ItemType material, JsonSection conf) {
         this.material = material;
         tributeTimes = conf.getDoubleList("tribute_times");
         fitness = conf.getInt("fitness");
@@ -27,7 +27,7 @@ public class TributeModel extends AbstractPersistentModel<String> {
         lastKnownValue = conf.getDouble("last_known_value");
     }
 
-    public TributeModel(Material material, int fitness) {
+    public TributeModel(ItemType material, int fitness) {
         this.material = material;
         tributeTimes = new ArrayList<>();
         this.fitness = fitness;
@@ -35,7 +35,7 @@ public class TributeModel extends AbstractPersistentModel<String> {
         lastKnownValue = 1.0;
     }
 
-    public Material getMaterial() {
+    public ItemType getMaterial() {
         return material;
     }
 
@@ -119,7 +119,7 @@ public class TributeModel extends AbstractPersistentModel<String> {
 
     @Override
     public String getPersistentId() {
-        return getMaterial().name();
+        return getMaterial().getId();
     }
 
     public static class ValueTask implements Runnable {

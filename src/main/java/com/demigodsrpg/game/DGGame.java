@@ -121,24 +121,24 @@ public class DGGame {
 
         // Register commands
         CommandService commands = GAME.getCommandDispatcher();
-        commands.register(PLUGIN, new FactionCommand(), "faction");
-        getCommand("binds").setExecutor(new BindsCommand());
-        getCommand("check").setExecutor(new CheckCommand());
-        getCommand("aspect").setExecutor(new AspectCommand());
-        getCommand("cleanse").setExecutor(new CleanseCommand());
-        getCommand("shrine").setExecutor(new ShrineCommand());
-        getCommand("values").setExecutor(new ValuesCommand());
+        commands.register(PLUGIN, new FactionCommand(), "faction", "f");
+        commands.register(PLUGIN, new BindsCommand(), "binds", "b");
+        commands.register(PLUGIN, new CheckCommand(), "check", "c");
+        commands.register(PLUGIN, new AspectCommand(), "aspect", "a");
+        commands.register(PLUGIN, new CleanseCommand(), "cleanse");
+        commands.register(PLUGIN, new ShrineCommand(), "shrine", "sh", "s");
+        commands.register(PLUGIN, new ValuesCommand(), "values", "value", "v");
 
         // Admin commands
-        getCommand("adminmode").setExecutor(new AdminModeComand());
-        getCommand("selectarea").setExecutor(new SelectAreaCommand());
-        getCommand("createfactionarea").setExecutor(new CreateFactionAreaCommand());
-        getCommand("checkplayer").setExecutor(new CheckPlayerCommand());
-        getCommand("adddevotion").setExecutor(new AddDevotionCommand());
-        getCommand("removedevotion").setExecutor(new RemoveDevotionCommand());
-        getCommand("giveaspect").setExecutor(new GiveAspectCommand());
-        getCommand("removeaspect").setExecutor(new RemoveAspectCommand());
-        getCommand("setfaction").setExecutor(new SetFactionCommand());
+        commands.register(PLUGIN, new AdminModeComand(), "adminmode", "admin");
+        commands.register(PLUGIN, new SelectAreaCommand(), "selectarea", "sa");
+        commands.register(PLUGIN, new CreateFactionAreaCommand(), "createfactionarea");
+        commands.register(PLUGIN, new CheckPlayerCommand(), "checkplayer");
+        commands.register(PLUGIN, new AddDevotionCommand(), "adddevotion");
+        commands.register(PLUGIN, new RemoveDevotionCommand(), "removedevotion");
+        commands.register(PLUGIN, new GiveAspectCommand(), "giveaspect");
+        commands.register(PLUGIN, new RemoveAspectCommand(), "removeaspect");
+        commands.register(PLUGIN, new SetFactionCommand(), "setfaction");
 
         // Enable ZoneUtil
         ZoneUtil.init();

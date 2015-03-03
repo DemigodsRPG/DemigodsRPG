@@ -1,31 +1,36 @@
 package com.demigodsrpg.game;
 
-import org.bukkit.configuration.ConfigurationSection;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import org.spongepowered.api.service.config.ConfigRoot;
 
 @SuppressWarnings("unchecked")
 public enum Setting {
-    MAX_TARGET_RANGE(Integer.class, getConfig().getInt("max_target_range", 100)),
-    MAX_HP(Integer.class, getConfig().getInt("max_hp", 3000)),
-    ASCENSION_CAP(Integer.class, getConfig().getInt("ascension_cap", 120)),
-    FAVOR_CAP(Integer.class, getConfig().getInt("globalfavorcap", 20000)),
-    FAVOR_REGEN_SECONDS(Double.class, getConfig().getDouble("favor_regen_seconds", 0.5)),
-    BROADCAST_NEW_ASPECT(Boolean.class, getConfig().getBoolean("broadcast_new_aspects", true)),
-    ALLOW_PVP_EVERYWHERE(Boolean.class, getConfig().getBoolean("allow_skills_everywhere", false)),
-    MAX_TEAM_KILLS(Integer.class, getConfig().getInt("max_team_kills", 10)),
-    FRIENDLY_FIRE(Boolean.class, getConfig().getBoolean("friendly_fire", false)),
-    EXP_MULTIPLIER(Double.class, getConfig().getDouble("globalexpmultiplier", 4.0)),
-    NO_COST_ASPECT_MODE(Boolean.class, getConfig().getBoolean("no_cost_aspect_mode", false)),
-    NO_FACTION_ASPECT_MODE(Boolean.class, getConfig().getBoolean("no_faction_aspect_mode", false)),
-    SAVE_PRETTY(Boolean.class, getConfig().getBoolean("save_pretty", false)),
-    DEBUG_DATA(Boolean.class, getConfig().getBoolean("debug_data", false)),
-    DEBUG_INVISIBLE_WALLS(Boolean.class, getConfig().getBoolean("debug_invisible_walls", false));
+    MAX_TARGET_RANGE(Integer.class, getNode("max_target_range").getInt(), 100),
+    MAX_HP(Integer.class, getNode("max_hp").getInt(), 3000),
+    ASCENSION_CAP(Integer.class, getNode("ascension_cap").getInt(), 120),
+    FAVOR_CAP(Integer.class, getNode("globalfavorcap").getInt(), 20000),
+    FAVOR_REGEN_SECONDS(Double.class, getNode("favor_regen_seconds").getDouble(), 0.5),
+    BROADCAST_NEW_ASPECT(Boolean.class, getNode("broadcast_new_aspects").getBoolean(), true),
+    ALLOW_PVP_EVERYWHERE(Boolean.class, getNode("allow_skills_everywhere").getBoolean(), false),
+    MAX_TEAM_KILLS(Integer.class, getNode("max_team_kills").getInt(), 10),
+    FRIENDLY_FIRE(Boolean.class, getNode("friendly_fire").getBoolean(), false),
+    EXP_MULTIPLIER(Double.class, getNode("globalexpmultiplier").getDouble(), 4.0),
+    NO_COST_ASPECT_MODE(Boolean.class, getNode("no_cost_aspect_mode").getBoolean(), false),
+    NO_FACTION_ASPECT_MODE(Boolean.class, getNode("no_faction_aspect_mode").getBoolean(), false),
+    SAVE_PRETTY(Boolean.class, getNode("save_pretty").getBoolean(), false),
+    DEBUG_DATA(Boolean.class, getNode("debug_data").getBoolean(), false),
+    DEBUG_INVISIBLE_WALLS(Boolean.class, getNode("debug_invisible_walls").getBoolean(), false);
 
     private final Class<?> clazz;
     private final Object setting;
 
-    private <T> Setting(Class<T> clazz, T setting) {
+    private <T> Setting(Class<T> clazz, T setting, T def) {
         this.clazz = clazz;
-        this.setting = setting;
+        if (setting != null) {
+            this.setting = setting;
+        } else {
+            this.setting = def;
+        }
     }
 
     public Class<?> getType() {
@@ -36,7 +41,12 @@ public enum Setting {
         return ((Class<T>) clazz).cast(setting);
     }
 
-    private static ConfigurationSection getConfig() {
-        return DGGame.getInst().getConfig();
+    private static CommentedConfigurationNode getNode(Object... args) {
+        try {
+            return DGGame.GAME.getServiceManager().provide(ConfigRoot.class).get().getConfig().load().getNode(args);
+        } catch (Exception oops) {
+            oops.printStackTrace();
+        }
+        return null;
     }
 }

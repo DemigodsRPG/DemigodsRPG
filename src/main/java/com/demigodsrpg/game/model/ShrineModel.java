@@ -7,10 +7,11 @@ import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.shrine.Shrine;
 import com.demigodsrpg.game.shrine.ShrineWorld;
 import com.demigodsrpg.game.util.JsonSection;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
+import com.flowpowered.math.vector.Vector3d;
+import com.google.common.base.Optional;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class ShrineModel extends AbstractPersistentModel<String> {
         ownerMojangId = player.getUniqueId().toString();
         this.deity = deity;
         this.shrine = shrine;
-        this.point = new Point(location.getBlockX(), location.getBlockY(), location.getBlockZ(), new ShrineWorld(location.getWorld()));
+        this.point = new Point(location.getBlock().getX(), location.getBlock().getY(), location.getBlock().getZ(), new ShrineWorld(location.getExtent()));
         this.location = location;
     }
 
@@ -38,13 +39,13 @@ public class ShrineModel extends AbstractPersistentModel<String> {
         deity = DGGame.DEITY_R.deityFromName(conf.getString("deity"));
         shrine = Shrine.valueOf(conf.getString("type"));
 
-        World world = Bukkit.getWorld(conf.getString("world_name"));
-        if (world != null) {
+        Optional<World> world = DGGame.SERVER.getWorld(conf.getString("world_name"));
+        if (world.isPresent()) {
             int x = conf.getInt("x");
             int y = conf.getInt("y");
             int z = conf.getInt("z");
-            point = new Point(x, y, z, new ShrineWorld(world));
-            location = new Location(world, x, y, z);
+            point = new Point(x, y, z, new ShrineWorld(world.get()));
+            location = new Location(world.get(), new Vector3d(x, y, z));
         } else {
             throw new NullPointerException("World not found for a shrine location.");
         }

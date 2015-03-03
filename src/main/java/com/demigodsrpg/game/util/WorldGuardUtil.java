@@ -16,33 +16,11 @@
 
 package com.demigodsrpg.game.util;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Maps;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.events.DisallowedPVPEvent;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
-import com.sk89q.worldguard.protection.flags.Flag;
-import com.sk89q.worldguard.protection.flags.StateFlag;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.plugin.Plugin;
-
-import java.util.Iterator;
-import java.util.concurrent.ConcurrentMap;
-
 /**
  * Custom flags will not require reflection in WorldGuard 6+, until then we'll use it.
  */
-public class WorldGuardUtil implements Listener {
+public class WorldGuardUtil {
+    /*
     private static boolean ENABLED;
     private static ConcurrentMap<String, ProtoPVPListener> protoPVPListeners = Maps.newConcurrentMap();
 
@@ -74,9 +52,10 @@ public class WorldGuardUtil implements Listener {
         }, 0, 5);
     }
 
+
     /**
      * @return WorldGuard is enabled.
-     */
+     *
     public static boolean worldGuardEnabled() {
         return ENABLED;
     }
@@ -84,7 +63,7 @@ public class WorldGuardUtil implements Listener {
     /**
      * @param id The name of a WorldGuard flag.
      * @deprecated If you don't have WorldGuard installed this will error.
-     */
+     *
     public static Flag<?> getFlag(String id) {
         return DefaultFlag.fuzzyMatchFlag(id);
     }
@@ -95,7 +74,7 @@ public class WorldGuardUtil implements Listener {
      * @param name     The name of the region.
      * @param location The location being checked.
      * @return The region does exist at the provided location.
-     */
+     *
     public static boolean checkForRegion(final String name, Location location) {
         return Iterators.any(WorldGuardPlugin.inst().getRegionManager(location.getWorld()).getApplicableRegions(location).iterator(), new Predicate<ProtectedRegion>() {
             @Override
@@ -111,7 +90,7 @@ public class WorldGuardUtil implements Listener {
      * @param flag     The flag being checked.
      * @param location The location being checked.
      * @return The flag does exist at the provided location.
-     */
+     *
     public static boolean checkForFlag(final Flag flag, Location location) {
         return Iterators.any(WorldGuardPlugin.inst().getRegionManager(location.getWorld()).getApplicableRegions(location).iterator(), new Predicate<ProtectedRegion>() {
             @Override
@@ -131,7 +110,7 @@ public class WorldGuardUtil implements Listener {
      * @param flag     The flag being checked.
      * @param location The location being checked.
      * @return The flag is enabled.
-     */
+     *
     public static boolean checkStateFlagAllows(final StateFlag flag, Location location) {
         return WorldGuardPlugin.inst().getGlobalRegionManager().allows(flag, location);
     }
@@ -143,7 +122,7 @@ public class WorldGuardUtil implements Listener {
      * @param value    The value (marshalled) as a String.
      * @param location The location being checked.
      * @return The flag-value does exist at the provided location.
-     */
+     *
     public static boolean checkForFlagValue(final Flag flag, final String value, Location location) {
         return Iterators.any(WorldGuardPlugin.inst().getRegionManager(location.getWorld()).getApplicableRegions(location).iterator(), new Predicate<ProtectedRegion>() {
             @Override
@@ -161,7 +140,7 @@ public class WorldGuardUtil implements Listener {
      * @param player   Given player.
      * @param location Given location.
      * @return The player can build here.
-     */
+     *
     public static boolean canBuild(Player player, Location location) {
         return WorldGuardPlugin.inst().canBuild(player, location);
     }
@@ -169,7 +148,7 @@ public class WorldGuardUtil implements Listener {
     /**
      * @param location Given location.
      * @return PVP is allowed here.
-     */
+     *
     public static boolean canPVP(Location location) {
         return checkStateFlagAllows(DefaultFlag.PVP, location);
     }
@@ -224,4 +203,5 @@ public class WorldGuardUtil implements Listener {
             if (checkPVP.apply(event.getCause())) event.setCancelled(true);
         }
     }
+    */
 }

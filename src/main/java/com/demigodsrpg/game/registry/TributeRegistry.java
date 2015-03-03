@@ -1,12 +1,14 @@
 package com.demigodsrpg.game.registry;
 
 import com.censoredsoftware.library.util.RandomUtil;
+import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.model.TributeModel;
 import com.demigodsrpg.game.util.JsonSection;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
+import com.google.common.base.Optional;
+import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.recipe.Recipe;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,7 +18,11 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
 
     @Override
     public TributeModel valueFromData(String stringKey, JsonSection data) {
-        return new TributeModel(Material.getMaterial(stringKey), data);
+        Optional<ItemType> blockType = DGGame.GAME.getRegistry().getItem(stringKey);
+        if (blockType.isPresent()) {
+            return new TributeModel(blockType.get(), data);
+        }
+        return null;
     }
 
     @Override
@@ -24,7 +30,7 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
         return FILE_NAME;
     }
 
-    void save(Material material, int amount) {
+    void save(ItemType material, int amount) {
         // Remove the data if it exists already
         remove(material);
 
@@ -32,9 +38,9 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
         register(new TributeModel(material, amount));
     }
 
-    void remove(Material material) {
-        if (fromId(material.name()) != null) {
-            unregister(fromId(material.name()));
+    void remove(ItemType material) {
+        if (fromId(material.getId()) != null) {
+            unregister(fromId(material.getId()));
         }
     }
 
@@ -42,13 +48,19 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
     public TributeModel fromId(String materialName) {
         TributeModel model = super.fromId(materialName);
         if (model == null) {
-            model = new TributeModel(Material.valueOf(materialName), 1);
-            register(model);
+            Optional<ItemType> blockType = DGGame.GAME.getRegistry().getItem(materialName);
+            if (blockType.isPresent()) {
+                model = new TributeModel(blockType.get(), 1);
+                register(model);
+            } else {
+                throw new NullPointerException("Not a valid block type: " + materialName);
+            }
+
         }
         return model;
     }
 
-    public Collection<TributeModel> find(final Category category) {
+    public List<TributeModel> find(final Category category) {
         return getRegistered().stream().filter(model -> category.equals(model.getCategory())).collect(Collectors.toList());
     }
 
@@ -57,8 +69,8 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
      *
      * @return a Map of all tribute data.
      */
-    public Map<Material, Integer> getTributeValuesMap() {
-        Map<Material, Integer> map = new HashMap<>();
+    public Map<ItemType, Integer> getTributeValuesMap() {
+        Map<ItemType, Integer> map = new HashMap<>();
         for (TributeModel data : getRegistered()) {
             map.put(data.getMaterial(), (int) getValue(data.getMaterial()));
         }
@@ -84,8 +96,8 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
      * @param material the material to check.
      * @return the total number of tributes.
      */
-    int getTributes(Material material) {
-        TributeModel data = fromId(material.name());
+    int getTributes(ItemType material) {
+        TributeModel data = fromId(material.getId());
         if (data != null) return data.getFitness();
         else return 1;
     }
@@ -110,20 +122,20 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
      * @param item the item whose amount to save.
      */
     void saveTribute(ItemStack item) {
-        TributeModel data = fromId(item.getType().name());
+        TributeModel data = fromId(item.getItem().getId());
 
         if (data != null) {
-            data.setFitness(data.getFitness() + item.getAmount());
+            data.setFitness(data.getFitness() + item.getQuantity());
         } else {
-            save(item.getType(), item.getAmount());
+            save(item.getItem(), item.getQuantity());
         }
     }
 
     /**
      * Returns the value for a <code>material</code>.
      */
-    double getValue(Material material) {
-        int lastKnownValue = (int) fromId(material.name()).getLastKnownValue();
+    double getValue(ItemType material) {
+        int lastKnownValue = (int) fromId(material.getId()).getLastKnownValue();
         return lastKnownValue >= 0.0 ? lastKnownValue : 1.0;
     }
 
@@ -134,7 +146,7 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
      * @return the value of the item.
      */
     public int getValue(ItemStack item) {
-        return (int) getValue(item.getType()) * item.getAmount();
+        return (int) getValue(item.getItem()) * item.getQuantity();
     }
 
     /**
@@ -144,13 +156,13 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
      * @return the category
      */
     @Deprecated
-    public Category getCategory(final Material material) {
-        switch (material) {
-            case BEDROCK:
-                return Category.CHEATING;
-            case DRAGON_EGG:
-            case NETHER_STAR:
-                return Category.BOSS_REWARD;
+    public Category getCategory(final ItemType material) {
+        if (material.equals(ItemTypes.BEDROCK)) {
+            return Category.CHEATING;
+        } else if (material.equals(ItemTypes.DRAGON_EGG) || material.equals(ItemTypes.NETHER_STAR)) {
+            return Category.BOSS_REWARD;
+        }
+            /*
             case GHAST_TEAR:
             case DIAMOND_ORE:
             case LAPIS_ORE:
@@ -233,19 +245,17 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
                     return Category.COAL;
                 } else if (material.name().contains("LEATHER")) {
                     return Category.LEATHER;
-                }
+                } */
 
-                Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
-                while (recipeIterator.hasNext()) {
-                    Recipe recipe = recipeIterator.next();
-                    if (recipe.getResult().getType().equals(material)) {
-                        return Category.MANUFACTURED;
-                    }
-                }
-
-                // TODO More
-                return Category.OTHER;
+        Set<Recipe> recipes = DGGame.GAME.getRegistry().getRecipeRegistry().getRecipes();
+        for (Recipe recipe : recipes) {
+            if (recipe.getResultTypes().contains(material)) {
+                return Category.MANUFACTURED;
+            }
         }
+
+        // TODO More
+        return Category.OTHER;
     }
 
     /**
@@ -274,9 +284,12 @@ public class TributeRegistry extends AbstractRegistry<TributeModel> {
      */
     @Deprecated
     public void initializeTributeTracking() {
-        for (Material material : Material.values()) {
+        for (ItemType material : DGGame.GAME.getRegistry().getItems()) {
             // Don't use certain materials
-            Material[] unused = {Material.AIR, Material.WATER, Material.STATIONARY_WATER, Material.LAVA, Material.STATIONARY_LAVA, Material.ENDER_PORTAL, Material.BEDROCK, Material.FIRE, Material.MOB_SPAWNER, Material.BURNING_FURNACE, Material.FLOWER_POT, Material.SKULL, Material.DOUBLE_STEP, Material.PORTAL, Material.CAKE_BLOCK, Material.BREWING_STAND, Material.CARROT, Material.DIODE_BLOCK_OFF, Material.DIODE_BLOCK_ON, Material.DOUBLE_PLANT, Material.EXP_BOTTLE, Material.GLOWING_REDSTONE_ORE, Material.LOG_2, Material.SIGN_POST, Material.SNOW, Material.WALL_SIGN};
+            ItemType[] unused = {ItemTypes.BEDROCK, ItemTypes.MOB_SPAWNER, ItemTypes.FLOWER_POT, ItemTypes.SKULL,
+                    ItemTypes.STONE_SLAB2, ItemTypes.BREWING_STAND, ItemTypes.CARROT, ItemTypes.DOUBLE_PLANT,
+                    ItemTypes.EXPERIENCE_BOTTLE, ItemTypes.LOG2, ItemTypes.SIGN, ItemTypes.SNOW};
+
             if (Arrays.asList(unused).contains(material)) continue;
 
             // Fill it with random data

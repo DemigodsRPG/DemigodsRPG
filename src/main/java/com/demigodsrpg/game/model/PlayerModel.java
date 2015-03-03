@@ -17,10 +17,10 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Lists;
 import gnu.trove.iterator.TIntIterator;
 import gnu.trove.map.hash.TIntDoubleHashMap;
-import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.message.Messages;
 import org.spongepowered.api.world.Location;
@@ -299,30 +299,30 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return binds;
     }
 
-    public AbilityMetaData getBound(BlockType material) {
+    public AbilityMetaData getBound(ItemType material) {
         if (binds.inverse().containsKey(material.getId())) {
             return DGGame.ABILITY_R.fromCommand(binds.inverse().get(material.getId()));
         }
         return null;
     }
 
-    public BlockType getBound(AbilityMetaData ability) {
+    public ItemType getBound(AbilityMetaData ability) {
         return getBound(ability.getCommand());
     }
 
-    BlockType getBound(String abilityCommand) {
+    ItemType getBound(String abilityCommand) {
         if (binds.containsKey(abilityCommand)) {
-            return DGGame.GAME.getRegistry().getBlock(binds.get(abilityCommand)).get();
+            return DGGame.GAME.getRegistry().getItem(binds.get(abilityCommand)).get();
         }
         return null;
     }
 
-    public void bind(AbilityMetaData ability, BlockType material) {
+    public void bind(AbilityMetaData ability, ItemType material) {
         binds.put(ability.getCommand(), material.getId());
         DGGame.PLAYER_R.register(this);
     }
 
-    public void bind(String abilityCommand, BlockType material) {
+    public void bind(String abilityCommand, ItemType material) {
         binds.put(abilityCommand, material.getId());
         DGGame.PLAYER_R.register(this);
     }
@@ -337,7 +337,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         DGGame.PLAYER_R.register(this);
     }
 
-    public void unbind(BlockType material) {
+    public void unbind(ItemType material) {
         binds.inverse().remove(material.getId());
         DGGame.PLAYER_R.register(this);
     }

@@ -1,8 +1,8 @@
 package com.demigodsrpg.game.shrine;
 
-import org.bukkit.Location;
+import org.spongepowered.api.world.Location;
 
-import java.util.Collection;
+import java.util.List;
 
 public enum Shrine implements IShrine {
     OVERWORLD(new OverworldShrine()), NETHER(new NetherShrine());
@@ -30,7 +30,7 @@ public enum Shrine implements IShrine {
     }
 
     @Override
-    public Collection<Location> getLocations(Location reference) {
+    public List<Location> getLocations(Location reference) {
         return parent.getLocations(reference);
     }
 

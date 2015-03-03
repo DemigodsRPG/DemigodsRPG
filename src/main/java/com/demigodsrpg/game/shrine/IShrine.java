@@ -1,8 +1,8 @@
 package com.demigodsrpg.game.shrine;
 
-import org.bukkit.Location;
+import org.spongepowered.api.world.Location;
 
-import java.util.Collection;
+import java.util.List;
 
 interface IShrine {
     void generate(Location reference);
@@ -13,5 +13,5 @@ interface IShrine {
 
     int getGroundRadius();
 
-    Collection<Location> getLocations(Location reference);
+    List<Location> getLocations(Location reference);
 }
