@@ -8,19 +8,21 @@ import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
 import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.model.PlayerModel;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import com.google.common.base.Optional;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.util.command.CommandException;
+import org.spongepowered.api.util.command.CommandSource;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
 import java.util.List;
 
 public class CreateFactionAreaCommand extends BaseCommand {
     @Override
-    protected CommandResult onCommand(CommandSender sender, Command command, String[] args) {
+    protected CommandResult onCommand(CommandSource sender, String command, List<String> args) {
         // Need at least 1 arg
-        if (args.length > 0) {
+        if (args.size() > 0) {
             if (sender instanceof Player) {
                 PlayerModel model = DGGame.PLAYER_R.fromPlayer((Player) sender);
                 if (model.getAdminMode()) {
@@ -32,11 +34,11 @@ public class CreateFactionAreaCommand extends BaseCommand {
 
                         // Get territory info
                         List<Location> corners = selection.getPoints();
-                        Faction faction = DGGame.FACTION_R.factionFromName(args[0]);
+                        Faction faction = DGGame.FACTION_R.factionFromName(args.get(0));
 
                         // Does the faction exist?
                         if (faction == null) {
-                            sender.sendMessage(ChatColor.RED + args[0] + " is not a valid faction name.");
+                            sender.sendMessage(TextColors.RED + args.get(0) + " is not a valid faction name.");
                             return CommandResult.QUIET_ERROR;
                         }
 
@@ -44,23 +46,23 @@ public class CreateFactionAreaCommand extends BaseCommand {
                         if (!corners.isEmpty()) {
                             // Unregister/clear the selection
                             selection.unregister();
-                            sender.sendMessage(ChatColor.YELLOW + "Area selection cleared.");
+                            sender.sendMessage(TextColors.YELLOW + "Area selection cleared.");
 
                             // Create and register the faction territory
                             FactionTerritory territory = new FactionTerritory(faction, AreaPriority.NORMAL, corners);
-                            DGGame.AREA_R.get(selection.getPoints().get(0).getWorld().getName()).register(territory);
+                            DGGame.AREA_R.get(((World) selection.getPoints().get(0).getExtent()).getName()).register(territory);
 
                             // Notify the admin
-                            sender.sendMessage(ChatColor.YELLOW + "Faction territory for " + faction.getName() + " has been created.");
+                            sender.sendMessage(TextColors.YELLOW + "Faction territory for " + faction.getName() + " has been created.");
 
                             return CommandResult.SUCCESS;
                         } else {
-                            sender.sendMessage(ChatColor.RED + "The selection was empty, try again.");
+                            sender.sendMessage(TextColors.RED + "The selection was empty, try again.");
                             return CommandResult.QUIET_ERROR;
                         }
                     } else {
                         // Tell them to make a selection
-                        sender.sendMessage(ChatColor.RED + "Make a selection before using this command.");
+                        sender.sendMessage(TextColors.RED + "Make a selection before using this command.");
                         return CommandResult.QUIET_ERROR;
                     }
                 } else {
@@ -72,5 +74,30 @@ public class CreateFactionAreaCommand extends BaseCommand {
         }
 
         return CommandResult.INVALID_SYNTAX;
+    }
+
+    @Override
+    public boolean testPermission(CommandSource commandSource) {
+        return false;
+    }
+
+    @Override
+    public Optional<String> getShortDescription() {
+        return null;
+    }
+
+    @Override
+    public Optional<String> getHelp() {
+        return null;
+    }
+
+    @Override
+    public String getUsage() {
+        return null;
+    }
+
+    @Override
+    public List<String> getSuggestions(CommandSource commandSource, String s) throws CommandException {
+        return null;
     }
 }

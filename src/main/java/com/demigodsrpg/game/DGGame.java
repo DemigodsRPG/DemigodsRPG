@@ -1,7 +1,13 @@
 package com.demigodsrpg.game;
 
-import com.demigodsrpg.game.command.*;
-import com.demigodsrpg.game.command.admin.*;
+import com.demigodsrpg.game.command.AdminModeComand;
+import com.demigodsrpg.game.command.CheckCommand;
+import com.demigodsrpg.game.command.FactionCommand;
+import com.demigodsrpg.game.command.ValuesCommand;
+import com.demigodsrpg.game.command.admin.CheckPlayerCommand;
+import com.demigodsrpg.game.command.admin.CreateFactionAreaCommand;
+import com.demigodsrpg.game.command.admin.SelectAreaCommand;
+import com.demigodsrpg.game.command.admin.SetFactionCommand;
 import com.demigodsrpg.game.deity.Deity;
 import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.listener.*;
@@ -123,11 +129,11 @@ public class DGGame {
         // Register commands
         CommandService commands = GAME.getCommandDispatcher();
         commands.register(PLUGIN, new FactionCommand(), "faction", "f");
-        commands.register(PLUGIN, new BindsCommand(), "binds", "b");
+        // commands.register(PLUGIN, new BindsCommand(), "binds", "b");
         commands.register(PLUGIN, new CheckCommand(), "check", "c");
-        commands.register(PLUGIN, new AspectCommand(), "aspect", "a");
-        commands.register(PLUGIN, new CleanseCommand(), "cleanse");
-        commands.register(PLUGIN, new ShrineCommand(), "shrine", "sh", "s");
+        // commands.register(PLUGIN, new AspectCommand(), "aspect", "a");
+        // commands.register(PLUGIN, new CleanseCommand(), "cleanse");
+        // commands.register(PLUGIN, new ShrineCommand(), "shrine", "sh", "s");
         commands.register(PLUGIN, new ValuesCommand(), "values", "value", "v");
 
         // Admin commands
@@ -135,10 +141,10 @@ public class DGGame {
         commands.register(PLUGIN, new SelectAreaCommand(), "selectarea", "sa");
         commands.register(PLUGIN, new CreateFactionAreaCommand(), "createfactionarea");
         commands.register(PLUGIN, new CheckPlayerCommand(), "checkplayer");
-        commands.register(PLUGIN, new AddDevotionCommand(), "adddevotion");
-        commands.register(PLUGIN, new RemoveDevotionCommand(), "removedevotion");
-        commands.register(PLUGIN, new GiveAspectCommand(), "giveaspect");
-        commands.register(PLUGIN, new RemoveAspectCommand(), "removeaspect");
+        // commands.register(PLUGIN, new AddDevotionCommand(), "adddevotion");
+        // commands.register(PLUGIN, new RemoveDevotionCommand(), "removedevotion");
+        // commands.register(PLUGIN, new GiveAspectCommand(), "giveaspect");
+        // commands.register(PLUGIN, new RemoveAspectCommand(), "removeaspect");
         commands.register(PLUGIN, new SetFactionCommand(), "setfaction");
 
         // Enable ZoneUtil

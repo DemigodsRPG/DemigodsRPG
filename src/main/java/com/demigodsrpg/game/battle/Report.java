@@ -1,6 +1,6 @@
 package com.demigodsrpg.game.battle;
 
-import org.bukkit.Location;
+import org.spongepowered.api.world.Location;
 
 public class Report {
     public Location startLocation;

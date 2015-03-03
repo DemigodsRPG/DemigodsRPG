@@ -170,7 +170,7 @@ public class TributeListener {
         Deity shrineDeity = save.getDeity();
 
         // Open the tribute inventory
-        Inventory ii = Inventories.customInventoryBuilder().size(27)/*.name("Tribute to " + shrineDeity.getFaction().getColor() + shrineDeity.getName() + ChatColor.RESET + "." */.build();
+        Inventory ii = Inventories.customInventoryBuilder().size(27)/*.name("Tribute to " + shrineDeity.getFaction().getColor() + shrineDeity.getName() + TextColors.RESET + "." */.build();
 
         player.openInventory(ii);
     }

@@ -1,10 +1,12 @@
 package com.demigodsrpg.game.aspect.fire;
 
 import com.demigodsrpg.game.aspect.Aspect;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.material.MaterialData;
+import org.spongepowered.api.effect.sound.SoundType;
+import org.spongepowered.api.effect.sound.SoundTypes;
+import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.text.format.TextColor;
+import org.spongepowered.api.text.format.TextColors;
 
 public class FireAspect implements Aspect.Group {
     @Override
@@ -13,17 +15,17 @@ public class FireAspect implements Aspect.Group {
     }
 
     @Override
-    public ChatColor getColor() {
-        return ChatColor.GOLD;
+    public TextColor getColor() {
+        return TextColors.GOLD;
     }
 
     @Override
-    public Sound getSound() {
-        return Sound.FIRE;
+    public SoundType getSound() {
+        return SoundTypes.FIRE;
     }
 
     @Override
-    public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.FIREBALL);
+    public ItemType getClaimMaterial() {
+        return ItemTypes.FIRE_CHARGE;
     }
 }

@@ -7,14 +7,13 @@ import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.util.TargetingUtil;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.event.entity.living.player.PlayerInteractEvent;
+import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.world.Location;
+
 
 public class LightningAspectI implements Aspect {
 
@@ -48,10 +47,10 @@ public class LightningAspectI implements Aspect {
 
         // Define variables
         Location target;
-        LivingEntity entity = TargetingUtil.autoTarget(player);
+        Entity entity = TargetingUtil.autoTarget(player);
         boolean notify;
 
-        if (entity != null) {
+        if (entity instanceof Living) {
             target = entity.getLocation();
             notify = true;
         } else {
@@ -66,11 +65,12 @@ public class LightningAspectI implements Aspect {
         // Set variables
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
 
-        if (!player.getWorld().equals(target.getWorld())) return false;
+        if (!player.getWorld().equals(target.getExtent())) return false;
         Location toHit = TargetingUtil.adjustedAimLocation(model, target);
 
-        player.getWorld().strikeLightningEffect(toHit);
+        // player.getWorld().strikeLightningEffect(toHit); FIXME
 
+        /* FIXME
         for (Entity entity : toHit.getBlock().getChunk().getEntities()) {
             if (entity instanceof LivingEntity) {
                 if (!DGGame.BATTLE_R.canTarget(entity)) continue;
@@ -88,8 +88,9 @@ public class LightningAspectI implements Aspect {
                 }
             }
         }
+        */
 
-        if (!TargetingUtil.isHit(target, toHit) && notify) player.sendMessage(ChatColor.RED + "Missed...");
+        if (!TargetingUtil.isHit(target, toHit) && notify) player.sendMessage(TextColors.RED + "Missed...");
 
         return true;
     }

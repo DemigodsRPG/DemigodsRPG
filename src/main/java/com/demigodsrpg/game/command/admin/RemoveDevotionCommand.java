@@ -1,16 +1,7 @@
 package com.demigodsrpg.game.command.admin;
 
-import com.demigodsrpg.game.DGGame;
-import com.demigodsrpg.game.aspect.Aspect;
-import com.demigodsrpg.game.aspect.Aspects;
-import com.demigodsrpg.game.command.type.AdminPlayerCommand;
-import com.demigodsrpg.game.command.type.CommandResult;
-import com.demigodsrpg.game.model.PlayerModel;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-public class RemoveDevotionCommand extends AdminPlayerCommand {
+public class RemoveDevotionCommand /* extends AdminPlayerCommand */ {
+    /*
     @Override
     public CommandResult onCommand(CommandSender sender, PlayerModel model, String[] args) {
         if (args.length == 3) {
@@ -22,7 +13,7 @@ public class RemoveDevotionCommand extends AdminPlayerCommand {
                 m = DGGame.PLAYER_R.fromPlayer(p);
                 Aspect aspect = Aspects.valueOf(args[1].toUpperCase());
                 if (!m.getAspects().contains(aspect.getGroup().getName() + " " + aspect.getTier().name())) {
-                    sender.sendMessage(ChatColor.RED + "The player you are accessing does not have that deity.");
+                    sender.sendMessage(TextColors.RED + "The player you are accessing does not have that deity.");
                     return CommandResult.QUIET_ERROR;
                 }
                 double newAmount = m.getExperience(aspect) - amount;
@@ -30,13 +21,14 @@ public class RemoveDevotionCommand extends AdminPlayerCommand {
 
                 m.setExperience(aspect, newAmount);
 
-                sender.sendMessage(ChatColor.YELLOW + "You removed " + amount + " devotion from " + p.getName() + " in the aspect group " + aspect.getGroup().getName() + ".");
+                sender.sendMessage(TextColors.YELLOW + "You removed " + amount + " devotion from " + p.getName() + " in the aspect group " + aspect.getGroup().getName() + ".");
             } catch (Exception ignored) {
-                sender.sendMessage(ChatColor.RED + "Invalid syntax! /RemoveDevotion [Name, Deity, Amount]");
+                sender.sendMessage(TextColors.RED + "Invalid syntax! /RemoveDevotion [Name, Deity, Amount]");
                 return CommandResult.QUIET_ERROR;
             }
             return CommandResult.SUCCESS;
         }
         return CommandResult.INVALID_SYNTAX;
     }
+    */
 }

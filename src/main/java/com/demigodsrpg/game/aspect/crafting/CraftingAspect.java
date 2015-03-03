@@ -1,10 +1,12 @@
 package com.demigodsrpg.game.aspect.crafting;
 
 import com.demigodsrpg.game.aspect.Aspect;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.material.MaterialData;
+import org.spongepowered.api.effect.sound.SoundType;
+import org.spongepowered.api.effect.sound.SoundTypes;
+import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.text.format.TextColor;
+import org.spongepowered.api.text.format.TextColors;
 
 public class CraftingAspect implements Aspect.Group {
     @Override
@@ -13,17 +15,17 @@ public class CraftingAspect implements Aspect.Group {
     }
 
     @Override
-    public ChatColor getColor() {
-        return ChatColor.DARK_GRAY;
+    public TextColor getColor() {
+        return TextColors.DARK_GRAY;
     }
 
     @Override
-    public Sound getSound() {
-        return Sound.ANVIL_USE;
+    public SoundType getSound() {
+        return SoundTypes.ANVIL_USE;
     }
 
     @Override
-    public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.ANVIL);
+    public ItemType getClaimMaterial() {
+        return ItemTypes.ANVIL;
     }
 }

@@ -7,13 +7,12 @@ import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.util.TargetingUtil;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.event.entity.living.player.PlayerInteractEvent;
+import org.spongepowered.api.text.format.TextColors;
 
 public class WaterAspectI implements Aspect {
     @Override
@@ -43,15 +42,16 @@ public class WaterAspectI implements Aspect {
 
         double damage = Math.ceil(0.37286 * Math.pow(model.getLevel() * 100, 0.371238)); // TODO Make damage do more?
 
-        LivingEntity hit = TargetingUtil.autoTarget(player);
+        Entity hit = TargetingUtil.autoTarget(player);
 
-        if (hit != null) {
-            player.sendMessage(ChatColor.AQUA + "*shploosh*");
-            hit.damage(damage);
-            hit.setLastDamageCause(new EntityDamageByEntityEvent(player, hit, EntityDamageEvent.DamageCause.DROWNING, damage));
+        if (hit != null && hit instanceof Living) {
+            player.sendMessage(TextColors.AQUA + "*shploosh*");
+            ((Living) hit).damage(damage);
+            ((Living) hit).setLastAttacker(player);
 
-            if (hit.getLocation().getBlock().getType().equals(Material.AIR)) {
-                hit.getLocation().getBlock().setTypeIdAndData(Material.WATER.getId(), (byte) 0x8, true);
+            if (hit.getLocation().getBlock().getType().equals(BlockTypes.AIR)) {
+                hit.getLocation().getBlock().replaceWith(BlockTypes.WATER);
+                hit.getLocation().getBlock().replaceWith(BlockTypes.WATER.getStateFromDataValue((byte) 0x8));
             }
 
             return AbilityResult.SUCCESS;

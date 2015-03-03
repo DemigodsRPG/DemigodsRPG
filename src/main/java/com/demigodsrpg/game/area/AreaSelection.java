@@ -1,22 +1,20 @@
 package com.demigodsrpg.game.area;
 
 import com.demigodsrpg.game.DGGame;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.spongepowered.api.entity.EntityInteractionType;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.event.entity.living.player.PlayerInteractEvent;
+import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.util.event.Order;
+import org.spongepowered.api.util.event.Subscribe;
+import org.spongepowered.api.world.Location;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-public class AreaSelection implements Listener {
+public class AreaSelection {
 
     // -- GLOBAL CACHE -- //
 
@@ -32,28 +30,30 @@ public class AreaSelection implements Listener {
         points = new ArrayList<>();
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @Subscribe(order = Order.LATE)
     public void onClick(PlayerInteractEvent event) {
-        if (event.getPlayer().getUniqueId().toString().equals(playerUUID) && Action.RIGHT_CLICK_BLOCK.equals(event.getAction())) {
-            // Get the point
-            Location point = event.getClickedBlock().getLocation();
+        if (!event.isCancelled()) {
+            if (event.getPlayer().getUniqueId().toString().equals(playerUUID) && EntityInteractionType.RIGHT_CLICK.equals(event.getInteractionType()) && event.getClickedPosition().isPresent()) {
+                // Get the point
+                Location point = new Location(event.getPlayer().getLocation().getExtent(), event.getClickedPosition().get().toDouble());
 
-            if (!points.isEmpty() && !points.get(0).getWorld().equals(point.getWorld())) {
-                event.getPlayer().sendMessage(ChatColor.RED + "Points must all be from the same world.");
-                return;
-            }
+                if (!points.isEmpty() && !points.get(0).getExtent().equals(point.getExtent())) {
+                    event.getPlayer().sendMessage(TextColors.RED + "Points must all be from the same world.");
+                    return;
+                }
 
-            // Cancel the click to be sure
-            event.setCancelled(true);
+                // Cancel the click to be sure
+                event.setCancelled(true);
 
-            // Either add or remove the point
-            if (!points.contains(point)) {
-                points.add(point);
-                event.getPlayer().sendMessage(ChatColor.YELLOW + "Point " + points.size() + " has been marked.");
-            } else {
-                int index = points.indexOf(point) + 1;
-                points.remove(point);
-                event.getPlayer().sendMessage(ChatColor.RED + "Point " + index + " has been unmarked.");
+                // Either add or remove the point
+                if (!points.contains(point)) {
+                    points.add(point);
+                    event.getPlayer().sendMessage(TextColors.YELLOW + "Point " + points.size() + " has been marked.");
+                } else {
+                    int index = points.indexOf(point) + 1;
+                    points.remove(point);
+                    event.getPlayer().sendMessage(TextColors.RED + "Point " + index + " has been unmarked.");
+                }
             }
         }
     }
@@ -63,15 +63,12 @@ public class AreaSelection implements Listener {
     }
 
     public void register() {
-        // Get the plugin instance
-        DGGame inst = DGGame.getInst();
-
         // Register this listener
-        inst.getServer().getPluginManager().registerEvents(this, inst);
+        DGGame.GAME.getEventManager().register(this, DGGame.PLUGIN);
     }
 
     public void unregister() {
         // Unregister this listener
-        HandlerList.unregisterAll(this);
+        DGGame.GAME.getEventManager().unregister(this);
     }
 }

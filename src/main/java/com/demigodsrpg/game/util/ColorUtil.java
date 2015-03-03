@@ -129,9 +129,9 @@ public class ColorUtil {
      * Get a TextColor that is best related to a given Color.
      *
      * @param color Color to be matched.
-     * @return Best ChatColor found.
+     * @return Best TextColors found.
      */
-    public static TextColor getChatColor(final Color color) {
+    public static TextColor getTextColors(final Color color) {
         TextColor nearestColor = TextColors.WHITE;
         double bestDistance = Double.MAX_VALUE;
 
@@ -147,9 +147,9 @@ public class ColorUtil {
     }
 
     /**
-     * Get a Color that is best related to a given ChatColor.
+     * Get a Color that is best related to a given TextColors.
      *
-     * @param color ChatColor to be matched.
+     * @param color TextColors to be matched.
      * @return Best Color found.
      */
     public static Color getColor(final TextColor color) {
@@ -157,9 +157,9 @@ public class ColorUtil {
     }
 
     /**
-     * Get MaterialData that is best related to a given ChatColor.
+     * Get MaterialData that is best related to a given TextColors.
      *
-     * @param color ChatColor to be matched.
+     * @param color TextColors to be matched.
      * @return Best MaterialData found.
      */
     public static BlockType getMaterial(final TextColor color) {

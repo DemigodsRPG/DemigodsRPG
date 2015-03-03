@@ -9,9 +9,9 @@ public class FactionChatTag /* extends PlayerTag */ {
     @Override
     public String getFor(Player player) {
         if (isInChat(player)) {
-            return ChatColor.DARK_GRAY + "[.]";
+            return TextColors.DARK_GRAY + "[.]";
         }
-        return ChatColor.DARK_RED + "[!]";
+        return TextColors.DARK_RED + "[!]";
     }
 
     @Override

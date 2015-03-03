@@ -6,16 +6,8 @@ import com.demigodsrpg.game.ability.AbilityResult;
 import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.model.PlayerModel;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.WeatherType;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.event.entity.living.player.PlayerInteractEvent;
 
 public class LightningAspectIII implements Aspect {
 
@@ -59,6 +51,7 @@ public class LightningAspectIII implements Aspect {
         setWeather(player, 100);
 
         // Strike targets
+        /* FIXME
         for (final Entity entity : player.getNearbyEntities(radius, radius, radius)) {
             // Validate them first
             if (!(entity instanceof LivingEntity)) continue;
@@ -87,11 +80,13 @@ public class LightningAspectIII implements Aspect {
                 }
             }, 15);
         }
+        */
 
         return AbilityResult.SUCCESS;
     }
 
     private static void setWeather(final Player player, long ticks) {
+        /* FIXME
         // Set the weather
         player.setPlayerWeather(WeatherType.DOWNFALL);
 
@@ -102,5 +97,6 @@ public class LightningAspectIII implements Aspect {
                 player.resetPlayerWeather();
             }
         }, ticks);
+        */
     }
 }

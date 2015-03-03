@@ -5,18 +5,16 @@ import com.demigodsrpg.game.model.ShrineModel;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+// FIXME This whole thing is just broken
 
 public class ShrineGUI implements IInventoryGUI {
     public static final String INVENTORY_NAME = "Shrine Select";
@@ -53,19 +51,21 @@ public class ShrineGUI implements IInventoryGUI {
             final String type = model.getShrineType().name();
             final String owner = DGGame.PLAYER_R.fromId(model.getOwnerMojangId()).getLastKnownName();
 
-            items.add(count, new ItemStack(Material.ENCHANTED_BOOK, 1) {
-                {
+            ItemStack item = DGGame.GAME.getRegistry().getItemBuilder().itemType(ItemTypes.ENCHANTED_BOOK).quantity(1).build();
+            items.add(count, item);
+            /* {
+                { FIXME
                     ItemMeta meta = getItemMeta();
                     meta.setDisplayName(name);
-                    List<String> lore = Lists.newArrayList(ChatColor.AQUA + type, ChatColor.YELLOW + "Owner: " + ChatColor.LIGHT_PURPLE + owner);
+                    List<String> lore = Lists.newArrayList(TextColors.AQUA + type, TextColors.YELLOW + "Owner: " + TextColors.LIGHT_PURPLE + owner);
                     meta.setLore(lore);
                     setItemMeta(meta);
                 }
-            });
+            }); */
 
             count++;
 
-            if (count % 19 == 0 || !shrines.hasNext()) {
+            /* if (count % 19 == 0 || !shrines.hasNext()) {
                 Inventory inventory = Bukkit.createInventory(player, 27, INVENTORY_NAME + " " + icount);
                 for (int i = 0; i < items.size(); i++) {
                     inventory.setItem(i, items.get(i));
@@ -74,7 +74,7 @@ public class ShrineGUI implements IInventoryGUI {
                     inventory.setItem(25, new ItemStack(Material.PAPER, 1) {
                         {
                             ItemMeta meta = getItemMeta();
-                            meta.setDisplayName(ChatColor.GOLD + "< BACK");
+                            meta.setDisplayName(TextColors.GOLD + "< BACK");
                             setItemMeta(meta);
                         }
                     });
@@ -83,7 +83,7 @@ public class ShrineGUI implements IInventoryGUI {
                     inventory.setItem(26, new ItemStack(Material.PAPER, 1) {
                         {
                             ItemMeta meta = getItemMeta();
-                            meta.setDisplayName(ChatColor.GOLD + "NEXT >");
+                            meta.setDisplayName(TextColors.GOLD + "NEXT >");
                             setItemMeta(meta);
                         }
                     });
@@ -94,7 +94,7 @@ public class ShrineGUI implements IInventoryGUI {
 
                 INVENTORY_LIST.add(inventory);
                 icount++;
-            }
+            } */
         }
     }
 

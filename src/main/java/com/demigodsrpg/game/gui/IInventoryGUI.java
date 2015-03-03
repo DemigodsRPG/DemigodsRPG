@@ -1,6 +1,6 @@
 package com.demigodsrpg.game.gui;
 
-import org.bukkit.inventory.Inventory;
+import org.spongepowered.api.item.inventory.Inventory;
 
 interface IInventoryGUI {
     //Get the inventory

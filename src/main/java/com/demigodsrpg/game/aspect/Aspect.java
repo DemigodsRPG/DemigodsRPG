@@ -1,8 +1,8 @@
 package com.demigodsrpg.game.aspect;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
-import org.bukkit.material.MaterialData;
+import org.spongepowered.api.effect.sound.SoundType;
+import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.text.format.TextColor;
 
 public interface Aspect {
     Group getGroup();
@@ -20,10 +20,10 @@ public interface Aspect {
     public interface Group {
         public String getName();
 
-        public ChatColor getColor();
+        public TextColor getColor();
 
-        public Sound getSound();
+        public SoundType getSound();
 
-        public MaterialData getClaimMaterial();
+        public ItemType getClaimMaterial();
     }
 }

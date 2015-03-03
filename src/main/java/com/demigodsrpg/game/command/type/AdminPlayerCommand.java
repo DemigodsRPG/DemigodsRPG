@@ -2,19 +2,18 @@ package com.demigodsrpg.game.command.type;
 
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.model.PlayerModel;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.spongepowered.api.util.command.CommandException;
+import org.spongepowered.api.util.command.CommandSource;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AdminPlayerCommand extends BaseCommand implements TabCompleter {
+public abstract class AdminPlayerCommand extends BaseCommand {
     @SuppressWarnings("deprecation")
     @Override
-    public CommandResult onCommand(CommandSender sender, Command command, String[] args) {
-        if (args.length > 0) {
-            PlayerModel model = DGGame.PLAYER_R.fromName(args[0]);
+    public CommandResult onCommand(CommandSource sender, String command, List<String> args) {
+        if (args.size() > 0) {
+            PlayerModel model = DGGame.PLAYER_R.fromName(args.get(0));
             if (model != null) {
                 return onCommand(sender, model, args);
             }
@@ -23,12 +22,12 @@ public abstract class AdminPlayerCommand extends BaseCommand implements TabCompl
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length == 1) {
-            return DGGame.PLAYER_R.getNameStartsWith(args[0]);
+    public List<String> getSuggestions(CommandSource commandSource, String s) throws CommandException {
+        if (s.split(" ").length == 1) {
+            return DGGame.PLAYER_R.getNameStartsWith(s.split(" ")[0]);
         }
         return new ArrayList<>();
     }
 
-    protected abstract CommandResult onCommand(CommandSender sender, PlayerModel model, String[] args);
+    protected abstract CommandResult onCommand(CommandSource sender, PlayerModel model, List<String> args);
 }

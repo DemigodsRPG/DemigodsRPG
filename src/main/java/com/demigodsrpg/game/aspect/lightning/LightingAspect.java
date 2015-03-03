@@ -1,10 +1,12 @@
 package com.demigodsrpg.game.aspect.lightning;
 
 import com.demigodsrpg.game.aspect.Aspect;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.material.MaterialData;
+import org.spongepowered.api.effect.sound.SoundType;
+import org.spongepowered.api.effect.sound.SoundTypes;
+import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.text.format.TextColor;
+import org.spongepowered.api.text.format.TextColors;
 
 public class LightingAspect implements Aspect.Group {
     @Override
@@ -13,17 +15,17 @@ public class LightingAspect implements Aspect.Group {
     }
 
     @Override
-    public ChatColor getColor() {
-        return ChatColor.YELLOW;
+    public TextColor getColor() {
+        return TextColors.YELLOW;
     }
 
     @Override
-    public Sound getSound() {
-        return Sound.AMBIENCE_THUNDER;
+    public SoundType getSound() {
+        return SoundTypes.AMBIENCE_THUNDER;
     }
 
     @Override
-    public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.FEATHER);
+    public ItemType getClaimMaterial() {
+        return ItemTypes.FEATHER;
     }
 }

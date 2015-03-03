@@ -7,7 +7,7 @@ import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.model.PlayerModel;
-import org.bukkit.ChatColor;
+import org.bukkit.TextColors;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -51,11 +51,11 @@ public class DemonAspectIII implements Aspect {
 
         int amt = tartarus(player, model);
         if (amt > 0) {
-            player.sendMessage(ChatColor.DARK_RED + "Nothingness" + ChatColor.GRAY + " has corrupted " + amt + " enemies.");
+            player.sendMessage(TextColors.DARK_RED + "Nothingness" + TextColors.GRAY + " has corrupted " + amt + " enemies.");
             player.getWorld().setTime(18000);
             return AbilityResult.SUCCESS;
         } else {
-            player.sendMessage(ChatColor.YELLOW + "There were no valid targets or the ultimate could not be used.");
+            player.sendMessage(TextColors.YELLOW + "There were no valid targets or the ultimate could not be used.");
         }
         return AbilityResult.OTHER_FAILURE;
     }

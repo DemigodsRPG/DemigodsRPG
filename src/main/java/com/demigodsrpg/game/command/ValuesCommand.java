@@ -6,23 +6,26 @@ import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import com.google.common.base.Optional;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.format.TextStyles;
+import org.spongepowered.api.util.command.CommandException;
+import org.spongepowered.api.util.command.CommandSource;
 
+import java.util.List;
 import java.util.Map;
 
 public class ValuesCommand extends BaseCommand {
     @Override
-    public CommandResult onCommand(CommandSender sender, Command command, String[] args) {
+    public CommandResult onCommand(CommandSource sender, String command, List<String> args) {
         // Define variables
         Player player = (Player) sender;
         int count = 0;
 
         if (DGGame.TRIBUTE_R.getTributeValuesMap().isEmpty()) {
-            sender.sendMessage(ChatColor.RED + "There are currently no tributes on record.");
+            sender.sendMessage(TextColors.RED + "There are currently no tributes on record.");
             return CommandResult.QUIET_ERROR;
         }
 
@@ -30,24 +33,49 @@ public class ValuesCommand extends BaseCommand {
         sender.sendMessage(StringUtil2.chatTitle("Current High Value Tributes"));
         sender.sendMessage(" ");
 
-        for (Map.Entry<Material, Integer> entry : MapUtil2.sortByValue(DGGame.TRIBUTE_R.getTributeValuesMap(), true).entrySet()) {
+        for (Map.Entry<ItemType, Integer> entry : MapUtil2.sortByValue(DGGame.TRIBUTE_R.getTributeValuesMap(), true).entrySet()) {
             // Handle count
             if (count >= 10) break;
             count++;
 
             // Display value
-            sender.sendMessage(ChatColor.GRAY + " " + CommonSymbol.RIGHTWARD_ARROW + " " + ChatColor.YELLOW + StringUtil2.beautify(entry.getKey().name()) + ChatColor.GRAY + " (currently worth " + ChatColor.GREEN + entry.getValue() + ChatColor.GRAY + " per item)");
+            sender.sendMessage(TextColors.GRAY + " " + CommonSymbol.RIGHTWARD_ARROW + " " + TextColors.YELLOW + StringUtil2.beautify(entry.getKey().getId()) + TextColors.GRAY + " (currently worth " + TextColors.GREEN + entry.getValue() + TextColors.GRAY + " per item)");
         }
 
         sender.sendMessage(" ");
-        sender.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "Values are constantly changing based on how players");
-        sender.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "tribute, so check back often!");
+        sender.sendMessage(TextColors.GRAY + "" + TextStyles.ITALIC + "Values are constantly changing based on how players");
+        sender.sendMessage(TextColors.GRAY + "" + TextStyles.ITALIC + "tribute, so check back often!");
 
-        if (!Material.AIR.equals(player.getItemInHand().getType())) {
+        if (player.getItemInHand().isPresent()) {
             sender.sendMessage(" ");
-            sender.sendMessage(ChatColor.GRAY + "The " + (player.getItemInHand().getAmount() == 1 ? "item in your hand is" : "items in your hand are") + " worth " + ChatColor.GREEN + DGGame.TRIBUTE_R.getValue(player.getItemInHand()) + ChatColor.GRAY + " in total.");
+            sender.sendMessage(TextColors.GRAY + "The " + (player.getItemInHand().get().getQuantity() == 1 ? "item in your hand is" : "items in your hand are") + " worth " + TextColors.GREEN + DGGame.TRIBUTE_R.getValue(player.getItemInHand().get()) + TextColors.GRAY + " in total.");
         }
 
         return CommandResult.SUCCESS;
+    }
+
+    @Override
+    public boolean testPermission(CommandSource commandSource) {
+        return false;
+    }
+
+    @Override
+    public Optional<String> getShortDescription() {
+        return null;
+    }
+
+    @Override
+    public Optional<String> getHelp() {
+        return null;
+    }
+
+    @Override
+    public String getUsage() {
+        return null;
+    }
+
+    @Override
+    public List<String> getSuggestions(CommandSource commandSource, String s) throws CommandException {
+        return null;
     }
 }

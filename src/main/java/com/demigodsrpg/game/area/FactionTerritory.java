@@ -4,7 +4,7 @@ import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.util.JsonSection;
 import com.demigodsrpg.game.util.LocationUtil;
-import org.bukkit.Location;
+import org.spongepowered.api.world.Location;
 
 import java.util.ArrayList;
 import java.util.List;

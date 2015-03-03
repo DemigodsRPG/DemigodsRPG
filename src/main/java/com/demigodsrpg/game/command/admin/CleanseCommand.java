@@ -1,24 +1,12 @@
 package com.demigodsrpg.game.command.admin;
 
-import com.demigodsrpg.game.DGGame;
-import com.demigodsrpg.game.aspect.Aspect;
-import com.demigodsrpg.game.aspect.Aspects;
-import com.demigodsrpg.game.command.type.BaseCommand;
-import com.demigodsrpg.game.command.type.CommandResult;
-import com.demigodsrpg.game.deity.Faction;
-import com.demigodsrpg.game.model.PlayerModel;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
-
-public class CleanseCommand extends BaseCommand {
+public class CleanseCommand /* extends BaseCommand */ {
+    /*
     @Override
     protected CommandResult onCommand(CommandSender sender, Command command, String[] args) {
         // Check for no args
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.YELLOW + "To cleanse all, do /cleanse all");
+            sender.sendMessage(TextColors.YELLOW + "To cleanse all, do /cleanse all");
             return CommandResult.SUCCESS;
         }
         // Check for only 1 arg
@@ -34,7 +22,7 @@ public class CleanseCommand extends BaseCommand {
 
             // Check that the player model is not null
             if (playerModel == null) {
-                sender.sendMessage(ChatColor.DARK_RED + "Something is wrong with your player data. Try to re-log.");
+                sender.sendMessage(TextColors.DARK_RED + "Something is wrong with your player data. Try to re-log.");
                 return CommandResult.QUIET_ERROR;
             }
 
@@ -45,12 +33,12 @@ public class CleanseCommand extends BaseCommand {
                     // Get the deity object
                     Aspect aspect = Aspects.valueOf(deityName.toUpperCase());
                     if (aspect == null) {
-                        sender.sendMessage(ChatColor.RED + deityName + " does not exist, something is wrong with the player data...");
+                        sender.sendMessage(TextColors.RED + deityName + " does not exist, something is wrong with the player data...");
                         return CommandResult.QUIET_ERROR;
                     }
 
                     playerModel.removeAspect(aspect);
-                    sender.sendMessage(ChatColor.YELLOW + "You have cleansed " + aspect.getGroup().getName());
+                    sender.sendMessage(TextColors.YELLOW + "You have cleansed " + aspect.getGroup().getName());
                 }
 
                 // Set the alliance to neutral
@@ -58,7 +46,7 @@ public class CleanseCommand extends BaseCommand {
                 return CommandResult.SUCCESS;
             } else {
                 // TODO Check for individual deity forsake requests.
-                sender.sendMessage(ChatColor.YELLOW + "To cleanse all do /cleanse all");
+                sender.sendMessage(TextColors.YELLOW + "To cleanse all do /cleanse all");
                 return CommandResult.SUCCESS;
             }
         }
@@ -74,7 +62,7 @@ public class CleanseCommand extends BaseCommand {
                 // Get the target's player model
                 PlayerModel playerModel = DGGame.PLAYER_R.fromName(args[0]);
                 if (playerModel == null) {
-                    sender.sendMessage(ChatColor.DARK_RED + "No such player! Please try a little harder.");
+                    sender.sendMessage(TextColors.DARK_RED + "No such player! Please try a little harder.");
                     return CommandResult.QUIET_ERROR;
                 }
 
@@ -91,7 +79,7 @@ public class CleanseCommand extends BaseCommand {
 
                 // Set the target's alliance to neutral.
                 playerModel.setFaction(Faction.NEUTRAL);
-                sender.sendMessage(ChatColor.YELLOW + "You have removed all aspects from " + playerModel.getLastKnownName());
+                sender.sendMessage(TextColors.YELLOW + "You have removed all aspects from " + playerModel.getLastKnownName());
 
                 return CommandResult.SUCCESS;
             } else {
@@ -103,4 +91,5 @@ public class CleanseCommand extends BaseCommand {
         // Something went wrong...
         return CommandResult.QUIET_ERROR;
     }
+    */
 }

@@ -8,11 +8,12 @@ import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.util.TargetingUtil;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.util.Vector;
+import com.flowpowered.math.vector.Vector3d;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.event.entity.living.player.PlayerInteractEvent;
+import org.spongepowered.api.text.format.TextColors;
 
 public class LightningAspectII implements Aspect {
 
@@ -48,14 +49,14 @@ public class LightningAspectII implements Aspect {
         double devotion = model.getExperience(Aspects.LIGHTNING_ASPECT_II);
         double multiply = 0.1753 * Math.pow(devotion, 0.322917);
 
-        LivingEntity hit = TargetingUtil.autoTarget(player);
+        Entity hit = TargetingUtil.autoTarget(player);
 
-        if (hit != null) {
-            player.sendMessage(ChatColor.YELLOW + "*whoosh*");
+        if (hit instanceof Living) {
+            player.sendMessage(TextColors.YELLOW + "*whoosh*");
 
-            Vector v = player.getLocation().toVector();
-            Vector victor = hit.getLocation().toVector().subtract(v);
-            victor.multiply(multiply);
+            Vector3d v = player.getVelocity();
+            Vector3d victor = hit.getVelocity().sub(v);
+            victor.mul(multiply);
             hit.setVelocity(victor);
 
             return AbilityResult.SUCCESS;

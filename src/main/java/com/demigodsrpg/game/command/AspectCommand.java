@@ -1,26 +1,7 @@
 package com.demigodsrpg.game.command;
 
-import com.censoredsoftware.library.util.StringUtil2;
-import com.demigodsrpg.game.DGGame;
-import com.demigodsrpg.game.ability.Ability;
-import com.demigodsrpg.game.ability.AbilityMetaData;
-import com.demigodsrpg.game.aspect.Aspect;
-import com.demigodsrpg.game.aspect.Aspects;
-import com.demigodsrpg.game.command.type.BaseCommand;
-import com.demigodsrpg.game.command.type.CommandResult;
-import com.demigodsrpg.game.model.PlayerModel;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Effect;
-import org.bukkit.Sound;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.ExperienceOrb;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-
-public class AspectCommand extends BaseCommand {
+public class AspectCommand /* extends BaseCommand */ {
+    /*
     @Override
     protected CommandResult onCommand(CommandSender sender, Command command, String[] args) {
         // Player only
@@ -35,9 +16,9 @@ public class AspectCommand extends BaseCommand {
         // Deity list
         if (args.length == 0) {
             // FIXME Display the deities not aspects
-            player.sendMessage(ChatColor.YELLOW + StringUtil2.chatTitle("Aspect List"));
+            player.sendMessage(TextColors.YELLOW + StringUtil2.chatTitle("Aspect List"));
             for (Aspect aspect : Aspects.values()) {
-                player.sendMessage(" - " + aspect.getGroup().getColor() + aspect.getGroup().getName() + " " + aspect.getTier().name() + ": " + aspect.getInfo() /* FIXME + " (" + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + ")" */);
+                player.sendMessage(" - " + aspect.getGroup().getColor() + aspect.getGroup().getName() + " " + aspect.getTier().name() + ": " + aspect.getInfo());
             }
             return CommandResult.SUCCESS;
         }
@@ -82,13 +63,13 @@ public class AspectCommand extends BaseCommand {
                     if (aspect != null && model.canClaim(aspect)) {
                         // Check if the aspect is a hero tier
                         if (Aspect.Tier.HERO.equals(aspect.getTier())) {
-                            player.sendMessage(ChatColor.RED + "You cannot claim this aspect.");
+                            player.sendMessage(TextColors.RED + "You cannot claim this aspect.");
                             return CommandResult.QUIET_ERROR;
                         }
                         // Check if the tier is I
                         else if (Aspect.Tier.I.equals(aspect.getTier())) {
                             // Pondering message
-                            player.sendMessage(aspect.getGroup().getColor() + aspect.getGroup().getName() + ChatColor.GRAY + " is pondering your choice...");
+                            player.sendMessage(aspect.getGroup().getColor() + aspect.getGroup().getName() + TextColors.GRAY + " is pondering your choice...");
 
                             // Play scary sound
                             player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 0.6F, 1F);
@@ -115,7 +96,7 @@ public class AspectCommand extends BaseCommand {
                         } else {
                             // Pondering message
                             // FIXME Display a more fitting message
-                            player.sendMessage(aspect.getGroup().getColor() + aspect.getGroup().getName() + ChatColor.GRAY + " is pondering your choice...");
+                            player.sendMessage(aspect.getGroup().getColor() + aspect.getGroup().getName() + TextColors.GRAY + " is pondering your choice...");
 
                             // Play scary sound
                             player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 0.6F, 1F);
@@ -149,4 +130,5 @@ public class AspectCommand extends BaseCommand {
 
         return CommandResult.QUIET_ERROR;
     }
+    */
 }

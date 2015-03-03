@@ -1,7 +1,7 @@
 package com.demigodsrpg.game.battle;
 
 import com.demigodsrpg.game.deity.Faction;
-import org.bukkit.Location;
+import org.spongepowered.api.world.Location;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
