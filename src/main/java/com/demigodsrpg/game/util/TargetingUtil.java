@@ -108,7 +108,7 @@ public class TargetingUtil {
 
         int accuracy = 15;
 
-        int offset = (int) (TARGET_OFFSET + player.getOfflinePlayer().getPlayer().getLocation().distance(target));
+        int offset = (int) (TARGET_OFFSET + player.getPlayer().getPlayer().getLocation().distance(target));
         int adjustedOffset = offset / accuracy;
         if (adjustedOffset < 1) adjustedOffset = 1;
         Random random = new Random();

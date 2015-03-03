@@ -17,10 +17,13 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Lists;
 import gnu.trove.iterator.TIntIterator;
 import gnu.trove.map.hash.TIntDoubleHashMap;
-import org.bukkit.*;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.entity.EntityType;
+import org.spongepowered.api.entity.EntityTypes;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.message.Messages;
+import org.spongepowered.api.world.Location;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -296,31 +299,31 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return binds;
     }
 
-    public AbilityMetaData getBound(Material material) {
-        if (binds.inverse().containsKey(material.name())) {
-            return DGGame.ABILITY_R.fromCommand(binds.inverse().get(material.name()));
+    public AbilityMetaData getBound(BlockType material) {
+        if (binds.inverse().containsKey(material.getId())) {
+            return DGGame.ABILITY_R.fromCommand(binds.inverse().get(material.getId()));
         }
         return null;
     }
 
-    public Material getBound(AbilityMetaData ability) {
+    public BlockType getBound(AbilityMetaData ability) {
         return getBound(ability.getCommand());
     }
 
-    Material getBound(String abilityCommand) {
+    BlockType getBound(String abilityCommand) {
         if (binds.containsKey(abilityCommand)) {
-            return Material.valueOf(binds.get(abilityCommand));
+            return DGGame.GAME.getRegistry().getBlock(binds.get(abilityCommand)).get();
         }
         return null;
     }
 
-    public void bind(AbilityMetaData ability, Material material) {
-        binds.put(ability.getCommand(), material.name());
+    public void bind(AbilityMetaData ability, BlockType material) {
+        binds.put(ability.getCommand(), material.getId());
         DGGame.PLAYER_R.register(this);
     }
 
-    public void bind(String abilityCommand, Material material) {
-        binds.put(abilityCommand, material.name());
+    public void bind(String abilityCommand, BlockType material) {
+        binds.put(abilityCommand, material.getId());
         DGGame.PLAYER_R.register(this);
     }
 
@@ -334,8 +337,8 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         DGGame.PLAYER_R.register(this);
     }
 
-    public void unbind(Material material) {
-        binds.inverse().remove(material.name());
+    public void unbind(BlockType material) {
+        binds.inverse().remove(material.getId());
         DGGame.PLAYER_R.register(this);
     }
 
@@ -389,23 +392,27 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         DGGame.PLAYER_R.register(this);
     }
 
-    public OfflinePlayer getOfflinePlayer() {
-        return Bukkit.getOfflinePlayer(UUID.fromString(mojangId));
+    public Player getPlayer() {
+        try {
+            return DGGame.SERVER.getPlayer(UUID.fromString(mojangId)).get();
+        } catch (Exception ignored) {
+        }
+        return null;
     }
 
     public boolean getOnline() {
-        return getOfflinePlayer().isOnline();
+        return getPlayer().isOnline();
     }
 
     @Override
     public EntityType getEntityType() {
-        return EntityType.PLAYER;
+        return EntityTypes.PLAYER;
     }
 
     @Override
     public Location getLocation() {
         if (getOnline()) {
-            return getOfflinePlayer().getPlayer().getLocation();
+            return getPlayer().getLocation();
         }
         throw new UnsupportedOperationException("We don't support finding locations for players who aren't online.");
     }
@@ -461,13 +468,12 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
             resetTeamKills();
             double former = getTotalExperience();
             if (getOnline()) {
-                Player player = getOfflinePlayer().getPlayer();
-                player.sendMessage(ChatColor.RED + "Your former faction has just excommunicated you.");
-                player.sendMessage(ChatColor.RED + "You will no longer respawn at the faction spawn.");
-                player.sendMessage(ChatColor.RED + "You have lost " +
-                        ChatColor.GOLD + DecimalFormat.getCurrencyInstance().format(former - getTotalExperience()) +
-                        ChatColor.RED + " experience.");
-                player.sendMessage(ChatColor.YELLOW + "To join a faction, "); // TODO
+                Player player = getPlayer();
+                player.sendMessage(Messages.builder().color(TextColors.RED).append(Messages.of("Your former faction has just excommunicated you.")).build());
+                player.sendMessage(Messages.builder().color(TextColors.RED).append(Messages.of("You will no longer respawn at the faction spawn.")).build());
+                player.sendMessage(Messages.builder().color(TextColors.RED).append(Messages.of("You have lost ")).
+                        color(TextColors.GOLD).append(Messages.of("" + DecimalFormat.getCurrencyInstance().format(former - getTotalExperience()))).
+                        color(TextColors.RED).append(Messages.of(" experience.")).build());
             }
             return false;
         }
@@ -498,19 +504,17 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     void calculateAscensions() {
-        Player player = getOfflinePlayer().getPlayer();
+        Player player = getPlayer();
         if (getLevel() >= (int) Setting.ASCENSION_CAP.get()) return;
         while (getTotalExperience() >= (int) Math.ceil(500 * Math.pow(getLevel() + 1, 2.02)) && getLevel() < (int) Setting.ASCENSION_CAP.get()) {
             setMaxHealth(getMaxHealth() + 10.0);
             player.setMaxHealth(getMaxHealth());
-            player.setHealthScale(20.0);
-            player.setHealthScaled(true);
             player.setHealth(getMaxHealth());
 
             setLevel(getLevel() + 1);
 
-            player.sendMessage(ChatColor.AQUA + "Congratulations! Your Ascensions have increased to " + getLevel() + ".");
-            player.sendMessage(ChatColor.YELLOW + "Your maximum HP has increased to " + getMaxHealth() + ".");
+            player.sendMessage(Messages.builder().color(TextColors.AQUA).append(Messages.of("Congratulations! Your Ascensions have increased to " + getLevel() + ".")).build());
+            player.sendMessage(Messages.builder().color(TextColors.YELLOW).append(Messages.of("Your maximum HP has increased to " + getMaxHealth() + ".")).build());
         }
         DGGame.PLAYER_R.register(this);
     }
@@ -550,31 +554,31 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
     @SuppressWarnings("deprecation")
     public void updateCanPvp() {
-        if (Bukkit.getPlayer(mojangId) == null) return;
+        if (!DGGame.SERVER.getPlayer(mojangId).isPresent()) return;
 
         // Define variables
-        final Player player = Bukkit.getPlayer(mojangId);
+        final Player player = DGGame.SERVER.getPlayer(mojangId).get();
         final boolean inNoPvpZone = ZoneUtil.inNoPvpZone(player.getLocation());
 
         if (DGGame.BATTLE_R.isInBattle(this)) return;
 
         if (!getCanPvp() && !inNoPvpZone) {
             setCanPvp(true);
-            player.sendMessage(ChatColor.GRAY + "You can now enter in a battle.");
+            player.sendMessage(Messages.builder().color(TextColors.GRAY).append(Messages.of("You can now enter in a battle.")).build());
         } else if (!inNoPvpZone) {
             setCanPvp(true);
-            DGGame.SERVER_R.remove(player.getName(), "pvp_cooldown");
-        } else if (getCanPvp() && !DGGame.SERVER_R.contains(player.getName(), "pvp_cooldown")) {
+            DGGame.MISC_R.remove(player.getName(), "pvp_cooldown");
+        } else if (getCanPvp() && !DGGame.MISC_R.contains(player.getName(), "pvp_cooldown")) {
             int delay = 10;
-            DGGame.SERVER_R.put(player.getName(), "pvp_cooldown", true, delay, TimeUnit.SECONDS);
+            DGGame.MISC_R.put(player.getName(), "pvp_cooldown", true, delay, TimeUnit.SECONDS);
             final PlayerModel THIS = this;
-            Bukkit.getScheduler().scheduleSyncDelayedTask(DGGame.getInst(), new BukkitRunnable() {
+            DGGame.GAME.getSyncScheduler().runTaskAfter(DGGame.PLUGIN, new Runnable() {
                 @Override
                 public void run() {
                     if (ZoneUtil.inNoPvpZone(player.getLocation())) {
                         if (DGGame.BATTLE_R.isInBattle(THIS)) return;
                         setCanPvp(false);
-                        player.sendMessage(ChatColor.GRAY + "You are now safe from other players.");
+                        player.sendMessage(Messages.builder().color(TextColors.GRAY).append(Messages.of("You are now safe from other players.")).build());
                     }
                 }
             }, (delay * 20));

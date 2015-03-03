@@ -1,40 +1,42 @@
 package com.demigodsrpg.game.command.type;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.message.Messages;
+import org.spongepowered.api.util.command.CommandCallable;
+import org.spongepowered.api.util.command.CommandSource;
 
-public abstract class BaseCommand implements CommandExecutor {
+import java.util.List;
+
+public abstract class BaseCommand implements CommandCallable {
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        CommandResult result = onCommand(sender, command, args);
+    public boolean call(CommandSource sender, String alias, List<String> args) {
+        CommandResult result = onCommand(sender, alias, args);
         switch (result) {
             case SUCCESS:
             case QUIET_ERROR:
                 break;
             case INVALID_SYNTAX:
-                sender.sendMessage(ChatColor.RED + "Invalid syntax, please try again.");
+                sender.sendMessage(Messages.builder().color(TextColors.RED).append(Messages.of("Invalid syntax, please try again.")).build());
                 return false;
             case NO_PERMISSIONS:
-                sender.sendMessage(ChatColor.RED + "You don't have the permissions to use this command.");
+                sender.sendMessage(Messages.builder().color(TextColors.RED).append(Messages.of("You don't have the permissions to use this command.")).build());
                 break;
             case CONSOLE_ONLY:
-                sender.sendMessage(ChatColor.RED + "This command is for the console only.");
+                sender.sendMessage(Messages.builder().color(TextColors.RED).append(Messages.of("This command is for the console only.")).build());
                 break;
             case PLAYER_ONLY:
-                sender.sendMessage(ChatColor.RED + "This command can only be used by a player.");
+                sender.sendMessage(Messages.builder().color(TextColors.RED).append(Messages.of("This command can only be used by a player.")).build());
                 break;
             case ERROR:
-                sender.sendMessage(ChatColor.RED + "An error occurred, please check the console.");
+                sender.sendMessage(Messages.builder().color(TextColors.RED).append(Messages.of("An error occurred, please check the console.")).build());
                 break;
             case UNKNOWN:
             default:
-                sender.sendMessage(ChatColor.RED + "The command can't run for some unknown reason.");
+                sender.sendMessage(Messages.builder().color(TextColors.RED).append(Messages.of("The command can't run for some unknown reason.")).build());
                 break;
         }
         return true;
     }
 
-    protected abstract CommandResult onCommand(CommandSender sender, Command command, String[] args);
+    protected abstract CommandResult onCommand(CommandSource sender, String alias, List<String> args);
 }

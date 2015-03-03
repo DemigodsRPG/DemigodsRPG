@@ -1,13 +1,7 @@
 package com.demigodsrpg.game.integration.chitchat;
 
-import com.demigodsrpg.chitchat.tag.PlayerTag;
-import com.demigodsrpg.game.DGGame;
-import com.demigodsrpg.game.model.PlayerModel;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-
-public class FactionIdTag extends PlayerTag {
-    @Override
+public class FactionIdTag /* extends PlayerTag */ {
+    /* @Override
     public String getName() {
         return "faction_id";
     }
@@ -22,5 +16,5 @@ public class FactionIdTag extends PlayerTag {
     @Override
     public int getPriority() {
         return 1;
-    }
+    } */
 }

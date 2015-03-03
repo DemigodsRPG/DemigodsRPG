@@ -14,9 +14,8 @@
 
     <properties> <!-- It is important to keep up to date manually. -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>1.8-R0.1-SNAPSHOT</spigot.version>
+        <sponge.version>1.1-SNAPSHOT</sponge.version>
         <censoredlib.version>1.0.0</censoredlib.version>
-        <worldguard.version>6.0.0-SNAPSHOT</worldguard.version>
     </properties>
 
     <developers>
@@ -52,35 +51,31 @@
             <url>http://repo.censoredsoftware.com/</url>
         </repository>
         <repository>
-            <id>sk89q-repo</id>
-            <url>http://maven.sk89q.com/repo/</url>
-        </repository>
-        <repository>
-            <id>spigot-releases</id>
-            <url>http://hub.spigotmc.org/nexus/content/repositories/public</url>
+            <id>sponge-releases</id>
+            <url>http://repo.spongepowered.org/maven/</url>
         </repository>
     </repositories>
 
     <dependencies>
-        <!-- Spigot -->
+        <!-- Sponge API -->
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>${spigot.version}</version>
+            <groupId>org.spongepowered</groupId>
+            <artifactId>spongeapi</artifactId>
+            <version>${sponge.version}</version>
         </dependency>
 
-        <!-- Chitchat -->
+        <!-- Chitchat
         <dependency>
             <groupId>com.demigodsrpg</groupId>
             <artifactId>chitchat</artifactId>
             <version>1.0.0-SNAPSHOT</version>
-        </dependency>
+        </dependency> -->
 
         <!-- Apache Lang -->
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.3.2</version>
         </dependency>
 
         <!-- Guava -->
@@ -104,15 +99,6 @@
             <version>3.0.3</version>
         </dependency>
 
-        <!-- WorldGuard -->
-        <dependency>
-            <groupId>com.sk89q</groupId>
-            <artifactId>worldguard</artifactId>
-            <version>${worldguard.version}</version>
-            <scope>compile</scope>
-            <type>jar</type>
-        </dependency>
-
         <!-- CensoredLib -->
         <dependency>
             <groupId>com.censoredsoftware.library</groupId>
@@ -127,7 +113,7 @@
     </dependencies>
 
     <build>
-        <finalName>DemigodsRPG</finalName>
+        <finalName>${project.name}</finalName>
         <defaultGoal>clean install</defaultGoal>
         <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
         <resources>
@@ -155,8 +141,6 @@
                             <minimizeJar>true</minimizeJar>
                             <artifactSet>
                                 <includes>
-                                    <!-- <include>com.google.code.gson:gson</include> -->
-                                    <!-- <include>commons-lang:commons-lang</include> -->
                                     <include>com.censoredsoftware.library:*</include>
                                 </includes>
                             </artifactSet>
@@ -166,19 +150,6 @@
                                     <pattern>com.google.common.util.concurrent</pattern>
                                     <shadedPattern>net.minecraft.util.com.google.common.util.concurrent</shadedPattern>
                                 </relocation>
-                                <!-- Spigot doesn't relocate this since 1.8
-                                <relocation>
-                                    <pattern>gnu.trove</pattern>
-                                    <shadedPattern>net.minecraft.util.gnu.trove</shadedPattern>
-                                </relocation> -->
-                                <relocation>
-                                    <pattern>com.google.gson</pattern>
-                                    <shadedPattern>org.bukkit.craftbukkit.libs.com.google.gson</shadedPattern>
-                                </relocation>
-                                <!--<relocation>
-                                    <pattern>org.apache.commons.lang</pattern>
-                                    <shadedPattern>com.demigodsrpg.game.org.apache.commons.lang</shadedPattern>
-                                </relocation> -->
                                 <!-- Shaded into the jar -->
                                 <relocation>
                                     <pattern>com.censoredsoftware.library</pattern>

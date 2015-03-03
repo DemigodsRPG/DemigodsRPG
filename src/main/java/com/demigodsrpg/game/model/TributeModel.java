@@ -5,7 +5,6 @@ import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.registry.TributeRegistry;
 import com.demigodsrpg.game.util.JsonSection;
 import org.bukkit.Material;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -123,7 +122,7 @@ public class TributeModel extends AbstractPersistentModel<String> {
         return getMaterial().name();
     }
 
-    public static class ValueTask extends BukkitRunnable {
+    public static class ValueTask implements Runnable {
         @Override
         public void run() {
             OFFSET = 1.0;

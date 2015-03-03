@@ -17,7 +17,7 @@ public class RemoveDevotionCommand extends AdminPlayerCommand {
 
             PlayerModel m;
             try {
-                Player p = DGGame.PLAYER_R.fromName(args[0]).getOfflinePlayer().getPlayer();
+                Player p = DGGame.PLAYER_R.fromName(args[0]).getPlayer().getPlayer();
                 double amount = Double.parseDouble(args[2]);
                 m = DGGame.PLAYER_R.fromPlayer(p);
                 Aspect aspect = Aspects.valueOf(args[1].toUpperCase());

@@ -20,7 +20,7 @@ public class CheckPlayerCommand extends AdminPlayerCommand {
 
         if (args.length == 1) {
             try {
-                p = DGGame.PLAYER_R.fromName(args[0]).getOfflinePlayer();
+                p = DGGame.PLAYER_R.fromName(args[0]).getPlayer();
             } catch (Exception ignored) {
                 sender.sendMessage(ChatColor.RED + "Player is not real, but we appreciate the attempt!");
                 return CommandResult.QUIET_ERROR;

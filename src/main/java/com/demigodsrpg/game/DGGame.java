@@ -1,35 +1,46 @@
 package com.demigodsrpg.game;
 
-import com.demigodsrpg.chitchat.Chitchat;
 import com.demigodsrpg.game.command.*;
 import com.demigodsrpg.game.command.admin.*;
 import com.demigodsrpg.game.deity.Deity;
 import com.demigodsrpg.game.deity.Faction;
-import com.demigodsrpg.game.integration.chitchat.FactionChatTag;
-import com.demigodsrpg.game.integration.chitchat.FactionIdTag;
 import com.demigodsrpg.game.listener.*;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.model.TributeModel;
 import com.demigodsrpg.game.registry.*;
 import com.demigodsrpg.game.util.ZoneUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
+import org.slf4j.Logger;
+import org.spongepowered.api.Game;
+import org.spongepowered.api.Server;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.event.state.ServerStartedEvent;
+import org.spongepowered.api.event.state.ServerStoppingEvent;
+import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.plugin.PluginContainer;
+import org.spongepowered.api.service.command.CommandService;
+import org.spongepowered.api.service.config.ConfigRoot;
+import org.spongepowered.api.service.event.EventManager;
+import org.spongepowered.api.service.scheduler.AsynchronousScheduler;
+import org.spongepowered.api.service.scheduler.SynchronousScheduler;
+import org.spongepowered.api.util.event.Subscribe;
+import org.spongepowered.api.world.World;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.logging.Logger;
+import java.util.concurrent.TimeUnit;
 
-public class DGGame extends JavaPlugin {
+@Plugin(id = "demigods",
+        name = "Demigods RPG",
+        version = "4.0.0")
+public class DGGame {
+    // -- GAME RELATED CONSTANTS -- //
+    public static Game GAME;
+    public static Server SERVER;
+
     // -- PLUGIN RELATED CONSTANTS -- //
 
     private static DGGame INST;
+    public static PluginContainer PLUGIN;
     public static Logger CONSOLE;
     public static String SAVE_PATH;
 
@@ -43,25 +54,29 @@ public class DGGame extends JavaPlugin {
     public static final BattleRegistry BATTLE_R = new BattleRegistry();
     public static final AbilityRegistry ABILITY_R = new AbilityRegistry();
     public static final DeityRegistry DEITY_R = new DeityRegistry();
-    public static final ServerDataRegistry SERVER_R = new ServerDataRegistry();
+    public static final ServerDataRegistry MISC_R = new ServerDataRegistry();
     public static final ConcurrentMap<String, AreaRegistry> AREA_R = new ConcurrentHashMap<>();
 
     // -- PLUGIN RELATED INSTANCE METHODS -- //
+    @Subscribe
+    public void onEnable(ServerStartedEvent event) {
+        // Define the game
+        GAME = event.getGame();
+        SERVER = event.getGame().getServer().get();
 
-    @Override
-    public void onEnable() {
         // Define the instance
         INST = this;
+        PLUGIN = GAME.getPluginManager().fromInstance(this).get();
 
         // Define the logger
-        CONSOLE = getLogger();
+        CONSOLE = GAME.getPluginManager().getLogger(PLUGIN);
 
-        // Config
-        getConfig().options().copyDefaults(true);
-        saveConfig();
+        // FIXME Config
+        // getConfig().copyDefaults(true);
+        // saveConfig();
 
         // Define the save path
-        SAVE_PATH = getDataFolder().getPath() + "/data/";
+        SAVE_PATH = GAME.getServiceManager().provide(ConfigRoot.class).get().getDirectory().getPath() + "/data/";
 
         // Register default factions
         FACTION_R.register(Faction.NEUTRAL);
@@ -75,7 +90,7 @@ public class DGGame extends JavaPlugin {
         }
 
         // Determine territory registries
-        for (World world : Bukkit.getWorlds()) {
+        for (World world : SERVER.getWorlds()) {
             AreaRegistry area_r = new AreaRegistry(world);
             area_r.registerFromFile();
             AREA_R.put(world.getName(), new AreaRegistry(world));
@@ -96,16 +111,17 @@ public class DGGame extends JavaPlugin {
         startThreads();
 
         // Register the listeners
-        PluginManager manager = getServer().getPluginManager();
-        manager.registerEvents(new InventoryListener(), this);
-        manager.registerEvents(new PlayerListener(), this);
-        manager.registerEvents(new ShrineListener(), this);
-        manager.registerEvents(new TributeListener(), this);
-        manager.registerEvents(new AreaListener(), this);
-        manager.registerEvents(ABILITY_R, this);
+        EventManager manager = GAME.getEventManager();
+        manager.register(new InventoryListener(), this);
+        manager.register(new PlayerListener(), this);
+        manager.register(new ShrineListener(), this);
+        manager.register(new TributeListener(), this);
+        manager.register(new AreaListener(), this);
+        manager.register(ABILITY_R, this);
 
         // Register commands
-        getCommand("faction").setExecutor(new FactionCommand());
+        CommandService commands = GAME.getCommandDispatcher();
+        commands.register(PLUGIN, new FactionCommand(), "faction");
         getCommand("binds").setExecutor(new BindsCommand());
         getCommand("check").setExecutor(new CheckCommand());
         getCommand("aspect").setExecutor(new AspectCommand());
@@ -127,21 +143,21 @@ public class DGGame extends JavaPlugin {
         // Enable ZoneUtil
         ZoneUtil.init();
 
-        // Handle Chitchat integration
-        if (manager.isPluginEnabled("Chitchat")) {
-            Chitchat.getChatFormat().add(new FactionChatTag());
-            Chitchat.getChatFormat().add(new FactionIdTag());
+        // Handle Chitchat integration FIXME
+        if (GAME.getPluginManager().isLoaded("Chitchat")) {
+            // Chitchat.getChatFormat().add(new FactionChatTag());
+            // Chitchat.getChatFormat().add(new FactionIdTag());
         }
 
         // Let the console know
         CONSOLE.info("Enabled and ready for battle.");
     }
 
-    @Override
-    public void onDisable() {
+    @Subscribe
+    public void onDisable(ServerStoppingEvent event) {
         // Ensure that we unregister our commands and tasks
-        HandlerList.unregisterAll(this);
-        Bukkit.getScheduler().cancelTasks(this);
+        GAME.getEventManager().unregister(PLUGIN); // TODO Test this
+        // Bukkit.getScheduler().cancelTasks(this); FIXME
 
         // Clear the cache.
         clearCache();
@@ -159,21 +175,22 @@ public class DGGame extends JavaPlugin {
         TRIBUTE_R.clearCache();
         SPAWN_R.clearCache();
         DEITY_R.clearCache();
-        SERVER_R.clearCache();
+        MISC_R.clearCache();
 
         AREA_R.values().forEach(AreaRegistry::clearCache);
     }
 
     // -- TASK RELATED -- //
 
-    private static final BukkitRunnable SYNC, ASYNC, FIRE_SPREAD, VALUE;
+    private static final Runnable SYNC, ASYNC, /*FIRE_SPREAD,*/
+            VALUE;
 
     static {
-        SYNC = new BukkitRunnable() {
+        SYNC = new Runnable() {
             @Override
             public void run() {
                 // Update online players
-                for (Player player : Bukkit.getOnlinePlayers()) {
+                for (Player player : SERVER.getOnlinePlayers()) {
                     if (ZoneUtil.inNoDGZone(player.getLocation())) continue;
                     PlayerModel model = PLAYER_R.fromPlayer(player);
                     if (model != null) {
@@ -182,46 +199,43 @@ public class DGGame extends JavaPlugin {
                 }
             }
         };
-        ASYNC = new BukkitRunnable() {
+        ASYNC = new Runnable() {
             @Override
             public void run() {
                 // Update Timed Data
-                SERVER_R.clearExpired();
+                MISC_R.clearExpired();
             }
         };
-        FIRE_SPREAD = new BukkitRunnable() {
+        /*FIRE_SPREAD = new Runnable() { TODO Replace with EntityCollisionEvent
             @Override
             public void run() {
-                for (World world : Bukkit.getWorlds()) {
-                    world.getLivingEntities().stream().filter(entity -> entity.getFireTicks() > 0).forEach(entity -> {
+                for (World world : SERVER.getWorlds()) {
+                    world.getEntities().stream().filter(entity -> entity.getFireTicks() > 0).forEach(entity -> {
                         entity.getNearbyEntities(0.5, 0.5, 0.5).stream().filter(nearby -> nearby instanceof LivingEntity && !nearby.equals(entity)).forEach(nearby -> {
                             nearby.setFireTicks(100);
                         });
                     });
                 }
             }
-        };
+        }; */
         VALUE = new TributeModel.ValueTask();
     }
 
     @SuppressWarnings("deprecation")
     void startThreads() {
-        BukkitScheduler scheduler = Bukkit.getScheduler();
+        SynchronousScheduler sync = GAME.getSyncScheduler();
+        AsynchronousScheduler async = GAME.getAsyncScheduler();
 
         // Start sync demigods runnable
-        scheduler.scheduleSyncRepeatingTask(this, SYNC, 20, 20);
+        sync.runRepeatingTaskAfter(this, SYNC, 20, 20); // TODO Test if these are ticks or seconds/milliseconds
         CONSOLE.info("Main Demigods SYNC runnable enabled...");
 
         // Start async demigods runnable
-        scheduler.scheduleAsyncRepeatingTask(this, ASYNC, 20, 20);
+        async.runRepeatingTaskAfter(this, ASYNC, TimeUnit.SECONDS, 1, 1);
         CONSOLE.info("Main Demigods ASYNC runnable enabled...");
 
-        // Start sync fire runnable
-        scheduler.scheduleSyncRepeatingTask(this, FIRE_SPREAD, 3, 20);
-        CONSOLE.info("Main Demigods FIRE_SPREAD runnable enabled...");
-
         // Start async value runnable
-        scheduler.scheduleAsyncRepeatingTask(this, VALUE, 60, 400);
+        async.runRepeatingTaskAfter(this, VALUE, TimeUnit.SECONDS, 3, 20);
         CONSOLE.info("Main Demigods VALUE runnable enabled...");
     }
 

@@ -88,9 +88,9 @@ public class AreaListener implements Listener {
         // Check to make sure the player is in the right faction
         if (!faction.equals(model.getFaction()) && !model.getAdminMode()) {
             // Throttle the warning message
-            if (!DGGame.SERVER_R.contains(model.getMojangId(), "faction-area")) {
+            if (!DGGame.MISC_R.contains(model.getMojangId(), "faction-area")) {
                 player.sendMessage(ChatColor.RED + "You are not a member of the " + faction.getColor() + faction.getName() + org.bukkit.ChatColor.RED + " faction.");
-                DGGame.SERVER_R.put(model.getMojangId(), "faction-area", false, 4, TimeUnit.SECONDS);
+                DGGame.MISC_R.put(model.getMojangId(), "faction-area", false, 4, TimeUnit.SECONDS);
             }
 
             // Send a fake invisible wall to prevent the player from moving forward
@@ -106,9 +106,9 @@ public class AreaListener implements Listener {
         }
 
         // Throttle the welcome message
-        if (!DGGame.SERVER_R.contains(model.getMojangId(), "faction-area")) {
+        if (!DGGame.MISC_R.contains(model.getMojangId(), "faction-area")) {
             player.sendMessage(faction.getColor() + faction.getWelcomeMessage());
-            DGGame.SERVER_R.put(model.getMojangId(), "faction-area", true, 4, TimeUnit.SECONDS);
+            DGGame.MISC_R.put(model.getMojangId(), "faction-area", true, 4, TimeUnit.SECONDS);
         }
 
         // Don't cancel the event

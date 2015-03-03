@@ -15,7 +15,7 @@ public class AddDevotionCommand extends AdminPlayerCommand {
     public CommandResult onCommand(CommandSender sender, PlayerModel model, String[] args) {
         if (args.length == 3) {
             try {
-                Player p = DGGame.PLAYER_R.fromName(args[0]).getOfflinePlayer().getPlayer();
+                Player p = DGGame.PLAYER_R.fromName(args[0]).getPlayer().getPlayer();
                 double amount = Double.parseDouble(args[2]);
                 Aspect aspect = Aspects.valueOf(args[1].toUpperCase());
                 if (!DGGame.PLAYER_R.fromPlayer(p).getAspects().contains(aspect.getGroup().getName() + " " + aspect.getTier().name())) {

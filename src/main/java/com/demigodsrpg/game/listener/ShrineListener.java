@@ -128,12 +128,12 @@ public class ShrineListener implements Listener {
 
         if (DGGame.SHRINE_R.getShrine(location) != null) {
             // Cancel break animation
-            DGGame.SERVER_R.put(playerId, "NO-BREAK", true);
+            DGGame.MISC_R.put(playerId, "NO-BREAK", true);
             event.getPlayer().addPotionEffect(PotionEffectType.SLOW_DIGGING.createEffect(9999999, 5), true);
             event.setCancelled(true);
-        } else if (DGGame.SERVER_R.contains(playerId, "NO-BREAK")) {
+        } else if (DGGame.MISC_R.contains(playerId, "NO-BREAK")) {
             // Allow break animation
-            DGGame.SERVER_R.remove(playerId, "NO-BREAK");
+            DGGame.MISC_R.remove(playerId, "NO-BREAK");
             event.getPlayer().removePotionEffect(PotionEffectType.SLOW_DIGGING);
         }
     }
@@ -142,9 +142,9 @@ public class ShrineListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         String playerId = event.getPlayer().getUniqueId().toString();
         Block block = event.getClickedBlock();
-        if (block == null && DGGame.SERVER_R.contains(playerId, "NO-BREAK")) {
+        if (block == null && DGGame.MISC_R.contains(playerId, "NO-BREAK")) {
             // Allow break animation
-            DGGame.SERVER_R.remove(playerId, "NO-BREAK");
+            DGGame.MISC_R.remove(playerId, "NO-BREAK");
             event.getPlayer().removePotionEffect(PotionEffectType.SLOW_DIGGING);
         }
     }
@@ -180,8 +180,8 @@ public class ShrineListener implements Listener {
                 event.getLocation().getWorld().getEntitiesByClass(Item.class).stream().filter(drop -> drop.getLocation().distance(save.getLocation()) <= save.getShrineType().getGroundRadius()).forEach(org.bukkit.entity.Item::remove);
         }, 1);
 
-        if (DGGame.SERVER_R.contains("explode-structure", "blaam")) return;
-        DGGame.SERVER_R.put("explode-structure", "blaam", true, 2, TimeUnit.SECONDS);
+        if (DGGame.MISC_R.contains("explode-structure", "blaam")) return;
+        DGGame.MISC_R.put("explode-structure", "blaam", true, 2, TimeUnit.SECONDS);
 
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getInst(), () -> {
             for (final ShrineModel save : saves)

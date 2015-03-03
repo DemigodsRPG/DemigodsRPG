@@ -1,12 +1,11 @@
 package com.demigodsrpg.game.registry;
 
-
 import com.demigodsrpg.game.area.Area;
 import com.demigodsrpg.game.area.ClaimRoom;
 import com.demigodsrpg.game.area.FactionTerritory;
 import com.demigodsrpg.game.util.JsonSection;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
 import java.util.List;
 import java.util.stream.Collectors;

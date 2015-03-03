@@ -1,14 +1,7 @@
 package com.demigodsrpg.game.integration.chitchat;
 
-import com.demigodsrpg.chitchat.tag.PlayerTag;
-import com.demigodsrpg.game.DGGame;
-import com.demigodsrpg.game.deity.Faction;
-import com.demigodsrpg.game.model.PlayerModel;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-
-public class FactionChatTag extends PlayerTag {
-    @Override
+public class FactionChatTag /* extends PlayerTag */ {
+    /* @Override
     public String getName() {
         return "faction_chat";
     }
@@ -33,6 +26,6 @@ public class FactionChatTag extends PlayerTag {
 
     private boolean isInChat(Player player) {
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
-        return DGGame.SERVER_R.contains("faction_chat", player.getUniqueId().toString()) && !Faction.NEUTRAL.equals(model.getFaction()) && !Faction.EXCOMMUNICATED.equals(model.getFaction());
-    }
+        return DGGame.MISC_R.contains("faction_chat", player.getUniqueId().toString()) && !Faction.NEUTRAL.equals(model.getFaction()) && !Faction.EXCOMMUNICATED.equals(model.getFaction());
+    } */
 }

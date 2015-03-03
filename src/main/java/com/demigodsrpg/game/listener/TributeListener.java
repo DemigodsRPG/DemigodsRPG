@@ -132,7 +132,7 @@ public class TributeListener implements Listener {
             // Define the shrine owner
             if (save.getOwnerMojangId() != null && DGGame.PLAYER_R.fromId(save.getOwnerMojangId()) != null) {
                 PlayerModel shrineOwner = DGGame.PLAYER_R.fromId(save.getOwnerMojangId());
-                OfflinePlayer shrineOwnerPlayer = shrineOwner.getOfflinePlayer();
+                OfflinePlayer shrineOwnerPlayer = shrineOwner.getPlayer();
 
                 if (shrineOwner.getFavor() < (int) Setting.FAVOR_CAP.get() && !model.getMojangId().equals(shrineOwner.getMojangId())) {
                     // Give them some of the blessings

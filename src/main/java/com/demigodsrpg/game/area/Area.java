@@ -2,7 +2,7 @@ package com.demigodsrpg.game.area;
 
 import com.demigodsrpg.game.model.AbstractPersistentModel;
 import com.demigodsrpg.game.util.LocationUtil;
-import org.bukkit.Location;
+import org.spongepowered.api.world.Location;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -22,8 +22,8 @@ public abstract class Area extends AbstractPersistentModel<String> {
         int[] z = new int[corners.size()];
 
         for (int i = 0; i < corners.size(); i++) {
-            x[i] = corners.get(i).getBlockX();
-            z[i] = corners.get(i).getBlockZ();
+            x[i] = corners.get(i).getBlock().getX();
+            z[i] = corners.get(i).getBlock().getZ();
         }
 
         this.corners = corners;
@@ -40,7 +40,7 @@ public abstract class Area extends AbstractPersistentModel<String> {
     }
 
     public boolean contains(Location location) {
-        return shape.contains(location.getX(), location.getZ());
+        return shape.contains(location.getPosition().getX(), location.getPosition().getZ());
     }
 
     public List<Location> getCorners() {

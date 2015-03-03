@@ -195,20 +195,20 @@ public class AbilityRegistry implements Listener {
             if (model.getBound(ability) == null) {
                 return false;
             }
-            if (!model.getOfflinePlayer().getPlayer().getItemInHand().getType().equals(model.getBound(ability))) {
+            if (!model.getPlayer().getPlayer().getItemInHand().getType().equals(model.getBound(ability))) {
                 return false;
             }
 
             double cost = ability.getCost();
             if (model.getFavor() < cost) {
-                model.getOfflinePlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " requires more favor.");
+                model.getPlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " requires more favor.");
                 return false;
             }
-            if (DGGame.SERVER_R.contains(model.getMojangId(), ability + ":delay")) {
+            if (DGGame.MISC_R.contains(model.getMojangId(), ability + ":delay")) {
                 return false;
             }
-            if (DGGame.SERVER_R.contains(model.getMojangId(), ability + ":cooldown")) {
-                model.getOfflinePlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " is on a cooldown.");
+            if (DGGame.MISC_R.contains(model.getMojangId(), ability + ":cooldown")) {
+                model.getPlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " is on a cooldown.");
                 return false;
             }
         }
@@ -243,10 +243,10 @@ public class AbilityRegistry implements Listener {
             long cooldown = ability.getCooldown();
 
             if (delay > 0) {
-                DGGame.SERVER_R.put(model.getMojangId(), ability + ":delay", true, delay, TimeUnit.MILLISECONDS);
+                DGGame.MISC_R.put(model.getMojangId(), ability + ":delay", true, delay, TimeUnit.MILLISECONDS);
             }
             if (cooldown > 0) {
-                DGGame.SERVER_R.put(model.getMojangId(), ability + ":cooldown", true, cooldown, TimeUnit.MILLISECONDS);
+                DGGame.MISC_R.put(model.getMojangId(), ability + ":cooldown", true, cooldown, TimeUnit.MILLISECONDS);
             }
             if (cost > 0) {
                 model.setFavor(model.getFavor() - cost);
