@@ -29,11 +29,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
-@Plugin(id = "demigods",
-        name = "Demigods RPG",
+@Plugin(id = "demigods-rpg",
+        name = "DemigodsRPG",
         version = "4.0.0")
 public class DGGame {
     // -- GAME RELATED CONSTANTS -- //
+    
     public static Game GAME;
     public static Server SERVER;
 
