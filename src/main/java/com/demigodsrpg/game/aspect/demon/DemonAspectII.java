@@ -8,14 +8,16 @@ import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.util.TargetingUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerInteractEvent;
+import com.flowpowered.math.vector.Vector3d;
+import org.spongepowered.api.block.BlockLoc;
+import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.event.entity.living.player.PlayerInteractEvent;
+import org.spongepowered.api.world.Location;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DemonAspectII implements Aspect {
     @Override
@@ -43,26 +45,28 @@ public class DemonAspectII implements Aspect {
         Player player = event.getPlayer();
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
 
-        LivingEntity le = TargetingUtil.autoTarget(player);
+        Living le = TargetingUtil.autoTarget(player);
         if (le == null) return AbilityResult.NO_TARGET_FOUND;
         int duration = (int) Math.round(2.18678 * Math.pow(model.getExperience(Aspects.DEMON_ASPECT_II), 0.24723)); // seconds
-        final ArrayList<Block> tochange = new ArrayList<Block>();
+        final List<BlockLoc> tochange = new ArrayList<>();
         for (int x = -3; x <= 3; x++) {
             for (int y = -3; y <= 3; y++) {
                 for (int z = -3; z <= 3; z++) {
-                    Block block = player.getWorld().getBlockAt(le.getLocation().getBlockX() + x, le.getLocation().getBlockY() + y, le.getLocation().getBlockZ() + z);
-                    if ((block.getLocation().distance(le.getLocation()) > 2) && (block.getLocation().distance(le.getLocation()) < 3.5))
-                        if ((block.getType() == Material.AIR) || (block.getType() == Material.WATER) || (block.getType() == Material.LAVA)) {
-                            block.setType(Material.OBSIDIAN);
+                    BlockLoc block = new Location(le.getLocation().getExtent(), new Vector3d(le.getLocation().getBlock().getX() + x, le.getLocation().getBlock().getY() + y, le.getLocation().getBlock().getZ() + z)).getBlock();
+                    if ((block.getPosition().toDouble().distance(le.getLocation().getPosition()) > 2) && (block.getLocation().getPosition().toDouble().distance(le.getLocation().getPosition()) < 3.5))
+                        if (BlockTypes.AIR.equals(block.getType()) || BlockTypes.WATER.equals(block.getType()) || BlockTypes.LAVA.equals(block.getType())) {
+                            block.replaceWith(BlockTypes.OBSIDIAN);
                             tochange.add(block);
                         }
                 }
             }
         }
 
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getInst(), () -> {
-            for (Block b : tochange)
-                if (b.getType() == Material.OBSIDIAN) b.setType(Material.AIR);
+        DGGame.GAME.getSyncScheduler().runTaskAfter(DGGame.getInst(), () -> {
+            for (BlockLoc b : tochange)
+                if (BlockTypes.OBSIDIAN.equals(b.getType())) {
+                    b.replaceWith(BlockTypes.AIR);
+                }
         }, duration * 20);
 
         return AbilityResult.SUCCESS;

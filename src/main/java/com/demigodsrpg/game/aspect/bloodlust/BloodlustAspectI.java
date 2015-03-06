@@ -5,10 +5,11 @@ import com.demigodsrpg.game.ability.AbilityResult;
 import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.util.TargetingUtil;
-import org.bukkit.Location;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerInteractEvent;
+import com.flowpowered.math.vector.Vector3f;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.event.entity.living.player.PlayerInteractEvent;
 
 public class BloodlustAspectI implements Aspect {
     @Override
@@ -35,18 +36,19 @@ public class BloodlustAspectI implements Aspect {
     public AbilityResult blitzAbility(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        LivingEntity target = TargetingUtil.autoTarget(player, 250);
+        Entity target = TargetingUtil.autoTarget(player, 250);
 
-        if (target == null) return AbilityResult.NO_TARGET_FOUND;
+        if (!(target instanceof Living)) {
+            return AbilityResult.NO_TARGET_FOUND;
+        }
 
-        if (player.getLocation().toVector().distance(target.getLocation().toVector()) > 2) {
-            float pitch = player.getLocation().getPitch();
-            float yaw = player.getLocation().getYaw();
-            Location tar = target.getLocation();
-            tar.setPitch(pitch);
-            tar.setYaw(yaw);
-            player.teleport(tar);
-            target.damage(2, player);
+        if (player.getLocation().getPosition().distance(target.getLocation().getPosition()) > 2) {
+            float pitch = player.getRotation().getX(); // TODO does this work?
+            float yaw = player.getRotation().getY();
+            Vector3f tar = new Vector3f(pitch, yaw, target.getRotation().getZ());
+            player.setRotation(tar);
+            ((Living) target).damage(2.0);
+            ((Living) target).setLastAttacker(player);
 
             player.sendMessage(getGroup().getColor() + "*shooom*");
 

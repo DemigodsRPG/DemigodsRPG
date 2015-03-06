@@ -7,13 +7,12 @@ import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.model.PlayerModel;
-import org.bukkit.TextColors;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.event.entity.living.player.PlayerInteractEvent;
+import org.spongepowered.api.potion.PotionEffectTypes;
+import org.spongepowered.api.text.format.TextColors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +51,7 @@ public class DemonAspectIII implements Aspect {
         int amt = tartarus(player, model);
         if (amt > 0) {
             player.sendMessage(TextColors.DARK_RED + "Nothingness" + TextColors.GRAY + " has corrupted " + amt + " enemies.");
-            player.getWorld().setTime(18000);
+            // FIXME player.getWorld().setTime(18000);
             return AbilityResult.SUCCESS;
         } else {
             player.sendMessage(TextColors.YELLOW + "There were no valid targets or the ultimate could not be used.");
@@ -62,25 +61,25 @@ public class DemonAspectIII implements Aspect {
 
     private int tartarus(Player p, PlayerModel m) {
         int range = (int) Math.round(18.83043 * Math.pow(m.getExperience(Aspects.DEMON_ASPECT_III), 0.088637));
-        List<LivingEntity> entitylist = new ArrayList<>();
-        for (Entity anEntity : p.getNearbyEntities(range, range, range)) {
+        List<Living> entitylist = new ArrayList<>();
+        for (Entity anEntity : p.getWorld().getEntities(entity -> entity.getLocation().getPosition().distance(p.getLocation().getPosition()) <= range)) {
             if (anEntity instanceof Player && m.getFaction().equals(DGGame.PLAYER_R.fromPlayer((Player) anEntity).getFaction())) {
                 continue;
             }
-            if (anEntity instanceof LivingEntity) {
-                entitylist.add((LivingEntity) anEntity);
+            if (anEntity instanceof Living) {
+                entitylist.add((Living) anEntity);
             }
         }
         int duration = (int) Math.round(30 * Math.pow(m.getExperience(Aspects.DEMON_ASPECT_III), 0.09)) * 20;
-        for (LivingEntity le : entitylist) {
+        for (Living le : entitylist) {
             target(le, duration);
         }
         return entitylist.size();
     }
 
-    private void target(LivingEntity le, int duration) {
-        le.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration, 5));
-        le.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, duration, 5));
-        le.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, duration, 5));
+    private void target(Living le, int duration) {
+        le.addPotionEffect(DGGame.GAME.getRegistry().getPotionEffectBuilder().potionType(PotionEffectTypes.BLINDNESS).duration(duration).amplifier(5).build(), true);
+        le.addPotionEffect(DGGame.GAME.getRegistry().getPotionEffectBuilder().potionType(PotionEffectTypes.WEAKNESS).duration(duration).amplifier(5).build(), true);
+        le.addPotionEffect(DGGame.GAME.getRegistry().getPotionEffectBuilder().potionType(PotionEffectTypes.NAUSEA).duration(duration).amplifier(5).build(), true);
     }
 }

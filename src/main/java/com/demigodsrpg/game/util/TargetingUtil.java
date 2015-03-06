@@ -3,7 +3,7 @@ package com.demigodsrpg.game.util;
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.flowpowered.math.vector.Vector3d;
-import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.Location;
@@ -15,7 +15,7 @@ public class TargetingUtil {
     private static final int TARGET_OFFSET = 5;
 
     @Deprecated
-    public static Entity autoTarget(Player player) {
+    public static Living autoTarget(Player player) {
         return autoTarget(player, 140);
     }
 
@@ -27,7 +27,7 @@ public class TargetingUtil {
      * @param player the player
      * @return the targeted LivingEntity
      */
-    public static Entity autoTarget(Player player, int range) {
+    public static Living autoTarget(Player player, int range) {
         // Define variables
         /* final int correction = 3;
         Location target = null;

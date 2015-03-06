@@ -44,7 +44,7 @@ public class WaterAspectI implements Aspect {
 
         Entity hit = TargetingUtil.autoTarget(player);
 
-        if (hit != null && hit instanceof Living) {
+        if (hit != null) {
             player.sendMessage(TextColors.AQUA + "*shploosh*");
             ((Living) hit).damage(damage);
             ((Living) hit).setLastAttacker(player);

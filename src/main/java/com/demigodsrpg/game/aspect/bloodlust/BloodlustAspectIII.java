@@ -5,9 +5,8 @@ import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityResult;
 import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.aspect.Groups;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.event.entity.EntityChangeHealthEvent;
 
 
 public class BloodlustAspectIII implements Aspect {
@@ -32,12 +31,12 @@ public class BloodlustAspectIII implements Aspect {
     }
 
     @Ability(name = "Mighty Fists", info = "Attacking with no item does extra damage.", type = Ability.Type.PASSIVE)
-    public AbilityResult fistsAbility(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Player) {
-            Player player = (Player) event.getDamager();
+    public AbilityResult fistsAbility(EntityChangeHealthEvent event) {
+        if (event.getCause().isPresent() && event.getCause().get() instanceof Player) {
+            Player player = (Player) event.getCause().get();
             if (DGGame.PLAYER_R.fromPlayer(player).getAspects().contains(getGroup() + " " + getTier().name())) {
-                if (player.getItemInHand().getType().equals(Material.AIR)) {
-                    event.setDamage(15.0);
+                if (!player.getItemInHand().isPresent()) {
+                    event.setNewHealth(event.getOldHealth() - 15.0);
                 }
             }
         }

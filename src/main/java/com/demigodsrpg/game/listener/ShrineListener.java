@@ -13,7 +13,7 @@ import com.google.common.collect.Lists;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.data.Sign;
 import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.EntityInteractionType;
+import org.spongepowered.api.entity.EntityInteractionTypes;
 import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.event.block.BlockBreakEvent;
@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 public class ShrineListener {
     @Subscribe(order = Order.LATE)
     public void createShrine(PlayerInteractEvent e) {
-        if (!e.getInteractionType().equals(EntityInteractionType.RIGHT_CLICK) || !e.getClickedPosition().isPresent())
+        if (!e.getInteractionType().equals(EntityInteractionTypes.USE) && !e.getInteractionType().equals(EntityInteractionTypes.ATTACK) || !e.getClickedPosition().isPresent())
             return;
         if (ZoneUtil.isNoDGWorld(e.getPlayer().getWorld())) return;
         Location clickedLocation = new Location(e.getPlayer().getLocation().getExtent(), e.getClickedPosition().get().toDouble());

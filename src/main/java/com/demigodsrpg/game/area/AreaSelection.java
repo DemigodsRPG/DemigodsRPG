@@ -1,7 +1,7 @@
 package com.demigodsrpg.game.area;
 
 import com.demigodsrpg.game.DGGame;
-import org.spongepowered.api.entity.EntityInteractionType;
+import org.spongepowered.api.entity.EntityInteractionTypes;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.event.entity.living.player.PlayerInteractEvent;
 import org.spongepowered.api.text.format.TextColors;
@@ -33,7 +33,7 @@ public class AreaSelection {
     @Subscribe(order = Order.LATE)
     public void onClick(PlayerInteractEvent event) {
         if (!event.isCancelled()) {
-            if (event.getPlayer().getUniqueId().toString().equals(playerUUID) && EntityInteractionType.RIGHT_CLICK.equals(event.getInteractionType()) && event.getClickedPosition().isPresent()) {
+            if (event.getPlayer().getUniqueId().toString().equals(playerUUID) && EntityInteractionTypes.USE.equals(event.getInteractionType()) && event.getClickedPosition().isPresent()) {
                 // Get the point
                 Location point = new Location(event.getPlayer().getLocation().getExtent(), event.getClickedPosition().get().toDouble());
 

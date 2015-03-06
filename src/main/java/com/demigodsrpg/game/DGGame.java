@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.entity.player.Player;
-import org.spongepowered.api.event.state.ServerStartedEvent;
+import org.spongepowered.api.event.state.PreInitializationEvent;
 import org.spongepowered.api.event.state.ServerStoppingEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
@@ -35,9 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
-@Plugin(id = "demigods-rpg",
-        name = "DemigodsRPG",
-        version = "4.0.0")
+@Plugin(id = PomData.ARTIFACT_ID, name = PomData.NAME, version = PomData.VERSION)
 public class DGGame {
     // -- GAME RELATED CONSTANTS -- //
     
@@ -66,7 +64,7 @@ public class DGGame {
 
     // -- PLUGIN RELATED INSTANCE METHODS -- //
     @Subscribe
-    public void onEnable(ServerStartedEvent event) {
+    public void onEnable(PreInitializationEvent event) {
         // Define the game
         GAME = event.getGame();
         SERVER = event.getGame().getServer().get();

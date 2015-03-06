@@ -109,7 +109,7 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
         try {
             return JsonFileUtil.getSection(DGGame.SAVE_PATH, getFileName());
         } catch (Exception oops) {
-            DGGame.CONSOLE.warning("File corrupt: " + getFileName());
+            DGGame.CONSOLE.error("File corrupt: " + getFileName());
             oops.printStackTrace();
         }
         return null;

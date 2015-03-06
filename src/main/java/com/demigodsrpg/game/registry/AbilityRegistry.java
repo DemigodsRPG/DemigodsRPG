@@ -15,10 +15,13 @@ import com.google.common.collect.Multimaps;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.EntityInteractionType;
+import org.spongepowered.api.entity.EntityInteractionTypes;
 import org.spongepowered.api.entity.living.monster.Skeleton;
 import org.spongepowered.api.entity.living.monster.Zombie;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.event.block.data.FurnaceSmeltItemEvent;
+import org.spongepowered.api.event.entity.EntityChangeHealthEvent;
 import org.spongepowered.api.event.entity.EntityTargetEntityEvent;
 import org.spongepowered.api.event.entity.living.player.PlayerChangeHealthEvent;
 import org.spongepowered.api.event.entity.living.player.PlayerChatEvent;
@@ -31,7 +34,6 @@ import org.spongepowered.api.util.event.Order;
 import org.spongepowered.api.util.event.Subscribe;
 import org.spongepowered.api.world.World;
 
-import javax.annotation.Nullable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,28 +49,28 @@ public class AbilityRegistry {
 
     @Subscribe(order = Order.FIRST)
     private void onEvent(PlayerInteractEvent event) {
-        switch (event.getInteractionType()) {
-            case LEFT_CLICK:
-                return;
-        }
-        for (AbilityMetaData ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
-            try {
-                PlayerModel model = DGGame.PLAYER_R.fromPlayer(event.getPlayer());
-                if (processAbility1(model, ability)) {
-                    Object rawResult = ability.getMethod().invoke(ability.getAspect(), event);
-                    processAbility2(event.getPlayer(), model, ability, rawResult);
-                    event.setCancelled(true);
-                    return;
-                }
-            } catch (Exception oops) {
-                oops.printStackTrace();
-            }
+        EntityInteractionType type = event.getInteractionType();
+        if (EntityInteractionTypes.ATTACK.equals(type) || EntityInteractionTypes.USE.equals(type)) {
+            for (AbilityMetaData ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
+                try {
 
+                    PlayerModel model = DGGame.PLAYER_R.fromPlayer(event.getPlayer());
+                    if (processAbility1(model, ability)) {
+                        Object rawResult = ability.getMethod().invoke(ability.getAspect(), event);
+                        processAbility2(event.getPlayer(), model, ability, rawResult);
+                        event.setCancelled(true);
+                        return;
+                    }
+                } catch (Exception oops) {
+                    oops.printStackTrace();
+                }
+
+            }
         }
     }
 
     @Subscribe(order = Order.FIRST)
-    private void onEvent(PlayerChangeHealthEvent event) {
+    private void onEvent(EntityChangeHealthEvent event) {
         if (event.getCause().isPresent() && event.getCause().get().getCause() instanceof Entity) {
             for (AbilityMetaData ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
                 try {
@@ -223,7 +225,7 @@ public class AbilityRegistry {
         return true;
     }
 
-    void processAbility2(Player player, PlayerModel model, AbilityMetaData ability, @Nullable Object rawResult) {
+    void processAbility2(Player player, PlayerModel model, AbilityMetaData ability, Object rawResult) {
         // Check for result
         if (rawResult == null) {
             throw new NullPointerException("An ability returned null while casting.");

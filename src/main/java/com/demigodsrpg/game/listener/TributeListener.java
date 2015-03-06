@@ -10,7 +10,7 @@ import com.demigodsrpg.game.model.ShrineModel;
 import com.demigodsrpg.game.util.TargetingUtil;
 import com.demigodsrpg.game.util.ZoneUtil;
 import com.google.common.base.Optional;
-import org.spongepowered.api.entity.EntityInteractionType;
+import org.spongepowered.api.entity.EntityInteractionTypes;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.event.entity.living.player.PlayerInteractEvent;
 import org.spongepowered.api.event.inventory.InventoryCloseEvent;
@@ -36,7 +36,7 @@ public class TributeListener {
         Location location;
 
         // Return from actions we don't care about
-        if (!EntityInteractionType.RIGHT_CLICK.equals(event.getInteractionType())) {
+        if (EntityInteractionTypes.PICK_BLOCK.equals(event.getInteractionType())) {
             return;
         }
 

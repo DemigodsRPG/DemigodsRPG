@@ -64,6 +64,20 @@
             <version>${sponge.version}</version>
         </dependency>
 
+        <!-- Flow Math -->
+        <dependency>
+            <groupId>com.flowpowered</groupId>
+            <artifactId>flow-math</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- Hocon -->
+        <dependency>
+            <groupId>ninja.leaping.configurate</groupId>
+            <artifactId>configurate-hocon</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
         <!-- Chitchat
         <dependency>
             <groupId>com.demigodsrpg</groupId>
@@ -99,6 +113,13 @@
             <version>3.0.3</version>
         </dependency>
 
+        <!-- slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.7</version>
+        </dependency>
+
         <!-- CensoredLib -->
         <dependency>
             <groupId>com.censoredsoftware.library</groupId>
@@ -127,6 +148,19 @@
             </resource>
         </resources>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>templating-maven-plugin</artifactId>
+                <version>1.0-alpha-3</version>
+                <executions>
+                    <execution>
+                        <id>filter-src</id>
+                        <goals>
+                            <goal>filter-sources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

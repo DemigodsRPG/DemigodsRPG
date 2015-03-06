@@ -6,6 +6,9 @@ import com.demigodsrpg.game.ability.AbilityResult;
 import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.model.PlayerModel;
+import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.event.entity.living.player.PlayerInteractEvent;
 
@@ -51,10 +54,9 @@ public class LightningAspectIII implements Aspect {
         setWeather(player, 100);
 
         // Strike targets
-        /* FIXME
-        for (final Entity entity : player.getNearbyEntities(radius, radius, radius)) {
+        for (final Entity entity : player.getWorld().getEntities(e -> e.getLocation().getPosition().distance(player.getLocation().getPosition()) <= radius)) {
             // Validate them first
-            if (!(entity instanceof LivingEntity)) continue;
+            if (!(entity instanceof Living)) continue;
             if (entity instanceof Player) {
                 PlayerModel opponent = DGGame.PLAYER_R.fromPlayer((Player) entity);
                 if (opponent != null && model.getFaction().equals(opponent.getFaction())) continue;
@@ -65,22 +67,21 @@ public class LightningAspectIII implements Aspect {
             if (entity instanceof Player) setWeather((Player) entity, 100);
 
             // Strike them with a small delay
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getInst(), new BukkitRunnable() {
+            DGGame.GAME.getSyncScheduler().runTaskAfter(DGGame.getInst(), new Runnable() {
                 @Override
                 public void run() {
                     for (int i = 0; i <= 3; i++) {
-                        player.getWorld().strikeLightningEffect(entity.getLocation());
-                        if (entity.getLocation().getBlock().getType().equals(Material.WATER)) {
-                            ((LivingEntity) entity).damage(damage + 4);
+                        // FIXME player.getWorld().strikeLightningEffect(entity.getLocation());
+                        if (entity.getLocation().getBlock().getType().equals(BlockTypes.WATER)) {
+                            ((Living) entity).damage(damage + 4);
                         } else {
-                            ((LivingEntity) entity).damage(damage);
+                            ((Living) entity).damage(damage);
                         }
-                        entity.setLastDamageCause(new EntityDamageByEntityEvent(player, entity, EntityDamageEvent.DamageCause.LIGHTNING, damage));
+                        ((Living) entity).setLastAttacker(player);
                     }
                 }
             }, 15);
         }
-        */
 
         return AbilityResult.SUCCESS;
     }

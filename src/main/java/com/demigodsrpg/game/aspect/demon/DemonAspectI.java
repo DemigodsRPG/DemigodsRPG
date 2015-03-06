@@ -8,14 +8,12 @@ import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.util.TargetingUtil;
-import org.bukkit.Effect;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.spongepowered.api.effect.particle.ParticleTypes;
+import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.event.entity.EntityChangeHealthEvent;
+import org.spongepowered.api.potion.PotionEffectTypes;
+import org.spongepowered.api.util.Direction;
 
 public class DemonAspectI implements Aspect {
     @Override
@@ -39,8 +37,8 @@ public class DemonAspectI implements Aspect {
     }
 
     @Ability(name = "Chain", command = "chain", info = "Fire a chain of smoke that damages and blinds.", cost = 250, delay = 1500)
-    public AbilityResult chainAbility(EntityDamageByEntityEvent event) {
-        Player player = (Player) event.getDamager();
+    public AbilityResult chainAbility(EntityChangeHealthEvent event) {
+        Player player = (Player) event.getCause().get();
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
 
         double devotion = model.getExperience(Aspects.DEMON_ASPECT_I);
@@ -53,13 +51,13 @@ public class DemonAspectI implements Aspect {
     }
 
     private boolean chain(Player p, double damage, int blindpower, int blindduration) {
-        LivingEntity target = TargetingUtil.autoTarget(p);
+        Living target = TargetingUtil.autoTarget(p);
         if (target == null) return false;
-        target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, blindduration, blindpower));
+        target.addPotionEffect(DGGame.GAME.getRegistry().getPotionEffectBuilder().potionType(PotionEffectTypes.BLINDNESS).duration(blindduration).amplifier(blindpower).build(), true);
         target.damage(damage);
-        target.setLastDamageCause(new EntityDamageByEntityEvent(p, target, EntityDamageEvent.DamageCause.ENTITY_ATTACK, damage));
-        for (BlockFace bf : BlockFace.values()) {
-            p.getWorld().playEffect(target.getLocation().getBlock().getRelative(bf).getLocation(), Effect.SMOKE, 1);
+        target.setLastAttacker(p);
+        for (Direction direction : Direction.values()) {
+            p.getWorld().spawnParticles(DGGame.GAME.getRegistry().getParticleEffectBuilder(ParticleTypes.SMOKE_LARGE).count(1).build(), target.getLocation().getBlock().getRelative(direction).getLocation().getPosition(), 1);
         }
         return true;
     }
