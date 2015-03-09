@@ -1,6 +1,7 @@
 /*
  * Copyright 2015 Demigods RPG
  * Copyright 2015 Alexander Chauncey
+ * Copyright 2015 Alex Bennett
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
