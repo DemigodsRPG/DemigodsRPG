@@ -15,7 +15,7 @@
     <properties> <!-- It is important to keep up to date manually. -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sponge.version>1.1-SNAPSHOT</sponge.version>
-        <censoredlib.version>1.0.0</censoredlib.version>
+        <censoredlib.version>1.0.1</censoredlib.version>
     </properties>
 
     <developers>
@@ -47,8 +47,8 @@
 
     <repositories>
         <repository>
-            <id>CenSoft</id>
-            <url>http://repo.censoredsoftware.com/</url>
+            <id>DG-MG</id>
+            <url>http://repo.ii.dg-mg.club/</url>
         </repository>
         <repository>
             <id>sponge-releases</id>

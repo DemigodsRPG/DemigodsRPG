@@ -342,7 +342,7 @@ public class AbilityRegistry {
 
         /* FIXME Other damage causes aren't in Sponge yet
         if (Aspects.hasAspect(player, Aspects.LIGHTNING_ASPECT_II)) {
-            if ()
+            if (event.getCause()) { // Fall damage
                 event.setCancelled(true);
             }
         }
@@ -376,7 +376,7 @@ public class AbilityRegistry {
 
         if (Aspects.hasAspect(player, Aspects.WATER_ASPECT_II)) {
             BlockType locationMaterial = player.getLocation().getBlock().getType();
-            if (/* player.isSneaking() && */ (locationMaterial.equals(BlockTypes.WATER))) {
+            if (player.isSneaking() && locationMaterial.equals(BlockTypes.WATER)) {
                 Vector3d position = player.getLocation().getPosition();
                 Vector3d victor = (player.getPassenger().isPresent() && position.getY() > 0 ? new Vector3d(position.getX(), 0, position.getZ()) : position.normalize().mul(1.3D));
                 player.setVelocity(victor);

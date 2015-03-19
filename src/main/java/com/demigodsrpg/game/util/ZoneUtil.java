@@ -35,7 +35,7 @@ public class ZoneUtil {
     }
 
     public static boolean inNoDGZone(Location location) {
-        return false /* isNoDGWorld(location.getWorld()) */;
+        return isNoDGWorld((World) location.getExtent());
     }
 
     public static boolean isNoDGWorld(World world) {
