@@ -68,7 +68,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         faction = Faction.NEUTRAL;
 
         // Debug data
-        if (Setting.DEBUG_DATA.get()) {
+        if (Setting.DEBUG_DATA) {
             // Debug deities
             god = Deity.LOREM;
             hero = Deity.IPSUM;
@@ -448,7 +448,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
             score += data.getDenies();
             score += data.getKills() * 2;
             score -= data.getDeaths() * 1.5;
-            score *= (double) Setting.EXP_MULTIPLIER.get();
+            score *= Setting.EXP_MULTIPLIER;
             score /= aspects.size() + 1;
             for (String aspect : aspects) {
                 setExperience(aspect, getExperience(aspect) + score);
@@ -461,7 +461,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     boolean checkTeamKills() {
-        int maxTeamKills = Setting.MAX_TEAM_KILLS.get();
+        int maxTeamKills = Setting.MAX_TEAM_KILLS;
         if (maxTeamKills <= teamKills) {
             // Reset them to excommunicated
             setFaction(Faction.EXCOMMUNICATED);
@@ -495,7 +495,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public boolean canClaim(Aspect aspect) {
-        if (Setting.NO_FACTION_ASPECT_MODE.get()) {
+        if (Setting.NO_FACTION_ASPECT_MODE) {
             return costForNextAspect() <= level && !hasAspect(aspect) && hasPrereqs(aspect);
         }
 
@@ -505,8 +505,8 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
     void calculateAscensions() {
         Player player = getPlayer();
-        if (getLevel() >= (int) Setting.ASCENSION_CAP.get()) return;
-        while (getTotalExperience() >= (int) Math.ceil(500 * Math.pow(getLevel() + 1, 2.02)) && getLevel() < (int) Setting.ASCENSION_CAP.get()) {
+        if (getLevel() >= (int) Setting.ASCENSION_CAP) return;
+        while (getTotalExperience() >= (int) Math.ceil(500 * Math.pow(getLevel() + 1, 2.02)) && getLevel() < (int) Setting.ASCENSION_CAP) {
             setMaxHealth(getMaxHealth() + 10.0);
             player.setMaxHealth(getMaxHealth());
             player.setHealth(getMaxHealth());
@@ -520,7 +520,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public int costForNextAspect() {
-        if (Setting.NO_COST_ASPECT_MODE.get()) return 0;
+        if (Setting.NO_COST_ASPECT_MODE) return 0;
         switch (aspects.size() + 1) {
             case 1:
                 return 2;

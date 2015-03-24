@@ -1,4 +1,4 @@
-package com.demigodsrpg.game;
+package com.demigamesrpg.game;
 
 public class PomData {
     public static final String ARTIFACT_ID = "${project.artifactId}";

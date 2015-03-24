@@ -1,10 +1,8 @@
 package com.demigodsrpg.game;
 
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import org.spongepowered.api.service.config.ConfigRoot;
-
 @SuppressWarnings("unchecked")
-public enum Setting {
+public class Setting {
+    /*
     MAX_TARGET_RANGE(Integer.class, getNode("max_target_range").getInt(), 100),
     MAX_HP(Integer.class, getNode("max_hp").getInt(), 3000),
     ASCENSION_CAP(Integer.class, getNode("ascension_cap").getInt(), 120),
@@ -20,33 +18,30 @@ public enum Setting {
     SAVE_PRETTY(Boolean.class, getNode("save_pretty").getBoolean(), false),
     DEBUG_DATA(Boolean.class, getNode("debug_data").getBoolean(), false),
     DEBUG_INVISIBLE_WALLS(Boolean.class, getNode("debug_invisible_walls").getBoolean(), false);
+    */
 
-    private final Class<?> clazz;
-    private final Object setting;
+    public static final int MAX_TARGET_RANGE = 100;
+    public static final int MAX_HP = 3000;
+    public static final int ASCENSION_CAP = 120;
+    public static final int FAVOR_CAP = 20000;
+    public static final int MAX_TEAM_KILLS = 10;
+    public static final double FAVOR_REGEN_SECONDS = 0.5;
+    public static final double EXP_MULTIPLIER = 4.0;
+    public static final boolean BROADCAST_NEW_ASPECT = true;
+    public static final boolean ALLOW_PVP_EVERYWHERE = false;
+    public static final boolean FRIENDLY_FIRE = false;
+    public static final boolean NO_COST_ASPECT_MODE = true; // DEBUG
+    public static final boolean NO_FACTION_ASPECT_MODE = true; // DEBUG
+    public static final boolean SAVE_PRETTY = true; // DEBUG
+    public static final boolean DEBUG_DATA = true; // DEBUG
+    public static final boolean DEBUG_INVISIBLE_WALLS = true; // DEBUG
 
-    private <T> Setting(Class<T> clazz, T setting, T def) {
-        this.clazz = clazz;
-        if (setting != null) {
-            this.setting = setting;
-        } else {
-            this.setting = def;
-        }
-    }
-
-    public Class<?> getType() {
-        return clazz;
-    }
-
-    public <T> T get() {
-        return ((Class<T>) clazz).cast(setting);
-    }
-
-    private static CommentedConfigurationNode getNode(Object... args) {
+    /*private static CommentedConfigurationNode getNode(Object... args) {
         try {
             return DGGame.GAME.getServiceManager().provide(ConfigRoot.class).get().getConfig().load().getNode(args);
         } catch (Exception oops) {
             oops.printStackTrace();
         }
         return null;
-    }
+    }*/
 }

@@ -60,7 +60,7 @@ public class TributeListener {
 
             Deity deity = shrine.getDeity();
             if (shrine.getOwnerMojangId() != null && !model.hasDeity(deity)) {
-                event.getPlayer().sendMessage(TextColors.YELLOW + "You must be allied with " + deity.getFaction().getColor() + deity.getName() + TextColors.YELLOW + " to tribute here.");
+                event.getPlayer().sendMessage(TextColors.YELLOW + "You must be allied with " /* + deity.getFaction().getColor() */ + deity.getName() + TextColors.YELLOW + " to tribute here.");
                 return;
             }
             tribute(event.getPlayer(), shrine);
@@ -122,13 +122,13 @@ public class TributeListener {
                 model.setFavor(favorBefore + tributeValue);
                 model.setExperience(aspect, devotionBefore + tributeValue);
 
-                if (model.getFavor() < (int) Setting.FAVOR_CAP.get()) {
+                if (model.getFavor() < Setting.FAVOR_CAP) {
                     if (model.getFavor() > favorBefore)
                         player.sendMessage(TextColors.YELLOW + "You have been blessed with " + TextStyles.ITALIC + (model.getFavor() - favorBefore) + TextColors.YELLOW + " favor.");
                 } else {
                     if (model.getExperience(aspect) > devotionBefore) {
                         // Message the tributer
-                        player.sendMessage(save.getDeity().getFaction().getColor() + "Your devotion for " + aspect.getGroup() + " " + aspect.getTier().name() + " has increased by " + TextStyles.ITALIC + (model.getExperience(aspect) - devotionBefore) + "!");
+                        player.sendMessage(/* save.getDeity().getFaction().getColor() + */ "Your devotion for " + aspect.getGroup() + " " + aspect.getTier().name() + " has increased by " + TextStyles.ITALIC + (model.getExperience(aspect) - devotionBefore) + "!");
                     }
                 }
             }
@@ -140,13 +140,13 @@ public class TributeListener {
                 PlayerModel shrineOwner = DGGame.PLAYER_R.fromId(save.getOwnerMojangId());
                 Player shrineOwnerPlayer = shrineOwner.getPlayer();
 
-                if (shrineOwner.getFavor() < (int) Setting.FAVOR_CAP.get() && !model.getMojangId().equals(shrineOwner.getMojangId())) {
+                if (shrineOwner.getFavor() < Setting.FAVOR_CAP && !model.getMojangId().equals(shrineOwner.getMojangId())) {
                     // Give them some of the blessings
                     shrineOwner.setFavor(shrineOwner.getFavor() + tributeValue / 5);
 
                     // Message them
                     if (shrineOwnerPlayer.isOnline()) {
-                        shrineOwnerPlayer.sendMessage(save.getDeity().getFaction().getColor() + "Someone has recently paid tribute at a shrine you own.");
+                        shrineOwnerPlayer.sendMessage(/*save.getDeity().getFaction().getColor() +*/ "Someone has recently paid tribute at a shrine you own.");
                     }
                 }
 
@@ -157,9 +157,9 @@ public class TributeListener {
         // Handle messaging and Shrine owner updating
         if (tributeValue < 1) {
             // They aren't good enough, let them know!
-            player.sendMessage(TextColors.RED + "Your tributes were insufficient for " + save.getDeity().getFaction().getColor() + save.getDeity().getName() + "'s" + TextColors.RED + " blessings.");
+            player.sendMessage(TextColors.RED + "Your tributes were insufficient for " + /*save.getDeity().getFaction().getColor() +*/ save.getDeity().getName() + "'s" + TextColors.RED + " blessings.");
         } else {
-            player.sendMessage(save.getDeity().getFaction().getColor() + save.getDeity().getName() + " is pleased with your tribute.");
+            player.sendMessage(/*save.getDeity().getFaction().getColor() +*/ save.getDeity().getName() + " is pleased with your tribute.");
         }
 
         // Clear the tribute case

@@ -3,13 +3,21 @@ package com.demigodsrpg.game.util;
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.model.PlayerModel;
 import com.flowpowered.math.vector.Vector3d;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.entity.player.gamemode.GameModes;
+import org.spongepowered.api.entity.projectile.EnderPearl;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class TargetingUtil {
     private static final int TARGET_OFFSET = 5;
@@ -29,54 +37,77 @@ public class TargetingUtil {
      */
     public static Living autoTarget(Player player, int range) {
         // Define variables
-        /* final int correction = 3;
-        Location target = null;
+        final int correction = 3;
+        Vector3d velocity = null;
         try {
-            target = player.getTargetBlock((Set<Material>) null, range).getLocation();
+            velocity = targetVelocity(player); // FIXME This is a velocity not a target position
         } catch (Exception ignored) {
         }
-        if (target == null) return null;
-        BlockIterator iterator = new BlockIterator(player, range);
-        List<Entity> targets = Lists.newArrayList();
+        if (velocity == null) return null;
+        List<Vector3d> blocks = getNearbyBlocks(player.getLocation(), range);
+        List<Entity> targets = new ArrayList<>();
         final PlayerModel looking = DGGame.PLAYER_R.fromPlayer(player);
 
         // Iterate through the blocks and find the target
-        while (iterator.hasNext()) {
-            final Block block = iterator.next();
-
-            targets.addAll(Collections2.filter(player.getNearbyEntities(range, range, range), new Predicate<Entity>() {
+        for (Vector3d pos : blocks) {
+            targets.addAll(getNearbyEntities(player.getLocation(), range).stream().filter(new Predicate<Entity>() {
                 @Override
-                public boolean apply(Entity entity) {
-                    if (entity instanceof LivingEntity && entity.getLocation().distance(block.getLocation()) <= correction) {
+                public boolean test(Entity entity) {
+                    if (entity instanceof Living && entity.getLocation().getPosition().distance(pos) <= correction) {
                         if (entity instanceof Player) {
                             PlayerModel target = DGGame.PLAYER_R.fromPlayer((Player) entity);
-                            if (looking.getFaction().equals(target.getFaction()) || ((Player) entity).getGameMode().equals(GameMode.CREATIVE))
+                            if (looking.getFaction().equals(target.getFaction()) || ((Player) entity).getGameMode().equals(GameModes.CREATIVE))
                                 return false;
                         }
                         return true;
                     }
                     return false;
                 }
-            }));
+            }).collect(Collectors.toList()));
         }
 
         // Attempt to return the closest entity to the cursor
         for (Entity entity : targets)
-            if (entity.getLocation().distance(target) <= correction) return (LivingEntity) entity;
+            if (entity.getLocation().getPosition().distance(velocity) <= correction) return (Living) entity;
 
         // If it failed to do that then just return the first entity
         try {
-            return (LivingEntity) targets.get(0);
+            return (Living) targets.get(0);
         } catch (Exception ignored) {
         }
 
-        return null; */
-
-        return player; // FIXME
+        return null;
     }
 
+    @Deprecated
     public static Location directTarget(Player player) {
-        return player. /*getTargetBlock((Set<Material>) null, 140). */ getLocation();
+        return new Location(player.getWorld(), targetVelocity(player));
+    }
+
+    public static Vector3d targetVelocity(Player player) {
+        EnderPearl ep = player.launchProjectile(EnderPearl.class);
+        try {
+            return ep.getVelocity();
+        } finally {
+            ep.remove();
+        }
+    }
+
+    public static Collection<Entity> getNearbyEntities(Location center, double range) {
+        Vector3d centerPos = center.getPosition();
+        return center.getExtent().getEntities(entity -> entity.getLocation().getPosition().distance(centerPos) <= range);
+    }
+
+    public static List<Vector3d> getNearbyBlocks(Location center, int range) {
+        List<Vector3d> blockPos = new ArrayList<>();
+        for (int x = -range; x < range; x++) {
+            for (int y = -range; y < range; y++) {
+                for (int z = -range; z < range; z++) {
+                    blockPos.add(new Vector3d(x, y, z));
+                }
+            }
+        }
+        return blockPos;
     }
 
     /**

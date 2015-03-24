@@ -1,5 +1,6 @@
 package com.demigodsrpg.game;
 
+import com.demigamesrpg.game.PomData;
 import com.demigodsrpg.game.command.AdminModeComand;
 import com.demigodsrpg.game.command.CheckCommand;
 import com.demigodsrpg.game.command.FactionCommand;
@@ -15,6 +16,7 @@ import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.model.TributeModel;
 import com.demigodsrpg.game.registry.*;
 import com.demigodsrpg.game.util.ZoneUtil;
+import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Server;
@@ -24,13 +26,14 @@ import org.spongepowered.api.event.state.ServerStoppingEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.service.command.CommandService;
-import org.spongepowered.api.service.config.ConfigRoot;
+import org.spongepowered.api.service.config.ConfigDir;
 import org.spongepowered.api.service.event.EventManager;
 import org.spongepowered.api.service.scheduler.AsynchronousScheduler;
 import org.spongepowered.api.service.scheduler.SynchronousScheduler;
 import org.spongepowered.api.util.event.Subscribe;
 import org.spongepowered.api.world.World;
 
+import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 @Plugin(id = PomData.ARTIFACT_ID, name = PomData.NAME, version = PomData.VERSION)
 public class DGGame {
     // -- GAME RELATED CONSTANTS -- //
-    
+
     public static Game GAME;
     public static Server SERVER;
 
@@ -62,6 +65,12 @@ public class DGGame {
     public static final ServerDataRegistry MISC_R = new ServerDataRegistry();
     public static final ConcurrentMap<String, AreaRegistry> AREA_R = new ConcurrentHashMap<>();
 
+    // -- CONFIG -- //
+
+    @Inject
+    @ConfigDir(sharedRoot = false)
+    protected File configDir;
+
     // -- PLUGIN RELATED INSTANCE METHODS -- //
     @Subscribe
     public void onEnable(PreInitializationEvent event) {
@@ -81,14 +90,14 @@ public class DGGame {
         // saveConfig();
 
         // Define the save path
-        SAVE_PATH = GAME.getServiceManager().provide(ConfigRoot.class).get().getDirectory().getPath() + "/data/";
+        SAVE_PATH = configDir.getPath() + "/data/";
 
         // Register default factions
         FACTION_R.register(Faction.NEUTRAL);
         FACTION_R.register(Faction.EXCOMMUNICATED);
 
         // Debug data
-        if (Setting.DEBUG_DATA.get()) {
+        if (Setting.DEBUG_DATA) {
             // Debug deities
             DEITY_R.register(Deity.LOREM);
             DEITY_R.register(Deity.IPSUM);
@@ -117,12 +126,12 @@ public class DGGame {
 
         // Register the listeners
         EventManager manager = GAME.getEventManager();
-        manager.register(new InventoryListener(), this);
-        manager.register(new PlayerListener(), this);
-        manager.register(new ShrineListener(), this);
-        manager.register(new TributeListener(), this);
-        manager.register(new AreaListener(), this);
-        manager.register(ABILITY_R, this);
+        manager.register(PLUGIN, new InventoryListener());
+        manager.register(PLUGIN, new PlayerListener());
+        manager.register(PLUGIN, new ShrineListener());
+        manager.register(PLUGIN, new TributeListener());
+        manager.register(PLUGIN, new AreaListener());
+        manager.register(PLUGIN, ABILITY_R);
 
         // Register commands
         CommandService commands = GAME.getCommandDispatcher();
@@ -191,26 +200,17 @@ public class DGGame {
             VALUE;
 
     static {
-        SYNC = new Runnable() {
-            @Override
-            public void run() {
-                // Update online players
-                for (Player player : SERVER.getOnlinePlayers()) {
-                    if (ZoneUtil.inNoDGZone(player.getLocation())) continue;
-                    PlayerModel model = PLAYER_R.fromPlayer(player);
-                    if (model != null) {
-                        model.updateCanPvp();
-                    }
+        SYNC = () -> {
+            // Update online players
+            for (Player player : SERVER.getOnlinePlayers()) {
+                if (ZoneUtil.inNoDGZone(player.getLocation())) continue;
+                PlayerModel model = PLAYER_R.fromPlayer(player);
+                if (model != null) {
+                    model.updateCanPvp();
                 }
             }
         };
-        ASYNC = new Runnable() {
-            @Override
-            public void run() {
-                // Update Timed Data
-                MISC_R.clearExpired();
-            }
-        };
+        ASYNC = MISC_R::clearExpired;
         /*FIRE_SPREAD = new Runnable() { TODO Replace with EntityCollisionEvent
             @Override
             public void run() {
@@ -232,15 +232,15 @@ public class DGGame {
         AsynchronousScheduler async = GAME.getAsyncScheduler();
 
         // Start sync demigods runnable
-        sync.runRepeatingTaskAfter(this, SYNC, 20, 20); // TODO Test if these are ticks or seconds/milliseconds
+        sync.runRepeatingTaskAfter(PLUGIN, SYNC, 20, 20); // TODO Test if these are ticks or seconds/milliseconds
         CONSOLE.info("Main Demigods SYNC runnable enabled...");
 
         // Start async demigods runnable
-        async.runRepeatingTaskAfter(this, ASYNC, TimeUnit.SECONDS, 1, 1);
+        async.runRepeatingTaskAfter(PLUGIN, ASYNC, TimeUnit.SECONDS, 1, 1);
         CONSOLE.info("Main Demigods ASYNC runnable enabled...");
 
         // Start async value runnable
-        async.runRepeatingTaskAfter(this, VALUE, TimeUnit.SECONDS, 3, 20);
+        async.runRepeatingTaskAfter(PLUGIN, VALUE, TimeUnit.SECONDS, 3, 20);
         CONSOLE.info("Main Demigods VALUE runnable enabled...");
     }
 

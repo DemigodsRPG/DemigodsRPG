@@ -14,21 +14,21 @@ public class Faction extends AbstractPersistentModel<String> {
 
     // -- ALWAYS EXISTING FACTIONS -- //
 
-    public static final Faction NEUTRAL = new Faction("Neutral", TextColors.GRAY, "N", "Welcome to neutral ground.");
-    public static final Faction EXCOMMUNICATED = new Faction("Excommunicated", TextColors.DARK_GRAY, "X", "Something has gone horribly wrong, alert an admin.");
+    public static final Faction NEUTRAL = new Faction("Neutral", /*TextColors.GRAY,*/ "N", "Welcome to neutral ground.");
+    public static final Faction EXCOMMUNICATED = new Faction("Excommunicated", /*TextColors.DARK_GRAY,*/ "X", "Something has gone horribly wrong, alert an admin.");
 
     // -- FACTION META DATA -- //
 
     private String name;
-    private TextColor color;
+    //private TextColor color;
     private String chatSymbol;
     private String welcomeMessage;
 
     // -- CONSTRUCTORS -- //
 
-    public Faction(String name, TextColor color, String chatSymbol, String welcomeMessage) {
+    public Faction(String name, /*TextColor color,*/ String chatSymbol, String welcomeMessage) {
         this.name = name;
-        this.color = color;
+        //this.color = color;
         this.chatSymbol = chatSymbol;
         this.welcomeMessage = welcomeMessage;
     }
@@ -39,11 +39,11 @@ public class Faction extends AbstractPersistentModel<String> {
         // Color TODO Sponge makes this hard to do...
         Color exactColor = new Color(conf.getInt("color-rgb"));
         Optional<TextColor> foundColor = TextColors.getValues().stream().filter(textColor -> textColor.getColor().equals(exactColor)).findAny();
-        if (foundColor.isPresent()) {
-            color = foundColor.get();
-        } else {
-            color = TextColors.GRAY;
-        }
+        //if (foundColor.isPresent()) {
+        //    color = foundColor.get();
+        //} else {
+        //   color = TextColors.GRAY;
+        //}
 
         chatSymbol = conf.getString("chat-symbol");
         welcomeMessage = conf.getString("welcome-message");
@@ -55,9 +55,9 @@ public class Faction extends AbstractPersistentModel<String> {
         return name;
     }
 
-    public TextColor getColor() {
-        return color;
-    }
+    //public TextColor getColor() {
+    //    return color;
+    //}
 
     public String getChatSymbol() {
         return chatSymbol;
@@ -75,7 +75,7 @@ public class Faction extends AbstractPersistentModel<String> {
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
-        map.put("color-rgb", color.getColor().getRGB());
+        //map.put("color-rgb", color.getColor().getRGB());
         map.put("chat-symbol", chatSymbol);
         map.put("welcome-message", welcomeMessage);
         return map;

@@ -96,7 +96,7 @@ public class ShrineListener {
         DGGame.SHRINE_R.register(shrine);
         shrine.getShrineType().generate(shrine.getLocation());
         // ((World) clickedLocation.getExtent().strikeLightningEffect(e.getClickedBlock().getLocation()); FIXME
-        p.sendMessage("You have dedicated this shrine to " + deity.getFaction().getColor() + deity.getName() + TextColors.WHITE + ".");
+        p.sendMessage("You have dedicated this shrine to " + /*deity.getFaction().getColor() +*/ deity.getName() + TextColors.WHITE + ".");
         p.sendMessage(TextColors.YELLOW + "Warp here at any time with /shrine.");
     }
 

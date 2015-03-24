@@ -74,6 +74,11 @@
         <!-- Hocon -->
         <dependency>
             <groupId>ninja.leaping.configurate</groupId>
+            <artifactId>configurate-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>ninja.leaping.configurate</groupId>
             <artifactId>configurate-hocon</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
@@ -134,7 +139,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.name}</finalName>
+        <finalName>DemigodsRPG</finalName>
         <defaultGoal>clean install</defaultGoal>
         <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
         <resources>
@@ -172,10 +177,12 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <minimizeJar>true</minimizeJar>
+                            <!--<minimizeJar>true</minimizeJar>-->
                             <artifactSet>
                                 <includes>
-                                    <include>com.censoredsoftware.library:*</include>
+                                    <include>org.apache.commons:commons-lang3</include>
+                                    <include>com.censoredsoftware.library:schematic</include>
+                                    <include>com.censoredsoftware.library:util</include>
                                 </includes>
                             </artifactSet>
                             <relocations>

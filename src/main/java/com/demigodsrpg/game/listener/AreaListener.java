@@ -90,7 +90,7 @@ public class AreaListener {
         if (!faction.equals(model.getFaction()) && !model.getAdminMode()) {
             // Throttle the warning message
             if (!DGGame.MISC_R.contains(model.getMojangId(), "faction-area")) {
-                player.sendMessage(TextColors.RED + "You are not a member of the " + faction.getColor() + faction.getName() + TextColors.RED + " faction.");
+                player.sendMessage(TextColors.RED + "You are not a member of the " + /*faction.getColor() +*/ faction.getName() + TextColors.RED + " faction.");
                 DGGame.MISC_R.put(model.getMojangId(), "faction-area", false, 4, TimeUnit.SECONDS);
             }
 
@@ -110,7 +110,7 @@ public class AreaListener {
 
         // Throttle the welcome message
         if (!DGGame.MISC_R.contains(model.getMojangId(), "faction-area")) {
-            player.sendMessage(faction.getColor() + faction.getWelcomeMessage());
+            player.sendMessage(/*faction.getColor() +*/ faction.getWelcomeMessage());
             DGGame.MISC_R.put(model.getMojangId(), "faction-area", true, 4, TimeUnit.SECONDS);
         }
 
@@ -129,11 +129,11 @@ public class AreaListener {
         switch (deity.getDeityType()) {
             case GOD:
                 model.setGod(deity);
-                endMessage += deity.getFaction().getColor() + deity.getName() + TextColors.YELLOW + " as your parent God.";
+                endMessage += /*deity.getFaction().getColor() +*/ deity.getName() + TextColors.YELLOW + " as your parent God.";
                 break;
             case HERO:
                 model.setHero(deity);
-                endMessage += deity.getFaction().getColor() + deity.getName() + TextColors.YELLOW + " as your parent Hero.";
+                endMessage += /*deity.getFaction().getColor() +*/ deity.getName() + TextColors.YELLOW + " as your parent Hero.";
                 break;
         }
 
@@ -147,7 +147,7 @@ public class AreaListener {
                 // Hero aspect
                 if (DeityType.HERO.equals(deity.getDeityType()) && Aspect.Tier.HERO.equals(aspect.getTier())) {
                     model.giveHeroAspect(deity, aspect);
-                    player.sendMessage(TextColors.YELLOW + StringUtils.capitalize(deity.getPronouns()[0]) + " has placed you in the " + deity.getFaction().getColor() + deity.getFaction().getName() + TextColors.YELLOW + " faction.");
+                    player.sendMessage(TextColors.YELLOW + StringUtils.capitalize(deity.getPronouns()[0]) + " has placed you in the " + /*deity.getFaction().getColor() +*/ deity.getFaction().getName() + TextColors.YELLOW + " faction.");
                     break;
                 }
 
