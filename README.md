@@ -1,4 +1,4 @@
-Demigods RPG [![Build Status](http://builds.ii.dg-mg.club/buildStatus/icon?job=DemigodsRPG)](http://builds.ii.dg-mg.club/job/DemigodsRPG/)
+Demigods RPG ![](http://builds.ii.dg-mg.club/buildStatus/icon?job=DemigodsRPG)
 ============
 
 Demigods RPG! The fun ARPG style gamemode for Minecraft.
