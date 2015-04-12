@@ -34,13 +34,17 @@ public class Faction extends AbstractPersistentModel<String> {
     // -- FACTION META DATA -- //
 
     private String name;
-    private ChatColor color;
+    private String color;
     private String chatSymbol;
     private String welcomeMessage;
 
     // -- CONSTRUCTORS -- //
 
     public Faction(String name, ChatColor color, String chatSymbol, String welcomeMessage) {
+        this(name, color.toString(), chatSymbol, welcomeMessage);
+    }
+
+    public Faction(String name, String color, String chatSymbol, String welcomeMessage) {
         this.name = name;
         this.color = color;
         this.chatSymbol = chatSymbol;
@@ -49,7 +53,7 @@ public class Faction extends AbstractPersistentModel<String> {
 
     public Faction(String stringKey, JsonSection conf) {
         name = stringKey;
-        color = ChatColor.valueOf(conf.getString("color"));
+        color = conf.getString("color");
         chatSymbol = conf.getString("chat-symbol");
         welcomeMessage = conf.getString("welcome-message");
     }
@@ -60,7 +64,7 @@ public class Faction extends AbstractPersistentModel<String> {
         return name;
     }
 
-    public ChatColor getColor() {
+    public String getColor() {
         return color;
     }
 
@@ -80,7 +84,7 @@ public class Faction extends AbstractPersistentModel<String> {
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
-        map.put("color", color.name());
+        map.put("color", color);
         map.put("chat-symbol", chatSymbol);
         map.put("welcome-message", welcomeMessage);
         return map;

@@ -56,6 +56,11 @@ public class DemonAspectIII implements Aspect {
         return Tier.I;
     }
 
+    @Override
+    public String name() {
+        return "Demonlord";
+    }
+
     @Ability(name = "Demon Friendlies", info = "Demon monsters will not attack you.", type = Ability.Type.PASSIVE, placeholder = true)
     public void friendlyAbility() {
         // Do nothing, handled directly in the ability listener to save time

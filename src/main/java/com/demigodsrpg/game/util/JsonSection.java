@@ -128,12 +128,23 @@ public class JsonSection {
         return o;
     }
 
+    Object getNullable(String s) {
+        if (contains(s)) {
+            return get(s);
+        }
+        return null;
+    }
+
     public String getString(String s) {
         return get(s).toString();
     }
 
     public String getString(String s, String s2) {
         return get(s, s2).toString();
+    }
+
+    public String getStringNullable(String s) {
+        return contains(s) ? getString(s) : null;
     }
 
     public boolean isString(String s) {
@@ -148,6 +159,10 @@ public class JsonSection {
         return getDouble(s, i).intValue();
     }
 
+    public Integer getIntNullable(String s) {
+        return contains(s) ? getInt(s) : null;
+    }
+
     public boolean isInt(String s) {
         return get(s) instanceof Integer;
     }
@@ -160,6 +175,10 @@ public class JsonSection {
         return Boolean.parseBoolean(get(s, b).toString());
     }
 
+    public Boolean getBooleanNullable(String s) {
+        return contains(s) ? getBoolean(s) : null;
+    }
+
     public boolean isBoolean(String s) {
         return get(s) instanceof Boolean;
     }
@@ -168,8 +187,12 @@ public class JsonSection {
         return Double.parseDouble(get(s).toString());
     }
 
-    Double getDouble(String s, double v) {
+    public Double getDouble(String s, double v) {
         return Double.parseDouble(get(s, v).toString());
+    }
+
+    public Double getDoubleNullable(String s) {
+        return contains(s) ? getDouble(s) : null;
     }
 
     public boolean isDouble(String s) {
@@ -184,6 +207,10 @@ public class JsonSection {
         return getDouble(s, l).longValue();
     }
 
+    public Long getLongNullable(String s) {
+        return contains(s) ? getLong(s) : null;
+    }
+
     public boolean isLong(String s) {
         return get(s) instanceof Long;
     }
@@ -194,6 +221,10 @@ public class JsonSection {
 
     public List<Object> getList(String s, List<Object> objects) {
         return (List) get(s, objects);
+    }
+
+    public List<Object> getListNullable(String s) {
+        return contains(s) ? getList(s) : null;
     }
 
     public boolean isList(String s) {
@@ -208,11 +239,19 @@ public class JsonSection {
         return (List) get(s);
     }
 
+    public List<Double> getDoubleListNullable(String s) {
+        return contains(s) ? getDoubleList(s) : null;
+    }
+
     public List<Map<String, Object>> getMapList(String s) {
         return (List) get(s);
     }
 
-    public JsonSection getSection(String s) {
+    public List<Map<String, Object>> getMapListNullable(String s) {
+        return contains(s) ? getMapList(s) : null;
+    }
+
+    public JsonSection getSectionNullable(String s) {
         try {
             JsonSection section = new JsonSection();
             section.SECTION_DATA = (Map) get(s);

@@ -54,6 +54,11 @@ public class FireAspectI implements Aspect {
         return Tier.I;
     }
 
+    @Override
+    public String name() {
+        return "Pyro";
+    }
+
     // -- ABILITIES -- //
 
     @Ability(name = "Fireball", command = "fireball", info = "Bring fire to your enemies.", cost = 120, delay = 2000)

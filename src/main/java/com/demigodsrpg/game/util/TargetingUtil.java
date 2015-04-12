@@ -18,8 +18,8 @@
 package com.demigodsrpg.game.util;
 
 import com.demigodsrpg.game.DGGame;
+import com.demigodsrpg.game.Setting;
 import com.demigodsrpg.game.model.PlayerModel;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import org.bukkit.*;
@@ -38,7 +38,7 @@ public class TargetingUtil {
 
     @Deprecated
     public static LivingEntity autoTarget(Player player) {
-        return autoTarget(player, 140);
+        return autoTarget(player, Setting.MAX_TARGET_RANGE);
     }
 
     /**
@@ -64,19 +64,19 @@ public class TargetingUtil {
         while (iterator.hasNext()) {
             final Block block = iterator.next();
 
-            targets.addAll(Collections2.filter(player.getNearbyEntities(range, range, range), new Predicate<Entity>() {
-                @Override
-                public boolean apply(Entity entity) {
-                    if (entity instanceof LivingEntity && entity.getLocation().distance(block.getLocation()) <= correction) {
+            targets.addAll(Collections2.filter(player.getWorld().getEntitiesByClass(LivingEntity.class), entity -> {
+                Location location = entity.getLocation();
+                if (location.distance(player.getLocation()) < range) {
+                    if (entity.getLocation().distance(block.getLocation()) <= correction) {
                         if (entity instanceof Player) {
-                            PlayerModel target = DGGame.PLAYER_R.fromPlayer((Player) entity);
-                            if (looking.getFaction().equals(target.getFaction()) || ((Player) entity).getGameMode().equals(GameMode.CREATIVE))
+                            PlayerModel target1 = DGGame.PLAYER_R.fromPlayer((Player) entity);
+                            if (!Setting.FRIENDLY_FIRE && looking.getFaction().equals(target1.getFaction()) || ((Player) entity).getGameMode().equals(GameMode.CREATIVE))
                                 return false;
                         }
                         return true;
                     }
-                    return false;
                 }
+                return false;
             }));
         }
 

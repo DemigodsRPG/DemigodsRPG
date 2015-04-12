@@ -44,7 +44,7 @@ public class ValuesCommand extends BaseCommand {
         }
 
         // Send header
-        sender.sendMessage(StringUtil2.chatTitle("Current High Value Tributes"));
+        sender.sendMessage(StringUtil2.chatTitle("Current Top Value Tributes"));
         sender.sendMessage(" ");
 
         for (Map.Entry<Material, Integer> entry : MapUtil2.sortByValue(DGGame.TRIBUTE_R.getTributeValuesMap(), true).entrySet()) {

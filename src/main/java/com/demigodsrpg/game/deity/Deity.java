@@ -34,6 +34,7 @@ public class Deity extends AbstractPersistentModel<String> {
 
     public static final Deity LOREM = new Deity(DeityType.GOD, "Lorem", Gender.EITHER, Faction.NEUTRAL, Arrays.asList(Groups.WATER_ASPECT));
     public static final Deity IPSUM = new Deity(DeityType.HERO, "Ipsum", Gender.FEMALE, Faction.NEUTRAL, Arrays.asList(Groups.BLOODLUST_ASPECT));
+    public static final Deity DOLOR = new Deity(DeityType.HERO, "Dolor", Gender.MALE, Faction.NEUTRAL, Arrays.asList(Groups.LIGHTNING_ASPECT));
 
     // -- DEITY META -- //
 

@@ -48,6 +48,11 @@ public class BloodlustAspectIII implements Aspect {
         return Tier.III;
     }
 
+    @Override
+    public String name() {
+        return "Bloody Sacrament";
+    }
+
     @Ability(name = "Mighty Fists", info = "Attacking with no item does extra damage.", type = Ability.Type.PASSIVE)
     public AbilityResult fistsAbility(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {

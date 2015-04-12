@@ -48,6 +48,11 @@ public class BloodlustAspectI implements Aspect {
         return Tier.I;
     }
 
+    @Override
+    public String name() {
+        return "Bloodthirsty";
+    }
+
     @Ability(name = "Blitz", command = "blitz", info = "Rush to a target entity and deal extra damage.", cost = 170, delay = 3000)
     public AbilityResult blitzAbility(PlayerInteractEvent event) {
         Player player = event.getPlayer();

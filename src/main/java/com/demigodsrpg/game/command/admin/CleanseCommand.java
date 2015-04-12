@@ -70,7 +70,7 @@ public class CleanseCommand extends BaseCommand {
                     sender.sendMessage(ChatColor.YELLOW + "You have cleansed " + aspect.getGroup().getName());
                 }
 
-                // Set the alliance to neutral
+                // Set the faction to neutral
                 playerModel.setFaction(Faction.NEUTRAL);
                 return CommandResult.SUCCESS;
             } else {
@@ -106,7 +106,7 @@ public class CleanseCommand extends BaseCommand {
                     playerModel.removeAspect(aspect);
                 }
 
-                // Set the target's alliance to neutral.
+                // Set the target's faction to neutral.
                 playerModel.setFaction(Faction.NEUTRAL);
                 sender.sendMessage(ChatColor.YELLOW + "You have removed all aspects from " + playerModel.getLastKnownName());
 

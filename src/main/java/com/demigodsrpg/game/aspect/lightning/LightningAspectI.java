@@ -57,6 +57,11 @@ public class LightningAspectI implements Aspect {
         return Tier.I;
     }
 
+    @Override
+    public String name() {
+        return "Shock Touch";
+    }
+
     // -- ABILITIES -- //
 
     @Ability(name = "Lightning", command = "lightning", info = "Strike lightning at a target location.", cost = 140, delay = 1000)

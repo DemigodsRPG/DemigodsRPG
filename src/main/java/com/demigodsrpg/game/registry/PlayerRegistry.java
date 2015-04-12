@@ -55,11 +55,11 @@ public class PlayerRegistry extends AbstractRegistry<PlayerModel> {
         return getRegistered().stream().map(PlayerModel::getOfflinePlayer).collect(Collectors.toSet());
     }
 
-    public Set<PlayerModel> getOnlineInAlliance(Faction alliance) {
+    public Set<PlayerModel> getOnlineInAlliance(Faction faction) {
         Set<PlayerModel> players = new HashSet<>();
         for (Player player : Bukkit.getOnlinePlayers()) {
             PlayerModel model = fromPlayer(player);
-            if (model.getFaction().equals(alliance)) {
+            if (model.getFaction().equals(faction)) {
                 players.add(model);
             }
         }
@@ -71,7 +71,7 @@ public class PlayerRegistry extends AbstractRegistry<PlayerModel> {
     }
 
     public Collection<PlayerModel> fromAspect(final Aspect aspect) {
-        return getRegistered().stream().filter(model -> model.getAspects().contains(aspect.getGroup() + " " + aspect.getTier().name())).collect(Collectors.toList());
+        return getRegistered().stream().filter(model -> model.getAspects().contains(aspect.name())).collect(Collectors.toList());
     }
 
     public List<String> getNameStartsWith(final String name) {

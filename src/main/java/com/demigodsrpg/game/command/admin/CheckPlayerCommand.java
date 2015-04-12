@@ -61,7 +61,7 @@ public class CheckPlayerCommand extends AdminPlayerCommand {
             StringBuilder builder = new StringBuilder();
             for (String deityName : model.getAspects()) {
                 Aspect aspect = Aspects.valueOf(deityName);
-                builder.append(aspect.getGroup().getColor()).append(aspect.getGroup()).append(" ").append(aspect.getTier().name()).append(ChatColor.RESET).append(", ");
+                builder.append(aspect.getGroup().getColor()).append(aspect.name()).append(ChatColor.RESET).append(", ");
             }
             String minorDeities = builder.toString();
             minorDeities = minorDeities.substring(0, minorDeities.length() - 4);

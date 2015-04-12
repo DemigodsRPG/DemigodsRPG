@@ -24,8 +24,6 @@
             <id>alexbennett</id>
             <name>Alex Bennett</name>
             <url>http://alexben.net/t</url>
-            <organization>CensoredSoftware</organization>
-            <organizationUrl>http://www.censoredsoftware.com/</organizationUrl>
             <roles>
                 <role>developer</role>
             </roles>
@@ -34,8 +32,6 @@
         <developer>
             <id>HmmmQuestionMark</id>
             <name>Alexander Chauncey</name>
-            <organization>CensoredSoftware</organization>
-            <organizationUrl>http://www.censoredsoftware.com/</organizationUrl>
             <roles>
                 <role>developer</role>
             </roles>
@@ -170,11 +166,11 @@
                                 <relocation>
                                     <pattern>gnu.trove</pattern>
                                     <shadedPattern>net.minecraft.util.gnu.trove</shadedPattern>
-                                </relocation> -->
+                                </relocation>
                                 <relocation>
                                     <pattern>com.google.gson</pattern>
                                     <shadedPattern>org.bukkit.craftbukkit.libs.com.google.gson</shadedPattern>
-                                </relocation>
+                                </relocation> -->
                                 <!--<relocation>
                                     <pattern>org.apache.commons.lang</pattern>
                                     <shadedPattern>com.demigodsrpg.game.org.apache.commons.lang</shadedPattern>

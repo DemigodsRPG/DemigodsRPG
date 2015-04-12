@@ -32,7 +32,7 @@ public class AbilityMetaData {
     // -- CONSTRUCTOR -- //
 
     public AbilityMetaData(Aspect aspect, Method method, Ability ability) {
-        this.aspect = aspect.getGroup() + " " + aspect.getTier().name();
+        this.aspect = aspect.name();
         this.method = method;
         this.ability = ability;
     }

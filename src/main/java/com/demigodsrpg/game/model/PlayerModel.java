@@ -17,6 +17,7 @@
 
 package com.demigodsrpg.game.model;
 
+import com.censoredsoftware.library.util.RandomUtil;
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.Setting;
 import com.demigodsrpg.game.ability.AbilityMetaData;
@@ -49,8 +50,8 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     private String lastKnownName;
 
     // -- PARENTS -- //
-    private Deity god;
-    private Deity hero;
+    private Optional<Deity> god;
+    private Optional<Deity> hero;
 
     private final List<String> aspects = new ArrayList<>(1);
     private Faction faction;
@@ -82,15 +83,36 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         faction = Faction.NEUTRAL;
 
         // Debug data
-        if (Setting.DEBUG_DATA.get()) {
+        if (Setting.DEBUG_DATA) {
             // Debug deities
-            god = Deity.LOREM;
-            hero = Deity.IPSUM;
+            god = Optional.of(Deity.LOREM);
 
             // Debug aspects
-            addAspect(Aspects.BLOODLUST_ASPECT_HERO);
-            addAspect(Aspects.WATER_ASPECT_I);
-            addAspect(Aspects.WATER_ASPECT_II);
+            if (RandomUtil.randomPercentBool(50)) {
+                hero = Optional.of(Deity.IPSUM);
+                addAspect(Aspects.BLOODLUST_ASPECT_HERO);
+                addAspect(Aspects.WATER_ASPECT_I);
+                addAspect(Aspects.WATER_ASPECT_II);
+
+                setExperience(Aspects.BLOODLUST_ASPECT_HERO, 1000);
+                setExperience(Aspects.WATER_ASPECT_I, 500);
+                setExperience(Aspects.WATER_ASPECT_II, 500);
+            } else {
+                hero = Optional.of(Deity.DOLOR);
+                addAspect(Aspects.LIGHTNING_ASPECT_HERO);
+                addAspect(Aspects.LIGHTNING_ASPECT_I);
+                addAspect(Aspects.FIRE_ASPECT_I);
+                addAspect(Aspects.CRAFTING_ASPECT_I);
+
+                setExperience(Aspects.LIGHTNING_ASPECT_HERO, 5000);
+                setExperience(Aspects.LIGHTNING_ASPECT_I, 500);
+                setExperience(Aspects.FIRE_ASPECT_I, 1000);
+                setExperience(Aspects.CRAFTING_ASPECT_I, 2000);
+            }
+        } else {
+            // Empty deities
+            god = Optional.empty();
+            hero = Optional.empty();
         }
 
         maxHealth = 20.0;
@@ -111,14 +133,17 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         lastKnownName = conf.getString("last_known_name");
         lastLoginTime = conf.getLong("last_login_time");
         aspects.addAll(conf.getStringList("aspects").stream().collect(Collectors.toList()));
-        god = DGGame.DEITY_R.deityFromName(conf.getString("god"));
-        hero = DGGame.DEITY_R.deityFromName(conf.getString("hero"));
-        faction = DGGame.FACTION_R.factionFromName(conf.getString("faction"));
-        binds.putAll((Map) conf.getSection("binds").getValues());
+        god = Optional.ofNullable(DGGame.DEITY_R.deityFromName(conf.getStringNullable("god")));
+        hero = Optional.ofNullable(DGGame.DEITY_R.deityFromName(conf.getStringNullable("hero")));
+        faction = DGGame.FACTION_R.factionFromName(conf.getStringNullable("faction"));
+        if (faction == null) {
+            faction = Faction.NEUTRAL;
+        }
+        binds.putAll((Map) conf.getSectionNullable("binds").getValues());
         maxHealth = conf.getDouble("max_health");
         favor = conf.getDouble("favor");
         experience = new TIntDoubleHashMap(1);
-        for (Map.Entry<String, Object> entry : conf.getSection("devotion").getValues().entrySet()) {
+        for (Map.Entry<String, Object> entry : conf.getSectionNullable("devotion").getValues().entrySet()) {
             try {
                 experience.put(Aspects.valueOf(entry.getKey()).getId(), Double.valueOf(entry.getValue().toString()));
             } catch (Exception ignored) {
@@ -148,8 +173,12 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         map.put("last_known_name", lastKnownName);
         map.put("last_login_time", lastLoginTime);
         map.put("aspects", Lists.newArrayList(aspects));
-        map.put("god", god.getName());
-        map.put("hero", hero.getName());
+        if (god.isPresent()) {
+            map.put("god", god.get().getName());
+        }
+        if (hero.isPresent()) {
+            map.put("hero", hero.get().getName());
+        }
         map.put("faction", faction.getName());
         map.put("binds", binds);
         map.put("max_health", maxHealth);
@@ -200,12 +229,12 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public void addAspect(Aspect aspect) {
-        aspects.add(getAspectName(aspect));
+        aspects.add(aspect.name());
         DGGame.PLAYER_R.register(this);
     }
 
     public void removeAspect(Aspect aspect) {
-        aspects.remove(getAspectName(aspect));
+        aspects.remove(aspect.name());
         DGGame.PLAYER_R.register(this);
     }
 
@@ -222,28 +251,28 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
     public void setGod(Deity god) {
         if (DeityType.GOD.equals(god.getDeityType())) {
-            this.god = god;
+            this.god = Optional.ofNullable(god);
         }
         throw new IllegalArgumentException("Cannot set a non-god deity as a god.");
     }
 
     public void setHero(Deity hero) {
         if (DeityType.HERO.equals(hero.getDeityType())) {
-            this.hero = hero;
+            this.hero = Optional.ofNullable(hero);
         }
         throw new IllegalArgumentException("Cannot set a non-hero deity as a hero.");
     }
 
-    public Deity getGod() {
+    public Optional<Deity> getGod() {
         return god;
     }
 
-    public Deity getHero() {
+    public Optional<Deity> getHero() {
         return hero;
     }
 
     public boolean hasDeity(Deity deity) {
-        return deity.equals(god) || deity.equals(hero);
+        return god.isPresent() && god.get().equals(deity) || hero.isPresent() && hero.get().equals(deity);
     }
 
     double getMaxHealth() {
@@ -432,7 +461,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public boolean hasAspect(Aspect aspect) {
-        return getAspects().contains(getAspectName(aspect));
+        return getAspects().contains(aspect.name());
     }
 
     public boolean hasPrereqs(Aspect aspect) {
@@ -458,7 +487,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
             score += data.getDenies();
             score += data.getKills() * 2;
             score -= data.getDeaths() * 1.5;
-            score *= (double) Setting.EXP_MULTIPLIER.get();
+            score *= (double) Setting.EXP_MULTIPLIER;
             score /= aspects.size() + 1;
             for (String aspect : aspects) {
                 setExperience(aspect, getExperience(aspect) + score);
@@ -471,7 +500,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     boolean checkTeamKills() {
-        int maxTeamKills = Setting.MAX_TEAM_KILLS.get();
+        int maxTeamKills = Setting.MAX_TEAM_KILLS;
         if (maxTeamKills <= teamKills) {
             // Reset them to excommunicated
             setFaction(Faction.EXCOMMUNICATED);
@@ -501,12 +530,12 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public void giveAspect(Aspect aspect) {
-        aspects.add(getAspectName(aspect));
+        aspects.add(aspect.name());
         setExperience(aspect, 20.0);
     }
 
     public boolean canClaim(Aspect aspect) {
-        if (Setting.NO_FACTION_ASPECT_MODE.get()) {
+        if (Setting.NO_FACTION_ASPECT_MODE) {
             return costForNextAspect() <= level && !hasAspect(aspect) && hasPrereqs(aspect);
         }
 
@@ -516,8 +545,8 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
     void calculateAscensions() {
         Player player = getOfflinePlayer().getPlayer();
-        if (getLevel() >= (int) Setting.ASCENSION_CAP.get()) return;
-        while (getTotalExperience() >= (int) Math.ceil(500 * Math.pow(getLevel() + 1, 2.02)) && getLevel() < (int) Setting.ASCENSION_CAP.get()) {
+        if (getLevel() >= Setting.ASCENSION_CAP) return;
+        while (getTotalExperience() >= (int) Math.ceil(500 * Math.pow(getLevel() + 1, 2.02)) && getLevel() < Setting.ASCENSION_CAP) {
             setMaxHealth(getMaxHealth() + 10.0);
             player.setMaxHealth(getMaxHealth());
             player.setHealthScale(20.0);
@@ -533,7 +562,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public int costForNextAspect() {
-        if (Setting.NO_COST_ASPECT_MODE.get()) return 0;
+        if (Setting.NO_COST_ASPECT_MODE) return 0;
         switch (aspects.size() + 1) {
             case 1:
                 return 2;
@@ -596,9 +625,5 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
                 }
             }, (delay * 20));
         }
-    }
-
-    private String getAspectName(Aspect aspect) {
-        return aspect.getGroup().getName() + " " + aspect.getTier().name();
     }
 }

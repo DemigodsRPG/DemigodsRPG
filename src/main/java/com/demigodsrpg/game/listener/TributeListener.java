@@ -133,7 +133,7 @@ public class TributeListener implements Listener {
                 model.setFavor(favorBefore + tributeValue);
                 model.setExperience(aspect, devotionBefore + tributeValue);
 
-                if (model.getFavor() < (int) Setting.FAVOR_CAP.get()) {
+                if (model.getFavor() < Setting.FAVOR_CAP) {
                     if (model.getFavor() > favorBefore)
                         player.sendMessage(ChatColor.YELLOW + "You have been blessed with " + ChatColor.ITALIC + (model.getFavor() - favorBefore) + ChatColor.YELLOW + " favor.");
                 } else {
@@ -151,7 +151,7 @@ public class TributeListener implements Listener {
                 PlayerModel shrineOwner = DGGame.PLAYER_R.fromId(save.getOwnerMojangId());
                 OfflinePlayer shrineOwnerPlayer = shrineOwner.getOfflinePlayer();
 
-                if (shrineOwner.getFavor() < (int) Setting.FAVOR_CAP.get() && !model.getMojangId().equals(shrineOwner.getMojangId())) {
+                if (shrineOwner.getFavor() < Setting.FAVOR_CAP && !model.getMojangId().equals(shrineOwner.getMojangId())) {
                     // Give them some of the blessings
                     shrineOwner.setFavor(shrineOwner.getFavor() + tributeValue / 5);
 

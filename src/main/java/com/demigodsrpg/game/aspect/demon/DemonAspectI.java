@@ -55,6 +55,11 @@ public class DemonAspectI implements Aspect {
         return Tier.I;
     }
 
+    @Override
+    public String name() {
+        return "Dark Secret";
+    }
+
     @Ability(name = "Chain", command = "chain", info = "Fire a chain of smoke that damages and blinds.", cost = 250, delay = 1500)
     public AbilityResult chainAbility(EntityDamageByEntityEvent event) {
         Player player = (Player) event.getDamager();

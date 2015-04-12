@@ -39,16 +39,16 @@ public class FactionCommand extends BaseCommand {
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
 
         if (Faction.NEUTRAL.equals(model.getFaction()) || Faction.EXCOMMUNICATED.equals(model.getFaction())) {
-            player.sendMessage(ChatColor.RED + "You aren't in an alliance.");
+            player.sendMessage(ChatColor.RED + "You aren't in a faction.");
             return CommandResult.QUIET_ERROR;
         }
 
-        if (DGGame.SERVER_R.contains("alliance_chat", player.getUniqueId().toString())) {
-            DGGame.SERVER_R.remove("alliance_chat", player.getUniqueId().toString());
-            player.sendMessage(ChatColor.YELLOW + "You just disabled alliance chat.");
+        if (DGGame.SERVER_R.contains("faction_chat", player.getUniqueId().toString())) {
+            DGGame.SERVER_R.remove("faction_chat", player.getUniqueId().toString());
+            player.sendMessage(ChatColor.YELLOW + "You just disabled faction chat.");
         } else {
-            DGGame.SERVER_R.put("alliance_chat", player.getUniqueId().toString(), true);
-            player.sendMessage(ChatColor.YELLOW + "You just enabled alliance chat.");
+            DGGame.SERVER_R.put("faction_chat", player.getUniqueId().toString(), true);
+            player.sendMessage(ChatColor.YELLOW + "You just enabled faction chat.");
         }
         return CommandResult.SUCCESS;
     }

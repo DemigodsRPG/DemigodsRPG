@@ -32,7 +32,7 @@ public class SetFactionCommand extends AdminPlayerCommand {
             PlayerModel player = DGGame.PLAYER_R.fromName(args[0]);
             Faction faction = DGGame.FACTION_R.factionFromName(args[1].toUpperCase());
             if (player == null || faction == null) {
-                sender.sendMessage(ChatColor.RED + "Wrong player or alliance! Please try a little harder.");
+                sender.sendMessage(ChatColor.RED + "Wrong player or faction! Please try a little harder.");
                 return CommandResult.QUIET_ERROR;
             }
             player.setFaction(faction);

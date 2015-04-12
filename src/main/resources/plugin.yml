@@ -36,6 +36,8 @@ commands:
   selectarea:
     usage: /selectarea
     aliases: [sa, areaselect]
+  createfaction:
+    usage: /createfaction [name] [color] [symbol] [welcome message...]
   createfactionarea:
     usage: /createfactionarea [faction]
     aliases: [makefactionarea]
@@ -50,7 +52,7 @@ commands:
   removeaspect:
     usage: /removedeity [player] [aspect]
   setfaction:
-    usage: /setalliance [player] [alliance]
+    usage: /setfaction [player] [faction]
 permisions:
   demigods.admin:
     default: op

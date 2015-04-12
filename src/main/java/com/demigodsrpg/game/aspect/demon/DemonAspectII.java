@@ -55,6 +55,11 @@ public class DemonAspectII implements Aspect {
         return Tier.I;
     }
 
+    @Override
+    public String name() {
+        return "Soulless";
+    }
+
     @Ability(name = "Entomb", command = "entomb", info = "Entomb an entity in obsidian.", cost = 470, cooldown = 20000)
     public AbilityResult entombAbility(PlayerInteractEvent event) {
         Player player = event.getPlayer();

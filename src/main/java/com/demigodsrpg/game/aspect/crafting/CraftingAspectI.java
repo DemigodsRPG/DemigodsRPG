@@ -44,6 +44,11 @@ public class CraftingAspectI implements Aspect {
         return Tier.I;
     }
 
+    @Override
+    public String name() {
+        return "Sweat of the Brow";
+    }
+
     // -- ABILITIES -- //
 
     @Ability(name = "Furnace Love", info = {"Doubles the output of nearby furnaces."}, type = Ability.Type.PASSIVE)

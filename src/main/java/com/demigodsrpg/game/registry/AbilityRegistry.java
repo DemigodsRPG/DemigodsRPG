@@ -19,6 +19,7 @@ package com.demigodsrpg.game.registry;
 
 import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.game.DGGame;
+import com.demigodsrpg.game.Setting;
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityMetaData;
 import com.demigodsrpg.game.ability.AbilityResult;
@@ -153,7 +154,7 @@ public class AbilityRegistry implements Listener {
         for (AbilityMetaData ability : REGISTERED_ABILITIES.values()) {
             if (ability.getCommand().equals(command)) {
                 player.sendMessage(StringUtil2.chatTitle(ability.getName()));
-                player.sendMessage(" - Aspect: " + ability.getAspect().getGroup().getColor() + ability.getAspect().getGroup().getName() + " " + ability.getAspect().getTier().name());
+                player.sendMessage(" - Aspect: " + ability.getAspect().getGroup().getColor() + ability.getAspect().name());
                 player.sendMessage(" - Type: " + StringUtil2.beautify(ability.getType().name()));
                 if (!ability.getType().equals(Ability.Type.PASSIVE)) {
                     player.sendMessage(" - Cost: " + ability.getCost());
@@ -194,7 +195,7 @@ public class AbilityRegistry implements Listener {
             }
         } else {
             AbilityMetaData ability = fromCommand(command);
-            if (ability.getCommand().equals(command) && model.getAspects().contains(ability.getAspect().getGroup().getName() + " " + ability.getAspect().getTier().name()) && ability.getCommand().equals(command)) {
+            if (ability.getCommand().equals(command) && model.getAspects().contains(ability.getAspect().name()) && ability.getCommand().equals(command)) {
                 model.bind(ability, material);
                 player.sendMessage(ChatColor.YELLOW + ability.getName() + " has been bound to " + StringUtil2.beautify(material.name()) + ".");
                 return true;
@@ -217,7 +218,7 @@ public class AbilityRegistry implements Listener {
             }
 
             double cost = ability.getCost();
-            if (model.getFavor() < cost) {
+            if (!Setting.NO_COST_ASPECT_MODE && model.getFavor() < cost) {
                 model.getOfflinePlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " requires more favor.");
                 return false;
             }
@@ -265,7 +266,7 @@ public class AbilityRegistry implements Listener {
             if (cooldown > 0) {
                 DGGame.SERVER_R.put(model.getMojangId(), ability + ":cooldown", true, cooldown, TimeUnit.MILLISECONDS);
             }
-            if (cost > 0) {
+            if (!Setting.NO_COST_ASPECT_MODE && cost > 0) {
                 model.setFavor(model.getFavor() - cost);
             }
         } catch (Exception ignored) {
@@ -349,7 +350,7 @@ public class AbilityRegistry implements Listener {
                 event.setDamage(event.getDamage() / 2);
             }
 
-            if (Aspects.hasAspect(player, Aspects.LIGHTNING_ASPECT_II)) {
+            if (Aspects.hasAspect(player, Aspects.LIGHTNING_ASPECT_HERO)) {
                 if (EntityDamageEvent.DamageCause.FALL.equals(event.getCause())) {
                     event.setCancelled(true);
                 }

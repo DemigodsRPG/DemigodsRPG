@@ -47,8 +47,8 @@ public class ClaimRoom extends Area {
         this.deity = DGGame.DEITY_R.deityFromName(id.split("\\$")[1]);
 
         // Load next location if it exists
-        if (conf.getSection("next-location") != null) {
-            JsonSection next = conf.getSection("next-location");
+        if (conf.getSectionNullable("next-location") != null) {
+            JsonSection next = conf.getSectionNullable("next-location");
             World world = Bukkit.getWorld(next.getString("world"));
 
             // If the world doesn't exist anymore, the next location is invalid

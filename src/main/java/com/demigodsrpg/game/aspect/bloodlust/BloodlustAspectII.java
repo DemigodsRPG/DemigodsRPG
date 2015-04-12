@@ -54,6 +54,11 @@ public class BloodlustAspectII implements Aspect {
         return Tier.II;
     }
 
+    @Override
+    public String name() {
+        return "Bloodrage";
+    }
+
     @Ability(name = "Deathblow", command = "deathblow", info = "Deal massive amounts of damage, increasing with each kill.", cost = 3500, cooldown = 200000, type = Ability.Type.ULTIMATE)
     public AbilityResult deathblowAbility(PlayerInteractEvent event) {
         final Player player = event.getPlayer();

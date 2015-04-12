@@ -112,7 +112,7 @@ public class AreaListener implements Listener {
 
             // Send a fake invisible wall to prevent the player from moving forward
             if (block) {
-                Material wall = Setting.DEBUG_INVISIBLE_WALLS.get() ? Material.BRICK : Material.BARRIER;
+                Material wall = Setting.DEBUG_INVISIBLE_WALLS ? Material.BRICK : Material.BARRIER;
                 Location forwardTop = forward.clone().add(0, 1, 0);
                 player.sendBlockChange(forward, wall, (byte) 0);
                 player.sendBlockChange(forwardTop, wall, (byte) 0);

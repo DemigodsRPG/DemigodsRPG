@@ -27,9 +27,9 @@ import com.demigodsrpg.game.aspect.demon.DemonAspectI;
 import com.demigodsrpg.game.aspect.demon.DemonAspectII;
 import com.demigodsrpg.game.aspect.demon.DemonAspectIII;
 import com.demigodsrpg.game.aspect.fire.FireAspectI;
+import com.demigodsrpg.game.aspect.lightning.LightningAspectHero;
 import com.demigodsrpg.game.aspect.lightning.LightningAspectI;
 import com.demigodsrpg.game.aspect.lightning.LightningAspectII;
-import com.demigodsrpg.game.aspect.lightning.LightningAspectIII;
 import com.demigodsrpg.game.aspect.water.WaterAspectI;
 import com.demigodsrpg.game.aspect.water.WaterAspectII;
 import com.demigodsrpg.game.deity.Deity;
@@ -39,9 +39,9 @@ import org.bukkit.entity.Player;
 public class Aspects {
     // -- PUBLIC RELEASE -- //
 
+    public static final LightningAspectHero LIGHTNING_ASPECT_HERO = new LightningAspectHero();
     public static final LightningAspectI LIGHTNING_ASPECT_I = new LightningAspectI();
     public static final LightningAspectII LIGHTNING_ASPECT_II = new LightningAspectII();
-    public static final LightningAspectIII LIGHTNING_ASPECT_III = new LightningAspectIII();
 
     public static final FireAspectI FIRE_ASPECT_I = new FireAspectI();
 
@@ -65,7 +65,7 @@ public class Aspects {
 
     private static final Aspect[] aspectList = new Aspect[]{
             // Lightning Aspect
-            LIGHTNING_ASPECT_I, LIGHTNING_ASPECT_II, LIGHTNING_ASPECT_III,
+            LIGHTNING_ASPECT_HERO, LIGHTNING_ASPECT_I, LIGHTNING_ASPECT_II,
 
             // Fire Aspect
             FIRE_ASPECT_I,
@@ -92,9 +92,11 @@ public class Aspects {
     }
 
     public static Aspect valueOf(final String name) {
-        for (Aspect aspect : aspectList) {
-            if ((aspect.getGroup().getName() + " " + aspect.getTier().name()).equals(name)) {
-                return aspect;
+        if (name != null) {
+            for (Aspect aspect : aspectList) {
+                if (aspect.name().equalsIgnoreCase(name)) {
+                    return aspect;
+                }
             }
         }
         return null;

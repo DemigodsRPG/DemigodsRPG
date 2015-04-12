@@ -85,10 +85,11 @@ public class DGGame extends JavaPlugin {
         FACTION_R.register(Faction.EXCOMMUNICATED);
 
         // Debug data
-        if (Setting.DEBUG_DATA.get()) {
+        if (Setting.DEBUG_DATA) {
             // Debug deities
             DEITY_R.register(Deity.LOREM);
             DEITY_R.register(Deity.IPSUM);
+            DEITY_R.register(Deity.DOLOR);
         }
 
         // Determine territory registries
@@ -133,6 +134,7 @@ public class DGGame extends JavaPlugin {
         // Admin commands
         getCommand("adminmode").setExecutor(new AdminModeComand());
         getCommand("selectarea").setExecutor(new SelectAreaCommand());
+        getCommand("createfaction").setExecutor(new CreateFactionCommand());
         getCommand("createfactionarea").setExecutor(new CreateFactionAreaCommand());
         getCommand("checkplayer").setExecutor(new CheckPlayerCommand());
         getCommand("adddevotion").setExecutor(new AddDevotionCommand());
@@ -210,11 +212,9 @@ public class DGGame extends JavaPlugin {
             @Override
             public void run() {
                 for (World world : Bukkit.getWorlds()) {
-                    world.getLivingEntities().stream().filter(entity -> entity.getFireTicks() > 0).forEach(entity -> {
-                        entity.getNearbyEntities(0.5, 0.5, 0.5).stream().filter(nearby -> nearby instanceof LivingEntity && !nearby.equals(entity)).forEach(nearby -> {
-                            nearby.setFireTicks(100);
-                        });
-                    });
+                    world.getLivingEntities().stream().filter(entity -> entity.getFireTicks() > 0).forEach(entity ->
+                                    entity.getNearbyEntities(0.5, 0.5, 0.5).stream().filter(nearby -> nearby instanceof LivingEntity && !nearby.equals(entity)).forEach(nearby -> nearby.setFireTicks(100))
+                    );
                 }
             }
         };

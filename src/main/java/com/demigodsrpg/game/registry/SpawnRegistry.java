@@ -28,8 +28,8 @@ import java.util.Optional;
 public class SpawnRegistry extends AbstractRegistry<SpawnModel> {
     private static final String FILE_NAME = "spawns.dgdat";
 
-    public Location getSpawn(final Faction alliance) {
-        Optional<SpawnModel> point = getRegistered().stream().filter(model -> model.getAlliance().equals(alliance)).findAny();
+    public Location getSpawn(final Faction faction) {
+        Optional<SpawnModel> point = getRegistered().stream().filter(model -> model.getAlliance().equals(faction)).findAny();
         if (!point.isPresent()) {
             return Bukkit.getWorlds().get(0).getSpawnLocation();
         }

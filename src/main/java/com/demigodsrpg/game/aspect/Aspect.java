@@ -30,17 +30,19 @@ public interface Aspect {
 
     Tier getTier();
 
-    public enum Tier {
+    String name();
+
+    enum Tier {
         I, II, III, HERO
     }
 
-    public interface Group {
-        public String getName();
+    interface Group {
+        String getName();
 
-        public ChatColor getColor();
+        ChatColor getColor();
 
-        public Sound getSound();
+        Sound getSound();
 
-        public MaterialData getClaimMaterial();
+        MaterialData getClaimMaterial();
     }
 }

@@ -38,8 +38,8 @@ public class RemoveDevotionCommand extends AdminPlayerCommand {
                 double amount = Double.parseDouble(args[2]);
                 m = DGGame.PLAYER_R.fromPlayer(p);
                 Aspect aspect = Aspects.valueOf(args[1].toUpperCase());
-                if (!m.getAspects().contains(aspect.getGroup().getName() + " " + aspect.getTier().name())) {
-                    sender.sendMessage(ChatColor.RED + "The player you are accessing does not have that deity.");
+                if (!m.getAspects().contains(aspect.name())) {
+                    sender.sendMessage(ChatColor.RED + "The player you are accessing does not have that aspect.");
                     return CommandResult.QUIET_ERROR;
                 }
                 double newAmount = m.getExperience(aspect) - amount;

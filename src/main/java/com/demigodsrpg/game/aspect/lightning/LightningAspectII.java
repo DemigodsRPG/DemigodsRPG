@@ -21,15 +21,18 @@ import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.ability.Ability;
 import com.demigodsrpg.game.ability.AbilityResult;
 import com.demigodsrpg.game.aspect.Aspect;
-import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.model.PlayerModel;
-import com.demigodsrpg.game.util.TargetingUtil;
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.WeatherType;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.util.Vector;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class LightningAspectII implements Aspect {
 
@@ -42,12 +45,12 @@ public class LightningAspectII implements Aspect {
 
     @Override
     public int getId() {
-        return 2;
+        return 3;
     }
 
     @Override
     public String getInfo() {
-        return "Expert level power over lightning";
+        return "Mastery over lightning";
     }
 
     @Override
@@ -55,35 +58,71 @@ public class LightningAspectII implements Aspect {
         return Tier.II;
     }
 
-    // -- ABILITIES -- //
-
-    @Ability(name = "Shove", command = "shove", info = "Use the force of wind to shove your enemies.", cost = 170, delay = 1500)
-    public AbilityResult pullAbility(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
-
-        double devotion = model.getExperience(Aspects.LIGHTNING_ASPECT_II);
-        double multiply = 0.1753 * Math.pow(devotion, 0.322917);
-
-        LivingEntity hit = TargetingUtil.autoTarget(player);
-
-        if (hit != null) {
-            player.sendMessage(ChatColor.YELLOW + "*whoosh*");
-
-            Vector v = player.getLocation().toVector();
-            Vector victor = hit.getLocation().toVector().subtract(v);
-            victor.multiply(multiply);
-            hit.setVelocity(victor);
-
-            return AbilityResult.SUCCESS;
-        }
-
-        return AbilityResult.NO_TARGET_FOUND;
+    @Override
+    public String name() {
+        return "Angry Skies";
     }
 
+    // -- ABILITIES -- //
 
-    @Ability(name = "No Fall Damage", info = "Take no fall damage.", type = Ability.Type.PASSIVE, placeholder = true)
-    public void noFallDamageAbility() {
-        // Do nothing, handled directly in the ability listener to save time
+    @Ability(name = "Storm", command = "storm", info = "Strike fear into the hearts of your enemies.", cost = 3700, cooldown = 600000, type = Ability.Type.ULTIMATE)
+    public AbilityResult stormAbility(PlayerInteractEvent event) {
+        final Player player = event.getPlayer();
+
+        // Define variables
+        PlayerModel model = DGGame.PLAYER_R.fromPlayer(event.getPlayer());
+
+        // Define variables
+        final int ultimateSkillLevel = model.getLevel();
+        final int damage = 10 * model.getLevel();
+        final int radius = (int) Math.log10(10 * ultimateSkillLevel) * 25;
+
+        // Make it stormy for the caster
+        setWeather(player, 100);
+
+        // Strike targets
+        for (final Entity entity : player.getNearbyEntities(radius, radius, radius)) {
+            // Validate them first
+            if (!(entity instanceof LivingEntity)) continue;
+            if (entity instanceof Player) {
+                PlayerModel opponent = DGGame.PLAYER_R.fromPlayer((Player) entity);
+                if (opponent != null && model.getFaction().equals(opponent.getFaction())) continue;
+            }
+            if (DGGame.BATTLE_R.canParticipate(entity) && !DGGame.BATTLE_R.canTarget(entity)) continue;
+
+            // Make it stormy for players
+            if (entity instanceof Player) setWeather((Player) entity, 100);
+
+            // Strike them with a small delay
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getInst(), new BukkitRunnable() {
+                @Override
+                public void run() {
+                    for (int i = 0; i <= 3; i++) {
+                        player.getWorld().strikeLightningEffect(entity.getLocation());
+                        if (entity.getLocation().getBlock().getType().equals(Material.WATER)) {
+                            ((LivingEntity) entity).damage(damage + 4);
+                        } else {
+                            ((LivingEntity) entity).damage(damage);
+                        }
+                        entity.setLastDamageCause(new EntityDamageByEntityEvent(player, entity, EntityDamageEvent.DamageCause.LIGHTNING, damage));
+                    }
+                }
+            }, 15);
+        }
+
+        return AbilityResult.SUCCESS;
+    }
+
+    private static void setWeather(final Player player, long ticks) {
+        // Set the weather
+        player.setPlayerWeather(WeatherType.DOWNFALL);
+
+        // Create the runnable to switch back
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getInst(), new BukkitRunnable() {
+            @Override
+            public void run() {
+                player.resetPlayerWeather();
+            }
+        }, ticks);
     }
 }

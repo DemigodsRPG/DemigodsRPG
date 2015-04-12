@@ -27,16 +27,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SpawnModel extends AbstractPersistentModel<String> {
-    private final Faction alliance;
+    private final Faction faction;
     private Location location;
 
-    public SpawnModel(Faction alliance, Location location) {
-        this.alliance = alliance;
+    public SpawnModel(Faction faction, Location location) {
+        this.faction = faction;
         this.location = location;
     }
 
-    public SpawnModel(Faction alliance, JsonSection conf) {
-        this.alliance = alliance;
+    public SpawnModel(Faction faction, JsonSection conf) {
+        this.faction = faction;
 
         World world = Bukkit.getWorld(conf.getString("world_name"));
         if (world != null) {
@@ -48,7 +48,7 @@ public class SpawnModel extends AbstractPersistentModel<String> {
             location = new Location(world, x, y, z, yaw, pitch);
         }
 
-        throw new NullPointerException("World not found for the " + alliance.getName() + " spawn location.");
+        throw new NullPointerException("World not found for the " + faction.getName() + " spawn location.");
     }
 
     @Override
@@ -64,7 +64,7 @@ public class SpawnModel extends AbstractPersistentModel<String> {
     }
 
     public Faction getAlliance() {
-        return alliance;
+        return faction;
     }
 
     public Location getLocation() {

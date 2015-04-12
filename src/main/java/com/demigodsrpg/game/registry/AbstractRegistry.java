@@ -66,7 +66,7 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
         if (currentFile != null) {
             synchronized (currentFile) {
                 for (String key : currentFile.getKeys()) {
-                    REGISTERED_DATA.put(key, valueFromData(key, currentFile.getSection(key)));
+                    REGISTERED_DATA.put(key, valueFromData(key, currentFile.getSectionNullable(key)));
                 }
             }
         }
@@ -95,7 +95,7 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
             currentFile.remove(key);
 
             // Save the file!
-            if (isPretty() || (boolean) Setting.SAVE_PRETTY.get()) {
+            if (isPretty() || Setting.SAVE_PRETTY) {
                 return JsonFileUtil.saveFilePretty(DGGame.SAVE_PATH, getFileName(), currentFile);
             }
             return JsonFileUtil.saveFile(DGGame.SAVE_PATH, getFileName(), currentFile);
@@ -113,7 +113,7 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
             currentFile.createSection(key, data.serialize());
 
             // Save the file!
-            if (isPretty() || (boolean) Setting.SAVE_PRETTY.get()) {
+            if (isPretty() || Setting.SAVE_PRETTY) {
                 return JsonFileUtil.saveFilePretty(DGGame.SAVE_PATH, getFileName(), currentFile);
             }
             return JsonFileUtil.saveFile(DGGame.SAVE_PATH, getFileName(), currentFile);

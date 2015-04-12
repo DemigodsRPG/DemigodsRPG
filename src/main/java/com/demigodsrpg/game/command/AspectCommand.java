@@ -26,6 +26,7 @@ import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
 import com.demigodsrpg.game.model.PlayerModel;
+import com.google.common.base.Joiner;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -54,39 +55,9 @@ public class AspectCommand extends BaseCommand {
             // FIXME Display the deities not aspects
             player.sendMessage(ChatColor.YELLOW + StringUtil2.chatTitle("Aspect List"));
             for (Aspect aspect : Aspects.values()) {
-                player.sendMessage(" - " + aspect.getGroup().getColor() + aspect.getGroup().getName() + " " + aspect.getTier().name() + ": " + aspect.getInfo() /* FIXME + " (" + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + ")" */);
+                player.sendMessage(" - " + aspect.getGroup().getColor() + aspect.name() + ": " + aspect.getInfo() /* FIXME + " (" + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + ")" */);
             }
             return CommandResult.SUCCESS;
-        }
-
-        if (args.length == 1) {
-            // Aspect info
-            try {
-                Aspect aspect = Aspects.valueOf(args[0].toUpperCase());
-                player.sendMessage(aspect.getGroup().getColor() + StringUtil2.chatTitle(aspect.getGroup() + " Info"));
-                player.sendMessage(" - Info: " + aspect.getInfo());
-                // FIXME player.sendMessage(" - Deity: " + StringUtil2.beautify(aspect.getDefaultAlliance().name()));
-
-                for (AbilityMetaData ability : DGGame.ABILITY_R.getAbilities(aspect)) {
-                    player.sendMessage(" " + ability.getName() + ":");
-                    player.sendMessage(ability.getInfo());
-
-                    player.sendMessage(" - Type: " + StringUtil2.beautify(ability.getType().name()));
-                    if (!ability.getCommand().equals("")) {
-                        player.sendMessage(" - Command: " + "/" + ability.getCommand());
-                    }
-                    if (!ability.getType().equals(Ability.Type.PASSIVE)) {
-                        player.sendMessage(" - Cost: " + ability.getCost());
-                    }
-                    if (ability.getCooldown() > 0) {
-                        player.sendMessage(" - Cooldown (ms): " + ability.getCooldown());
-                    }
-                    player.sendMessage(" ");
-                }
-
-                return CommandResult.SUCCESS;
-            } catch (NullPointerException ignored) {
-            }
         }
 
         if (args.length == 2) {
@@ -121,7 +92,7 @@ public class AspectCommand extends BaseCommand {
                                     player.playSound(player.getLocation(), Sound.ENDERDRAGON_DEATH, 1F, 1F);
 
                                     // Message them and do cool things
-                                    // FIXME player.sendMessage(aspect.getColor() + "The " + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + " alliance welcomes you, " + aspect.getNomen() + ".");
+                                    // FIXME player.sendMessage(aspect.getColor() + "The " + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + " faction welcomes you, " + aspect.getNomen() + ".");
                                     player.getWorld().strikeLightningEffect(player.getLocation());
 
                                     // Fancy particles
@@ -161,6 +132,36 @@ public class AspectCommand extends BaseCommand {
                         return CommandResult.SUCCESS;
                     }
                 }
+            }
+        }
+
+        if (args.length >= 1) {
+            // Aspect info
+            try {
+                Aspect aspect = Aspects.valueOf(Joiner.on(" ").join(args));
+                player.sendMessage(aspect.getGroup().getColor() + StringUtil2.chatTitle(aspect.name() + " Info"));
+                player.sendMessage(" - Info: " + aspect.getInfo());
+                // FIXME player.sendMessage(" - Deity: " + StringUtil2.beautify(aspect.getDefaultAlliance().name()));
+
+                for (AbilityMetaData ability : DGGame.ABILITY_R.getAbilities(aspect)) {
+                    player.sendMessage(" " + ability.getName() + ":");
+                    player.sendMessage(ability.getInfo());
+
+                    player.sendMessage(" - Type: " + StringUtil2.beautify(ability.getType().name()));
+                    if (!ability.getCommand().equals("")) {
+                        player.sendMessage(" - Command: " + "/" + ability.getCommand());
+                    }
+                    if (!ability.getType().equals(Ability.Type.PASSIVE)) {
+                        player.sendMessage(" - Cost: " + ability.getCost());
+                    }
+                    if (ability.getCooldown() > 0) {
+                        player.sendMessage(" - Cooldown (ms): " + ability.getCooldown());
+                    }
+                    player.sendMessage(" ");
+                }
+
+                return CommandResult.SUCCESS;
+            } catch (NullPointerException ignored) {
             }
         }
 

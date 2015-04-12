@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface Ability {
-    public enum Type {
+    enum Type {
         PASSIVE, SUPPORT, OFFENSIVE, ULTIMATE
     }
 

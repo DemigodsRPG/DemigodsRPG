@@ -43,6 +43,11 @@ public class WaterAspectII implements Aspect {
         return Tier.II;
     }
 
+    @Override
+    public String name() {
+        return "Soul of the Sea";
+    }
+
     @Ability(name = "Swim", info = "Swim like quickly poseidon through the water.", type = Ability.Type.SUPPORT, placeholder = true)
     public void swimAbility() {
         // Do nothing, handled directly in the ability listener to save time
