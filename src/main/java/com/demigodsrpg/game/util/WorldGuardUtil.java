@@ -86,6 +86,7 @@ public class WorldGuardUtil implements Listener {
      * @param id The name of a WorldGuard flag.
      * @deprecated If you don't have WorldGuard installed this will error.
      */
+    @Deprecated
     public static Flag<?> getFlag(String id) {
         return DefaultFlag.fuzzyMatchFlag(id);
     }
