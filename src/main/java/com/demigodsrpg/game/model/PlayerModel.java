@@ -19,6 +19,7 @@ package com.demigodsrpg.game.model;
 
 import com.censoredsoftware.library.util.RandomUtil;
 import com.demigodsrpg.game.DGGame;
+import com.demigodsrpg.game.Demo;
 import com.demigodsrpg.game.Setting;
 import com.demigodsrpg.game.ability.AbilityMetaData;
 import com.demigodsrpg.game.aspect.Aspect;
@@ -79,26 +80,27 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
         experience = new TIntDoubleHashMap(1);
 
-        // Neutral faction
-        faction = Faction.NEUTRAL;
-
         // Debug data
         if (Setting.DEBUG_DATA) {
             // Debug deities
-            god = Optional.of(Deity.LOREM);
+            god = Optional.of(Demo.D.LOREM);
 
             // Debug aspects
             if (RandomUtil.randomPercentBool(50)) {
-                hero = Optional.of(Deity.IPSUM);
+                hero = Optional.of(Demo.D.IPSUM);
+                faction = Demo.D.IPSUM.getFaction();
                 addAspect(Aspects.BLOODLUST_ASPECT_HERO);
+                addAspect(Aspects.BLOODLUST_ASPECT_I);
                 addAspect(Aspects.WATER_ASPECT_I);
                 addAspect(Aspects.WATER_ASPECT_II);
 
                 setExperience(Aspects.BLOODLUST_ASPECT_HERO, 1000);
+                setExperience(Aspects.BLOODLUST_ASPECT_I, 1000);
                 setExperience(Aspects.WATER_ASPECT_I, 500);
                 setExperience(Aspects.WATER_ASPECT_II, 500);
             } else {
-                hero = Optional.of(Deity.DOLOR);
+                hero = Optional.of(Demo.D.DOLOR);
+                faction = Demo.D.DOLOR.getFaction();
                 addAspect(Aspects.LIGHTNING_ASPECT_HERO);
                 addAspect(Aspects.LIGHTNING_ASPECT_I);
                 addAspect(Aspects.FIRE_ASPECT_I);
@@ -110,6 +112,9 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
                 setExperience(Aspects.CRAFTING_ASPECT_I, 2000);
             }
         } else {
+            // Neutral faction
+            faction = Faction.NEUTRAL;
+
             // Empty deities
             god = Optional.empty();
             hero = Optional.empty();

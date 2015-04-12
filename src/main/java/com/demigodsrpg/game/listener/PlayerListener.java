@@ -18,6 +18,7 @@
 package com.demigodsrpg.game.listener;
 
 import com.demigodsrpg.game.DGGame;
+import com.demigodsrpg.game.Setting;
 import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.model.PlayerModel;
 import org.bukkit.ChatColor;
@@ -35,6 +36,9 @@ public class PlayerListener implements Listener {
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(event.getPlayer());
 
         event.getPlayer().sendMessage("Welcome!");
+        if (Setting.DEBUG_DATA) {
+            event.getPlayer().sendMessage(ChatColor.GOLD + "~~ The server is currently in Demo Mode. ~~");
+        }
         if (model.getAspects().isEmpty()) {
             event.getPlayer().sendMessage("TEMP: " + ChatColor.GRAY + "Use " + ChatColor.YELLOW + "/aspect claim" + ChatColor.GRAY + " to claim an aspect.");
         }

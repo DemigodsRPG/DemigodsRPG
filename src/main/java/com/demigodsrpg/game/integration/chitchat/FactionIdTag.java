@@ -33,7 +33,7 @@ public class FactionIdTag extends PlayerTag {
     public String getFor(Player player) {
         PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
         String symbol = model.getFaction().getChatSymbol();
-        return model.getFaction().getColor() + "[" + model.getFaction().getColor() + symbol + "]" + ChatColor.RESET;
+        return ChatColor.DARK_GRAY + "[" + model.getFaction().getColor() + symbol + ChatColor.DARK_GRAY + "]" + ChatColor.RESET;
     }
 
     @Override

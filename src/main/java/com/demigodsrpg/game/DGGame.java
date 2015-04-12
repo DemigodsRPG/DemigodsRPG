@@ -20,7 +20,6 @@ package com.demigodsrpg.game;
 import com.demigodsrpg.chitchat.Chitchat;
 import com.demigodsrpg.game.command.*;
 import com.demigodsrpg.game.command.admin.*;
-import com.demigodsrpg.game.deity.Deity;
 import com.demigodsrpg.game.deity.Faction;
 import com.demigodsrpg.game.integration.chitchat.FactionChatTag;
 import com.demigodsrpg.game.integration.chitchat.FactionIdTag;
@@ -80,6 +79,10 @@ public class DGGame extends JavaPlugin {
         // Define the save path
         SAVE_PATH = getDataFolder().getPath() + "/data/";
 
+        // Get custom factions and deities
+        FACTION_R.registerFromFile();
+        DEITY_R.registerFromFile();
+
         // Register default factions
         FACTION_R.register(Faction.NEUTRAL);
         FACTION_R.register(Faction.EXCOMMUNICATED);
@@ -87,9 +90,13 @@ public class DGGame extends JavaPlugin {
         // Debug data
         if (Setting.DEBUG_DATA) {
             // Debug deities
-            DEITY_R.register(Deity.LOREM);
-            DEITY_R.register(Deity.IPSUM);
-            DEITY_R.register(Deity.DOLOR);
+            DEITY_R.register(Demo.D.LOREM);
+            DEITY_R.register(Demo.D.IPSUM);
+            DEITY_R.register(Demo.D.DOLOR);
+
+            // Debug factions
+            FACTION_R.register(Demo.F.KŌHAI);
+            FACTION_R.register(Demo.F.SENPAI);
         }
 
         // Determine territory registries

@@ -35,7 +35,7 @@ public class FactionChatTag extends PlayerTag {
         if (isInChat(player)) {
             return ChatColor.DARK_GRAY + "[.]";
         }
-        return ChatColor.DARK_RED + "[!]";
+        return ChatColor.DARK_GRAY + "[" + ChatColor.DARK_RED + "!" + ChatColor.DARK_GRAY + "]";
     }
 
     @Override
