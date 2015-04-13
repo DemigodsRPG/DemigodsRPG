@@ -36,7 +36,7 @@ public class Battle {
     private Location startLocation;
 
     private long startTimeMillis;
-    private long lastHit;
+    private long lastInteract;
     private long endTimeMillis;
 
     // -- CONSTRUCTORS -- //
@@ -57,7 +57,7 @@ public class Battle {
         }
         startLocation = participants[0].getLocation();
         startTimeMillis = System.currentTimeMillis();
-        lastHit = System.currentTimeMillis();
+        lastInteract = System.currentTimeMillis();
         DGGame.BATTLE_R.register(this);
     }
 
@@ -79,8 +79,8 @@ public class Battle {
         return startTimeMillis;
     }
 
-    public long getLastHit() {
-        return lastHit;
+    public long getLastInteract() {
+        return lastInteract;
     }
 
     public long getEndTimeMillis() {
@@ -104,7 +104,7 @@ public class Battle {
 
     public void setStartTimeMillis(long startTimeMillis) {
         this.startTimeMillis = startTimeMillis;
-        this.lastHit = startTimeMillis;
+        this.lastInteract = startTimeMillis;
     }
 
     public void setEndTimeMillis(long endTimeMillis) {
@@ -116,6 +116,7 @@ public class Battle {
         if (okayToHit(attacking, hit)) {
             involved.get(attacking.getPersistentId()).hits++;
         }
+        lastInteract = System.currentTimeMillis();
         DGGame.BATTLE_R.register(this);
     }
 
@@ -124,6 +125,7 @@ public class Battle {
         if (!attacking.getFaction().equals(denier.getFaction()) && okayToHit(attacking, target)) {
             involved.get(denier.getPersistentId()).denies++;
         }
+        lastInteract = System.currentTimeMillis();
         DGGame.BATTLE_R.register(this);
     }
 
@@ -132,6 +134,7 @@ public class Battle {
         if (!attacking.getFaction().equals(assistant.getFaction()) && okayToHit(attacking, hit)) {
             involved.get(assistant.getPersistentId()).assists++;
         }
+        lastInteract = System.currentTimeMillis();
         DGGame.BATTLE_R.register(this);
     }
 
@@ -143,6 +146,7 @@ public class Battle {
         } else {
             involved.get(attacking.getPersistentId()).kills++;
         }
+        lastInteract = System.currentTimeMillis();
         die(killed);
     }
 

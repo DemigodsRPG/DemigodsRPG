@@ -38,7 +38,7 @@ public class BattleRegistry {
     }
 
     public boolean canParticipate(Entity entity) {
-        return !(entity instanceof Player) || defineParticipant(entity).getCanPvp();
+        return (entity instanceof Player) && defineParticipant(entity).getCanPvp();
     }
 
     public boolean battleReady(Entity... participants) {
@@ -123,7 +123,7 @@ public class BattleRegistry {
     }
 
     public void endExpired() {
-        BATTLE_MAP.values().stream().filter(battle -> System.currentTimeMillis() - battle.getLastHit() > Setting.BATTLE_INTERVAL_SECONDS * 1000).forEach(battle -> {
+        BATTLE_MAP.values().stream().filter(battle -> System.currentTimeMillis() - battle.getLastInteract() > Setting.BATTLE_INTERVAL_SECONDS * 1000).forEach(battle -> {
             Report report = battle.end();
             report.sendToServer();
             report.sendToFactions();
