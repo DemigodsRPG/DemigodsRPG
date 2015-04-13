@@ -15,7 +15,7 @@
     <properties> <!-- It is important to keep up to date manually. -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spigot.version>1.8.3-R0.1-SNAPSHOT</spigot.version>
-        <censoredlib.version>1.0.1</censoredlib.version>
+        <censoredlib.version>1.0.2</censoredlib.version>
         <worldguard.version>6.0.0-SNAPSHOT</worldguard.version>
     </properties>
 
@@ -118,6 +118,11 @@
         <dependency>
             <groupId>com.censoredsoftware.library</groupId>
             <artifactId>util</artifactId>
+            <version>${censoredlib.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.censoredsoftware.library</groupId>
+            <artifactId>bukkit-util</artifactId>
             <version>${censoredlib.version}</version>
         </dependency>
     </dependencies>

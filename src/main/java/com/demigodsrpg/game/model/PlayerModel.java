@@ -41,7 +41,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -505,22 +504,23 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     boolean checkTeamKills() {
-        int maxTeamKills = Setting.MAX_TEAM_KILLS;
-        if (maxTeamKills <= teamKills) {
-            // Reset them to excommunicated
-            setFaction(Faction.EXCOMMUNICATED);
-            resetTeamKills();
-            double former = getTotalExperience();
-            if (getOnline()) {
-                Player player = getOfflinePlayer().getPlayer();
-                player.sendMessage(ChatColor.RED + "Your former faction has just excommunicated you.");
-                player.sendMessage(ChatColor.RED + "You will no longer respawn at the faction spawn.");
-                player.sendMessage(ChatColor.RED + "You have lost " +
-                        ChatColor.GOLD + DecimalFormat.getCurrencyInstance().format(former - getTotalExperience()) +
-                        ChatColor.RED + " experience.");
-                // player.sendMessage(ChatColor.YELLOW + "To join a faction, "); // TODO
+        if (!Faction.EXCOMMUNICATED.equals(faction)) {
+            if (Setting.MAX_TEAM_KILLS <= teamKills) {
+                // Reset them to excommunicated
+                setFaction(Faction.EXCOMMUNICATED);
+                resetTeamKills();
+                // double former = getTotalExperience();
+                if (getOnline()) {
+                    Player player = getOfflinePlayer().getPlayer();
+                    player.sendMessage(ChatColor.RED + "Your former faction has just excommunicated you.");
+                    player.sendMessage(ChatColor.RED + "You will no longer respawn at the faction spawn.");
+                    // player.sendMessage(ChatColor.RED + "You have lost " +
+                    //         ChatColor.GOLD + DecimalFormat.getCurrencyInstance().format(former - getTotalExperience()) +
+                    //         ChatColor.RED + " experience.");
+                    // player.sendMessage(ChatColor.YELLOW + "To join a faction, "); // TODO
+                }
+                return false;
             }
-            return false;
         }
         return true;
     }
@@ -604,10 +604,10 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
     @SuppressWarnings("deprecation")
     public void updateCanPvp() {
-        if (Bukkit.getPlayer(mojangId) == null) return;
+        if (Bukkit.getPlayer(UUID.fromString(mojangId)) == null) return;
 
         // Define variables
-        final Player player = Bukkit.getPlayer(mojangId);
+        final Player player = Bukkit.getPlayer(UUID.fromString(mojangId));
         final boolean inNoPvpZone = ZoneUtil.inNoPvpZone(player.getLocation());
 
         if (DGGame.BATTLE_R.isInBattle(this)) return;

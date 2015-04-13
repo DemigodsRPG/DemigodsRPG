@@ -29,6 +29,7 @@ public class Setting {
     public static final boolean BROADCAST_NEW_ASPECT = getConfig().getBoolean("broadcast_new_aspects", true);
     public static final boolean ALLOW_PVP_EVERYWHERE = getConfig().getBoolean("allow_skills_everywhere", false);
     public static final int MAX_TEAM_KILLS = getConfig().getInt("max_team_kills", 10);
+    public static final int BATTLE_INTERVAL_SECONDS = getConfig().getInt("battle_interval_seconds", 10);
     public static final boolean FRIENDLY_FIRE = getConfig().getBoolean("friendly_fire", false);
     public static final double EXP_MULTIPLIER = getConfig().getDouble("globalexpmultiplier", 4.0);
     public static final boolean NO_COST_ASPECT_MODE = getConfig().getBoolean("no_cost_aspect_mode", false);

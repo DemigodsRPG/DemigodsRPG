@@ -21,11 +21,11 @@ public class BattleMetaData {
     // -- PACKAGE PRIVATE FIELDS -- //
 
     int hits = 0;
-    private final int assists = 0;
-    private final int denies = 0;
-    private final int kills = 0;
-    private final int teamKills = 0;
-    private final int deaths = 0;
+    int assists = 0;
+    int denies = 0;
+    int kills = 0;
+    int teamKills = 0;
+    int deaths = 0;
 
     // -- GETTERS -- //
 

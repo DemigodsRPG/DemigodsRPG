@@ -22,6 +22,10 @@ import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
 public interface Participant {
+    String getLastKnownName();
+
+    String getPersistentId();
+
     boolean getCanPvp();
 
     EntityType getEntityType();
@@ -29,6 +33,8 @@ public interface Participant {
     Location getLocation();
 
     Faction getFaction();
+
+    void addTeamKill();
 
     boolean reward(BattleMetaData data);
 }

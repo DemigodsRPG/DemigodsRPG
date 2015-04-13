@@ -35,7 +35,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -124,6 +123,7 @@ public class DGGame extends JavaPlugin {
         PluginManager manager = getServer().getPluginManager();
         manager.registerEvents(new InventoryListener(), this);
         manager.registerEvents(new PlayerListener(), this);
+        manager.registerEvents(new BattleListener(), this);
         manager.registerEvents(new ShrineListener(), this);
         manager.registerEvents(new TributeListener(), this);
         manager.registerEvents(new AreaListener(), this);
@@ -192,39 +192,28 @@ public class DGGame extends JavaPlugin {
 
     // -- TASK RELATED -- //
 
-    private static final BukkitRunnable SYNC, ASYNC, FIRE_SPREAD, VALUE;
+    private static final Runnable SYNC, ASYNC, FIRE_SPREAD, BATTLE, VALUE;
 
     static {
-        SYNC = new BukkitRunnable() {
-            @Override
-            public void run() {
-                // Update online players
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (ZoneUtil.inNoDGZone(player.getLocation())) continue;
-                    PlayerModel model = PLAYER_R.fromPlayer(player);
-                    if (model != null) {
-                        model.updateCanPvp();
-                    }
+        SYNC = () -> {
+            // Update online players
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (ZoneUtil.inNoDGZone(player.getLocation())) continue;
+                PlayerModel model = PLAYER_R.fromPlayer(player);
+                if (model != null) {
+                    model.updateCanPvp();
                 }
             }
         };
-        ASYNC = new BukkitRunnable() {
-            @Override
-            public void run() {
-                // Update Timed Data
-                SERVER_R.clearExpired();
+        ASYNC = SERVER_R::clearExpired;
+        FIRE_SPREAD = () -> {
+            for (World world : Bukkit.getWorlds()) {
+                world.getLivingEntities().stream().filter(entity -> entity.getFireTicks() > 0).forEach(entity ->
+                                entity.getNearbyEntities(0.5, 0.5, 0.5).stream().filter(nearby -> nearby instanceof LivingEntity && !nearby.equals(entity)).forEach(nearby -> nearby.setFireTicks(100))
+                );
             }
         };
-        FIRE_SPREAD = new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (World world : Bukkit.getWorlds()) {
-                    world.getLivingEntities().stream().filter(entity -> entity.getFireTicks() > 0).forEach(entity ->
-                                    entity.getNearbyEntities(0.5, 0.5, 0.5).stream().filter(nearby -> nearby instanceof LivingEntity && !nearby.equals(entity)).forEach(nearby -> nearby.setFireTicks(100))
-                    );
-                }
-            }
-        };
+        BATTLE = BATTLE_R::endExpired;
         VALUE = new TributeModel.ValueTask();
     }
 
@@ -234,19 +223,23 @@ public class DGGame extends JavaPlugin {
 
         // Start sync demigods runnable
         scheduler.scheduleSyncRepeatingTask(this, SYNC, 20, 20);
-        CONSOLE.info("Main Demigods SYNC runnable enabled...");
+        CONSOLE.info("Main Demigods SYNC thread enabled...");
 
         // Start async demigods runnable
         scheduler.scheduleAsyncRepeatingTask(this, ASYNC, 20, 20);
-        CONSOLE.info("Main Demigods ASYNC runnable enabled...");
+        CONSOLE.info("Main Demigods ASYNC thread enabled...");
 
         // Start sync fire runnable
         scheduler.scheduleSyncRepeatingTask(this, FIRE_SPREAD, 3, 20);
-        CONSOLE.info("Main Demigods FIRE_SPREAD runnable enabled...");
+        CONSOLE.info("Demigods FIRE SPREAD task enabled...");
+
+        // Start sync fire runnable
+        scheduler.scheduleSyncRepeatingTask(this, BATTLE, 3, 20);
+        CONSOLE.info("Demigods BATTLE task enabled...");
 
         // Start async value runnable
         scheduler.scheduleAsyncRepeatingTask(this, VALUE, 60, 400);
-        CONSOLE.info("Main Demigods VALUE runnable enabled...");
+        CONSOLE.info("Demigods VALUE task enabled...");
     }
 
     public static DGGame getInst() {

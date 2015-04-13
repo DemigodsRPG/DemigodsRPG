@@ -17,6 +17,7 @@
 
 package com.demigodsrpg.game.command;
 
+import com.censoredsoftware.library.bukkitutil.ColorUtil;
 import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.aspect.Aspect;
@@ -24,7 +25,6 @@ import com.demigodsrpg.game.aspect.Aspects;
 import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
 import com.demigodsrpg.game.model.PlayerModel;
-import com.demigodsrpg.game.util.ColorUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

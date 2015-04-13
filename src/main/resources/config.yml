@@ -20,6 +20,7 @@ broadcast_new_aspects: true
 stat_display_frequency_in_seconds: 0
 confirm_time: 10
 pvp_area_delay_time: 10
+battle_interval_seconds: 10
 start_delay_seconds: 0.1
 favor_regen_seconds: 0.5
 hp_regen_seconds: 10.0

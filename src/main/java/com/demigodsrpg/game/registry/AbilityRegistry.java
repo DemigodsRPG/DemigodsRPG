@@ -205,7 +205,7 @@ public class AbilityRegistry implements Listener {
     }
 
     boolean processAbility1(PlayerModel model, AbilityMetaData ability) {
-        if (ZoneUtil.isNoDGWorld(model.getLocation().getWorld())) return false;
+        if (ZoneUtil.inNoDGZone(model.getLocation())) return false;
         if (!ability.getType().equals(Ability.Type.PASSIVE)) {
             if ((ability.getType().equals(Ability.Type.OFFENSIVE) || ability.getType().equals(Ability.Type.ULTIMATE)) && ZoneUtil.inNoPvpZone(model.getLocation())) {
                 return false;
