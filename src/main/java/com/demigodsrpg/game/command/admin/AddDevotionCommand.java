@@ -40,7 +40,7 @@ public class AddDevotionCommand extends AdminPlayerCommand {
                     return CommandResult.QUIET_ERROR;
                 }
 
-                DGGame.PLAYER_R.fromPlayer(p).setExperience(aspect, DGGame.PLAYER_R.fromPlayer(p).getExperience(aspect) + amount);
+                DGGame.PLAYER_R.fromPlayer(p).setExperience(aspect, DGGame.PLAYER_R.fromPlayer(p).getExperience(aspect) + amount, true);
 
                 sender.sendMessage(ChatColor.YELLOW + "You added " + amount + " devotion to " + p.getName() + " to the " + aspect.getGroup().getName() + " " + aspect.getTier().name() + " aspect.");
             } catch (Exception ignored) {

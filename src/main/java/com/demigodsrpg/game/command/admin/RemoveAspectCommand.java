@@ -43,7 +43,7 @@ public class RemoveAspectCommand extends AdminPlayerCommand {
 
             p.removeAspect(aspect);
             sender.sendMessage(ChatColor.YELLOW + "You removed " + aspect.getGroup().getName() + " " + aspect.getTier().name() + " from " + p.getLastKnownName() + ".");
-            p.setExperience(aspect, 0.0);
+            p.setExperience(aspect, 0.0, true);
             return CommandResult.SUCCESS;
         }
         return CommandResult.INVALID_SYNTAX;

@@ -45,7 +45,7 @@ public class RemoveDevotionCommand extends AdminPlayerCommand {
                 double newAmount = m.getExperience(aspect) - amount;
                 if (newAmount < 0) newAmount = 0;
 
-                m.setExperience(aspect, newAmount);
+                m.setExperience(aspect, newAmount, true);
 
                 sender.sendMessage(ChatColor.YELLOW + "You removed " + amount + " devotion from " + p.getName() + " in the aspect group " + aspect.getGroup().getName() + ".");
             } catch (Exception ignored) {

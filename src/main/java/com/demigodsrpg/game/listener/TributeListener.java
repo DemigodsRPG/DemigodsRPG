@@ -131,7 +131,7 @@ public class TributeListener implements Listener {
 
                 // Update the character's favor
                 model.setFavor(favorBefore + tributeValue);
-                model.setExperience(aspect, devotionBefore + tributeValue);
+                model.setExperience(aspect, devotionBefore + tributeValue, true);
 
                 if (model.getFavor() < Setting.FAVOR_CAP) {
                     if (model.getFavor() > favorBefore)

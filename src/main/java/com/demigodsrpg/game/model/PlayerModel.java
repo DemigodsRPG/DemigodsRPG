@@ -86,7 +86,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
             god = Optional.of(Demo.D.LOREM);
 
             // Debug aspects
-            if (RandomUtil.randomPercentBool(50)) {
+            if (RandomUtil.randomPercentBool(49.9)) {
                 hero = Optional.of(Demo.D.IPSUM);
                 faction = Demo.D.IPSUM.getFaction();
                 addAspect(Aspects.BLOODLUST_ASPECT_HERO);
@@ -94,10 +94,10 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
                 addAspect(Aspects.WATER_ASPECT_I);
                 addAspect(Aspects.WATER_ASPECT_II);
 
-                setExperience(Aspects.BLOODLUST_ASPECT_HERO, 1000);
-                setExperience(Aspects.BLOODLUST_ASPECT_I, 1000);
-                setExperience(Aspects.WATER_ASPECT_I, 500);
-                setExperience(Aspects.WATER_ASPECT_II, 500);
+                setExperience(Aspects.BLOODLUST_ASPECT_HERO, 1000, false);
+                setExperience(Aspects.BLOODLUST_ASPECT_I, 1000, false);
+                setExperience(Aspects.WATER_ASPECT_I, 500, false);
+                setExperience(Aspects.WATER_ASPECT_II, 500, true);
             } else {
                 hero = Optional.of(Demo.D.DOLOR);
                 faction = Demo.D.DOLOR.getFaction();
@@ -106,10 +106,10 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
                 addAspect(Aspects.FIRE_ASPECT_I);
                 addAspect(Aspects.CRAFTING_ASPECT_I);
 
-                setExperience(Aspects.LIGHTNING_ASPECT_HERO, 5000);
-                setExperience(Aspects.LIGHTNING_ASPECT_I, 500);
-                setExperience(Aspects.FIRE_ASPECT_I, 1000);
-                setExperience(Aspects.CRAFTING_ASPECT_I, 2000);
+                setExperience(Aspects.LIGHTNING_ASPECT_HERO, 5000, false);
+                setExperience(Aspects.LIGHTNING_ASPECT_I, 500, false);
+                setExperience(Aspects.FIRE_ASPECT_I, 1000, false);
+                setExperience(Aspects.CRAFTING_ASPECT_I, 2000, true);
             }
         } else {
             // Neutral faction
@@ -321,16 +321,16 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return total;
     }
 
-    public void setExperience(Aspect aspect, double experience) {
+    public void setExperience(Aspect aspect, double experience, boolean announce) {
         this.experience.put(aspect.getId(), experience);
-        calculateAscensions();
+        calculateAscensions(announce);
         DGGame.PLAYER_R.register(this);
     }
 
-    void setExperience(String aspectName, double experience) {
+    void setExperience(String aspectName, double experience, boolean announce) {
         int ordinal = Aspects.valueOf(aspectName).getId();
         this.experience.put(ordinal, experience);
-        calculateAscensions();
+        calculateAscensions(announce);
         DGGame.PLAYER_R.register(this);
     }
 
@@ -495,7 +495,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
             score *= (double) Setting.EXP_MULTIPLIER;
             score /= aspects.size() + 1;
             for (String aspect : aspects) {
-                setExperience(aspect, getExperience(aspect) + score);
+                setExperience(aspect, getExperience(aspect) + score, true);
             }
         }
 
@@ -518,7 +518,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
                 player.sendMessage(ChatColor.RED + "You have lost " +
                         ChatColor.GOLD + DecimalFormat.getCurrencyInstance().format(former - getTotalExperience()) +
                         ChatColor.RED + " experience.");
-                player.sendMessage(ChatColor.YELLOW + "To join a faction, "); // TODO
+                // player.sendMessage(ChatColor.YELLOW + "To join a faction, "); // TODO
             }
             return false;
         }
@@ -530,13 +530,13 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         setFaction(hero.getFaction());
         setMaxHealth(25.0);
         setLevel(1);
-        setExperience(aspect, 20.0);
-        calculateAscensions();
+        setExperience(aspect, 20.0, true);
+        calculateAscensions(true);
     }
 
     public void giveAspect(Aspect aspect) {
         aspects.add(aspect.name());
-        setExperience(aspect, 20.0);
+        setExperience(aspect, 20.0, true);
     }
 
     public boolean canClaim(Aspect aspect) {
@@ -548,10 +548,12 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return costForNextAspect() <= level && !hasAspect(aspect) && hasPrereqs(aspect) && Aspects.isInFaction(faction, aspect);
     }
 
-    void calculateAscensions() {
+    void calculateAscensions(boolean announce) {
         Player player = getOfflinePlayer().getPlayer();
         if (getLevel() >= Setting.ASCENSION_CAP) return;
+        boolean did = false;
         while (getTotalExperience() >= (int) Math.ceil(500 * Math.pow(getLevel() + 1, 2.02)) && getLevel() < Setting.ASCENSION_CAP) {
+            did = true;
             setMaxHealth(getMaxHealth() + 10.0);
             player.setMaxHealth(getMaxHealth());
             player.setHealthScale(20.0);
@@ -559,7 +561,8 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
             player.setHealth(getMaxHealth());
 
             setLevel(getLevel() + 1);
-
+        }
+        if (did && announce) {
             player.sendMessage(ChatColor.AQUA + "Congratulations! Your Ascensions have increased to " + getLevel() + ".");
             player.sendMessage(ChatColor.YELLOW + "Your maximum HP has increased to " + getMaxHealth() + ".");
         }

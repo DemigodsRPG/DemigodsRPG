@@ -28,9 +28,9 @@ import java.util.Arrays;
 
 public class Demo {
     public static class D {
-        public static final Deity LOREM = new Deity(DeityType.GOD, "Lorem", Gender.EITHER, Faction.NEUTRAL, Arrays.asList(Groups.WATER_ASPECT));
+        public static final Deity LOREM = new Deity(DeityType.GOD, "Lorem", Gender.EITHER, Faction.NEUTRAL, Arrays.asList(Groups.WATER_ASPECT, Groups.FIRE_ASPECT));
         public static final Deity IPSUM = new Deity(DeityType.HERO, "Ipsum", Gender.FEMALE, F.SENPAI, Arrays.asList(Groups.BLOODLUST_ASPECT));
-        public static final Deity DOLOR = new Deity(DeityType.HERO, "Dolor", Gender.MALE, F.KŌHAI, Arrays.asList(Groups.LIGHTNING_ASPECT));
+        public static final Deity DOLOR = new Deity(DeityType.HERO, "Dolor", Gender.MALE, F.KŌHAI, Arrays.asList(Groups.LIGHTNING_ASPECT, Groups.CRAFTING_ASPECT));
     }
 
     public static class F {
