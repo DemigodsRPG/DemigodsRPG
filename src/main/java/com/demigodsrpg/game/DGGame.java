@@ -92,10 +92,13 @@ public class DGGame extends JavaPlugin {
             DEITY_R.register(Demo.D.LOREM);
             DEITY_R.register(Demo.D.IPSUM);
             DEITY_R.register(Demo.D.DOLOR);
+            DEITY_R.register(Demo.D.SIT);
+            DEITY_R.register(Demo.D.AMET);
 
             // Debug factions
             FACTION_R.register(Demo.F.KŌHAI);
             FACTION_R.register(Demo.F.SENPAI);
+            FACTION_R.register(Demo.F.SENSEI);
         }
 
         // Determine territory registries
