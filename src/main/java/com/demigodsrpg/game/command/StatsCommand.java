@@ -17,5 +17,5 @@
 
 package com.demigodsrpg.game.command;
 
-class StatsCommand {
+public class StatsCommand {
 }

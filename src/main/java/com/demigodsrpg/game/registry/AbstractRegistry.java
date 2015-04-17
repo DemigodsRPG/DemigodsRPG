@@ -72,7 +72,7 @@ public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>
         }
     }
 
-    void unregister(T data) {
+    public void unregister(T data) {
         REGISTERED_DATA.remove(data.getPersistentId());
         synchronized (data) {
             deleteFromFile(data.getPersistentId());

@@ -22,7 +22,7 @@ import com.demigodsrpg.game.aspect.Aspect;
 import com.demigodsrpg.game.aspect.Groups;
 
 
-public class WaterAspectII implements Aspect {
+public class WaterAspectHero implements Aspect {
     @Override
     public Group getGroup() {
         return Groups.WATER_ASPECT;
@@ -40,7 +40,7 @@ public class WaterAspectII implements Aspect {
 
     @Override
     public Tier getTier() {
-        return Tier.II;
+        return Tier.HERO;
     }
 
     @Override

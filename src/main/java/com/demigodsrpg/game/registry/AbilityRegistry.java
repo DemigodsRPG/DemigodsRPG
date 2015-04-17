@@ -356,7 +356,7 @@ public class AbilityRegistry implements Listener {
                 }
             }
 
-            if (Aspects.hasAspect(player, Aspects.WATER_ASPECT_II)) {
+            if (Aspects.hasAspect(player, Aspects.WATER_ASPECT_HERO)) {
                 if (EntityDamageEvent.DamageCause.DROWNING.equals(event.getCause())) {
                     event.setCancelled(true);
                     player.setRemainingAir(player.getMaximumAir());
@@ -383,7 +383,7 @@ public class AbilityRegistry implements Listener {
 
         Player player = event.getPlayer();
 
-        if (Aspects.hasAspect(player, Aspects.WATER_ASPECT_II)) {
+        if (Aspects.hasAspect(player, Aspects.WATER_ASPECT_HERO)) {
             Material locationMaterial = player.getLocation().getBlock().getType();
             if (player.isSneaking() && (locationMaterial.equals(Material.STATIONARY_WATER) || locationMaterial.equals(Material.WATER))) {
                 Vector victor = (player.getPassenger() != null && player.getLocation().getDirection().getY() > 0 ? player.getLocation().getDirection().clone().setY(0) : player.getLocation().getDirection()).normalize().multiply(1.3D);
@@ -404,7 +404,7 @@ public class AbilityRegistry implements Listener {
         if (event.getTarget() instanceof Player) {
             // Demon Aspect III
             if (entity instanceof Zombie || entity instanceof Skeleton) {
-                if (DGGame.PLAYER_R.fromPlayer((Player) event.getTarget()).hasAspect(Aspects.DEMON_ASPECT_III)) {
+                if (DGGame.PLAYER_R.fromPlayer((Player) event.getTarget()).hasAspect(Aspects.DEMON_ASPECT_HERO)) {
                     event.setCancelled(true);
                 }
             }

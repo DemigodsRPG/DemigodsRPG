@@ -81,35 +81,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
         // Debug data
         if (Setting.DEBUG_DATA) {
-            // Debug deities
-            god = Optional.of(Demo.D.LOREM);
-
-            // Debug aspects
-            if (RandomUtil.randomPercentBool(49.9)) {
-                hero = Optional.of(Demo.D.IPSUM);
-                faction = Demo.D.IPSUM.getFaction();
-                addAspect(Aspects.BLOODLUST_ASPECT_HERO);
-                addAspect(Aspects.BLOODLUST_ASPECT_I);
-                addAspect(Aspects.WATER_ASPECT_I);
-                addAspect(Aspects.WATER_ASPECT_II);
-
-                setExperience(Aspects.BLOODLUST_ASPECT_HERO, 1000, false);
-                setExperience(Aspects.BLOODLUST_ASPECT_I, 1000, false);
-                setExperience(Aspects.WATER_ASPECT_I, 500, false);
-                setExperience(Aspects.WATER_ASPECT_II, 500, true);
-            } else {
-                hero = Optional.of(Demo.D.DOLOR);
-                faction = Demo.D.DOLOR.getFaction();
-                addAspect(Aspects.LIGHTNING_ASPECT_HERO);
-                addAspect(Aspects.LIGHTNING_ASPECT_I);
-                addAspect(Aspects.FIRE_ASPECT_I);
-                addAspect(Aspects.CRAFTING_ASPECT_I);
-
-                setExperience(Aspects.LIGHTNING_ASPECT_HERO, 5000, false);
-                setExperience(Aspects.LIGHTNING_ASPECT_I, 500, false);
-                setExperience(Aspects.FIRE_ASPECT_I, 1000, false);
-                setExperience(Aspects.CRAFTING_ASPECT_I, 2000, true);
-            }
+            handleDemo();
         } else {
             // Neutral faction
             faction = Faction.NEUTRAL;
@@ -149,7 +121,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         experience = new TIntDoubleHashMap(1);
         for (Map.Entry<String, Object> entry : conf.getSectionNullable("devotion").getValues().entrySet()) {
             try {
-                experience.put(Aspects.valueOf(entry.getKey()).getId(), Double.valueOf(entry.getValue().toString()));
+                experience.put(Integer.valueOf(entry.getKey()), Double.valueOf(entry.getValue().toString()));
             } catch (Exception ignored) {
             }
         }
@@ -632,6 +604,78 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
                     }
                 }
             }, (delay * 20));
+        }
+    }
+
+    @Deprecated
+    public void cleanse() {
+        // Neutral faction
+        faction = Faction.NEUTRAL;
+
+        // Empty deities
+        god = Optional.empty();
+        hero = Optional.empty();
+
+        // Reset stats
+        maxHealth = 20.0;
+        favor = 700.0;
+        level = 0;
+        experience.clear();
+
+        // Clear binds and aspects
+        binds.clear();
+        aspects.clear();
+
+        // Check for demo
+        if (Setting.DEBUG_DATA) {
+            handleDemo();
+        }
+
+        // Save
+        DGGame.PLAYER_R.register(this);
+    }
+
+    private void handleDemo() {
+        // Debug deities
+        god = Optional.of(Demo.D.LOREM);
+
+        // Debug aspects
+        int roll = RandomUtil.generateIntRange(0, 2);
+        if (roll == 0) {
+            hero = Optional.of(Demo.D.IPSUM);
+            faction = Demo.D.IPSUM.getFaction();
+            addAspect(Aspects.BLOODLUST_ASPECT_HERO);
+            addAspect(Aspects.BLOODLUST_ASPECT_I);
+            addAspect(Aspects.WATER_ASPECT_I);
+
+            setExperience(Aspects.BLOODLUST_ASPECT_HERO, 1000, false);
+            setExperience(Aspects.BLOODLUST_ASPECT_I, 1000, false);
+            setExperience(Aspects.WATER_ASPECT_I, 500, false);
+        } else if (roll == 1) {
+            hero = Optional.of(Demo.D.DOLOR);
+            faction = Demo.D.DOLOR.getFaction();
+            addAspect(Aspects.LIGHTNING_ASPECT_HERO);
+            addAspect(Aspects.LIGHTNING_ASPECT_I);
+            addAspect(Aspects.FIRE_ASPECT_I);
+            addAspect(Aspects.CRAFTING_ASPECT_I);
+
+            setExperience(Aspects.LIGHTNING_ASPECT_HERO, 5000, false);
+            setExperience(Aspects.LIGHTNING_ASPECT_I, 500, false);
+            setExperience(Aspects.FIRE_ASPECT_I, 1000, false);
+            setExperience(Aspects.CRAFTING_ASPECT_I, 2000, true);
+        } else {
+            god = Optional.of(Demo.D.SIT);
+            hero = Optional.of(Demo.D.AMET);
+            faction = Demo.D.AMET.getFaction();
+            addAspect(Aspects.BLOODLUST_ASPECT_I);
+            addAspect(Aspects.BLOODLUST_ASPECT_II);
+            addAspect(Aspects.LIGHTNING_ASPECT_I);
+            addAspect(Aspects.WATER_ASPECT_HERO);
+
+            setExperience(Aspects.BLOODLUST_ASPECT_I, 1000, false);
+            setExperience(Aspects.BLOODLUST_ASPECT_II, 1000, false);
+            setExperience(Aspects.LIGHTNING_ASPECT_I, 500, false);
+            setExperience(Aspects.WATER_ASPECT_HERO, 1000, false);
         }
     }
 }

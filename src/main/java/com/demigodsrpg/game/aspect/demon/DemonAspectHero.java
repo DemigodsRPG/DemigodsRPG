@@ -35,7 +35,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DemonAspectIII implements Aspect {
+public class DemonAspectHero implements Aspect {
     @Override
     public Group getGroup() {
         return Groups.DEMON_ASPECT;
@@ -53,7 +53,7 @@ public class DemonAspectIII implements Aspect {
 
     @Override
     public Tier getTier() {
-        return Tier.I;
+        return Tier.HERO;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class DemonAspectIII implements Aspect {
     }
 
     private int tartarus(Player p, PlayerModel m) {
-        int range = (int) Math.round(18.83043 * Math.pow(m.getExperience(Aspects.DEMON_ASPECT_III), 0.088637));
+        int range = (int) Math.round(18.83043 * Math.pow(m.getExperience(Aspects.DEMON_ASPECT_HERO), 0.088637));
         List<LivingEntity> entitylist = new ArrayList<>();
         for (Entity anEntity : p.getNearbyEntities(range, range, range)) {
             if (anEntity instanceof Player && m.getFaction().equals(DGGame.PLAYER_R.fromPlayer((Player) anEntity).getFaction())) {
@@ -93,7 +93,7 @@ public class DemonAspectIII implements Aspect {
                 entitylist.add((LivingEntity) anEntity);
             }
         }
-        int duration = (int) Math.round(30 * Math.pow(m.getExperience(Aspects.DEMON_ASPECT_III), 0.09)) * 20;
+        int duration = (int) Math.round(30 * Math.pow(m.getExperience(Aspects.DEMON_ASPECT_HERO), 0.09)) * 20;
         for (LivingEntity le : entitylist) {
             target(le, duration);
         }

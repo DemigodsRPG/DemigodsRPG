@@ -17,5 +17,5 @@
 
 package com.demigodsrpg.game.command;
 
-class DemigodsCommand {
+public class DemigodsCommand {
 }

@@ -23,15 +23,15 @@ import com.demigodsrpg.game.aspect.bloodlust.BloodlustAspectI;
 import com.demigodsrpg.game.aspect.bloodlust.BloodlustAspectII;
 import com.demigodsrpg.game.aspect.bloodlust.BloodlustAspectIII;
 import com.demigodsrpg.game.aspect.crafting.CraftingAspectI;
+import com.demigodsrpg.game.aspect.demon.DemonAspectHero;
 import com.demigodsrpg.game.aspect.demon.DemonAspectI;
 import com.demigodsrpg.game.aspect.demon.DemonAspectII;
-import com.demigodsrpg.game.aspect.demon.DemonAspectIII;
 import com.demigodsrpg.game.aspect.fire.FireAspectI;
 import com.demigodsrpg.game.aspect.lightning.LightningAspectHero;
 import com.demigodsrpg.game.aspect.lightning.LightningAspectI;
 import com.demigodsrpg.game.aspect.lightning.LightningAspectII;
+import com.demigodsrpg.game.aspect.water.WaterAspectHero;
 import com.demigodsrpg.game.aspect.water.WaterAspectI;
-import com.demigodsrpg.game.aspect.water.WaterAspectII;
 import com.demigodsrpg.game.deity.Deity;
 import com.demigodsrpg.game.deity.Faction;
 import org.bukkit.entity.Player;
@@ -45,8 +45,8 @@ public class Aspects {
 
     public static final FireAspectI FIRE_ASPECT_I = new FireAspectI();
 
+    public static final WaterAspectHero WATER_ASPECT_HERO = new WaterAspectHero();
     public static final WaterAspectI WATER_ASPECT_I = new WaterAspectI();
-    public static final WaterAspectII WATER_ASPECT_II = new WaterAspectII();
 
     public static final BloodlustAspectHero BLOODLUST_ASPECT_HERO = new BloodlustAspectHero();
     public static final BloodlustAspectI BLOODLUST_ASPECT_I = new BloodlustAspectI();
@@ -57,9 +57,10 @@ public class Aspects {
 
     // -- EXPANSION 1 -- //
 
+    public static final DemonAspectHero DEMON_ASPECT_HERO = new DemonAspectHero();
     public static final DemonAspectI DEMON_ASPECT_I = new DemonAspectI();
     public static final DemonAspectII DEMON_ASPECT_II = new DemonAspectII();
-    public static final DemonAspectIII DEMON_ASPECT_III = new DemonAspectIII();
+
 
     // -- ASPECT LIST -- //
 
@@ -71,7 +72,7 @@ public class Aspects {
             FIRE_ASPECT_I,
 
             // Water Aspect
-            WATER_ASPECT_I, WATER_ASPECT_II,
+            WATER_ASPECT_HERO, WATER_ASPECT_I,
 
             // Bloodlust Aspect
             BLOODLUST_ASPECT_HERO, BLOODLUST_ASPECT_I, BLOODLUST_ASPECT_II, BLOODLUST_ASPECT_III,
@@ -97,6 +98,15 @@ public class Aspects {
                 if (aspect.name().equalsIgnoreCase(name)) {
                     return aspect;
                 }
+            }
+        }
+        return null;
+    }
+
+    public static Aspect fromId(int id) {
+        for (Aspect aspect : aspectList) {
+            if (aspect.getId() == id) {
+                return aspect;
             }
         }
         return null;

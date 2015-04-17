@@ -23,6 +23,7 @@ import com.demigodsrpg.game.aspect.Groups;
 import com.demigodsrpg.game.model.AbstractPersistentModel;
 import com.demigodsrpg.game.util.JsonSection;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,10 @@ public class Deity extends AbstractPersistentModel<String> {
     private List<Aspect.Group> aspectGroups;
 
     // -- CONSTRUCTORS -- //
+
+    public Deity(DeityType deityType, String name, Gender gender, Faction faction, Aspect.Group... aspectGroups) {
+        this(deityType, name, gender, faction, Arrays.asList(aspectGroups));
+    }
 
     public Deity(DeityType deityType, String name, Gender gender, Faction faction, List<Aspect.Group> aspectGroups) {
         this.deityType = deityType;
