@@ -115,9 +115,12 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         if (faction == null) {
             faction = Faction.NEUTRAL;
         }
-        binds.putAll((Map) conf.getSectionNullable("binds").getValues());
-        maxHealth = conf.getDouble("max_health");
-        favor = conf.getDouble("favor");
+        Map binds = conf.getSectionNullable("binds") != null ? (Map) conf.getSectionNullable("binds").getValues() : null;
+        if (binds != null) {
+            this.binds.putAll(binds);
+        }
+        maxHealth = conf.getDouble("max_health", 20.0);
+        favor = conf.getDouble("favor", 20.0);
         experience = new TIntDoubleHashMap(1);
         for (Map.Entry<String, Object> entry : conf.getSectionNullable("devotion").getValues().entrySet()) {
             try {
@@ -251,11 +254,11 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return god.isPresent() && god.get().equals(deity) || hero.isPresent() && hero.get().equals(deity);
     }
 
-    double getMaxHealth() {
+    public double getMaxHealth() {
         return maxHealth;
     }
 
-    void setMaxHealth(Double maxHealth) {
+    public void setMaxHealth(Double maxHealth) {
         this.maxHealth = maxHealth;
         DGGame.PLAYER_R.register(this);
     }
@@ -276,7 +279,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return experience.get(aspect.getId());
     }
 
-    double getExperience(String aspectName) {
+    public double getExperience(String aspectName) {
         int ordinal = Aspects.valueOf(aspectName).getId();
         if (!experience.containsKey(ordinal)) {
             return 0.0;
@@ -298,7 +301,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         DGGame.PLAYER_R.register(this);
     }
 
-    void setExperience(String aspectName, double experience, boolean announce) {
+    public void setExperience(String aspectName, double experience, boolean announce) {
         int ordinal = Aspects.valueOf(aspectName).getId();
         this.experience.put(ordinal, experience);
         calculateAscensions(announce);
@@ -309,7 +312,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return level;
     }
 
-    void setLevel(int level) {
+    public void setLevel(int level) {
         this.level = level;
         DGGame.PLAYER_R.register(this);
     }
@@ -329,7 +332,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return getBound(ability.getCommand());
     }
 
-    Material getBound(String abilityCommand) {
+    public Material getBound(String abilityCommand) {
         if (binds.containsKey(abilityCommand)) {
             return Material.valueOf(binds.get(abilityCommand));
         }
@@ -365,7 +368,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return canPvp;
     }
 
-    void setCanPvp(Boolean canPvp) {
+    public void setCanPvp(Boolean canPvp) {
         this.canPvp = canPvp;
         DGGame.PLAYER_R.register(this);
     }
@@ -406,7 +409,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         DGGame.PLAYER_R.register(this);
     }
 
-    void resetTeamKills() {
+    public void resetTeamKills() {
         teamKills = 0;
         DGGame.PLAYER_R.register(this);
     }
@@ -475,7 +478,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return experience > getTotalExperience();
     }
 
-    boolean checkTeamKills() {
+    public boolean checkTeamKills() {
         if (!Faction.EXCOMMUNICATED.equals(faction)) {
             if (Setting.MAX_TEAM_KILLS <= teamKills) {
                 // Reset them to excommunicated
@@ -520,7 +523,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return costForNextAspect() <= level && !hasAspect(aspect) && hasPrereqs(aspect) && Aspects.isInFaction(faction, aspect);
     }
 
-    void calculateAscensions(boolean announce) {
+    public void calculateAscensions(boolean announce) {
         Player player = getOfflinePlayer().getPlayer();
         if (getLevel() >= Setting.ASCENSION_CAP) return;
         boolean did = false;
