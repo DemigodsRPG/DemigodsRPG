@@ -64,6 +64,8 @@ public class ShrineCommand extends BaseCommand {
             PlayerModel invitee = DGGame.PLAYER_R.fromName(inviteeName);
             ShrineModel shrine = DGGame.SHRINE_R.fromId(shrineName);
 
+            PlayerModel inviter = DGGame.PLAYER_R.fromPlayer(player);
+
             boolean invite = "invite".equalsIgnoreCase(args[0]);
 
             if (invitee == null) {
@@ -72,6 +74,10 @@ public class ShrineCommand extends BaseCommand {
             }
             if (!invite && !invitee.getShrineWarps().contains(shrineName)) {
                 player.sendMessage(ChatColor.RED + "That player has never been invited to that shrine.");
+                return CommandResult.QUIET_ERROR;
+            } else if (invite && !invitee.getFaction().equals(inviter.getFaction())) {
+                player.sendMessage(ChatColor.RED + "That player is not in the same faction as you.");
+                return CommandResult.QUIET_ERROR;
             }
             if (shrine == null || player.getUniqueId().toString().equals(shrine.getOwnerMojangId())) {
                 player.sendMessage(ChatColor.RED + "That shrine is not yours.");
