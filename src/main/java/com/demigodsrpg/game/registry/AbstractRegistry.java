@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentMap;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractRegistry<T extends AbstractPersistentModel<String>> {
-    private final ConcurrentMap<String, T> REGISTERED_DATA = new ConcurrentHashMap<>();
+    protected final ConcurrentMap<String, T> REGISTERED_DATA = new ConcurrentHashMap<>();
 
     public T fromId(String id) {
         if (REGISTERED_DATA.get(id) == null) {

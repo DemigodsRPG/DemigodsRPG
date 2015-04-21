@@ -102,6 +102,7 @@ public class ShrineListener implements Listener {
         ShrineModel shrine = new ShrineModel(shrinename, p, deity, type, e.getClickedBlock().getLocation());
         DGGame.SHRINE_R.register(shrine);
         shrine.getShrineType().generate(shrine.getLocation());
+        DGGame.PLAYER_R.fromPlayer(p).addShrineWarp(shrine);
         e.getClickedBlock().getWorld().strikeLightningEffect(e.getClickedBlock().getLocation());
         p.sendMessage("You have dedicated this shrine to " + deity.getFaction().getColor() + deity.getName() + ChatColor.WHITE + ".");
         p.sendMessage(ChatColor.YELLOW + "Warp here at any time with /shrine.");

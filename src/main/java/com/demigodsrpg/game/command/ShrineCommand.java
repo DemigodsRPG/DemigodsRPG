@@ -17,10 +17,14 @@
 
 package com.demigodsrpg.game.command;
 
+import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
 import com.demigodsrpg.game.gui.ShrineGUI;
+import com.demigodsrpg.game.model.PlayerModel;
+import com.demigodsrpg.game.model.ShrineModel;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -33,20 +37,63 @@ public class ShrineCommand extends BaseCommand {
         if (sender instanceof ConsoleCommandSender) {
             return CommandResult.PLAYER_ONLY;
         }
+        Player player = (Player) sender;
 
-        try {
-            Player player = (Player) sender;
-            Inventory inventory = new ShrineGUI(player).getInventory();
-            if (inventory == null) {
-                player.sendMessage(ChatColor.YELLOW + "You don't have any shrines yet!");
+        if (args.length < 1) {
+            try {
+                Inventory inventory = new ShrineGUI(player).getInventory();
+                if (inventory == null) {
+                    player.sendMessage(ChatColor.YELLOW + "You don't have any shrines yet!");
+                    return CommandResult.QUIET_ERROR;
+                }
+                player.openInventory(inventory);
+            } catch (Exception oops) {
+                oops.printStackTrace();
+                return CommandResult.ERROR;
+            }
+
+            return CommandResult.SUCCESS;
+        } else if ("invite".equalsIgnoreCase(args[0]) || "uninvite".equalsIgnoreCase(args[0])) {
+            if (args.length < 3) {
+                return CommandResult.INVALID_SYNTAX;
+            }
+
+            String inviteeName = args[1];
+            String shrineName = args[2];
+
+            PlayerModel invitee = DGGame.PLAYER_R.fromName(inviteeName);
+            ShrineModel shrine = DGGame.SHRINE_R.fromId(shrineName);
+
+            boolean invite = "invite".equalsIgnoreCase(args[0]);
+
+            if (invitee == null) {
+                player.sendMessage(ChatColor.RED + "That player has not joined this server yet.");
                 return CommandResult.QUIET_ERROR;
             }
-            player.openInventory(inventory);
-        } catch (Exception oops) {
-            oops.printStackTrace();
-            return CommandResult.ERROR;
+            if (!invite && !invitee.getShrineWarps().contains(shrineName)) {
+                player.sendMessage(ChatColor.RED + "That player has never been invited to that shrine.");
+            }
+            if (shrine == null || player.getUniqueId().toString().equals(shrine.getOwnerMojangId())) {
+                player.sendMessage(ChatColor.RED + "That shrine is not yours.");
+                return CommandResult.QUIET_ERROR;
+            }
+
+            if (invite) {
+                invitee.addShrineWarp(shrine);
+                player.sendMessage(ChatColor.YELLOW + "Invite sent to " + invitee.getLastKnownName() + ".");
+            } else {
+                invitee.removeShrineWarp(shrine);
+                player.sendMessage(ChatColor.YELLOW + "Uninvited " + invitee.getLastKnownName() + ".");
+            }
+            OfflinePlayer inviteePlayer = invitee.getOfflinePlayer();
+            if (inviteePlayer.isOnline()) {
+                inviteePlayer.getPlayer().sendMessage(invite ? ChatColor.YELLOW + player.getName() + " has invited you to a shrine." :
+                        ChatColor.YELLOW + player.getName() + " has uninvited you from a shrine.");
+            }
+
+            return CommandResult.SUCCESS;
         }
 
-        return CommandResult.SUCCESS;
+        return CommandResult.INVALID_SYNTAX;
     }
 }

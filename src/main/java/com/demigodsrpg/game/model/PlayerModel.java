@@ -43,7 +43,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class PlayerModel extends AbstractPersistentModel<String> implements Participant {
     private final String mojangId;
@@ -54,6 +53,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     private Optional<Deity> hero;
 
     private final List<String> aspects = new ArrayList<>(1);
+    private final List<String> shrineWarps = new ArrayList<>();
     private Faction faction;
     private final BiMap<String, String> binds = HashBiMap.create();
     private final TIntDoubleHashMap experience;
@@ -104,11 +104,13 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         teamKills = 0;
     }
 
+    @SuppressWarnings("unchecked")
     public PlayerModel(String mojangId, JsonSection conf) {
         this.mojangId = mojangId;
         lastKnownName = conf.getString("last_known_name");
         lastLoginTime = conf.getLong("last_login_time");
-        aspects.addAll(conf.getStringList("aspects").stream().collect(Collectors.toList()));
+        aspects.addAll(conf.getStringList("aspects"));
+        shrineWarps.addAll(conf.getStringList("shrine_warps"));
         god = Optional.ofNullable(DGGame.DEITY_R.deityFromName(conf.getStringNullable("god")));
         hero = Optional.ofNullable(DGGame.DEITY_R.deityFromName(conf.getStringNullable("hero")));
         faction = DGGame.FACTION_R.factionFromName(conf.getStringNullable("faction"));
@@ -122,11 +124,16 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         maxHealth = conf.getDouble("max_health", 20.0);
         favor = conf.getDouble("favor", 20.0);
         experience = new TIntDoubleHashMap(1);
+        boolean expError = false;
         for (Map.Entry<String, Object> entry : conf.getSectionNullable("devotion").getValues().entrySet()) {
             try {
                 experience.put(Integer.valueOf(entry.getKey()), Double.valueOf(entry.getValue().toString()));
             } catch (Exception ignored) {
+                expError = true;
             }
+        }
+        if (expError) {
+            DGGame.CONSOLE.warning("There was an error loading devotion data for " + lastKnownName + ".");
         }
         level = conf.getInt("level");
         canPvp = conf.getBoolean("can_pvp", true);
@@ -152,6 +159,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         map.put("last_known_name", lastKnownName);
         map.put("last_login_time", lastLoginTime);
         map.put("aspects", Lists.newArrayList(aspects));
+        map.put("shrine_warps", Lists.newArrayList(shrineWarps));
         if (god.isPresent()) {
             map.put("god", god.get().getName());
         }
@@ -217,6 +225,25 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         DGGame.PLAYER_R.register(this);
     }
 
+    public List<String> getShrineWarps() {
+        return shrineWarps;
+    }
+
+    public void addShrineWarp(ShrineModel model) {
+        shrineWarps.add(model.getPersistentId());
+        DGGame.PLAYER_R.register(this);
+    }
+
+    public void removeShrineWarp(ShrineModel model) {
+        shrineWarps.remove(model.getPersistentId());
+        DGGame.PLAYER_R.register(this);
+    }
+
+    public void removeShrineWarp(String id) {
+        shrineWarps.remove(id);
+        DGGame.PLAYER_R.register(this);
+    }
+
     @Override
     public Faction getFaction() {
         return faction;
@@ -231,15 +258,19 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     public void setGod(Deity god) {
         if (DeityType.GOD.equals(god.getDeityType())) {
             this.god = Optional.ofNullable(god);
+            DGGame.PLAYER_R.register(this);
+        } else {
+            throw new IllegalArgumentException("Cannot set a non-god deity as a god.");
         }
-        throw new IllegalArgumentException("Cannot set a non-god deity as a god.");
     }
 
     public void setHero(Deity hero) {
         if (DeityType.HERO.equals(hero.getDeityType())) {
             this.hero = Optional.ofNullable(hero);
+            DGGame.PLAYER_R.register(this);
+        } else {
+            throw new IllegalArgumentException("Cannot set a non-hero deity as a hero.");
         }
-        throw new IllegalArgumentException("Cannot set a non-hero deity as a hero.");
     }
 
     public Optional<Deity> getGod() {

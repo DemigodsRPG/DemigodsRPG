@@ -25,6 +25,7 @@ import com.demigodsrpg.game.integration.chitchat.FactionChatTag;
 import com.demigodsrpg.game.integration.chitchat.FactionIdTag;
 import com.demigodsrpg.game.listener.*;
 import com.demigodsrpg.game.model.PlayerModel;
+import com.demigodsrpg.game.model.ShrineModel;
 import com.demigodsrpg.game.model.TributeModel;
 import com.demigodsrpg.game.registry.*;
 import com.demigodsrpg.game.util.ZoneUtil;
@@ -37,9 +38,11 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class DGGame extends JavaPlugin {
     // -- PLUGIN RELATED CONSTANTS -- //
@@ -88,7 +91,10 @@ public class DGGame extends JavaPlugin {
 
         // Debug data
         if (Setting.DEBUG_DATA) {
+            CONSOLE.info("Enabling demo mode.");
+
             // Debug deities
+            CONSOLE.info("Enabling demo deities.");
             DEITY_R.register(Demo.D.LOREM);
             DEITY_R.register(Demo.D.IPSUM);
             DEITY_R.register(Demo.D.DOLOR);
@@ -96,9 +102,22 @@ public class DGGame extends JavaPlugin {
             DEITY_R.register(Demo.D.AMET);
 
             // Debug factions
+            CONSOLE.info("Enabling demo factions.");
             FACTION_R.register(Demo.F.KŌHAI);
             FACTION_R.register(Demo.F.SENPAI);
             FACTION_R.register(Demo.F.SENSEI);
+
+            // Rebuild shrine warps
+            CONSOLE.info("Rebuilding shrine warps.");
+            PLAYER_R.getRegistered().forEach(model -> {
+                List<ShrineModel> ownedShrines = SHRINE_R.getRegistered().stream().
+                        filter(shrine -> model.getMojangId().equals(shrine.getOwnerMojangId())).collect(Collectors.toList());
+                ownedShrines.forEach(shrine -> {
+                    if (!model.getShrineWarps().contains(shrine.getPersistentId())) {
+                        model.addShrineWarp(shrine);
+                    }
+                });
+            });
         }
 
         // Determine territory registries

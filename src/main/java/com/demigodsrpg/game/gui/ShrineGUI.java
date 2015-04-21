@@ -18,10 +18,9 @@
 package com.demigodsrpg.game.gui;
 
 import com.demigodsrpg.game.DGGame;
+import com.demigodsrpg.game.model.PlayerModel;
 import com.demigodsrpg.game.model.ShrineModel;
-import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,6 +33,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ShrineGUI implements IInventoryGUI {
     public static final String INVENTORY_NAME = "Shrine Select";
@@ -42,6 +42,9 @@ public class ShrineGUI implements IInventoryGUI {
     private final ImmutableMap<Integer, SlotFunction> FUNCTION_MAP;
 
     public ShrineGUI(final Player player) {
+        // Player model
+        PlayerModel model = DGGame.PLAYER_R.fromPlayer(player);
+
         // FUNCTION MAP
         ImmutableMap.Builder<Integer, SlotFunction> builder = ImmutableMap.builder();
 
@@ -58,19 +61,14 @@ public class ShrineGUI implements IInventoryGUI {
         INVENTORY_LIST = new ArrayList<>();
         List<ItemStack> items = new ArrayList<>();
         int count = 0, icount = 0;
-        Iterator<ShrineModel> shrines = Iterators.filter(DGGame.SHRINE_R.getRegistered().iterator(), new Predicate<ShrineModel>() {
-            @Override
-            public boolean apply(ShrineModel model) {
-                return model.getOwnerMojangId().equals(player.getUniqueId().toString());
-            }
-        });
+        Iterator<ShrineModel> shrines = model.getShrineWarps().stream().map(DGGame.SHRINE_R::fromId).collect(Collectors.toSet()).iterator();
         while (shrines.hasNext()) {
-            ShrineModel model = shrines.next();
-            final String name = model.getPersistentId();
-            final String type = model.getShrineType().name();
-            final String owner = DGGame.PLAYER_R.fromId(model.getOwnerMojangId()).getLastKnownName();
+            ShrineModel shrine = shrines.next();
+            final String name = shrine.getPersistentId();
+            final String type = shrine.getShrineType().name();
+            final String owner = DGGame.PLAYER_R.fromId(shrine.getOwnerMojangId()).getLastKnownName();
 
-            items.add(count, new ItemStack(Material.ENCHANTED_BOOK, 1) {
+            items.add(count, new ItemStack(owner.equals(model.getLastKnownName()) ? Material.ENCHANTED_BOOK : Material.PAPER, 1) {
                 {
                     ItemMeta meta = getItemMeta();
                     meta.setDisplayName(name);

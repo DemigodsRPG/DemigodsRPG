@@ -23,7 +23,6 @@ import org.bukkit.Location;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ShrineRegistry extends AbstractRegistry<ShrineModel> {
@@ -34,12 +33,7 @@ public class ShrineRegistry extends AbstractRegistry<ShrineModel> {
     }
 
     public ShrineModel getShrine(final Location location) {
-        Optional<ShrineModel> model = getRegistered().stream().filter(new Predicate<ShrineModel>() {
-            @Override
-            public boolean test(ShrineModel model) {
-                return model.getShrineType().getLocations(model.getLocation()).contains(location);
-            }
-        }).findAny();
+        Optional<ShrineModel> model = getRegistered().stream().filter(model1 -> model1.getShrineType().getLocations(model1.getLocation()).contains(location)).findAny();
 
         if (model.isPresent()) {
             return model.get();
