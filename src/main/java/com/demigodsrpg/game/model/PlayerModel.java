@@ -110,7 +110,9 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         lastKnownName = conf.getString("last_known_name");
         lastLoginTime = conf.getLong("last_login_time");
         aspects.addAll(conf.getStringList("aspects"));
-        shrineWarps.addAll(conf.getStringList("shrine_warps"));
+        if (conf.getStringList("shrine_warps") != null) {
+            shrineWarps.addAll(conf.getStringList("shrine_warps"));
+        }
         god = Optional.ofNullable(DGGame.DEITY_R.deityFromName(conf.getStringNullable("god")));
         hero = Optional.ofNullable(DGGame.DEITY_R.deityFromName(conf.getStringNullable("hero")));
         faction = DGGame.FACTION_R.factionFromName(conf.getStringNullable("faction"));
