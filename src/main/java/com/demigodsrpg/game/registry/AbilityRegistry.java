@@ -236,7 +236,7 @@ public class AbilityRegistry implements Listener {
     void processAbility2(Player player, PlayerModel model, AbilityMetaData ability, @Nullable Object rawResult) {
         // Check for result
         if (rawResult == null) {
-            throw new NullPointerException("An ability returned null while casting.");
+            throw new NullPointerException("An ability (" + ability.getName() + ") returned null while casting.");
         }
 
         try {
