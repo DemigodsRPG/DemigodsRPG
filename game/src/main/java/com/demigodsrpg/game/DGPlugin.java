@@ -66,13 +66,13 @@ public class DGPlugin extends JavaPlugin {
         LIBRARIES = new LibraryHandler(this);
 
         // Censored Libs
-        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, "com.censoredsoftware.library", "schematic", "${censoredlib.version}");
-        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, "com.censoredsoftware.library", "util", "${censoredlib.version}");
-        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, "com.censoredsoftware.library", "bukkit-util", "${censoredlib.version}");
+        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, Depends.COM_CS, Depends.CS_SCHEMATIC, Depends.CS_VER);
+        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, Depends.COM_CS, Depends.CS_UTIL, Depends.CS_VER);
+        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, Depends.COM_CS, Depends.CS_BUKKIT_UTIL, Depends.CS_VER);
 
         // Demigods RPG Libs
-        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, "com.demigodsrpg", "util", "${util.version}");
-        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, "com.demigodsrpg", "data", "${data.version}");
+        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, Depends.COM_DG, Depends.DG_UTIL, Depends.DG_UTIL_VER);
+        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, Depends.COM_DG, Depends.DG_DATA, Depends.DG_DATA_VER);
 
         // Define the instance
         INST = this;

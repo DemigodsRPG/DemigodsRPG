@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>game</artifactId>
+    <artifactId>demigodsrpg-game</artifactId>
     <version>${game.version}</version>
 
     <name>Demigods RPG - Game</name>

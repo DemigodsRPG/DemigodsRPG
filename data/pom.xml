@@ -26,7 +26,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>data</artifactId>
+    <artifactId>demigodsrpg-data</artifactId>
     <version>${data.version}</version>
 
     <name>Demigods RPG - Data</name>
