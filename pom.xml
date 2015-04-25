@@ -5,8 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.demigodsrpg</groupId>
-    <artifactId>demigodsrpg</artifactId>
+    <artifactId>demigodsrpg-parent</artifactId>
     <version>4.0.0-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>util</module>
+        <module>data</module>
+        <module>game</module>
+    </modules>
 
     <name>Demigods RPG</name>
     <description>Demigods RPG for Bukkit/Spigot Minecraft Servers.</description>
@@ -17,6 +25,11 @@
         <spigot.version>1.8.3-R0.1-SNAPSHOT</spigot.version>
         <censoredlib.version>1.0.2</censoredlib.version>
         <worldguard.version>6.0.0-SNAPSHOT</worldguard.version>
+
+        <!-- Modules -->
+        <util.version>1.0.0-SNAPSHOT</util.version>
+        <data.version>1.0.0-SNAPSHOT</data.version>
+        <game.version>4.0.0-SNAPSHOT</game.version>
     </properties>
 
     <developers>
@@ -128,103 +141,7 @@
     </dependencies>
 
     <build>
-        <finalName>DemigodsRPG</finalName>
         <defaultGoal>clean install</defaultGoal>
-        <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
-        <resources>
-            <resource>
-                <targetPath>.</targetPath>
-                <filtering>true</filtering>
-                <directory>${basedir}/src/main/resources/</directory>
-                <includes>
-                    <include>*.yml</include>
-                </includes>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.3</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <minimizeJar>true</minimizeJar>
-                            <artifactSet>
-                                <includes>
-                                    <!-- <include>com.google.code.gson:gson</include> -->
-                                    <!-- <include>commons-lang:commons-lang</include> -->
-                                    <include>com.censoredsoftware.library:*</include>
-                                </includes>
-                            </artifactSet>
-                            <relocations>
-                                <!-- Included with the server -->
-                                <relocation>
-                                    <pattern>com.google.common.util.concurrent</pattern>
-                                    <shadedPattern>net.minecraft.util.com.google.common.util.concurrent</shadedPattern>
-                                </relocation>
-                                <!-- Spigot doesn't relocate this since 1.8
-                                <relocation>
-                                    <pattern>gnu.trove</pattern>
-                                    <shadedPattern>net.minecraft.util.gnu.trove</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>com.google.gson</pattern>
-                                    <shadedPattern>org.bukkit.craftbukkit.libs.com.google.gson</shadedPattern>
-                                </relocation> -->
-                                <!--<relocation>
-                                    <pattern>org.apache.commons.lang</pattern>
-                                    <shadedPattern>com.demigodsrpg.game.org.apache.commons.lang</shadedPattern>
-                                </relocation> -->
-                                <!-- Shaded into the jar -->
-                                <relocation>
-                                    <pattern>com.censoredsoftware.library</pattern>
-                                    <shadedPattern>com.demigodsrpg.game.com.censoredsoftware.library
-                                    </shadedPattern>
-                                </relocation>
-                            </relocations>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.4.1</version>
-                <configuration>
-                    <preparationGoals>assembly:assembly</preparationGoals>
-                    <goals>assembly:assembly</goals>
-                    <tagNameFormat>@{project.version}</tagNameFormat>
-                </configuration>
-            </plugin>
-            <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-compiler-plugin</artifactId>
-               <version>3.1</version>
-               <configuration>
-                  <source>1.8</source>
-                  <target>1.8</target>
-                  <compilerId>javac-with-errorprone</compilerId>
-                  <forceJavacCompilerUse>true</forceJavacCompilerUse>
-               </configuration>
-               <dependencies>
-                  <dependency>
-                    <groupId>org.codehaus.plexus</groupId>
-                    <artifactId>plexus-compiler-javac-errorprone</artifactId>
-                    <version>2.5</version>
-                  </dependency>
-               </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-            </plugin>
-        </plugins>
     </build>
 
 </project>
