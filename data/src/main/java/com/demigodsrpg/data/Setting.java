@@ -15,10 +15,9 @@
  * limitations under the License.
  */
 
-package com.demigodsrpg.util;
+package com.demigodsrpg.data;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.plugin.java.JavaPlugin;
 
 @SuppressWarnings("unchecked")
 public class Setting {
@@ -40,6 +39,6 @@ public class Setting {
     public static final boolean DEBUG_INVISIBLE_WALLS = getConfig().getBoolean("debug_invisible_walls", false);
 
     private static ConfigurationSection getConfig() {
-        return JavaPlugin.getProvidingPlugin(Setting.class).getConfig();
+        return DGData.PLUGIN.getConfig();
     }
 }

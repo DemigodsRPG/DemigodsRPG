@@ -18,6 +18,7 @@
 package com.demigodsrpg.util;
 
 import com.demigodsrpg.data.DGData;
+import com.demigodsrpg.data.Setting;
 import com.demigodsrpg.data.model.PlayerModel;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;

@@ -1,5 +1,5 @@
 name: DemigodsRPG
-main: com.demigodsrpg.game.DGPlugin
+main: com.demigodsrpg.game.DGBukkitPlugin
 version: ${game.version}
 description: Ally yourself with mythical deities and battle in the name of the Gods or Titans.
 authors: [marinating, HmmmQuestionMark, _Alex, TheFatDemon, janie177]

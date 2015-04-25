@@ -18,10 +18,10 @@
 package com.demigodsrpg.data.registry;
 
 import com.demigodsrpg.data.DGData;
+import com.demigodsrpg.data.Setting;
 import com.demigodsrpg.data.model.AbstractPersistentModel;
 import com.demigodsrpg.util.JsonFileUtil;
 import com.demigodsrpg.util.JsonSection;
-import com.demigodsrpg.util.Setting;
 
 import java.util.Arrays;
 import java.util.Collection;

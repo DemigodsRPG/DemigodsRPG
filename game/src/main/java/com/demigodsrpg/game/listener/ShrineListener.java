@@ -21,7 +21,7 @@ import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.deity.Deity;
 import com.demigodsrpg.data.model.ShrineModel;
 import com.demigodsrpg.data.shrine.Shrine;
-import com.demigodsrpg.game.DGPlugin;
+import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.util.ZoneUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.*;
@@ -191,7 +191,7 @@ public class ShrineListener implements Listener {
         if (event.getEntity() == null || ZoneUtil.inNoDGZone(event.getEntity().getLocation())) return;
         final List<ShrineModel> saves = Lists.newArrayList(DGData.SHRINE_R.getShrines(event.getLocation(), 10));
 
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGPlugin.getInst(), () -> {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getPlugin(), () -> {
             // Remove all drops from explosion zone
             for (final ShrineModel save : saves)
                 event.getLocation().getWorld().getEntitiesByClass(Item.class).stream().filter(drop -> drop.getLocation().distance(save.getLocation()) <= save.getShrineType().getGroundRadius()).forEach(org.bukkit.entity.Item::remove);
@@ -200,7 +200,7 @@ public class ShrineListener implements Listener {
         if (DGData.SERVER_R.contains("explode-structure", "blaam")) return;
         DGData.SERVER_R.put("explode-structure", "blaam", true, 2, TimeUnit.SECONDS);
 
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGPlugin.getInst(), () -> {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getPlugin(), () -> {
             for (final ShrineModel save : saves)
                 save.getShrineType().generate(save.getLocation());
         }, 30);

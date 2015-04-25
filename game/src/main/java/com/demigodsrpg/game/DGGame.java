@@ -20,6 +20,7 @@ package com.demigodsrpg.game;
 import com.demigodsrpg.chitchat.Chitchat;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.Demo;
+import com.demigodsrpg.data.Setting;
 import com.demigodsrpg.data.deity.Faction;
 import com.demigodsrpg.data.model.PlayerModel;
 import com.demigodsrpg.data.model.ShrineModel;
@@ -30,8 +31,6 @@ import com.demigodsrpg.game.command.admin.*;
 import com.demigodsrpg.game.integration.chitchat.FactionChatTag;
 import com.demigodsrpg.game.integration.chitchat.FactionIdTag;
 import com.demigodsrpg.game.listener.*;
-import com.demigodsrpg.util.LibraryHandler;
-import com.demigodsrpg.util.Setting;
 import com.demigodsrpg.util.ZoneUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -39,47 +38,34 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DGPlugin extends JavaPlugin {
+public class DGGame {
     // -- PLUGIN RELATED CONSTANTS -- //
 
-    private static DGPlugin INST;
-    private static LibraryHandler LIBRARIES;
+    private static DGGame INST;
+    private static DGBukkitPlugin PLUGIN;
 
-    // -- PLUGIN RELATED INSTANCE METHODS -- //
+    // -- ENABLE/DISABLE -- //
 
-    @Override
-    public void onEnable() {
-        // Get and load the libraries
-        LIBRARIES = new LibraryHandler(this);
-
-        // Censored Libs
-        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, Depends.COM_CS, Depends.CS_SCHEMATIC, Depends.CS_VER);
-        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, Depends.COM_CS, Depends.CS_UTIL, Depends.CS_VER);
-        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, Depends.COM_CS, Depends.CS_BUKKIT_UTIL, Depends.CS_VER);
-
-        // Demigods RPG Libs
-        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, Depends.COM_DG, Depends.DG_UTIL, Depends.DG_UTIL_VER);
-        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, Depends.COM_DG, Depends.DG_DATA, Depends.DG_DATA_VER);
-
-        // Define the instance
+    public DGGame(DGBukkitPlugin plugin) {
+        // Define the instances
         INST = this;
-        DGData.PLUGIN = this;
+        PLUGIN = plugin;
+        DGData.PLUGIN = plugin;
 
         // Define the console
-        DGData.CONSOLE = getLogger();
+        DGData.CONSOLE = plugin.getLogger();
 
         // Define the save path
-        DGData.SAVE_PATH = getDataFolder().getPath() + "/data/";
+        DGData.SAVE_PATH = plugin.getDataFolder().getPath() + "/data/";
 
         // Config
-        getConfig().options().copyDefaults(true);
-        saveConfig();
+        plugin.getConfig().options().copyDefaults(true);
+        plugin.saveConfig();
 
         // Get custom factions and deities
         DGData.FACTION_R.registerFromFile();
@@ -139,40 +125,40 @@ public class DGPlugin extends JavaPlugin {
         }
 
         // Start the threads
-        startThreads();
+        startThreads(plugin);
 
         // Register the listeners
-        PluginManager manager = getServer().getPluginManager();
-        manager.registerEvents(new InventoryListener(), this);
-        manager.registerEvents(new PlayerListener(), this);
-        manager.registerEvents(new BattleListener(), this);
-        manager.registerEvents(new ShrineListener(), this);
-        manager.registerEvents(new TributeListener(), this);
-        manager.registerEvents(new AreaListener(), this);
-        manager.registerEvents(new AbilityListener(), this);
-        manager.registerEvents(DGData.ABILITY_R, this);
+        PluginManager manager = plugin.getServer().getPluginManager();
+        manager.registerEvents(new InventoryListener(), plugin);
+        manager.registerEvents(new PlayerListener(), plugin);
+        manager.registerEvents(new BattleListener(), plugin);
+        manager.registerEvents(new ShrineListener(), plugin);
+        manager.registerEvents(new TributeListener(), plugin);
+        manager.registerEvents(new AreaListener(), plugin);
+        manager.registerEvents(new AbilityListener(), plugin);
+        manager.registerEvents(DGData.ABILITY_R, plugin);
 
 
         // Register commands
-        getCommand("faction").setExecutor(new FactionCommand());
-        getCommand("binds").setExecutor(new BindsCommand());
-        getCommand("check").setExecutor(new CheckCommand());
-        getCommand("aspect").setExecutor(new AspectCommand());
-        getCommand("cleanse").setExecutor(new CleanseCommand());
-        getCommand("shrine").setExecutor(new ShrineCommand());
-        getCommand("values").setExecutor(new ValuesCommand());
+        plugin.getCommand("faction").setExecutor(new FactionCommand());
+        plugin.getCommand("binds").setExecutor(new BindsCommand());
+        plugin.getCommand("check").setExecutor(new CheckCommand());
+        plugin.getCommand("aspect").setExecutor(new AspectCommand());
+        plugin.getCommand("cleanse").setExecutor(new CleanseCommand());
+        plugin.getCommand("shrine").setExecutor(new ShrineCommand());
+        plugin.getCommand("values").setExecutor(new ValuesCommand());
 
         // Admin commands
-        getCommand("adminmode").setExecutor(new AdminModeComand());
-        getCommand("selectarea").setExecutor(new SelectAreaCommand());
-        getCommand("createfaction").setExecutor(new CreateFactionCommand());
-        getCommand("createfactionarea").setExecutor(new CreateFactionAreaCommand());
-        getCommand("checkplayer").setExecutor(new CheckPlayerCommand());
-        getCommand("adddevotion").setExecutor(new AddDevotionCommand());
-        getCommand("removedevotion").setExecutor(new RemoveDevotionCommand());
-        getCommand("giveaspect").setExecutor(new GiveAspectCommand());
-        getCommand("removeaspect").setExecutor(new RemoveAspectCommand());
-        getCommand("setfaction").setExecutor(new SetFactionCommand());
+        plugin.getCommand("adminmode").setExecutor(new AdminModeComand());
+        plugin.getCommand("selectarea").setExecutor(new SelectAreaCommand());
+        plugin.getCommand("createfaction").setExecutor(new CreateFactionCommand());
+        plugin.getCommand("createfactionarea").setExecutor(new CreateFactionAreaCommand());
+        plugin.getCommand("checkplayer").setExecutor(new CheckPlayerCommand());
+        plugin.getCommand("adddevotion").setExecutor(new AddDevotionCommand());
+        plugin.getCommand("removedevotion").setExecutor(new RemoveDevotionCommand());
+        plugin.getCommand("giveaspect").setExecutor(new GiveAspectCommand());
+        plugin.getCommand("removeaspect").setExecutor(new RemoveAspectCommand());
+        plugin.getCommand("setfaction").setExecutor(new SetFactionCommand());
 
         // Enable ZoneUtil
         ZoneUtil.init();
@@ -187,38 +173,27 @@ public class DGPlugin extends JavaPlugin {
         DGData.CONSOLE.info("Enabled and ready for battle.");
     }
 
-    @Override
-    public void onDisable() {
+    public void onDisable(DGBukkitPlugin plugin) {
         // Ensure that we unregister our commands and tasks
-        HandlerList.unregisterAll(this);
-        Bukkit.getScheduler().cancelTasks(this);
+        HandlerList.unregisterAll(plugin);
+        Bukkit.getScheduler().cancelTasks(plugin);
 
         // Clear the cache.
-        clearCache();
+        DGData.clearCache();
 
         // Let the console know
         DGData.CONSOLE.info("Disabled successfully.");
     }
 
-    // -- PLUGIN RELATED UTILITY METHODS -- //
-
-    private static void clearCache() {
-        DGData.PLAYER_R.clearCache();
-        DGData.SHRINE_R.clearCache();
-        DGData.FACTION_R.clearCache();
-        DGData.TRIBUTE_R.clearCache();
-        DGData.SPAWN_R.clearCache();
-        DGData.DEITY_R.clearCache();
-        DGData.SERVER_R.clearCache();
-
-        DGData.AREA_R.values().forEach(AreaRegistry::clearCache);
-    }
-
     // -- TASK RELATED -- //
 
-    private static final Runnable SYNC, ASYNC, FIRE_SPREAD, BATTLE, VALUE;
+    private Runnable SYNC, ASYNC, FIRE_SPREAD, BATTLE, VALUE;
 
-    static {
+    @SuppressWarnings("deprecation")
+    void startThreads(DGBukkitPlugin plugin) {
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+
+        // Define the runnables
         SYNC = () -> {
             // Update online players
             for (Player player : Bukkit.getOnlinePlayers()) {
@@ -239,34 +214,33 @@ public class DGPlugin extends JavaPlugin {
         };
         BATTLE = DGData.BATTLE_R::endExpired;
         VALUE = new TributeModel.ValueTask();
-    }
-
-    @SuppressWarnings("deprecation")
-    void startThreads() {
-        BukkitScheduler scheduler = Bukkit.getScheduler();
 
         // Start sync demigods runnable
-        scheduler.scheduleSyncRepeatingTask(this, SYNC, 20, 20);
+        scheduler.scheduleSyncRepeatingTask(plugin, SYNC, 20, 20);
         DGData.CONSOLE.info("Main Demigods SYNC thread enabled...");
 
         // Start async demigods runnable
-        scheduler.scheduleAsyncRepeatingTask(this, ASYNC, 20, 20);
+        scheduler.scheduleAsyncRepeatingTask(plugin, ASYNC, 20, 20);
         DGData.CONSOLE.info("Main Demigods ASYNC thread enabled...");
 
         // Start sync fire runnable
-        scheduler.scheduleSyncRepeatingTask(this, FIRE_SPREAD, 3, 20);
+        scheduler.scheduleSyncRepeatingTask(plugin, FIRE_SPREAD, 3, 20);
         DGData.CONSOLE.info("Demigods FIRE SPREAD task enabled...");
 
         // Start sync fire runnable
-        scheduler.scheduleSyncRepeatingTask(this, BATTLE, 3, 20);
+        scheduler.scheduleSyncRepeatingTask(plugin, BATTLE, 3, 20);
         DGData.CONSOLE.info("Demigods BATTLE task enabled...");
 
         // Start async value runnable
-        scheduler.scheduleAsyncRepeatingTask(this, VALUE, 60, 400);
+        scheduler.scheduleAsyncRepeatingTask(plugin, VALUE, 60, 400);
         DGData.CONSOLE.info("Demigods VALUE task enabled...");
     }
 
-    public static DGPlugin getInst() {
+    public static DGGame getInst() {
         return INST;
+    }
+
+    public static DGBukkitPlugin getPlugin() {
+        return PLUGIN;
     }
 }

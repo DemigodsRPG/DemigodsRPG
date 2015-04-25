@@ -24,7 +24,7 @@ import com.demigodsrpg.aspect.Aspect;
 import com.demigodsrpg.aspect.Aspects;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.model.PlayerModel;
-import com.demigodsrpg.game.DGPlugin;
+import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
 import com.google.common.base.Joiner;
@@ -83,7 +83,7 @@ public class AspectCommand extends BaseCommand {
                             player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 0.6F, 1F);
 
                             // Delay for dramatic effect
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(DGPlugin.getInst(), new BukkitRunnable() {
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(DGGame.getPlugin(), new BukkitRunnable() {
                                 @Override
                                 public void run() {
                                     // Give the aspect
@@ -110,7 +110,7 @@ public class AspectCommand extends BaseCommand {
                             player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 0.6F, 1F);
 
                             // Delay for dramatic effect
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(DGPlugin.getInst(), new BukkitRunnable() {
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(DGGame.getPlugin(), new BukkitRunnable() {
                                 @Override
                                 public void run() {
                                     // Give the deity

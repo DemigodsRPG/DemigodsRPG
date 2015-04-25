@@ -41,4 +41,18 @@ public class DGData {
     public static Plugin PLUGIN;
     public static Logger CONSOLE;
     public static String SAVE_PATH;
+
+    // -- DATA RELATED UTILITY METHODS -- //
+
+    public static void clearCache() {
+        PLAYER_R.clearCache();
+        SHRINE_R.clearCache();
+        FACTION_R.clearCache();
+        TRIBUTE_R.clearCache();
+        SPAWN_R.clearCache();
+        DEITY_R.clearCache();
+        SERVER_R.clearCache();
+
+        AREA_R.values().forEach(AreaRegistry::clearCache);
+    }
 }

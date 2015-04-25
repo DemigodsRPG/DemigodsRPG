@@ -18,10 +18,10 @@
 package com.demigodsrpg.data.registry;
 
 import com.demigodsrpg.data.DGData;
+import com.demigodsrpg.data.Setting;
 import com.demigodsrpg.data.battle.Battle;
 import com.demigodsrpg.data.battle.Report;
 import com.demigodsrpg.data.model.Participant;
-import com.demigodsrpg.util.Setting;
 import com.demigodsrpg.util.ZoneUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
