@@ -17,7 +17,6 @@
 
 package com.demigodsrpg.game;
 
-import com.demigodsrpg.ability.AbilityRegistry;
 import com.demigodsrpg.chitchat.Chitchat;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.Demo;
@@ -26,7 +25,6 @@ import com.demigodsrpg.data.model.PlayerModel;
 import com.demigodsrpg.data.model.ShrineModel;
 import com.demigodsrpg.data.model.TributeModel;
 import com.demigodsrpg.data.registry.AreaRegistry;
-import com.demigodsrpg.data.registry.BattleRegistry;
 import com.demigodsrpg.game.command.*;
 import com.demigodsrpg.game.command.admin.*;
 import com.demigodsrpg.game.integration.chitchat.FactionChatTag;
@@ -52,11 +50,6 @@ public class DGPlugin extends JavaPlugin {
 
     private static DGPlugin INST;
     private static LibraryHandler LIBRARIES;
-
-    // -- REGISTRIES -- //
-
-    public static final BattleRegistry BATTLE_R = new BattleRegistry();
-    public static final AbilityRegistry ABILITY_R = new AbilityRegistry();
 
     // -- PLUGIN RELATED INSTANCE METHODS -- //
 
@@ -135,7 +128,7 @@ public class DGPlugin extends JavaPlugin {
         }
 
         // Register the abilities
-        ABILITY_R.registerAbilities();
+        DGData.ABILITY_R.registerAbilities();
 
         // Regen shrines
         DGData.SHRINE_R.generate();
@@ -157,7 +150,7 @@ public class DGPlugin extends JavaPlugin {
         manager.registerEvents(new TributeListener(), this);
         manager.registerEvents(new AreaListener(), this);
         manager.registerEvents(new AbilityListener(), this);
-        manager.registerEvents(ABILITY_R, this);
+        manager.registerEvents(DGData.ABILITY_R, this);
 
 
         // Register commands
@@ -244,7 +237,7 @@ public class DGPlugin extends JavaPlugin {
                 );
             }
         };
-        BATTLE = BATTLE_R::endExpired;
+        BATTLE = DGData.BATTLE_R::endExpired;
         VALUE = new TributeModel.ValueTask();
     }
 

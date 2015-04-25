@@ -20,7 +20,6 @@ package com.demigodsrpg.game.listener;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.battle.Battle;
 import com.demigodsrpg.data.model.PlayerModel;
-import com.demigodsrpg.game.DGPlugin;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -33,7 +32,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 public class BattleListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onDamageByEntity(EntityDamageByEntityEvent event) {
-        if (DGPlugin.BATTLE_R.battleReady(event.getDamager(), event.getEntity())) {
+        if (DGData.BATTLE_R.battleReady(event.getDamager(), event.getEntity())) {
             // Get the models
             PlayerModel damagerModel = DGData.PLAYER_R.fromPlayer((Player) event.getDamager());
             PlayerModel damageeModel = DGData.PLAYER_R.fromPlayer((Player) event.getEntity());
@@ -42,9 +41,9 @@ public class BattleListener implements Listener {
             Battle battle;
 
             // Check if anyone is already in a battle
-            if (DGPlugin.BATTLE_R.isInBattle(damagerModel) || DGPlugin.BATTLE_R.isInBattle(damageeModel)) {
+            if (DGData.BATTLE_R.isInBattle(damagerModel) || DGData.BATTLE_R.isInBattle(damageeModel)) {
                 // Get the battle
-                battle = DGPlugin.BATTLE_R.getBattle(damagerModel, damageeModel);
+                battle = DGData.BATTLE_R.getBattle(damagerModel, damageeModel);
             } else {
                 battle = new Battle(damagerModel, damageeModel);
             }
@@ -60,9 +59,9 @@ public class BattleListener implements Listener {
         PlayerModel model = DGData.PLAYER_R.fromPlayer(player);
 
         // Check there is a battle
-        if (DGPlugin.BATTLE_R.isInBattle(model)) {
+        if (DGData.BATTLE_R.isInBattle(model)) {
             // Get the battle
-            Battle battle = DGPlugin.BATTLE_R.getBattle(model);
+            Battle battle = DGData.BATTLE_R.getBattle(model);
 
             // Is it because of a battle?
             if (player.getLastDamageCause() instanceof EntityDamageByEntityEvent) {

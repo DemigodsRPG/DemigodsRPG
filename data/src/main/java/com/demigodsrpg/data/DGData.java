@@ -17,6 +17,7 @@
 
 package com.demigodsrpg.data;
 
+import com.demigodsrpg.ability.AbilityRegistry;
 import com.demigodsrpg.data.registry.*;
 import org.bukkit.plugin.Plugin;
 
@@ -34,6 +35,7 @@ public class DGData {
     public static final ServerDataRegistry SERVER_R = new ServerDataRegistry();
     public static final ConcurrentMap<String, AreaRegistry> AREA_R = new ConcurrentHashMap<>();
 
+    public static final AbilityRegistry ABILITY_R = new AbilityRegistry();
     public static final BattleRegistry BATTLE_R = new BattleRegistry();
 
     public static Plugin PLUGIN;

@@ -144,7 +144,7 @@ public class AspectCommand extends BaseCommand {
                 player.sendMessage(" - Info: " + aspect.getInfo());
                 // FIXME player.sendMessage(" - Deity: " + StringUtil2.beautify(aspect.getDefaultAlliance().name()));
 
-                for (AbilityMetaData ability : DGPlugin.ABILITY_R.getAbilities(aspect)) {
+                for (AbilityMetaData ability : DGData.ABILITY_R.getAbilities(aspect)) {
                     player.sendMessage(" " + ability.getName() + ":");
                     player.sendMessage(ability.getInfo());
 
