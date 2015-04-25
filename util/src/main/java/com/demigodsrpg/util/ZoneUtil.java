@@ -23,15 +23,19 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Set;
 
 public class ZoneUtil {
     private static final Set<String> ENABLED_WORLDS = Sets.newHashSet();
-    private static final Configuration PLUGIN_CONFIG = JavaPlugin.getProvidingPlugin(ZoneUtil.class).getConfig();
+    private static Configuration PLUGIN_CONFIG;
 
-    public static int init() {
+    public static int init(Plugin plugin) {
+        // Get the plugin config
+        PLUGIN_CONFIG = plugin.getConfig();
+
         // Load disabled worlds
         Set<String> enabledWorlds = Sets.newHashSet();
         int erroredWorlds = 0;

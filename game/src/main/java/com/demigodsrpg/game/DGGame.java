@@ -161,7 +161,7 @@ public class DGGame {
         plugin.getCommand("setfaction").setExecutor(new SetFactionCommand());
 
         // Enable ZoneUtil
-        ZoneUtil.init();
+        ZoneUtil.init(plugin);
 
         // Handle Chitchat integration
         if (manager.isPluginEnabled("Chitchat")) {
