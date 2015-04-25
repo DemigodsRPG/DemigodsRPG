@@ -27,7 +27,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>demigodsrpg-data</artifactId>
-    <version>${data.version}</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <name>Demigods RPG - Data</name>
     <url>http://github.com/DemigodsRPG/DemigodsRPG</url>
@@ -35,7 +35,7 @@
     <dependencies>
         <dependency>
             <groupId>com.demigodsrpg</groupId>
-            <artifactId>util</artifactId>
+            <artifactId>demigodsrpg-util</artifactId>
             <version>${util.version}</version>
         </dependency>
     </dependencies>

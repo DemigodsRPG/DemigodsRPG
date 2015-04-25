@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>demigodsrpg-game</artifactId>
+    <artifactId>demigods-game</artifactId>
     <version>${game.version}</version>
 
     <name>Demigods RPG - Game</name>
@@ -19,12 +19,12 @@
     <dependencies>
         <dependency>
             <groupId>com.demigodsrpg</groupId>
-            <artifactId>util</artifactId>
+            <artifactId>demigodsrpg-util</artifactId>
             <version>${util.version}</version>
         </dependency>
         <dependency>
             <groupId>com.demigodsrpg</groupId>
-            <artifactId>data</artifactId>
+            <artifactId>demigodsrpg-data</artifactId>
             <version>${data.version}</version>
         </dependency>
     </dependencies>
