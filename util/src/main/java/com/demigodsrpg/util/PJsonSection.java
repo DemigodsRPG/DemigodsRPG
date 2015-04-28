@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Object representing a section of a json file.
+ * Object representing a section of a json db.
  */
 @SuppressWarnings("unchecked")
 public class PJsonSection implements DataSection, Serializable {
