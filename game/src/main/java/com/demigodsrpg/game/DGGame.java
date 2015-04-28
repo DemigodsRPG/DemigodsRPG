@@ -23,7 +23,6 @@ import com.demigodsrpg.data.Demo;
 import com.demigodsrpg.data.Setting;
 import com.demigodsrpg.data.deity.Faction;
 import com.demigodsrpg.data.model.PlayerModel;
-import com.demigodsrpg.data.model.ShrineModel;
 import com.demigodsrpg.data.model.TributeModel;
 import com.demigodsrpg.data.registry.config.AreaRegistry;
 import com.demigodsrpg.game.command.*;
@@ -40,9 +39,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class DGGame {
     // -- PLUGIN RELATED CONSTANTS -- //
@@ -66,11 +62,15 @@ public class DGGame {
             try {
                 Class.forName("org.postgresql.Driver");
                 Db.open(Setting.PSQL_CONNECTION).close();
+                DGData.CONSOLE.info("PSQL database saving enabled.");
             } catch (Exception oops) {
+                oops.printStackTrace();
                 DGData.CONSOLE.warning("Could not load the PSQL driver.");
-                DGData.CONSOLE.warning("Defaulting to file save.");
+                DGData.CONSOLE.warning("Defaulting to json file save.");
                 Setting.PSQL_PERSISTENCE = false;
             }
+        } else {
+            DGData.CONSOLE.info("Json file database saving enabled.");
         }
 
         // Define the save path
@@ -101,18 +101,6 @@ public class DGGame {
             DGData.FACTION_R.register(Demo.F.KŌHAI);
             DGData.FACTION_R.register(Demo.F.SENPAI);
             DGData.FACTION_R.register(Demo.F.SENSEI);
-
-            // Rebuild shrine warps
-            DGData.CONSOLE.info("Rebuilding shrine warps.");
-            DGData.PLAYER_R.getRegistered().forEach(model -> {
-                List<ShrineModel> ownedShrines = DGData.SHRINE_R.getRegistered().stream().
-                        filter(shrine -> model.getMojangId().equals(shrine.getOwnerMojangId())).collect(Collectors.toList());
-                ownedShrines.forEach(shrine -> {
-                    if (!model.getShrineWarps().contains(shrine.getPersistentId())) {
-                        model.addShrineWarp(shrine);
-                    }
-                });
-            });
         }
 
         // Determine territory registries

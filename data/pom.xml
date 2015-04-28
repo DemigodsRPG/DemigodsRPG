@@ -41,7 +41,6 @@
     </dependencies>
 
     <build>
-        <finalName>DemigodsRPG-Data</finalName>
         <defaultGoal>clean install</defaultGoal>
         <sourceDirectory>src/main/java/</sourceDirectory>
         <plugins>

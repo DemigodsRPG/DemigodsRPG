@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.iciql.Db;
 import com.iciql.Iciql;
+import com.iciql.util.Utils;
 import org.postgresql.util.PGobject;
 
 import java.io.Serializable;
@@ -57,6 +58,8 @@ public class PJsonSection implements DataSection, Serializable {
     public PJsonSection(Map<String, Object> data) {
         if (data != null) {
             SECTION_DATA = data;
+        } else {
+            throw new NullPointerException("PJsonSection will not hold null.");
         }
     }
 
@@ -70,10 +73,16 @@ public class PJsonSection implements DataSection, Serializable {
      * @return Save success or failure.
      */
     public boolean save(String name, String connection) {
+        ThreadLocal<Table> tableSafe = Utils.newThreadLocal(Table.class);
         Db db = Db.open(connection);
         try {
-            db.insert(new Table(name, this));
+            if (db.from(tableSafe.get()).where(tableSafe.get().id).is(name).select().size() > 0) {
+                db.update(new Table(name, this));
+            } else {
+                db.insert(new Table(name, this));
+            }
         } catch (Exception oops) {
+            oops.printStackTrace();
             return false;
         } finally {
             db.close();
@@ -236,11 +245,13 @@ public class PJsonSection implements DataSection, Serializable {
     }
 
     public PJsonSection getSectionNullable(String s) {
-        try {
-            PJsonSection section = new PJsonSection();
-            section.SECTION_DATA = (Map) get(s);
-            return section;
-        } catch (Exception ignored) {
+        if (contains(s) && isSection(s)) {
+            try {
+                PJsonSection section = new PJsonSection();
+                section.SECTION_DATA = (Map) get(s);
+                return section;
+            } catch (Exception ignored) {
+            }
         }
         return null;
     }
@@ -287,7 +298,7 @@ public class PJsonSection implements DataSection, Serializable {
 
         @Override
         public String getDataType() {
-            return "jsonb";
+            return "json";
         }
 
         @Override
@@ -302,7 +313,7 @@ public class PJsonSection implements DataSection, Serializable {
 
         @Override
         public Object serialize(PJsonSection section) {
-            String json = gson().toJson(section);
+            String json = gson().toJson(section.SECTION_DATA, Map.class);
             PGobject pg = new PGobject();
             pg.setType(getDataType());
             try {
@@ -327,7 +338,7 @@ public class PJsonSection implements DataSection, Serializable {
         @Iciql.IQColumn(primaryKey = true)
         public String id;
 
-        @Iciql.IQColumn
+        @Iciql.IQColumn(nullable = false)
         @Iciql.TypeAdapter(Adapter.class)
         PJsonSection section;
 

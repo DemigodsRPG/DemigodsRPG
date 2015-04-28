@@ -78,12 +78,13 @@ public class DataSectionUtil {
         try {
             Optional<PJsonSection.Table> found = db.from(safeTable.get()).where(safeTable.get().id).is(name).select().stream().findFirst();
             if (found.isPresent()) {
-                return Optional.ofNullable(found.get().section);
+                return Optional.of(found.get().section);
             }
         } catch (Exception oops) {
             oops.printStackTrace();
+        } finally {
+            db.close();
         }
-        db.close();
         return Optional.empty();
     }
 

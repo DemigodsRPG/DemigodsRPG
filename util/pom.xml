@@ -33,7 +33,6 @@
     <url>http://github.com/DemigodsRPG/DemigodsRPG</url>
 
     <build>
-        <finalName>DemigodsRPG-Util</finalName>
         <defaultGoal>clean install</defaultGoal>
         <sourceDirectory>src/main/java/</sourceDirectory>
         <plugins>

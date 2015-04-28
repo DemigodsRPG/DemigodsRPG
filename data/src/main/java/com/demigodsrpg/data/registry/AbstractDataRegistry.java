@@ -22,6 +22,8 @@ import com.demigodsrpg.data.Setting;
 import com.demigodsrpg.data.model.AbstractPersistentModel;
 import com.demigodsrpg.util.DataSection;
 import com.demigodsrpg.util.DataSectionUtil;
+import com.demigodsrpg.util.FJsonSection;
+import com.demigodsrpg.util.PJsonSection;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -89,7 +91,6 @@ public abstract class AbstractDataRegistry<T extends AbstractPersistentModel<Str
     synchronized boolean deleteFromDatabase(String key) {
         // Grab the current db, and its data as a usable map.
         DataSection currentDb = getDatabase();
-
         if (currentDb != null) {
             // Remove data.
             currentDb.remove(key);
@@ -134,19 +135,18 @@ public abstract class AbstractDataRegistry<T extends AbstractPersistentModel<Str
         if (Setting.PSQL_PERSISTENCE) {
             try {
                 return DataSectionUtil.loadSectionFromPSQL(getName(), Setting.PSQL_CONNECTION).get();
-            } catch (Exception oops) {
-                DGData.CONSOLE.warning("Unable to access sql table: " + getName());
-                oops.printStackTrace();
+            } catch (Exception ignored) {
             }
         } else {
             try {
                 return DataSectionUtil.loadSectionFromFile(DGData.SAVE_PATH + getName() + getExtention()).get();
-            } catch (Exception oops) {
-                DGData.CONSOLE.warning("File corrupt: " + getName());
-                oops.printStackTrace();
+            } catch (Exception ignored) {
             }
         }
-        return null;
+        if (Setting.PSQL_PERSISTENCE) {
+            return new PJsonSection(new ConcurrentHashMap<>());
+        }
+        return new FJsonSection(new ConcurrentHashMap<>());
     }
 
     public synchronized final void clearCache() {
