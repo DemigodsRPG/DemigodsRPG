@@ -24,7 +24,7 @@ public class Depends {
     public static final String COM_DG = "com.demigodsrpg";
     public static final String COM_CS = "com.censoredsoftware.library";
     public static final String COM_ICIQL = "com.iciql";
-    public static final String ORG_PSQL = "com.postgresql";
+    public static final String ORG_PSQL = "org.postgresql";
 
     public static final String CS_UTIL = "util";
     public static final String CS_BUKKIT_UTIL = "bukkit-util";
