@@ -32,6 +32,7 @@ import com.demigodsrpg.game.integration.chitchat.FactionChatTag;
 import com.demigodsrpg.game.integration.chitchat.FactionIdTag;
 import com.demigodsrpg.game.listener.*;
 import com.demigodsrpg.util.ZoneUtil;
+import com.iciql.Db;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
@@ -59,6 +60,18 @@ public class DGGame {
 
         // Define the console
         DGData.CONSOLE = plugin.getLogger();
+
+        // Test for SQL connection if it is enabled
+        if (Setting.PSQL_PERSISTENCE) {
+            try {
+                Class.forName("org.postgresql.Driver");
+                Db.open(Setting.PSQL_CONNECTION).close();
+            } catch (Exception oops) {
+                DGData.CONSOLE.warning("Could not load the PSQL driver.");
+                DGData.CONSOLE.warning("Defaulting to file save.");
+                Setting.PSQL_PERSISTENCE = false;
+            }
+        }
 
         // Define the save path
         DGData.SAVE_PATH = plugin.getDataFolder().getPath() + "/data/";
@@ -166,7 +179,13 @@ public class DGGame {
         }
 
         // Let the console know
-        DGData.CONSOLE.info("Enabled and ready for battle.");
+        DGData.CONSOLE.info("     ____            _           _");
+        DGData.CONSOLE.info("    |    \\ ___ _____|_|___ ___ _| |___");
+        DGData.CONSOLE.info("    |  |  | -_|     | | . | . | . |_ -|");
+        DGData.CONSOLE.info("    |____/|___|_|_|_|_|_  |___|___|___|");
+        DGData.CONSOLE.info("        Battle of the |___| Chosen");
+        DGData.CONSOLE.info("  ");
+        DGData.CONSOLE.info(" ver. " + DGData.PLUGIN.getDescription().getVersion() + " enabled!");
     }
 
     public void onDisable(DGBukkitPlugin plugin) {

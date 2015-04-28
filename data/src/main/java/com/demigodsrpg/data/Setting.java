@@ -36,7 +36,7 @@ public class Setting {
     public static final boolean SAVE_PRETTY = getConfig().getBoolean("save_pretty", false);
     public static final boolean DEBUG_DATA = getConfig().getBoolean("debug_data", false);
     public static final boolean DEBUG_INVISIBLE_WALLS = getConfig().getBoolean("debug_invisible_walls", false);
-    public static final boolean PSQL_PERSISTENCE = getConfig().getBoolean("psql.use", false);
+    public static boolean PSQL_PERSISTENCE = getConfig().getBoolean("psql.use", false);
     public static final String PSQL_CONNECTION = getConfig().getString("psql.connection", "postgresql://localhost:5432/demigods?user=demigods&password=demigods");
 
     private static ConfigurationSection getConfig() {

@@ -47,7 +47,7 @@ public class DGBukkitPlugin extends JavaPlugin {
         LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_DG, Depends.DG_DATA, Depends.DG_DATA_VER);
 
         // PostgreSQL & Iciql Libs
-        if (getConfig().getBoolean("psql_persistence", false)) {
+        if (getConfig().getBoolean("psql.use", false)) {
             LIBRARIES.addMavenLibrary(Depends.GITBLIT_REPO, Depends.COM_ICIQL, Depends.ICIQL, Depends.ICIQL_VER);
             LIBRARIES.addMavenLibrary(LibraryHandler.MAVEN_CENTRAL, Depends.ORG_PSQL, Depends.PSQL, Depends.PSQL_VER);
         }
