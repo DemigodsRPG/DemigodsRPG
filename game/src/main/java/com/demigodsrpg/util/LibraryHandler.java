@@ -90,7 +90,7 @@ public class LibraryHandler {
 
         // If they aren't found, download them
         if (libraryFile == null) {
-            PLUGIN.getLogger().warning("Downloading " + fileName + "...");
+            PLUGIN.getLogger().warning("Downloading " + fileName + ".");
             libraryFile = downloadLibrary(fileName, url);
         }
 
