@@ -30,17 +30,27 @@ public class DGBukkitPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // Config
+        getConfig().options().copyDefaults(true);
+        saveConfig();
+
         // Get and load the libraries
         LIBRARIES = new LibraryHandler(this);
 
         // Censored Libs
-        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, Depends.COM_CS, Depends.CS_SCHEMATIC, Depends.CS_VER);
-        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, Depends.COM_CS, Depends.CS_UTIL, Depends.CS_VER);
-        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, Depends.COM_CS, Depends.CS_BUKKIT_UTIL, Depends.CS_VER);
+        LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_CS, Depends.CS_SCHEMATIC, Depends.CS_VER);
+        LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_CS, Depends.CS_UTIL, Depends.CS_VER);
+        LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_CS, Depends.CS_BUKKIT_UTIL, Depends.CS_VER);
 
         // Demigods RPG Libs
-        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, Depends.COM_DG, Depends.DG_UTIL, Depends.DG_UTIL_VER);
-        LIBRARIES.addMavenLibrary(LibraryHandler.DG_MG, Depends.COM_DG, Depends.DG_DATA, Depends.DG_DATA_VER);
+        LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_DG, Depends.DG_UTIL, Depends.DG_UTIL_VER);
+        LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_DG, Depends.DG_DATA, Depends.DG_DATA_VER);
+
+        // PostgreSQL & Iciql Libs
+        if (getConfig().getBoolean("psql_persistence", false)) {
+            LIBRARIES.addMavenLibrary(Depends.GITBLIT_REPO, Depends.COM_ICIQL, Depends.ICIQL, Depends.ICIQL_VER);
+            LIBRARIES.addMavenLibrary(LibraryHandler.MAVEN_CENTRAL, Depends.ORG_PSQL, Depends.PSQL, Depends.PSQL_VER);
+        }
 
         // Enable
         new DGGame(this);

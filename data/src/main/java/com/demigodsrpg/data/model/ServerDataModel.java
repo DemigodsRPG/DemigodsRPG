@@ -17,7 +17,7 @@
 
 package com.demigodsrpg.data.model;
 
-import com.demigodsrpg.util.JsonSection;
+import com.demigodsrpg.util.DataSection;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +36,7 @@ public class ServerDataModel extends AbstractPersistentModel<String> {
     public ServerDataModel() {
     }
 
-    public ServerDataModel(String id, JsonSection conf) {
+    public ServerDataModel(String id, DataSection conf) {
         this.id = id;
         this.type = DataType.valueOf(conf.getString("type"));
         this.row = conf.getString("row");

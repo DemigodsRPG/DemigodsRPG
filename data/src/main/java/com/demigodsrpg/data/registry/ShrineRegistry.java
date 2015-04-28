@@ -18,15 +18,15 @@
 package com.demigodsrpg.data.registry;
 
 import com.demigodsrpg.data.model.ShrineModel;
-import com.demigodsrpg.util.JsonSection;
+import com.demigodsrpg.util.DataSection;
 import org.bukkit.Location;
 
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ShrineRegistry extends AbstractRegistry<ShrineModel> {
-    private static final String FILE_NAME = "shrines.dgdat";
+public class ShrineRegistry extends AbstractDataRegistry<ShrineModel> {
+    private static final String FILE_NAME = "shrines";
 
     public Collection<ShrineModel> getShrines(final Location location, final int range) {
         return getRegistered().stream().filter(model -> model.getLocation().getWorld().equals(location.getWorld()) && model.getLocation().distance(location) <= range).collect(Collectors.toList());
@@ -48,12 +48,12 @@ public class ShrineRegistry extends AbstractRegistry<ShrineModel> {
     }
 
     @Override
-    public ShrineModel valueFromData(String stringKey, JsonSection data) {
+    public ShrineModel valueFromData(String stringKey, DataSection data) {
         return new ShrineModel(stringKey, data);
     }
 
     @Override
-    public String getFileName() {
+    public String getName() {
         return FILE_NAME;
     }
 }

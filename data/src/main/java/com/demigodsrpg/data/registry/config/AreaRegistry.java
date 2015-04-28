@@ -15,26 +15,26 @@
  * limitations under the License.
  */
 
-package com.demigodsrpg.data.registry;
+package com.demigodsrpg.data.registry.config;
 
 
 import com.demigodsrpg.data.area.Area;
 import com.demigodsrpg.data.area.ClaimRoom;
 import com.demigodsrpg.data.area.FactionTerritory;
-import com.demigodsrpg.util.JsonSection;
+import com.demigodsrpg.util.DataSection;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AreaRegistry extends AbstractRegistry<Area> {
+public class AreaRegistry extends AbstractConfigRegistry<Area> {
     private final World WORLD;
     private final String FILE_NAME;
 
     public AreaRegistry(World world) {
         WORLD = world;
-        FILE_NAME = world.getName() + ".areas.dgcfg";
+        FILE_NAME = world.getName() + ".areas";
     }
 
     public World getWorld() {
@@ -42,7 +42,7 @@ public class AreaRegistry extends AbstractRegistry<Area> {
     }
 
     @Override
-    public Area valueFromData(String stringKey, JsonSection data) {
+    public Area valueFromData(String stringKey, DataSection data) {
         String areaType = stringKey.split("\\$")[0];
         if ("faction".equals(areaType)) {
             return new FactionTerritory(stringKey, data);
@@ -53,7 +53,7 @@ public class AreaRegistry extends AbstractRegistry<Area> {
     }
 
     @Override
-    public String getFileName() {
+    public String getName() {
         return FILE_NAME;
     }
 

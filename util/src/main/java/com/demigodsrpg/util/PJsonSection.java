@@ -19,9 +19,12 @@ package com.demigodsrpg.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.iciql.Db;
+import com.iciql.Iciql;
+import org.postgresql.util.PGobject;
 
-import java.io.File;
-import java.io.PrintWriter;
+import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,17 +34,19 @@ import java.util.Set;
  * Object representing a section of a json file.
  */
 @SuppressWarnings("unchecked")
-public class JsonSection {
+public class PJsonSection implements DataSection, Serializable {
+    private static final long serialVersionUID = -8256135535498326597L;
+
     // -- PRIVATE FIELDS -- //
 
-    private Map<String, Object> SECTION_DATA = new HashMap<>();
+    Map<String, Object> SECTION_DATA = new HashMap<>();
 
     // -- CONSTRUCTORS -- //
 
     /**
      * Default constructor.
      */
-    private JsonSection() {
+    public PJsonSection() {
     }
 
     /**
@@ -49,7 +54,7 @@ public class JsonSection {
      *
      * @param data Default data.
      */
-    public JsonSection(Map<String, Object> data) {
+    public PJsonSection(Map<String, Object> data) {
         if (data != null) {
             SECTION_DATA = data;
         }
@@ -58,43 +63,22 @@ public class JsonSection {
     // -- UTILITY METHODS -- //
 
     /**
-     * Save this section to a json file.
+     * Save this section to a json db.
      *
-     * @param dataFile The file to hold the section data.
+     * @param name       The section name.
+     * @param connection The db to hold the section data.
      * @return Save success or failure.
      */
-    public boolean save(File dataFile) {
+    public boolean save(String name, String connection) {
+        Db db = Db.open(connection);
         try {
-            Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
-            String json = gson.toJson(SECTION_DATA, Map.class);
-            PrintWriter writer = new PrintWriter(dataFile);
-            writer.print(json);
-            writer.close();
-            return true;
+            db.insert(new Table(name, this));
         } catch (Exception oops) {
-            oops.printStackTrace();
+            return false;
+        } finally {
+            db.close();
         }
-        return false;
-    }
-
-    /**
-     * Save this section to a json file in a pretty format.
-     *
-     * @param dataFile The file to hold the section data.
-     * @return Save success or failure.
-     */
-    public boolean savePretty(File dataFile) {
-        try {
-            Gson gson = new GsonBuilder().setPrettyPrinting().enableComplexMapKeySerialization().create();
-            String json = gson.toJson(SECTION_DATA, Map.class);
-            PrintWriter writer = new PrintWriter(dataFile);
-            writer.print(json);
-            writer.close();
-            return true;
-        } catch (Exception oops) {
-            oops.printStackTrace();
-        }
-        return false;
+        return true;
     }
 
     // -- GETTERS -- //
@@ -109,7 +93,7 @@ public class JsonSection {
         return SECTION_DATA;
     }
 
-    boolean contains(String s) {
+    public boolean contains(String s) {
         return SECTION_DATA.containsKey(s);
     }
 
@@ -121,14 +105,14 @@ public class JsonSection {
         return SECTION_DATA.get(s);
     }
 
-    Object get(String s, Object o) {
+    public Object get(String s, Object o) {
         if (contains(s)) {
             return get(s);
         }
         return o;
     }
 
-    Object getNullable(String s) {
+    public Object getNullable(String s) {
         if (contains(s)) {
             return get(s);
         }
@@ -251,9 +235,9 @@ public class JsonSection {
         return contains(s) ? getMapList(s) : null;
     }
 
-    public JsonSection getSectionNullable(String s) {
+    public PJsonSection getSectionNullable(String s) {
         try {
-            JsonSection section = new JsonSection();
+            PJsonSection section = new PJsonSection();
             section.SECTION_DATA = (Map) get(s);
             return section;
         } catch (Exception ignored) {
@@ -275,16 +259,84 @@ public class JsonSection {
         SECTION_DATA.put(s, null);
     }
 
-    public JsonSection createSection(String s) {
-        JsonSection section = new JsonSection();
+    public PJsonSection createSection(String s) {
+        PJsonSection section = new PJsonSection();
         SECTION_DATA.put(s, section.SECTION_DATA);
         return section;
     }
 
-    public JsonSection createSection(String s, Map<String, Object> map) {
-        JsonSection section = new JsonSection();
+    public PJsonSection createSection(String s, Map<String, Object> map) {
+        PJsonSection section = new PJsonSection();
         section.SECTION_DATA = map;
         SECTION_DATA.put(s, section.SECTION_DATA);
         return section;
+    }
+
+    @Override
+    public FJsonSection toFJsonSection() {
+        return new FJsonSection(SECTION_DATA);
+    }
+
+    @Override
+    public PJsonSection toPJsonSection() {
+        return this;
+    }
+
+    public static class Adapter implements Iciql.DataTypeAdapter<PJsonSection> {
+        private Iciql.Mode mode;
+
+        @Override
+        public String getDataType() {
+            return "jsonb";
+        }
+
+        @Override
+        public Class<PJsonSection> getJavaType() {
+            return PJsonSection.class;
+        }
+
+        @Override
+        public void setMode(Iciql.Mode mode) {
+            this.mode = mode;
+        }
+
+        @Override
+        public Object serialize(PJsonSection section) {
+            String json = gson().toJson(section);
+            PGobject pg = new PGobject();
+            pg.setType(getDataType());
+            try {
+                pg.setValue(json);
+            } catch (SQLException ignored) {
+            }
+            return pg;
+        }
+
+        @Override
+        public PJsonSection deserialize(Object value) {
+            return new PJsonSection(gson().fromJson(value.toString(), Map.class));
+        }
+
+        private Gson gson() {
+            return new GsonBuilder().create();
+        }
+    }
+
+    @Iciql.IQTable(name = "json_sections")
+    public static class Table {
+        @Iciql.IQColumn(primaryKey = true)
+        public String id;
+
+        @Iciql.IQColumn
+        @Iciql.TypeAdapter(Adapter.class)
+        PJsonSection section;
+
+        public Table() {
+        }
+
+        public Table(String id, PJsonSection section) {
+            this.id = id;
+            this.section = section;
+        }
     }
 }

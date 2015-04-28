@@ -23,7 +23,7 @@ import com.demigodsrpg.data.deity.Deity;
 import com.demigodsrpg.data.deity.Faction;
 import com.demigodsrpg.data.shrine.Shrine;
 import com.demigodsrpg.data.shrine.ShrineWorld;
-import com.demigodsrpg.util.JsonSection;
+import com.demigodsrpg.util.DataSection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -49,7 +49,7 @@ public class ShrineModel extends AbstractPersistentModel<String> {
         this.location = location;
     }
 
-    public ShrineModel(String shrineId, JsonSection conf) {
+    public ShrineModel(String shrineId, DataSection conf) {
         this.shrineId = shrineId;
         ownerMojangId = conf.getString("owner_id");
         deity = DGData.DEITY_R.deityFromName(conf.getString("deity"));

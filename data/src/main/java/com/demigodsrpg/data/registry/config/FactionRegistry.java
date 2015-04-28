@@ -15,20 +15,20 @@
  * limitations under the License.
  */
 
-package com.demigodsrpg.data.registry;
+package com.demigodsrpg.data.registry.config;
 
 import com.demigodsrpg.aspect.Aspect;
 import com.demigodsrpg.aspect.Groups;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.deity.Deity;
 import com.demigodsrpg.data.deity.Faction;
-import com.demigodsrpg.util.JsonSection;
+import com.demigodsrpg.util.DataSection;
 
 import java.util.Optional;
 
-public class FactionRegistry extends AbstractRegistry<Faction> {
+public class FactionRegistry extends AbstractConfigRegistry<Faction> {
 
-    private static final String FILE_NAME = "factions.dgcfg";
+    private static final String FILE_NAME = "factions";
 
     public Faction factionFromName(final String name) {
         Optional<Faction> found = getRegistered().stream().filter(faction -> faction.getName().equalsIgnoreCase(name)).findAny();
@@ -39,12 +39,12 @@ public class FactionRegistry extends AbstractRegistry<Faction> {
     }
 
     @Override
-    protected Faction valueFromData(String stringKey, JsonSection data) {
+    protected Faction valueFromData(String stringKey, DataSection data) {
         return new Faction(stringKey, data);
     }
 
     @Override
-    protected String getFileName() {
+    protected String getName() {
         return FILE_NAME;
     }
 

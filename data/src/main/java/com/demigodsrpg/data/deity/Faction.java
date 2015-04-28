@@ -18,7 +18,7 @@
 package com.demigodsrpg.data.deity;
 
 import com.demigodsrpg.data.model.AbstractPersistentModel;
-import com.demigodsrpg.util.JsonSection;
+import com.demigodsrpg.util.DataSection;
 import org.bukkit.ChatColor;
 
 import java.util.HashMap;
@@ -51,7 +51,7 @@ public class Faction extends AbstractPersistentModel<String> {
         this.welcomeMessage = welcomeMessage;
     }
 
-    public Faction(String stringKey, JsonSection conf) {
+    public Faction(String stringKey, DataSection conf) {
         name = stringKey;
         color = conf.getString("color");
         chatSymbol = conf.getString("chat-symbol");

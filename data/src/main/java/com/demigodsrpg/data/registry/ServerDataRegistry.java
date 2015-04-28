@@ -18,14 +18,14 @@
 package com.demigodsrpg.data.registry;
 
 import com.demigodsrpg.data.model.ServerDataModel;
-import com.demigodsrpg.util.JsonSection;
+import com.demigodsrpg.util.DataSection;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class ServerDataRegistry extends AbstractRegistry<ServerDataModel> {
-    private static final String FILE_NAME = "misc.dgdat";
+public class ServerDataRegistry extends AbstractDataRegistry<ServerDataModel> {
+    private static final String FILE_NAME = "misc";
 
     public void put(String row, String column, String value) {
         // Remove the value if it exists already
@@ -124,12 +124,12 @@ public class ServerDataRegistry extends AbstractRegistry<ServerDataModel> {
     }
 
     @Override
-    public ServerDataModel valueFromData(String stringKey, JsonSection data) {
+    public ServerDataModel valueFromData(String stringKey, DataSection data) {
         return new ServerDataModel(stringKey, data);
     }
 
     @Override
-    public String getFileName() {
+    public String getName() {
         return FILE_NAME;
     }
 }

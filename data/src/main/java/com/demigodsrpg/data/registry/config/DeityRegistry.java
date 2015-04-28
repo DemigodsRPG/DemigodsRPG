@@ -15,18 +15,18 @@
  * limitations under the License.
  */
 
-package com.demigodsrpg.data.registry;
+package com.demigodsrpg.data.registry.config;
 
 import com.demigodsrpg.data.deity.Deity;
 import com.demigodsrpg.data.deity.Faction;
-import com.demigodsrpg.util.JsonSection;
+import com.demigodsrpg.util.DataSection;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class DeityRegistry extends AbstractRegistry<Deity> {
-    private static final String FILE_NAME = "deities.dgcfg";
+public class DeityRegistry extends AbstractConfigRegistry<Deity> {
+    private static final String FILE_NAME = "deities";
 
     public Deity deityFromName(String name) {
         Optional<Deity> found = getRegistered().stream().filter(deity -> deity.getName().equalsIgnoreCase(name)).findAny();
@@ -41,12 +41,12 @@ public class DeityRegistry extends AbstractRegistry<Deity> {
     }
 
     @Override
-    protected Deity valueFromData(String stringKey, JsonSection data) {
+    protected Deity valueFromData(String stringKey, DataSection data) {
         return new Deity(stringKey, data);
     }
 
     @Override
-    protected String getFileName() {
+    protected String getName() {
         return FILE_NAME;
     }
 

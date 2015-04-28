@@ -25,7 +25,7 @@ import com.demigodsrpg.data.deity.Faction;
 import com.demigodsrpg.data.model.PlayerModel;
 import com.demigodsrpg.data.model.ShrineModel;
 import com.demigodsrpg.data.model.TributeModel;
-import com.demigodsrpg.data.registry.AreaRegistry;
+import com.demigodsrpg.data.registry.config.AreaRegistry;
 import com.demigodsrpg.game.command.*;
 import com.demigodsrpg.game.command.admin.*;
 import com.demigodsrpg.game.integration.chitchat.FactionChatTag;
@@ -63,13 +63,9 @@ public class DGGame {
         // Define the save path
         DGData.SAVE_PATH = plugin.getDataFolder().getPath() + "/data/";
 
-        // Config
-        plugin.getConfig().options().copyDefaults(true);
-        plugin.saveConfig();
-
         // Get custom factions and deities
-        DGData.FACTION_R.registerFromFile();
-        DGData.DEITY_R.registerFromFile();
+        DGData.FACTION_R.registerFromDatabase();
+        DGData.DEITY_R.registerFromDatabase();
 
         // Register default factions
         DGData.FACTION_R.register(Faction.NEUTRAL);
@@ -109,7 +105,7 @@ public class DGGame {
         // Determine territory registries
         for (World world : Bukkit.getWorlds()) {
             AreaRegistry area_r = new AreaRegistry(world);
-            area_r.registerFromFile();
+            area_r.registerFromDatabase();
             DGData.AREA_R.put(world.getName(), new AreaRegistry(world));
         }
 

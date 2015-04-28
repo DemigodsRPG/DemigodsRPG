@@ -28,7 +28,7 @@ import com.demigodsrpg.data.deity.Deity;
 import com.demigodsrpg.data.deity.DeityType;
 import com.demigodsrpg.data.deity.Faction;
 import com.demigodsrpg.data.model.PlayerModel;
-import com.demigodsrpg.data.registry.AreaRegistry;
+import com.demigodsrpg.data.registry.config.AreaRegistry;
 import com.demigodsrpg.util.ZoneUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.lang.StringUtils;

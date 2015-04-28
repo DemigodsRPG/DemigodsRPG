@@ -21,7 +21,7 @@ import com.demigodsrpg.aspect.Aspect;
 import com.demigodsrpg.data.deity.Deity;
 import com.demigodsrpg.data.deity.Faction;
 import com.demigodsrpg.data.model.PlayerModel;
-import com.demigodsrpg.util.JsonSection;
+import com.demigodsrpg.util.DataSection;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -30,8 +30,8 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class PlayerRegistry extends AbstractRegistry<PlayerModel> {
-    private static final String FILE_NAME = "players.dgdat";
+public class PlayerRegistry extends AbstractDataRegistry<PlayerModel> {
+    private static final String FILE_NAME = "players";
 
     @Deprecated
     public PlayerModel fromName(final String name) {
@@ -84,12 +84,12 @@ public class PlayerRegistry extends AbstractRegistry<PlayerModel> {
     }
 
     @Override
-    public String getFileName() {
+    public String getName() {
         return FILE_NAME;
     }
 
     @Override
-    public PlayerModel valueFromData(String stringKey, JsonSection data) {
+    public PlayerModel valueFromData(String stringKey, DataSection data) {
         return new PlayerModel(stringKey, data);
     }
 }

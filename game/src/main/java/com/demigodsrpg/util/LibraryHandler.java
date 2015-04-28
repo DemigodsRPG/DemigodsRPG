@@ -32,7 +32,6 @@ public class LibraryHandler {
     // -- IMPORTANT FIELDS -- //
 
     public static final String MAVEN_CENTRAL = "http://central.maven.org/maven2/";
-    public static final String DG_MG = "http://repo.ii.dg-mg.club/";
     private static final int BYTE_SIZE = 1024;
 
     private final List<String> FILE_NAMES;

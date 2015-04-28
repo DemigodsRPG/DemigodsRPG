@@ -29,7 +29,7 @@ import com.demigodsrpg.data.battle.BattleMetaData;
 import com.demigodsrpg.data.deity.Deity;
 import com.demigodsrpg.data.deity.DeityType;
 import com.demigodsrpg.data.deity.Faction;
-import com.demigodsrpg.util.JsonSection;
+import com.demigodsrpg.util.DataSection;
 import com.demigodsrpg.util.ZoneUtil;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -105,7 +105,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     @SuppressWarnings("unchecked")
-    public PlayerModel(String mojangId, JsonSection conf) {
+    public PlayerModel(String mojangId, DataSection conf) {
         this.mojangId = mojangId;
         lastKnownName = conf.getString("last_known_name");
         lastLoginTime = conf.getLong("last_login_time");

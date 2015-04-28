@@ -21,7 +21,7 @@ import com.demigodsrpg.aspect.Aspect;
 import com.demigodsrpg.aspect.Groups;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.model.AbstractPersistentModel;
-import com.demigodsrpg.util.JsonSection;
+import com.demigodsrpg.util.DataSection;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -54,7 +54,7 @@ public class Deity extends AbstractPersistentModel<String> {
         decidePronouns();
     }
 
-    public Deity(String stringKey, JsonSection conf) {
+    public Deity(String stringKey, DataSection conf) {
         name = stringKey;
         gender = Gender.valueOf(conf.getString("gender"));
         deityType = DeityType.valueOf(conf.getString("type"));

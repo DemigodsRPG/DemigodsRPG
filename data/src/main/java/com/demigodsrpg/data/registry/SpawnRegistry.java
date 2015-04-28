@@ -19,14 +19,14 @@ package com.demigodsrpg.data.registry;
 
 import com.demigodsrpg.data.deity.Faction;
 import com.demigodsrpg.data.model.SpawnModel;
-import com.demigodsrpg.util.JsonSection;
+import com.demigodsrpg.util.DataSection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.util.Optional;
 
-public class SpawnRegistry extends AbstractRegistry<SpawnModel> {
-    private static final String FILE_NAME = "spawns.dgdat";
+public class SpawnRegistry extends AbstractDataRegistry<SpawnModel> {
+    private static final String FILE_NAME = "spawns";
 
     public Location getSpawn(final Faction faction) {
         Optional<SpawnModel> point = getRegistered().stream().filter(model -> model.getAlliance().equals(faction)).findAny();
@@ -37,13 +37,13 @@ public class SpawnRegistry extends AbstractRegistry<SpawnModel> {
     }
 
     @Override
-    public SpawnModel valueFromData(String stringKey, JsonSection data) {
+    public SpawnModel valueFromData(String stringKey, DataSection data) {
         // FIXME return better faction
         return new SpawnModel(Faction.NEUTRAL, data);
     }
 
     @Override
-    public String getFileName() {
+    public String getName() {
         return FILE_NAME;
     }
 }

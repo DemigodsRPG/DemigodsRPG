@@ -19,7 +19,7 @@ package com.demigodsrpg.data.area;
 
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.deity.Deity;
-import com.demigodsrpg.util.JsonSection;
+import com.demigodsrpg.util.DataSection;
 import com.demigodsrpg.util.LocationUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -39,7 +39,7 @@ public class ClaimRoom extends Area {
         this.deity = deity;
     }
 
-    public ClaimRoom(String id, JsonSection conf) {
+    public ClaimRoom(String id, DataSection conf) {
         super(AreaPriority.valueOf(conf.getString("priority")), new ArrayList<Location>() {{
             addAll(conf.getStringList("locations").stream().map(LocationUtil::locationFromString).collect(Collectors.toList()));
         }});
@@ -48,7 +48,7 @@ public class ClaimRoom extends Area {
 
         // Load next location if it exists
         if (conf.getSectionNullable("next-location") != null) {
-            JsonSection next = conf.getSectionNullable("next-location");
+            DataSection next = conf.getSectionNullable("next-location");
             World world = Bukkit.getWorld(next.getString("world"));
 
             // If the world doesn't exist anymore, the next location is invalid

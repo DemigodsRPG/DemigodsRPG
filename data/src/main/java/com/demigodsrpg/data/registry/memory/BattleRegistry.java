@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.demigodsrpg.data.registry;
+package com.demigodsrpg.data.registry.memory;
 
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.Setting;

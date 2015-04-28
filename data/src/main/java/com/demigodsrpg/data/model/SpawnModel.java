@@ -18,7 +18,7 @@
 package com.demigodsrpg.data.model;
 
 import com.demigodsrpg.data.deity.Faction;
-import com.demigodsrpg.util.JsonSection;
+import com.demigodsrpg.util.DataSection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -35,7 +35,7 @@ public class SpawnModel extends AbstractPersistentModel<String> {
         this.location = location;
     }
 
-    public SpawnModel(Faction faction, JsonSection conf) {
+    public SpawnModel(Faction faction, DataSection conf) {
         this.faction = faction;
 
         World world = Bukkit.getWorld(conf.getString("world_name"));

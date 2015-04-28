@@ -20,7 +20,7 @@ package com.demigodsrpg.data.model;
 import com.censoredsoftware.library.util.MapUtil2;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.registry.TributeRegistry;
-import com.demigodsrpg.util.JsonSection;
+import com.demigodsrpg.util.DataSection;
 import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -37,7 +37,7 @@ public class TributeModel extends AbstractPersistentModel<String> {
     private final TributeRegistry.Category category;
     private double lastKnownValue;
 
-    public TributeModel(Material material, JsonSection conf) {
+    public TributeModel(Material material, DataSection conf) {
         this.material = material;
         tributeTimes = conf.getDoubleList("tribute_times");
         fitness = conf.getInt("fitness");

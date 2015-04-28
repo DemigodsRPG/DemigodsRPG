@@ -19,6 +19,10 @@ package com.demigodsrpg.data;
 
 import com.demigodsrpg.ability.AbilityRegistry;
 import com.demigodsrpg.data.registry.*;
+import com.demigodsrpg.data.registry.config.AreaRegistry;
+import com.demigodsrpg.data.registry.config.DeityRegistry;
+import com.demigodsrpg.data.registry.config.FactionRegistry;
+import com.demigodsrpg.data.registry.memory.BattleRegistry;
 import org.bukkit.plugin.Plugin;
 
 import java.util.concurrent.ConcurrentHashMap;
