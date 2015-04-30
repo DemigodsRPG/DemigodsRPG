@@ -38,13 +38,25 @@ public class DGBukkitPlugin extends JavaPlugin {
         LIBRARIES = new LibraryHandler(this);
 
         // Censored Libs
-        LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_CS, Depends.CS_SCHEMATIC, Depends.CS_VER);
-        LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_CS, Depends.CS_UTIL, Depends.CS_VER);
-        LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_CS, Depends.CS_BUKKIT_UTIL, Depends.CS_VER);
+        try {
+            Class.forName("com.censoredsoftware.library.schematic.Selection");
+            getLogger().info("CensoredLib is bundled.");
+        } catch (Exception oops) {
+            getLogger().info("CensoredLib is not bundled.");
+            LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_CS, Depends.CS_SCHEMATIC, Depends.CS_VER);
+            LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_CS, Depends.CS_UTIL, Depends.CS_VER);
+            LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_CS, Depends.CS_BUKKIT_UTIL, Depends.CS_VER);
+        }
 
         // Demigods RPG Libs
-        LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_DG, Depends.DG_UTIL, Depends.DG_UTIL_VER);
-        LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_DG, Depends.DG_DATA, Depends.DG_DATA_VER);
+        try {
+            Class.forName("com.demigodsrpg.data.DGData");
+            getLogger().info("Data and utility modules are bundled.");
+        } catch (Exception oops) {
+            getLogger().info("Data and utility modules are not bundled.");
+            LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_DG, Depends.DG_UTIL, Depends.DG_UTIL_VER);
+            LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_DG, Depends.DG_DATA, Depends.DG_DATA_VER);
+        }
 
         // PostgreSQL & Iciql Libs
         if (getConfig().getBoolean("psql.use", false)) {

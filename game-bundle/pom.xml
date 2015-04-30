@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2015 Demigods RPG
+  ~ Copyright 2015 Alexander Chauncey
+  ~ Copyright 2015 Alex Bennett
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -9,10 +26,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>demigodsrpg-game</artifactId>
+    <artifactId>game-bundle</artifactId>
     <version>${game.version}</version>
 
-    <name>Demigods RPG - Game</name>
+    <name>Demigods RPG - Bundle</name>
     <description>Demigods RPG for Bukkit/Spigot Minecraft Servers.</description>
     <url>http://github.com/DemigodsRPG/DemigodsRPG</url>
 
@@ -26,6 +43,11 @@
             <groupId>com.demigodsrpg</groupId>
             <artifactId>demigodsrpg-data</artifactId>
             <version>${data.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.demigodsrpg</groupId>
+            <artifactId>demigodsrpg-game</artifactId>
+            <version>${game.version}</version>
         </dependency>
     </dependencies>
 
@@ -45,15 +67,24 @@
         </resources>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>templating-maven-plugin</artifactId>
-                <version>1.0-alpha-3</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.1</version>
                 <executions>
                     <execution>
-                        <id>filter-src</id>
+                        <phase>package</phase>
                         <goals>
-                            <goal>filter-sources</goal>
+                            <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>com.demigodsrpg:demigodsrpg-game</include>
+                                    <include>com.demigodsrpg:demigodsrpg-data</include>
+                                    <include>com.demigodsrpg:demigodsrpg-util</include>
+                                </includes>
+                            </artifactSet>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -92,5 +123,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
