@@ -82,7 +82,7 @@ public class ShrineCommand extends BaseCommand {
                 player.sendMessage(ChatColor.RED + "That player is not in the same faction as you.");
                 return CommandResult.QUIET_ERROR;
             }
-            if (shrine == null || inviter.getMojangId().equals(shrine.getOwnerMojangId())) {
+            if (shrine == null || !inviter.getMojangId().equals(shrine.getOwnerMojangId())) {
                 player.sendMessage(ChatColor.RED + "That shrine is not yours.");
                 return CommandResult.QUIET_ERROR;
             }

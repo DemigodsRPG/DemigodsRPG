@@ -68,7 +68,7 @@ public class ShrineGUI implements IInventoryGUI {
             final String type = shrine.getShrineType().name();
             final String owner = DGData.PLAYER_R.fromId(shrine.getOwnerMojangId()).getLastKnownName();
 
-            items.add(count, new ItemStack(owner.equals(model.getLastKnownName()) ? Material.ENCHANTED_BOOK : Material.PAPER, 1) {
+            items.add(count, new ItemStack(owner.equals(model.getLastKnownName()) ? Material.ENCHANTED_BOOK : Material.WRITTEN_BOOK, 1) {
                 {
                     ItemMeta meta = getItemMeta();
                     meta.setDisplayName(name);
