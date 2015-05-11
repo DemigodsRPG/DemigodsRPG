@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-package com.demigodsrpg.aspect.lightning;
+package com.demigodsrpg.aspect.magnetism;
 
+import com.censoredsoftware.library.bukkitutil.ItemUtil;
 import com.demigodsrpg.ability.Ability;
 import com.demigodsrpg.ability.AbilityResult;
 import com.demigodsrpg.aspect.Aspect;
@@ -26,18 +27,27 @@ import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.model.PlayerModel;
 import com.demigodsrpg.util.TargetingUtil;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-public class LightningAspectHero implements Aspect {
+import java.util.Collections;
+
+public class MagnetismAspectHero implements Aspect {
 
     // -- ASPECT META -- //
 
     @Override
     public Group getGroup() {
         return Groups.LIGHTNING_ASPECT;
+    }
+
+    @Override
+    public ItemStack getItem() {
+        return ItemUtil.create(Material.IRON_SPADE, name(), Collections.singletonList(getInfo()), null);
     }
 
     @Override
@@ -67,7 +77,7 @@ public class LightningAspectHero implements Aspect {
         Player player = event.getPlayer();
         PlayerModel model = DGData.PLAYER_R.fromPlayer(player);
 
-        double devotion = model.getExperience(Aspects.LIGHTNING_ASPECT_HERO);
+        double devotion = model.getExperience(Aspects.MAGNETISM_ASPECT_HERO);
         double multiply = 0.1753 * Math.pow(devotion, 0.322917);
 
         LivingEntity hit = TargetingUtil.autoTarget(player);

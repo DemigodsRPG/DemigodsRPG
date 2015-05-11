@@ -17,20 +17,30 @@
 
 package com.demigodsrpg.aspect.bloodlust;
 
+import com.censoredsoftware.library.bukkitutil.ItemUtil;
 import com.demigodsrpg.ability.Ability;
 import com.demigodsrpg.ability.AbilityResult;
 import com.demigodsrpg.aspect.Aspect;
 import com.demigodsrpg.aspect.Groups;
 import com.demigodsrpg.util.TargetingUtil;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Collections;
 
 public class BloodlustAspectI implements Aspect {
     @Override
     public Group getGroup() {
         return Groups.BLOODLUST_ASPECT;
+    }
+
+    @Override
+    public ItemStack getItem() {
+        return ItemUtil.create(Material.IRON_SWORD, name(), Collections.singletonList(getInfo()), null);
     }
 
     @Override

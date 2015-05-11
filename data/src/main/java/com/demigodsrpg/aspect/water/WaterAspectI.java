@@ -17,6 +17,7 @@
 
 package com.demigodsrpg.aspect.water;
 
+import com.censoredsoftware.library.bukkitutil.ItemUtil;
 import com.demigodsrpg.ability.Ability;
 import com.demigodsrpg.ability.AbilityResult;
 import com.demigodsrpg.aspect.Aspect;
@@ -31,11 +32,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Collections;
 
 public class WaterAspectI implements Aspect {
     @Override
     public Group getGroup() {
         return Groups.WATER_ASPECT;
+    }
+
+    @Override
+    public ItemStack getItem() {
+        return ItemUtil.create(Material.INK_SACK, name(), Collections.singletonList(getInfo()), null);
     }
 
     @Override
@@ -73,7 +82,7 @@ public class WaterAspectI implements Aspect {
             hit.setLastDamageCause(new EntityDamageByEntityEvent(player, hit, EntityDamageEvent.DamageCause.DROWNING, damage));
 
             if (hit.getLocation().getBlock().getType().equals(Material.AIR)) {
-                hit.getLocation().getBlock().setTypeIdAndData(Material.WATER.getId(), (byte) 0x8, true);
+                player.getWorld().spawnFallingBlock(hit.getLocation(), Material.WATER, (byte) 0);
             }
 
             return AbilityResult.SUCCESS;

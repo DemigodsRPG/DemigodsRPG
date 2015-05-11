@@ -17,6 +17,7 @@
 
 package com.demigodsrpg.aspect.bloodlust;
 
+import com.censoredsoftware.library.bukkitutil.ItemUtil;
 import com.demigodsrpg.ability.Ability;
 import com.demigodsrpg.ability.AbilityResult;
 import com.demigodsrpg.aspect.Aspect;
@@ -25,11 +26,19 @@ import com.demigodsrpg.data.DGData;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Collections;
 
 public class BloodlustAspectIII implements Aspect {
     @Override
     public Group getGroup() {
         return Groups.BLOODLUST_ASPECT;
+    }
+
+    @Override
+    public ItemStack getItem() {
+        return ItemUtil.create(Material.REDSTONE, name(), Collections.singletonList(getInfo()), null);
     }
 
     @Override

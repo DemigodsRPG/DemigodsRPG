@@ -17,6 +17,7 @@
 
 package com.demigodsrpg.aspect.demon;
 
+import com.censoredsoftware.library.bukkitutil.ItemUtil;
 import com.demigodsrpg.ability.Ability;
 import com.demigodsrpg.ability.AbilityResult;
 import com.demigodsrpg.aspect.Aspect;
@@ -26,18 +27,27 @@ import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.model.PlayerModel;
 import com.demigodsrpg.util.TargetingUtil;
 import org.bukkit.Effect;
+import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.Collections;
 
 public class DemonAspectI implements Aspect {
     @Override
     public Group getGroup() {
         return Groups.DEMON_ASPECT;
+    }
+
+    @Override
+    public ItemStack getItem() {
+        return ItemUtil.create(Material.IRON_FENCE, name(), Collections.singletonList(getInfo()), null);
     }
 
     @Override

@@ -73,7 +73,7 @@ public class TributeListener implements Listener {
 
             Deity deity = shrine.getDeity();
             if (shrine.getOwnerMojangId() != null && !model.hasDeity(deity)) {
-                event.getPlayer().sendMessage(ChatColor.YELLOW + "You must be allied with " + deity.getFaction().getColor() + deity.getName() + ChatColor.YELLOW + " to tribute here.");
+                event.getPlayer().sendMessage(ChatColor.YELLOW + "You must be contracted with " + shrine.getFaction().getColor() + deity.getName() + ChatColor.YELLOW + " to tribute here.");
                 return;
             }
             tribute(event.getPlayer(), shrine);
@@ -139,7 +139,7 @@ public class TributeListener implements Listener {
                 } else {
                     if (model.getExperience(aspect) > devotionBefore) {
                         // Message the tributer
-                        player.sendMessage(save.getDeity().getFaction().getColor() + "Your devotion for " + aspect.getGroup() + " " + aspect.getTier().name() + " has increased by " + ChatColor.ITALIC + (model.getExperience(aspect) - devotionBefore) + "!");
+                        player.sendMessage(save.getFaction().getColor() + "Your devotion for " + aspect.getGroup() + " " + aspect.getTier().name() + " has increased by " + ChatColor.ITALIC + (model.getExperience(aspect) - devotionBefore) + "!");
                     }
                 }
             }
@@ -157,7 +157,7 @@ public class TributeListener implements Listener {
 
                     // Message them
                     if (shrineOwnerPlayer.isOnline()) {
-                        ((Player) shrineOwnerPlayer).sendMessage(save.getDeity().getFaction().getColor() + "Someone has recently paid tribute at a shrine you own.");
+                        ((Player) shrineOwnerPlayer).sendMessage(save.getFaction().getColor() + "Someone has recently paid tribute at a shrine you own.");
                     }
                 }
 
@@ -168,9 +168,9 @@ public class TributeListener implements Listener {
         // Handle messaging and Shrine owner updating
         if (tributeValue < 1) {
             // They aren't good enough, let them know!
-            player.sendMessage(ChatColor.RED + "Your tributes were insufficient for " + save.getDeity().getFaction().getColor() + save.getDeity().getName() + "'s" + ChatColor.RED + " blessings.");
+            player.sendMessage(ChatColor.RED + "Your tributes were insufficient for " + save.getFaction().getColor() + save.getDeity().getName() + "'s" + ChatColor.RED + " blessings.");
         } else {
-            player.sendMessage(save.getDeity().getFaction().getColor() + save.getDeity().getName() + " is pleased with your tribute.");
+            player.sendMessage(save.getFaction().getColor() + save.getDeity().getName() + " is pleased with your tribute.");
         }
 
         // Clear the tribute case
@@ -181,7 +181,7 @@ public class TributeListener implements Listener {
         Deity shrineDeity = save.getDeity();
 
         // Open the tribute inventory
-        Inventory ii = Bukkit.getServer().createInventory(player, 27, "Tribute to " + shrineDeity.getFaction().getColor() + shrineDeity.getName() + ChatColor.RESET + ".");
+        Inventory ii = Bukkit.getServer().createInventory(player, 27, "Tribute to " + save.getFaction().getColor() + shrineDeity.getName() + ChatColor.RESET + ".");
         player.openInventory(ii);
     }
 }

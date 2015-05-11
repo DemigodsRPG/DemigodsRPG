@@ -60,7 +60,7 @@ public class AbilityListener implements Listener {
                 event.setDamage(event.getDamage() / 2);
             }
 
-            if (DGData.PLAYER_R.hasAspect(player, Aspects.LIGHTNING_ASPECT_HERO)) {
+            if (DGData.PLAYER_R.hasAspect(player, Aspects.MAGNETISM_ASPECT_HERO)) {
                 if (EntityDamageEvent.DamageCause.FALL.equals(event.getCause())) {
                     event.setCancelled(true);
                 }

@@ -43,6 +43,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class PlayerModel extends AbstractPersistentModel<String> implements Participant {
     private final String mojangId;
@@ -51,6 +52,9 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     // -- PARENTS -- //
     private Optional<Deity> god;
     private Optional<Deity> hero;
+
+    // -- CONTRACTS -- //
+    private List<Deity> contracts = new ArrayList<>();
 
     private final List<String> aspects = new ArrayList<>(1);
     private final List<String> shrineWarps = new ArrayList<>();
@@ -115,6 +119,12 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         }
         god = Optional.ofNullable(DGData.DEITY_R.deityFromName(conf.getStringNullable("god")));
         hero = Optional.ofNullable(DGData.DEITY_R.deityFromName(conf.getStringNullable("hero")));
+        for (Object contractName : conf.getList("contracts", new ArrayList<>())) {
+            Deity contract = DGData.DEITY_R.deityFromName(contractName.toString());
+            if (contract != null) {
+                contracts.add(contract);
+            }
+        }
         faction = DGData.FACTION_R.factionFromName(conf.getStringNullable("faction"));
         if (faction == null) {
             faction = Faction.NEUTRAL;
@@ -168,6 +178,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         if (hero.isPresent()) {
             map.put("hero", hero.get().getName());
         }
+        map.put("contracts", contracts.stream().map(Deity::getName).collect(Collectors.toList()));
         map.put("faction", faction.getName());
         map.put("binds", binds);
         map.put("max_health", maxHealth);
@@ -256,7 +267,6 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         DGData.PLAYER_R.register(this);
     }
 
-
     public void setGod(Deity god) {
         if (DeityType.GOD.equals(god.getDeityType())) {
             this.god = Optional.ofNullable(god);
@@ -283,8 +293,20 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return hero;
     }
 
+    public List<Deity> getContracts() {
+        return contracts;
+    }
+
+    public void addContract(Deity deity) {
+        contracts.add(deity);
+    }
+
+    public void removeContract(Deity deity) {
+        contracts.remove(deity);
+    }
+
     public boolean hasDeity(Deity deity) {
-        return god.isPresent() && god.get().equals(deity) || hero.isPresent() && hero.get().equals(deity);
+        return god.isPresent() && god.get().equals(deity) || hero.isPresent() && hero.get().equals(deity) || contracts.contains(deity);
     }
 
     public double getMaxHealth() {
@@ -488,6 +510,47 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return false;
     }
 
+    public Map<Aspect.Group, Integer> getPotentialGroups() {
+        // Get the groups
+        Map<Aspect.Group, Integer> groups = new HashMap<>();
+
+        // Get the deities
+        List<Deity> deities = new ArrayList<>(contracts);
+
+        // Add hero and god tot he deity list
+        if (hero.isPresent()) {
+            deities.add(hero.get());
+        }
+        if (god.isPresent()) {
+            deities.add(god.get());
+        }
+
+        // For each deity, find the groups
+        // If the group only has a god, set it to 0, if it only has a hero, set it to 1, if it has both, set it to 2
+        for (Deity deity : deities) {
+            for (Aspect.Group group : deity.getAspectGroups()) {
+                // Is the deity a god?
+                boolean isGod = DeityType.GOD.equals(deity.getDeityType());
+
+                // Is the group already in the cache?
+                if (groups.containsKey(group)) {
+                    // If it is already there, check if it should be set to 2
+                    int n = groups.get(group);
+                    if (n == 1 && isGod || n == 0 && !isGod) {
+                        groups.put(group, 2);
+                    }
+                }
+                // Set to the correct number
+                else if (isGod) {
+                    groups.put(group, 0);
+                } else {
+                    groups.put(group, 1);
+                }
+            }
+        }
+        return groups;
+    }
+
     @SuppressWarnings("RedundantCast")
     @Override
     public boolean reward(BattleMetaData data) {
@@ -535,7 +598,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
     public void giveHeroAspect(Deity hero, Aspect aspect) {
         giveAspect(aspect);
-        setFaction(hero.getFaction());
+        setFaction(hero.getFactions().get(0));
         setMaxHealth(25.0);
         setLevel(1);
         setExperience(aspect, 20.0, true);
@@ -554,6 +617,10 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
         // TODO Decide how to check if they can claim an aspect.
         return costForNextAspect() <= level && !hasAspect(aspect) && hasPrereqs(aspect) && DGData.FACTION_R.isInFaction(faction, aspect);
+    }
+
+    public boolean canContract(Deity deity) {
+        return Setting.NO_FACTION_ASPECT_MODE || deity.getFactions().contains(faction);
     }
 
     public void calculateAscensions(boolean announce) {
@@ -679,7 +746,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         int roll = RandomUtil.generateIntRange(0, 2);
         if (roll == 0) {
             hero = Optional.of(Demo.D.IPSUM);
-            faction = Demo.D.IPSUM.getFaction();
+            faction = Demo.D.IPSUM.getFactions().get(0);
             addAspect(Aspects.BLOODLUST_ASPECT_HERO);
             addAspect(Aspects.BLOODLUST_ASPECT_I);
             addAspect(Aspects.WATER_ASPECT_I);
@@ -689,20 +756,20 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
             setExperience(Aspects.WATER_ASPECT_I, 500, false);
         } else if (roll == 1) {
             hero = Optional.of(Demo.D.DOLOR);
-            faction = Demo.D.DOLOR.getFaction();
-            addAspect(Aspects.LIGHTNING_ASPECT_HERO);
+            faction = Demo.D.DOLOR.getFactions().get(0);
+            addAspect(Aspects.MAGNETISM_ASPECT_HERO);
             addAspect(Aspects.LIGHTNING_ASPECT_I);
             addAspect(Aspects.FIRE_ASPECT_I);
             addAspect(Aspects.CRAFTING_ASPECT_I);
 
-            setExperience(Aspects.LIGHTNING_ASPECT_HERO, 5000, false);
+            setExperience(Aspects.MAGNETISM_ASPECT_HERO, 5000, false);
             setExperience(Aspects.LIGHTNING_ASPECT_I, 500, false);
             setExperience(Aspects.FIRE_ASPECT_I, 1000, false);
             setExperience(Aspects.CRAFTING_ASPECT_I, 2000, true);
         } else {
             god = Optional.of(Demo.D.SIT);
             hero = Optional.of(Demo.D.AMET);
-            faction = Demo.D.AMET.getFaction();
+            faction = Demo.D.AMET.getFactions().get(0);
             addAspect(Aspects.BLOODLUST_ASPECT_I);
             addAspect(Aspects.BLOODLUST_ASPECT_II);
             addAspect(Aspects.LIGHTNING_ASPECT_I);

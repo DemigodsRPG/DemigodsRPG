@@ -15,8 +15,14 @@
  * limitations under the License.
  */
 
-package com.demigodsrpg.game.gui;
+package com.demigodsrpg.util;
 
-public enum SlotFunction {
-    NEXT_PAGE, PREVIOUS_PAGE, WARP, RUN_COMMAND, OPEN_NEW_INVENTORY, NO_FUNCTION
+import org.bukkit.inventory.Inventory;
+
+public interface InventoryGUI {
+    //Get the inventory
+    Inventory getInventory(Integer... inventory);
+
+    //Get the function of the slot
+    SlotFunction getFunction(int slot);
 }

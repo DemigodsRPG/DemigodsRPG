@@ -37,13 +37,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ShrineGUI implements InventoryGUI {
-    public static final String INVENTORY_NAME = "Shrine Select";
+public class AspectGUI implements InventoryGUI {
+    public static final String INVENTORY_NAME = "Aspect Tree";
 
     private final List<Inventory> INVENTORY_LIST;
     private final ImmutableMap<Integer, SlotFunction> FUNCTION_MAP;
 
-    public ShrineGUI(final Player player) {
+    public AspectGUI(final Player player) {
         // Player model
         PlayerModel model = DGData.PLAYER_R.fromPlayer(player);
 

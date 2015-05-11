@@ -22,17 +22,18 @@ import com.demigodsrpg.aspect.crafting.CraftingAspect;
 import com.demigodsrpg.aspect.demon.DemonAspect;
 import com.demigodsrpg.aspect.fire.FireAspect;
 import com.demigodsrpg.aspect.lightning.LightingAspect;
+import com.demigodsrpg.aspect.magnetism.MagnetismAspect;
 import com.demigodsrpg.aspect.water.WaterAspect;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class Groups {
 
     // -- PUBLIC RELEASE -- //
 
+    public static final MagnetismAspect MAGNETISM_ASPECT = new MagnetismAspect();
     public static final LightingAspect LIGHTNING_ASPECT = new LightingAspect();
     public static final FireAspect FIRE_ASPECT = new FireAspect();
     public static final WaterAspect WATER_ASPECT = new WaterAspect();
@@ -46,7 +47,7 @@ public class Groups {
     // -- GROUP LIST -- //
 
     public static final Aspect.Group[] groupList = new Aspect.Group[]{
-            LIGHTNING_ASPECT, FIRE_ASPECT, WATER_ASPECT, BLOODLUST_ASPECT, CRAFTING_ASPECT
+            MAGNETISM_ASPECT, LIGHTNING_ASPECT, FIRE_ASPECT, WATER_ASPECT, BLOODLUST_ASPECT, CRAFTING_ASPECT
     };
 
     // -- PRIVATE CONSTRUCTOR -- //
@@ -72,12 +73,7 @@ public class Groups {
     public static List<Aspect> aspectsInGroup(final Aspect.Group group) {
         List<Aspect> aspects = new ArrayList<>(0);
         aspects.addAll(Arrays.asList(Aspects.values()));
-        aspects.removeIf(new Predicate<Aspect>() {
-            @Override
-            public boolean test(Aspect aspect) {
-                return !aspect.getGroup().equals(group);
-            }
-        });
+        aspects.removeIf(aspect -> !aspect.getGroup().equals(group));
         return aspects;
     }
 }

@@ -20,7 +20,7 @@ package com.demigodsrpg.game.listener;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.model.ShrineModel;
 import com.demigodsrpg.game.gui.ShrineGUI;
-import com.demigodsrpg.game.gui.SlotFunction;
+import com.demigodsrpg.util.SlotFunction;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

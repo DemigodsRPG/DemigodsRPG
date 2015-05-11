@@ -17,6 +17,7 @@
 
 package com.demigodsrpg.aspect.bloodlust;
 
+import com.censoredsoftware.library.bukkitutil.ItemUtil;
 import com.demigodsrpg.ability.Ability;
 import com.demigodsrpg.ability.AbilityResult;
 import com.demigodsrpg.aspect.Aspect;
@@ -26,11 +27,14 @@ import com.demigodsrpg.data.model.PlayerModel;
 import com.google.common.util.concurrent.AtomicDouble;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -38,6 +42,11 @@ public class BloodlustAspectII implements Aspect {
     @Override
     public Group getGroup() {
         return Groups.BLOODLUST_ASPECT;
+    }
+
+    @Override
+    public ItemStack getItem() {
+        return ItemUtil.create(Material.GOLD_SWORD, name(), Collections.singletonList(getInfo()), null);
     }
 
     @Override

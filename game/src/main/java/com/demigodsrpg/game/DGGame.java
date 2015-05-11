@@ -173,7 +173,7 @@ public class DGGame {
         DGData.CONSOLE.info("    |____/|___|_|_|_|_|_  |___|___|___|");
         DGData.CONSOLE.info("        Battle of the |___| Chosen");
         DGData.CONSOLE.info("  ");
-        DGData.CONSOLE.info(" ver. " + DGData.PLUGIN.getDescription().getVersion() + " enabled!");
+        DGData.CONSOLE.info(" v. " + DGData.PLUGIN.getDescription().getVersion() + ".");
     }
 
     public void onDisable(DGBukkitPlugin plugin) {

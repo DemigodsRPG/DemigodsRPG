@@ -37,7 +37,7 @@ public class DeityRegistry extends AbstractConfigRegistry<Deity> {
     }
 
     public List<Deity> deitiesInFaction(Faction faction) {
-        return getRegistered().stream().filter(deity -> deity.getFaction().equals(faction)).collect(Collectors.toList());
+        return getRegistered().stream().filter(deity -> deity.getFactions().contains(faction)).collect(Collectors.toList());
     }
 
     @Override

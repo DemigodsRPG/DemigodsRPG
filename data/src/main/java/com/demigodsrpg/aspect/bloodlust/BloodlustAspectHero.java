@@ -17,14 +17,24 @@
 
 package com.demigodsrpg.aspect.bloodlust;
 
+import com.censoredsoftware.library.bukkitutil.ItemUtil;
 import com.demigodsrpg.ability.Ability;
 import com.demigodsrpg.aspect.Aspect;
 import com.demigodsrpg.aspect.Groups;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Collections;
 
 public class BloodlustAspectHero implements Aspect {
     @Override
     public Aspect.Group getGroup() {
         return Groups.BLOODLUST_ASPECT;
+    }
+
+    @Override
+    public ItemStack getItem() {
+        return ItemUtil.create(Material.GOLD_CHESTPLATE, name(), Collections.singletonList(getInfo()), null);
     }
 
     @Override

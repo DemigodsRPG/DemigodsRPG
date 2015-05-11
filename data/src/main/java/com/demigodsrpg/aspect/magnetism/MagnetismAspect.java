@@ -15,14 +15,32 @@
  * limitations under the License.
  */
 
-package com.demigodsrpg.game.gui;
+package com.demigodsrpg.aspect.magnetism;
 
-import org.bukkit.inventory.Inventory;
+import com.demigodsrpg.aspect.Aspect;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.material.MaterialData;
 
-interface IInventoryGUI {
-    //Get the inventory
-    public Inventory getInventory(Integer... inventory);
+public class MagnetismAspect implements Aspect.Group {
+    @Override
+    public String getName() {
+        return "Magnetism Aspect";
+    }
 
-    //Get the function of the slot
-    public SlotFunction getFunction(int slot);
+    @Override
+    public ChatColor getColor() {
+        return ChatColor.BLUE;
+    }
+
+    @Override
+    public Sound getSound() {
+        return Sound.CLICK;
+    }
+
+    @Override
+    public MaterialData getClaimMaterial() {
+        return new MaterialData(Material.IRON_INGOT);
+    }
 }

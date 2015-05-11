@@ -26,16 +26,17 @@ import com.demigodsrpg.aspect.demon.DemonAspectHero;
 import com.demigodsrpg.aspect.demon.DemonAspectI;
 import com.demigodsrpg.aspect.demon.DemonAspectII;
 import com.demigodsrpg.aspect.fire.FireAspectI;
-import com.demigodsrpg.aspect.lightning.LightningAspectHero;
 import com.demigodsrpg.aspect.lightning.LightningAspectI;
 import com.demigodsrpg.aspect.lightning.LightningAspectII;
+import com.demigodsrpg.aspect.magnetism.MagnetismAspectHero;
 import com.demigodsrpg.aspect.water.WaterAspectHero;
 import com.demigodsrpg.aspect.water.WaterAspectI;
 
 public class Aspects {
     // -- PUBLIC RELEASE -- //
 
-    public static final LightningAspectHero LIGHTNING_ASPECT_HERO = new LightningAspectHero();
+    public static final MagnetismAspectHero MAGNETISM_ASPECT_HERO = new MagnetismAspectHero();
+
     public static final LightningAspectI LIGHTNING_ASPECT_I = new LightningAspectI();
     public static final LightningAspectII LIGHTNING_ASPECT_II = new LightningAspectII();
 
@@ -61,8 +62,11 @@ public class Aspects {
     // -- ASPECT LIST -- //
 
     private static final Aspect[] aspectList = new Aspect[]{
+            // Magnetism Aspect
+            MAGNETISM_ASPECT_HERO,
+
             // Lightning Aspect
-            LIGHTNING_ASPECT_HERO, LIGHTNING_ASPECT_I, LIGHTNING_ASPECT_II,
+            LIGHTNING_ASPECT_I, LIGHTNING_ASPECT_II,
 
             // Fire Aspect
             FIRE_ASPECT_I,

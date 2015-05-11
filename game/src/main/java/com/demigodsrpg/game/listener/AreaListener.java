@@ -141,13 +141,17 @@ public class AreaListener implements Listener {
 
         // Set the correct type (and potentially faction if the deity is a hero)
         switch (deity.getDeityType()) {
-            case GOD:
-                model.setGod(deity);
-                endMessage += deity.getFaction().getColor() + deity.getName() + ChatColor.YELLOW + " as your parent God.";
-                break;
             case HERO:
                 model.setHero(deity);
-                endMessage += deity.getFaction().getColor() + deity.getName() + ChatColor.YELLOW + " as your parent Hero.";
+                endMessage += deity.getFactions().get(0).getColor() + deity.getName() + ChatColor.YELLOW + " as your parent Hero.";
+                break;
+            case GOD:
+                model.setGod(deity);
+                String color = ChatColor.WHITE.toString();
+                if (model.getHero().isPresent()) {
+                    color = model.getHero().get().getFactions().get(0).getColor();
+                }
+                endMessage += color + deity.getName() + ChatColor.YELLOW + " as your parent God.";
                 break;
         }
 
@@ -161,7 +165,7 @@ public class AreaListener implements Listener {
                 // Hero aspect
                 if (DeityType.HERO.equals(deity.getDeityType()) && Aspect.Tier.HERO.equals(aspect.getTier())) {
                     model.giveHeroAspect(deity, aspect);
-                    player.sendMessage(ChatColor.YELLOW + StringUtils.capitalize(deity.getPronouns()[0]) + " has placed you in the " + deity.getFaction().getColor() + deity.getFaction().getName() + ChatColor.YELLOW + " faction.");
+                    player.sendMessage(ChatColor.YELLOW + StringUtils.capitalize(deity.getPronouns()[0]) + " has placed you in the " + deity.getFactions().get(0).getColor() + deity.getFactions().get(0).getName() + ChatColor.YELLOW + " faction.");
                     break;
                 }
 

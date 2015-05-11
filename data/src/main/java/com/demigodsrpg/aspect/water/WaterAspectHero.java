@@ -17,15 +17,25 @@
 
 package com.demigodsrpg.aspect.water;
 
+import com.censoredsoftware.library.bukkitutil.ItemUtil;
 import com.demigodsrpg.ability.Ability;
 import com.demigodsrpg.aspect.Aspect;
 import com.demigodsrpg.aspect.Groups;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Collections;
 
 
 public class WaterAspectHero implements Aspect {
     @Override
     public Group getGroup() {
         return Groups.WATER_ASPECT;
+    }
+
+    @Override
+    public ItemStack getItem() {
+        return ItemUtil.create(Material.SEA_LANTERN, name(), Collections.singletonList(getInfo()), null);
     }
 
     @Override

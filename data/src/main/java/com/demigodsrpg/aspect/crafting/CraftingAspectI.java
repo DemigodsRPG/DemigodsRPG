@@ -17,16 +17,25 @@
 
 package com.demigodsrpg.aspect.crafting;
 
+import com.censoredsoftware.library.bukkitutil.ItemUtil;
 import com.demigodsrpg.ability.Ability;
 import com.demigodsrpg.aspect.Aspect;
 import com.demigodsrpg.aspect.Groups;
+import org.bukkit.Material;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Collections;
 
 public class CraftingAspectI implements Aspect {
     @Override
     public Group getGroup() {
         return Groups.CRAFTING_ASPECT;
+    }
+
+    @Override
+    public ItemStack getItem() {
+        return ItemUtil.create(Material.FURNACE, name(), Collections.singletonList(getInfo()), null);
     }
 
     @Override

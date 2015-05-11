@@ -17,6 +17,7 @@
 
 package com.demigodsrpg.aspect.demon;
 
+import com.censoredsoftware.library.bukkitutil.ItemUtil;
 import com.demigodsrpg.ability.Ability;
 import com.demigodsrpg.ability.AbilityResult;
 import com.demigodsrpg.aspect.Aspect;
@@ -31,13 +32,20 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class DemonAspectII implements Aspect {
     @Override
     public Group getGroup() {
         return Groups.DEMON_ASPECT;
+    }
+
+    @Override
+    public ItemStack getItem() {
+        return ItemUtil.create(Material.OBSIDIAN, name(), Collections.singletonList(getInfo()), null);
     }
 
     @Override
