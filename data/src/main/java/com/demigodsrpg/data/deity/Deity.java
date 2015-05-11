@@ -56,6 +56,7 @@ public class Deity extends AbstractPersistentModel<String> {
         name = stringKey;
         gender = Gender.valueOf(conf.getString("gender"));
         deityType = DeityType.valueOf(conf.getString("type"));
+        this.factions = new ArrayList<>();
         for (Object factionName : conf.getList("factions", new ArrayList<>())) {
             Faction faction = DGData.FACTION_R.factionFromName(factionName.toString());
             if (faction != null) {
