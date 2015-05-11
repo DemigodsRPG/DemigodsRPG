@@ -42,7 +42,7 @@ public class MagnetismAspectHero implements Aspect {
 
     @Override
     public Group getGroup() {
-        return Groups.LIGHTNING_ASPECT;
+        return Groups.MAGNETISM_ASPECT;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class MagnetismAspectHero implements Aspect {
 
     @Override
     public String getInfo() {
-        return "Expert level power over lightning";
+        return "Expert level power over magnetism.";
     }
 
     @Override
