@@ -32,7 +32,7 @@ public class Setting {
     public static final boolean FRIENDLY_FIRE = getConfig().getBoolean("friendly_fire", false);
     public static final double EXP_MULTIPLIER = getConfig().getDouble("globalexpmultiplier", 4.0);
     public static final boolean NO_COST_ASPECT_MODE = getConfig().getBoolean("no_cost_aspect_mode", false);
-    public static final boolean NO_FACTION_ASPECT_MODE = getConfig().getBoolean("no_faction_aspect_mode", false);
+    public static final boolean NO_FACTION_CONTRACT_MODE = getConfig().getBoolean("no_faction_contract_mode", false);
     public static final boolean SAVE_PRETTY = getConfig().getBoolean("save_pretty", false);
     public static final boolean DEBUG_DATA = getConfig().getBoolean("debug_data", false);
     public static final boolean DEBUG_INVISIBLE_WALLS = getConfig().getBoolean("debug_invisible_walls", false);

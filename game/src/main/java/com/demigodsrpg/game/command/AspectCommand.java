@@ -65,6 +65,10 @@ public class AspectCommand extends BaseCommand {
 
         // Aspect menu, very bugged
         if (args.length == 1 && "claim".equalsIgnoreCase(args[0])) {
+            if (!model.getGod().isPresent() || !model.getHero().isPresent()) {
+                player.sendMessage(ChatColor.RED + "You are currently deity-less and cannot claim abilities.");
+                return CommandResult.QUIET_ERROR;
+            }
             try {
                 Inventory inventory = new AspectGUI(player).getInventory();
                 if (inventory == null) {

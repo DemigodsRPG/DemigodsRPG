@@ -95,6 +95,7 @@ public class InventoryListener implements Listener {
                                 PlayerModel model = DGData.PLAYER_R.fromPlayer(player);
                                 model.addAspect(aspect);
                                 player.sendMessage(ChatColor.YELLOW + "You have claimed " + aspectName + ".");
+                                player.getWorld().strikeLightningEffect(player.getLocation());
                             } else {
                                 player.closeInventory();
                                 player.sendMessage(ChatColor.RED + "Something is wrong with " + aspectName + "...");

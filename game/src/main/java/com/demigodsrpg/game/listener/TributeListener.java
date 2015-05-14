@@ -139,7 +139,7 @@ public class TributeListener implements Listener {
                 } else {
                     if (model.getExperience(aspect) > devotionBefore) {
                         // Message the tributer
-                        player.sendMessage(save.getFaction().getColor() + "Your devotion for " + aspect.getGroup() + " " + aspect.getTier().name() + " has increased by " + ChatColor.ITALIC + (model.getExperience(aspect) - devotionBefore) + "!");
+                        player.sendMessage(save.getFaction().getColor() + "Your devotion for " + aspect.name() + " has increased by " + ChatColor.ITALIC + (model.getExperience(aspect) - devotionBefore) + "!");
                     }
                 }
             }

@@ -53,10 +53,6 @@ public class AspectGUI implements InventoryGUI {
         // FUNCTION MAP
         ImmutableMap.Builder<Integer, String> builder = ImmutableMap.builder();
 
-        for (int i = 0; i < 18; i++) {
-            builder.put(i, SlotFunction.CLAIM);
-        }
-
         builder.put(25, SlotFunction.PREVIOUS_PAGE);
         builder.put(26, SlotFunction.NEXT_PAGE);
 
@@ -70,17 +66,27 @@ public class AspectGUI implements InventoryGUI {
             Aspect aspect = aspectIterator.next();
             ItemStack item = aspect.getItem().clone();
             ItemMeta meta = item.getItemMeta();
+            List<String> lore = meta.getLore();
             if(model.getAspects().contains(aspect.name())) {
-                meta.getLore().add("You've claimed this aspect!");
+                lore.add(ChatColor.YELLOW + "You already have this aspect!");
+                meta.setLore(lore);
                 item.setItemMeta(meta);
                 builder.put(count, SlotFunction.LOCKED);
             } else if(model.canClaim(aspect)) {
-                meta.getLore().add("This aspect is claimable!");
+                lore.add(ChatColor.GREEN + "This aspect is claimable!");
+                meta.setLore(lore);
                 item.setItemMeta(meta);
                 item = CustomEnchantments.enchant(item, CustomEnchantments.CLAIMABLE, 1, false);
+                builder.put(count, SlotFunction.CLAIM);
             } else {
                 item.setType(Material.BARRIER);
-                meta.getLore().add("This aspect is currently locked.");
+                lore.add(ChatColor.DARK_GRAY + "This aspect is currently locked.");
+                if (!model.hasPrereqs(aspect)) {
+                    lore.add(ChatColor.GRAY + "You don't have the prereqs for this aspect.");
+                } else if (model.getLevel() < model.costForNextAspect()) {
+                    lore.add(ChatColor.GRAY + "You need " + model.costForNextAspect() + " ascensions to claim a new aspect.");
+                }
+                meta.setLore(lore);
                 item.setItemMeta(meta);
                 builder.put(count, SlotFunction.LOCKED);
             }
@@ -97,7 +103,7 @@ public class AspectGUI implements InventoryGUI {
                     inventory.setItem(25, new ItemStack(Material.PAPER, 1) {
                         {
                             ItemMeta meta = getItemMeta();
-                            meta.setDisplayName(ChatColor.GOLD + "< BACK");
+                            meta.setDisplayName(ChatColor.GOLD + "< PREV");
                             setItemMeta(meta);
                         }
                     });

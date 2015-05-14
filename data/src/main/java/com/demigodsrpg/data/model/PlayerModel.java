@@ -500,11 +500,14 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public boolean hasPrereqs(Aspect aspect) {
-        Aspect.Group group = aspect.getGroup();
         int tier = aspect.getTier().ordinal();
+        if (tier == 0) {
+            return true;
+        }
+        Aspect.Group group = aspect.getGroup();
         for (String hasName : getAspects()) {
             Aspect has = Aspects.valueOf(hasName);
-            if (has.getGroup().equals(group) && !Aspect.Tier.HERO.equals(has.getTier()) && (tier == 1 || has.getTier().ordinal() + 1 == tier)) {
+            if (has.getGroup().equals(group) && has.getTier().ordinal() + 1 == tier) {
                 return true;
             }
         }
@@ -547,7 +550,11 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         for (Deity deity : gods) {
             if (deity.getAspectGroups().contains(group)) {
                 if (alwaysIncludeHero) {
-                    aspects.addAll(Groups.aspectsInGroup(group));
+                    List<Aspect> allAspects = Groups.aspectsInGroup(group);
+                    if (heroAspect.isPresent()) {
+                        allAspects.remove(heroAspect.get());
+                    }
+                    aspects.addAll(allAspects);
                 } else {
                     aspects.addAll(Groups.godAspectsInGroup(group));
                 }
@@ -625,16 +632,11 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public boolean canClaim(Aspect aspect) {
-        if (Setting.NO_FACTION_ASPECT_MODE) {
-            return costForNextAspect() <= level && !hasAspect(aspect) && hasPrereqs(aspect);
-        }
-
-        // TODO Decide how to check if they can claim an aspect.
-        return costForNextAspect() <= level && !hasAspect(aspect) && hasPrereqs(aspect) && DGData.FACTION_R.isInFaction(faction, aspect);
+        return costForNextAspect() <= level && !hasAspect(aspect) && hasPrereqs(aspect);
     }
 
     public boolean canContract(Deity deity) {
-        return Setting.NO_FACTION_ASPECT_MODE || deity.getFactions().contains(faction);
+        return Setting.NO_FACTION_CONTRACT_MODE || deity.getFactions().contains(faction);
     }
 
     public void calculateAscensions(boolean announce) {
@@ -660,9 +662,9 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
     public int costForNextAspect() {
         if (Setting.NO_COST_ASPECT_MODE) return 0;
-        switch (aspects.size() + 1) {
+        switch (aspects.size()) {
             case 1:
-                return 2;
+                return 0;
             case 2:
                 return 5;
             case 3:
@@ -762,36 +764,17 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
             hero = Optional.of(Demo.D.IPSUM);
             faction = Demo.D.IPSUM.getFactions().get(0);
             addAspect(Aspects.BLOODLUST_ASPECT_HERO);
-            addAspect(Aspects.BLOODLUST_ASPECT_I);
-            addAspect(Aspects.WATER_ASPECT_I);
-
             setExperience(Aspects.BLOODLUST_ASPECT_HERO, 1000, false);
-            setExperience(Aspects.BLOODLUST_ASPECT_I, 1000, false);
-            setExperience(Aspects.WATER_ASPECT_I, 500, false);
         } else if (roll == 1) {
             hero = Optional.of(Demo.D.DOLOR);
             faction = Demo.D.DOLOR.getFactions().get(0);
             addAspect(Aspects.MAGNETISM_ASPECT_HERO);
-            addAspect(Aspects.LIGHTNING_ASPECT_I);
-            addAspect(Aspects.FIRE_ASPECT_I);
-            addAspect(Aspects.CRAFTING_ASPECT_I);
-
             setExperience(Aspects.MAGNETISM_ASPECT_HERO, 5000, false);
-            setExperience(Aspects.LIGHTNING_ASPECT_I, 500, false);
-            setExperience(Aspects.FIRE_ASPECT_I, 1000, false);
-            setExperience(Aspects.CRAFTING_ASPECT_I, 2000, true);
         } else {
             god = Optional.of(Demo.D.SIT);
             hero = Optional.of(Demo.D.AMET);
             faction = Demo.D.AMET.getFactions().get(0);
-            addAspect(Aspects.BLOODLUST_ASPECT_I);
-            addAspect(Aspects.BLOODLUST_ASPECT_II);
-            addAspect(Aspects.LIGHTNING_ASPECT_I);
             addAspect(Aspects.WATER_ASPECT_HERO);
-
-            setExperience(Aspects.BLOODLUST_ASPECT_I, 1000, false);
-            setExperience(Aspects.BLOODLUST_ASPECT_II, 1000, false);
-            setExperience(Aspects.LIGHTNING_ASPECT_I, 500, false);
             setExperience(Aspects.WATER_ASPECT_HERO, 1000, false);
         }
     }

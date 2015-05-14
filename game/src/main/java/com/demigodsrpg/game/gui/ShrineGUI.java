@@ -91,7 +91,7 @@ public class ShrineGUI implements InventoryGUI {
                     inventory.setItem(25, new ItemStack(Material.PAPER, 1) {
                         {
                             ItemMeta meta = getItemMeta();
-                            meta.setDisplayName(ChatColor.GOLD + "< BACK");
+                            meta.setDisplayName(ChatColor.GOLD + "< PREV");
                             setItemMeta(meta);
                         }
                     });
