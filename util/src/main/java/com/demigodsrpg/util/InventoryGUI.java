@@ -24,5 +24,5 @@ public interface InventoryGUI {
     Inventory getInventory(Integer... inventory);
 
     //Get the function of the slot
-    SlotFunction getFunction(int slot);
+    String getFunction(int slot);
 }

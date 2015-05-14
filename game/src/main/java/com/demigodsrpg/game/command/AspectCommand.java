@@ -27,6 +27,7 @@ import com.demigodsrpg.data.model.PlayerModel;
 import com.demigodsrpg.game.DGGame;
 import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
+import com.demigodsrpg.game.gui.AspectGUI;
 import com.google.common.base.Joiner;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -37,6 +38,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class AspectCommand extends BaseCommand {
@@ -58,6 +60,23 @@ public class AspectCommand extends BaseCommand {
             for (Aspect aspect : Aspects.values()) {
                 player.sendMessage(" - " + aspect.getGroup().getColor() + aspect.name() + ": " + aspect.getInfo() /* FIXME + " (" + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + ")" */);
             }
+            return CommandResult.SUCCESS;
+        }
+
+        // Aspect menu, very bugged
+        if (args.length == 1 && "claim".equalsIgnoreCase(args[0])) {
+            try {
+                Inventory inventory = new AspectGUI(player).getInventory();
+                if (inventory == null) {
+                    player.sendMessage(ChatColor.YELLOW + "You don't have access to this menu.");
+                    return CommandResult.QUIET_ERROR;
+                }
+                player.openInventory(inventory);
+            } catch (Exception oops) {
+                oops.printStackTrace();
+                return CommandResult.ERROR;
+            }
+
             return CommandResult.SUCCESS;
         }
 

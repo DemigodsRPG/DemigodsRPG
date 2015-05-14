@@ -19,34 +19,49 @@ package com.demigodsrpg.game.gui;
 
 // TODO This needs major reorganization to make it look nice
 
-public class AspectGUI { /*implementsInventoryGUI {
+import com.demigodsrpg.aspect.Aspect;
+import com.demigodsrpg.data.DGData;
+import com.demigodsrpg.data.model.PlayerModel;
+import com.demigodsrpg.util.InventoryGUI;
+import com.demigodsrpg.util.SlotFunction;
+import com.google.common.collect.ImmutableMap;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class AspectGUI implements InventoryGUI {
     public static final String INVENTORY_NAME = "Aspect Tree";
 
     private final List<Inventory> INVENTORY_LIST;
-    private final ImmutableMap<Integer, SlotFunction> FUNCTION_MAP;
+    private final ImmutableMap<Integer, String> FUNCTION_MAP;
 
     public AspectGUI(final Player player) {
         // Player model
         PlayerModel model = DGData.PLAYER_R.fromPlayer(player);
 
         // FUNCTION MAP
-        ImmutableMap.Builder<Integer, SlotFunction> builder = ImmutableMap.builder();
+        ImmutableMap.Builder<Integer, String> builder = ImmutableMap.builder();
 
         for (int i = 0; i < 18; i++) {
-            builder.put(i, SlotFunction.WARP);
+            builder.put(i, SlotFunction.CLAIM);
         }
 
         builder.put(25, SlotFunction.PREVIOUS_PAGE);
         builder.put(26, SlotFunction.NEXT_PAGE);
-
-        FUNCTION_MAP = builder.build();
 
         // INVENTORY LIST
         INVENTORY_LIST = new ArrayList<>();
         List<ItemStack> items = new ArrayList<>();
         int count = 0, icount = 0;
         List<Aspect> aspects = model.getPotentialAspects(true);
-
         Iterator<Aspect> aspectIterator = aspects.iterator();
         while (aspectIterator.hasNext()) {
             Aspect aspect = aspectIterator.next();
@@ -54,14 +69,18 @@ public class AspectGUI { /*implementsInventoryGUI {
             ItemMeta meta = item.getItemMeta();
             if(model.getAspects().contains(aspect.name())) {
                 meta.getLore().add("You've claimed this aspect!");
+                builder.put(count, SlotFunction.LOCKED);
             } else if(model.canClaim(aspect)) {
                 meta.getLore().add("This aspect is claimable!");
-                meta.add
+            } else {
+                item.setType(Material.BARRIER);
+                meta.getLore().add("This aspect is currently locked.");
+                builder.put(count, SlotFunction.LOCKED);
             }
 
             count++;
 
-            if (count % 19 == 0 || !shrines.hasNext()) {
+            if (count % 19 == 0 || !aspectIterator.hasNext()) {
                 Inventory inventory = Bukkit.createInventory(player, 27, INVENTORY_NAME + " " + icount);
                 for (int i = 0; i < items.size(); i++) {
                     inventory.setItem(i, items.get(i));
@@ -75,7 +94,7 @@ public class AspectGUI { /*implementsInventoryGUI {
                         }
                     });
                 }
-                if (shrines.hasNext()) {
+                if (aspectIterator.hasNext()) {
                     inventory.setItem(26, new ItemStack(Material.PAPER, 1) {
                         {
                             ItemMeta meta = getItemMeta();
@@ -92,6 +111,8 @@ public class AspectGUI { /*implementsInventoryGUI {
                 icount++;
             }
         }
+
+        FUNCTION_MAP = builder.build();
     }
 
     @Override
@@ -106,10 +127,10 @@ public class AspectGUI { /*implementsInventoryGUI {
     }
 
     @Override
-    public SlotFunction getFunction(int slot) {
+    public String getFunction(int slot) {
         if (FUNCTION_MAP.containsKey(slot)) {
             return FUNCTION_MAP.get(slot);
         }
         return SlotFunction.NO_FUNCTION;
-    } */
+    }
 }

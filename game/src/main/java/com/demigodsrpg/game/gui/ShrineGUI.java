@@ -41,14 +41,14 @@ public class ShrineGUI implements InventoryGUI {
     public static final String INVENTORY_NAME = "Shrine Select";
 
     private final List<Inventory> INVENTORY_LIST;
-    private final ImmutableMap<Integer, SlotFunction> FUNCTION_MAP;
+    private final ImmutableMap<Integer, String> FUNCTION_MAP;
 
     public ShrineGUI(final Player player) {
         // Player model
         PlayerModel model = DGData.PLAYER_R.fromPlayer(player);
 
         // FUNCTION MAP
-        ImmutableMap.Builder<Integer, SlotFunction> builder = ImmutableMap.builder();
+        ImmutableMap.Builder<Integer, String> builder = ImmutableMap.builder();
 
         for (int i = 0; i < 18; i++) {
             builder.put(i, SlotFunction.WARP);
@@ -127,7 +127,7 @@ public class ShrineGUI implements InventoryGUI {
     }
 
     @Override
-    public SlotFunction getFunction(int slot) {
+    public String getFunction(int slot) {
         if (FUNCTION_MAP.containsKey(slot)) {
             return FUNCTION_MAP.get(slot);
         }
