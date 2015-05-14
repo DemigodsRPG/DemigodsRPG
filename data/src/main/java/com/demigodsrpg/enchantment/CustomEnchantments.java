@@ -52,12 +52,11 @@ public class CustomEnchantments {
     // -- PUBLIC RELEASE -- //
 
     public static final Claimable CLAIMABLE = new Claimable(150);
-    public static final Claimable LOCKED = new Claimable(151);
 
     // -- ENCHANTMENT LIST -- //
 
     public static final CustomEnchantment[] enchantList = new CustomEnchantment[]{
-            CLAIMABLE, LOCKED
+            CLAIMABLE
     };
 
     // -- PRIVATE CONSTRUCTOR -- //
