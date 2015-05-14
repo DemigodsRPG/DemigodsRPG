@@ -28,6 +28,7 @@ import com.demigodsrpg.aspect.water.WaterAspect;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class Groups {
 
@@ -68,6 +69,22 @@ public class Groups {
             }
         }
         return null;
+    }
+
+    public static Optional<Aspect> heroAspectInGroup(final Aspect.Group group) {
+        for (Aspect aspect : Aspects.values()) {
+            if (aspect.getGroup().equals(group) && Aspect.Tier.HERO.equals(aspect.getTier())) {
+                return Optional.of(aspect);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public static List<Aspect> godAspectsInGroup(final Aspect.Group group) {
+        List<Aspect> aspects = new ArrayList<>(0);
+        aspects.addAll(Arrays.asList(Aspects.values()));
+        aspects.removeIf(aspect -> !aspect.getGroup().equals(group) || Aspect.Tier.HERO.equals(aspect.getTier()));
+        return aspects;
     }
 
     public static List<Aspect> aspectsInGroup(final Aspect.Group group) {

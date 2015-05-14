@@ -25,6 +25,7 @@ import com.demigodsrpg.data.deity.Faction;
 import com.demigodsrpg.data.model.PlayerModel;
 import com.demigodsrpg.data.model.TributeModel;
 import com.demigodsrpg.data.registry.config.AreaRegistry;
+import com.demigodsrpg.enchantment.CustomEnchantments;
 import com.demigodsrpg.game.command.*;
 import com.demigodsrpg.game.command.admin.*;
 import com.demigodsrpg.game.integration.chitchat.FactionChatTag;
@@ -34,11 +35,16 @@ import com.demigodsrpg.util.ZoneUtil;
 import com.iciql.Db;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Map;
 
 public class DGGame {
     // -- PLUGIN RELATED CONSTANTS -- //
@@ -166,6 +172,9 @@ public class DGGame {
             Chitchat.getChatFormat().add(new FactionIdTag());
         }
 
+        // Register custom enchantments
+        handleCustomEnchatments();
+
         // Let the console know
         DGData.CONSOLE.info("     ____            _           _");
         DGData.CONSOLE.info("    |    \\ ___ _____|_|___ ___ _| |___");
@@ -239,11 +248,63 @@ public class DGGame {
         DGData.CONSOLE.info("Demigods VALUE task enabled...");
     }
 
+    @SuppressWarnings("unchecked")
+    void handleCustomEnchatments() {
+        try {
+            // Set the server to accept new enchantments
+            Field acceptNew = Enchantment.class.getDeclaredField("acceptingNew");
+            acceptNew.setAccessible(true);
+            acceptNew.set(null, true);
+
+            // Use reflection to get the maps from these fields
+            Field byIdField = Enchantment.class.getDeclaredField("byId");
+            Field byNameField = Enchantment.class.getDeclaredField("byName");
+            byIdField.setAccessible(true);
+            byNameField.setAccessible(true);
+            Map<Integer, Enchantment> byId = (Map<Integer, Enchantment>) byIdField.get(null);
+            Map<String, Enchantment> byName = (Map<String, Enchantment>) byNameField.get(null);
+
+            // Iterate over the custom enchantments
+            for (Enchantment enchant : CustomEnchantments.values()) {
+                // Remove the enchantments if they are already there
+                if (byId.containsKey(enchant.getId())) {
+                    byId.remove(enchant.getId());
+                }
+                if (byName.containsKey(enchant.getName())) {
+                    byName.remove(enchant.getName());
+                }
+
+                // Add the enchantments
+                try {
+                    Enchantment.registerEnchantment(enchant);
+                } catch (Exception oops) {
+                    DGData.CONSOLE.warning("Couldn't register a custom enchantment.");
+                    oops.printStackTrace();
+                }
+            }
+
+            // Set the server to stop accepting new enchantments, just to be safe
+            acceptNew.set(null, false);
+        } catch (Exception ignored) {
+        }
+        DGData.CONSOLE.info("Custom enchantments injected.");
+    }
+
     public static DGGame getInst() {
         return INST;
     }
 
     public static DGBukkitPlugin getPlugin() {
         return PLUGIN;
+    }
+
+    // -- DIRTY PRIVATE HELPER METHOD -- //
+
+    private void setFinalStatic(Field field, Object newValue) throws Exception {
+        field.setAccessible(true);
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        modifiersField.setAccessible(true);
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+        field.set(null, newValue);
     }
 }

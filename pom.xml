@@ -15,6 +15,7 @@
         <module>data</module>
         <module>game</module>
         <module>game-bundle</module>
+        <module>game-bundle-full</module>
     </modules>
 
     <name>Demigods RPG</name>

@@ -17,10 +17,12 @@
 
 package com.demigodsrpg.game.listener;
 
+import com.demigodsrpg.aspect.Aspects;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.Setting;
 import com.demigodsrpg.data.deity.Faction;
 import com.demigodsrpg.data.model.PlayerModel;
+import com.demigodsrpg.enchantment.CustomEnchantments;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,6 +31,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Set;
 
@@ -50,6 +53,11 @@ public class PlayerListener implements Listener {
         if (model.getAspects().isEmpty()) {
             // TODO IDK what to do here yet
         }
+
+        // Test enchantment
+        ItemStack item = Aspects.BLOODLUST_ASPECT_HERO.getItem().clone();
+        CustomEnchantments.enchant(item, CustomEnchantments.CLAIMABLE, 1, false);
+        player.getInventory().addItem(item);
     }
 
     @EventHandler(priority = EventPriority.LOW)

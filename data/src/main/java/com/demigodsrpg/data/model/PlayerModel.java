@@ -22,6 +22,7 @@ import com.demigodsrpg.ability.AbilityMetaData;
 import com.demigodsrpg.ability.AbilityRegistry;
 import com.demigodsrpg.aspect.Aspect;
 import com.demigodsrpg.aspect.Aspects;
+import com.demigodsrpg.aspect.Groups;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.Demo;
 import com.demigodsrpg.data.Setting;
@@ -510,9 +511,9 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return false;
     }
 
-    public Map<Aspect.Group, Integer> getPotentialGroups() {
+    public List<Aspect.Group> getPotentialGroups() {
         // Get the groups
-        Map<Aspect.Group, Integer> groups = new HashMap<>();
+        List<Aspect.Group> groups = new ArrayList<>();
 
         // Get the deities
         List<Deity> deities = new ArrayList<>(contracts);
@@ -526,29 +527,42 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         }
 
         // For each deity, find the groups
-        // If the group only has a god, set it to 0, if it only has a hero, set it to 1, if it has both, set it to 2
         for (Deity deity : deities) {
-            for (Aspect.Group group : deity.getAspectGroups()) {
-                // Is the deity a god?
-                boolean isGod = DeityType.GOD.equals(deity.getDeityType());
-
-                // Is the group already in the cache?
-                if (groups.containsKey(group)) {
-                    // If it is already there, check if it should be set to 2
-                    int n = groups.get(group);
-                    if (n == 1 && isGod || n == 0 && !isGod) {
-                        groups.put(group, 2);
-                    }
-                }
-                // Set to the correct number
-                else if (isGod) {
-                    groups.put(group, 0);
-                } else {
-                    groups.put(group, 1);
-                }
-            }
+            // Is the group already in the cache?
+            deity.getAspectGroups().stream().filter(group -> !groups.contains(group)).forEach(groups::add);
         }
         return groups;
+    }
+
+    public List<Aspect> getPotentialAspects(Aspect.Group group, boolean alwaysIncludeHero) {
+        List<Aspect> aspects = new ArrayList<>();
+        Optional<Aspect> heroAspect = Groups.heroAspectInGroup(group);
+        if (hero.isPresent() && hero.get().getAspectGroups().contains(group) && heroAspect.isPresent()) {
+            aspects.add(heroAspect.get());
+        }
+        List<Deity> gods = new ArrayList<>(contracts);
+        if (god.isPresent()) {
+            gods.add(god.get());
+        }
+        for (Deity deity : gods) {
+            if (deity.getAspectGroups().contains(group)) {
+                if (alwaysIncludeHero) {
+                    aspects.addAll(Groups.aspectsInGroup(group));
+                } else {
+                    aspects.addAll(Groups.godAspectsInGroup(group));
+                }
+                break;
+            }
+        }
+        return aspects;
+    }
+
+    public List<Aspect> getPotentialAspects(boolean alwaysIncludeHero) {
+        List<Aspect> aspects = new ArrayList<>();
+        for (Aspect.Group group : getPotentialGroups()) {
+            aspects.addAll(getPotentialAspects(group, alwaysIncludeHero));
+        }
+        return aspects;
     }
 
     @SuppressWarnings("RedundantCast")

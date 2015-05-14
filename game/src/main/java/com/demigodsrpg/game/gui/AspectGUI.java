@@ -17,27 +17,9 @@
 
 package com.demigodsrpg.game.gui;
 
-import com.demigodsrpg.data.DGData;
-import com.demigodsrpg.data.model.PlayerModel;
-import com.demigodsrpg.data.model.ShrineModel;
-import com.demigodsrpg.util.InventoryGUI;
-import com.demigodsrpg.util.SlotFunction;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+// TODO This needs major reorganization to make it look nice
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class AspectGUI implements InventoryGUI {
+public class AspectGUI { /*implementsInventoryGUI {
     public static final String INVENTORY_NAME = "Aspect Tree";
 
     private final List<Inventory> INVENTORY_LIST;
@@ -63,22 +45,19 @@ public class AspectGUI implements InventoryGUI {
         INVENTORY_LIST = new ArrayList<>();
         List<ItemStack> items = new ArrayList<>();
         int count = 0, icount = 0;
-        Iterator<ShrineModel> shrines = model.getShrineWarps().stream().map(DGData.SHRINE_R::fromId).collect(Collectors.toSet()).iterator();
-        while (shrines.hasNext()) {
-            ShrineModel shrine = shrines.next();
-            final String name = shrine.getPersistentId();
-            final String type = shrine.getShrineType().name();
-            final String owner = DGData.PLAYER_R.fromId(shrine.getOwnerMojangId()).getLastKnownName();
+        List<Aspect> aspects = model.getPotentialAspects(true);
 
-            items.add(count, new ItemStack(owner.equals(model.getLastKnownName()) ? Material.ENCHANTED_BOOK : Material.WRITTEN_BOOK, 1) {
-                {
-                    ItemMeta meta = getItemMeta();
-                    meta.setDisplayName(name);
-                    List<String> lore = Lists.newArrayList(ChatColor.AQUA + type, ChatColor.YELLOW + "Owner: " + ChatColor.LIGHT_PURPLE + owner);
-                    meta.setLore(lore);
-                    setItemMeta(meta);
-                }
-            });
+        Iterator<Aspect> aspectIterator = aspects.iterator();
+        while (aspectIterator.hasNext()) {
+            Aspect aspect = aspectIterator.next();
+            ItemStack item = aspect.getItem().clone();
+            ItemMeta meta = item.getItemMeta();
+            if(model.getAspects().contains(aspect.name())) {
+                meta.getLore().add("You've claimed this aspect!");
+            } else if(model.canClaim(aspect)) {
+                meta.getLore().add("This aspect is claimable!");
+                meta.add
+            }
 
             count++;
 
@@ -132,5 +111,5 @@ public class AspectGUI implements InventoryGUI {
             return FUNCTION_MAP.get(slot);
         }
         return SlotFunction.NO_FUNCTION;
-    }
+    } */
 }
