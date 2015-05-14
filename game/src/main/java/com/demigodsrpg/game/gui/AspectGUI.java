@@ -22,6 +22,7 @@ package com.demigodsrpg.game.gui;
 import com.demigodsrpg.aspect.Aspect;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.model.PlayerModel;
+import com.demigodsrpg.enchantment.CustomEnchantments;
 import com.demigodsrpg.util.InventoryGUI;
 import com.demigodsrpg.util.SlotFunction;
 import com.google.common.collect.ImmutableMap;
@@ -36,6 +37,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+// TODO Format this so it is actually a list and not just jumbled together
 
 public class AspectGUI implements InventoryGUI {
     public static final String INVENTORY_NAME = "Aspect Tree";
@@ -69,15 +72,20 @@ public class AspectGUI implements InventoryGUI {
             ItemMeta meta = item.getItemMeta();
             if(model.getAspects().contains(aspect.name())) {
                 meta.getLore().add("You've claimed this aspect!");
+                item.setItemMeta(meta);
                 builder.put(count, SlotFunction.LOCKED);
             } else if(model.canClaim(aspect)) {
                 meta.getLore().add("This aspect is claimable!");
+                item.setItemMeta(meta);
+                item = CustomEnchantments.enchant(item, CustomEnchantments.CLAIMABLE, 1, false);
             } else {
                 item.setType(Material.BARRIER);
                 meta.getLore().add("This aspect is currently locked.");
+                item.setItemMeta(meta);
                 builder.put(count, SlotFunction.LOCKED);
             }
 
+            items.add(count, item);
             count++;
 
             if (count % 19 == 0 || !aspectIterator.hasNext()) {
