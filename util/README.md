@@ -6,7 +6,7 @@ The different utilities and associated classes will be listed and explained belo
 
 ## Data Section
 
-The **DataSection** utility is made up of the following classes:
+The **DataSection** utility, contained in the ```datasection``` package, is made up of the following classes:
 
 ```DataSection.java``` is an interface declaring how data can be accessed from a *DataSection*. Each *DataSection* type needs to implement this interface to interact with the rest of the utility.
 
@@ -15,6 +15,12 @@ The **DataSection** utility is made up of the following classes:
 ```PJsonSection.java``` is the second of the two default implementations of a *DataSection*. Data is serialized as a json string and then exported into a compatible PostgreSQL database (v9.3+) as the json type. This is useful when sharing data accross multiple instances of the Demigods RPG mod.
 
 ```DataSectionUtil.java``` is the static utility class that handles various serialization and unserialization methods for the two default impelmentations of a *DataSection*.
+
+```Model.java``` is a simple interface representing a model data object.
+
+```AbstractPersistentModel.java``` is an abstract class representing a persistent type of Model.
+
+```AbstractDataRegistry.java``` is the complete, optimized, and easy to use registry that holds all data in the form of models extending ```AbstractPersistentModel``` with the id type ```String```. All data is read froma cache (```ConcurrentHashMap```) and saved to both the cache and the persistence method (either ```FJsonSection``` or ```PJsonSection```).
 
 ## Inventory GUI
 
