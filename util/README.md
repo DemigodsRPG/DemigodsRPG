@@ -28,7 +28,7 @@ The **Inventory GUI** utility is represented by the simple ```InventoryGUI.java`
 
 ## Location Utility
 
-The **Location Utility** (```LocationUtil.java```) is a very simple static utility class that provides a String serialization method for a Bukkit ```Location.java``` object.
+The **Location Utility** (```LocationUtil.java```) is a very simple static utility class that provides a String serialization method for a Bukkit ```Location``` object.
 
 ## Zone & WorldGuard Utilities
 
