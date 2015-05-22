@@ -20,7 +20,7 @@ The **DataSection** utility, contained in the ```datasection``` package, is made
 
 ```AbstractPersistentModel.java``` is an abstract class representing a persistent type of Model.
 
-```AbstractDataRegistry.java``` is the complete, optimized, and easy to use registry that holds all data in the form of models extending ```AbstractPersistentModel``` with the id type ```String```. All data is read froma cache (```ConcurrentHashMap```) and saved to both the cache and the persistence method (either ```FJsonSection``` or ```PJsonSection```).
+```AbstractDataRegistry.java``` is the complete, optimized, and easy to use registry that holds all data in the form of models extending ```AbstractPersistentModel``` with the id type ```String```. All data is read from a cache (```ConcurrentHashMap```) and saved to both the cache and the persistence method--either ```FJsonSection``` or ```PJsonSection```.
 
 ## Inventory GUI
 
