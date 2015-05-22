@@ -18,7 +18,7 @@
 package com.demigodsrpg.data.area;
 
 import com.demigodsrpg.data.DGData;
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.util.DataSection;
 import com.demigodsrpg.util.LocationUtil;
 import org.bukkit.Location;
@@ -28,30 +28,30 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class FactionTerritory extends Area {
+public class FamilyTerritory extends Area {
     private final String uuid;
-    private final Faction faction;
+    private final Family family;
 
-    public FactionTerritory(Faction faction, AreaPriority priority, List<Location> corners) {
+    public FamilyTerritory(Family family, AreaPriority priority, List<Location> corners) {
         super(priority, corners);
         this.uuid = UUID.randomUUID().toString();
-        this.faction = faction;
+        this.family = family;
     }
 
-    public FactionTerritory(String id, final DataSection conf) {
+    public FamilyTerritory(String id, final DataSection conf) {
         super(AreaPriority.valueOf(conf.getString("priority")), new ArrayList<Location>() {{
             addAll(conf.getStringList("locations").stream().map(LocationUtil::locationFromString).collect(Collectors.toList()));
         }});
         this.uuid = id.split("\\$")[2];
-        this.faction = DGData.FACTION_R.factionFromName(id.split("\\$")[1]);
+        this.family = DGData.FAMILY_R.familyFromName(id.split("\\$")[1]);
     }
 
-    public Faction getFaction() {
-        return faction;
+    public Family getFamily() {
+        return family;
     }
 
     @Override
     public String getPersistentId() {
-        return "faction$" + getFaction().getName() + "$" + uuid;
+        return "family$" + getFamily().getName() + "$" + uuid;
     }
 }

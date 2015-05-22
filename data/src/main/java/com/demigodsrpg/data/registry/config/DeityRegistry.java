@@ -18,7 +18,7 @@
 package com.demigodsrpg.data.registry.config;
 
 import com.demigodsrpg.data.deity.Deity;
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.util.DataSection;
 
 import java.util.List;
@@ -36,8 +36,8 @@ public class DeityRegistry extends AbstractConfigRegistry<Deity> {
         return null;
     }
 
-    public List<Deity> deitiesInFaction(Faction faction) {
-        return getRegistered().stream().filter(deity -> deity.getFactions().contains(faction)).collect(Collectors.toList());
+    public List<Deity> deitiesInFamily(Family family) {
+        return getRegistered().stream().filter(deity -> deity.getFamilies().contains(family)).collect(Collectors.toList());
     }
 
     @Override

@@ -19,7 +19,7 @@ package com.demigodsrpg.game.integration.chitchat;
 
 import com.demigodsrpg.chitchat.tag.PlayerTag;
 import com.demigodsrpg.data.DGData;
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.model.PlayerModel;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -39,7 +39,7 @@ public class FactionChatTag extends PlayerTag {
     }
 
     @Override
-    public boolean cancelBungee(Player player) {
+    public boolean cancelRedis(Player player) {
         return isInChat(player);
     }
 
@@ -50,6 +50,6 @@ public class FactionChatTag extends PlayerTag {
 
     private boolean isInChat(Player player) {
         PlayerModel model = DGData.PLAYER_R.fromPlayer(player);
-        return DGData.SERVER_R.contains("faction_chat", player.getUniqueId().toString()) && !Faction.NEUTRAL.equals(model.getFaction()) && !Faction.EXCOMMUNICATED.equals(model.getFaction());
+        return DGData.SERVER_R.contains("faction_chat", player.getUniqueId().toString()) && !Family.NEUTRAL.equals(model.getFamily()) && !Family.EXCOMMUNICATED.equals(model.getFamily());
     }
 }

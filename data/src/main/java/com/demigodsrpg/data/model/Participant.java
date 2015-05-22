@@ -18,7 +18,7 @@
 package com.demigodsrpg.data.model;
 
 import com.demigodsrpg.data.battle.BattleMetaData;
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.deity.Family;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
@@ -33,7 +33,7 @@ public interface Participant {
 
     Location getLocation();
 
-    Faction getFaction();
+    Family getFamily();
 
     void addTeamKill();
 

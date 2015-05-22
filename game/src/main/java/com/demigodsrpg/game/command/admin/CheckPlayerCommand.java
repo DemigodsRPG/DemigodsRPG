@@ -56,7 +56,7 @@ public class CheckPlayerCommand extends AdminPlayerCommand {
         if (model.getGod().isPresent() && model.getHero().isPresent()) {
             s.sendMessage(ChatColor.YELLOW + p.getName() + " is the offspring of " + model.getGod().get().getName() + " and " + model.getHero().get().getName() + "."); // TODO Colors
         }
-        s.sendMessage(p.getName() + " is a member of the " + StringUtil2.beautify(model.getFaction().getName()) + " faction.");
+        s.sendMessage(p.getName() + " is a member of the " + StringUtil2.beautify(model.getFamily().getName()) + " family.");
         if (p.isOnline())
             s.sendMessage(p.getName() + " has " + ColorUtil.getColor(p.getPlayer().getHealth(), p.getPlayer().getMaxHealth()) + ChatColor.ITALIC + p.getPlayer().getHealth() + " / " + p.getPlayer().getMaxHealth() + ChatColor.YELLOW + " health.");
         if (!model.getAspects().isEmpty()) {

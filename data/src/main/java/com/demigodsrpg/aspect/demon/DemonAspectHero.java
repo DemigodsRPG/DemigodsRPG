@@ -95,7 +95,7 @@ public class DemonAspectHero implements Aspect {
         int range = (int) Math.round(18.83043 * Math.pow(m.getExperience(Aspects.DEMON_ASPECT_HERO), 0.088637));
         List<LivingEntity> entitylist = new ArrayList<>();
         for (Entity anEntity : p.getNearbyEntities(range, range, range)) {
-            if (anEntity instanceof Player && m.getFaction().equals(DGData.PLAYER_R.fromPlayer((Player) anEntity).getFaction())) {
+            if (anEntity instanceof Player && m.getFamily().equals(DGData.PLAYER_R.fromPlayer((Player) anEntity).getFamily())) {
                 continue;
             }
             if (anEntity instanceof LivingEntity) {

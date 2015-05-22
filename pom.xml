@@ -34,6 +34,10 @@
         <util.version>1.0.0-SNAPSHOT</util.version>
         <data.version>1.0.0-SNAPSHOT</data.version>
         <game.version>4.0.0-SNAPSHOT</game.version>
+
+        <!-- Related -->
+        <chitchat.version>1.2.0</chitchat.version>
+        <families.version>1.0.0-SNAPSHOT</families.version>
     </properties>
 
     <developers>
@@ -90,7 +94,14 @@
         <dependency>
             <groupId>com.demigodsrpg</groupId>
             <artifactId>chitchat</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
+            <version>${chitchat.version}</version>
+        </dependency>
+
+        <!-- Families -->
+        <dependency>
+            <groupId>com.demigodsrpg</groupId>
+            <artifactId>families</artifactId>
+            <version>${families.version}</version>
         </dependency>
 
         <!-- Apache Lang -->

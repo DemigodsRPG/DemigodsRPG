@@ -20,8 +20,8 @@ package com.demigodsrpg.game.command.admin;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.area.AreaPriority;
 import com.demigodsrpg.data.area.AreaSelection;
-import com.demigodsrpg.data.area.FactionTerritory;
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.area.FamilyTerritory;
+import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.model.PlayerModel;
 import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
@@ -33,7 +33,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class CreateFactionAreaCommand extends BaseCommand {
+public class CreateFamilyAreaCommand extends BaseCommand {
     @Override
     protected CommandResult onCommand(CommandSender sender, Command command, String[] args) {
         // Need at least 1 arg
@@ -49,10 +49,10 @@ public class CreateFactionAreaCommand extends BaseCommand {
 
                         // Get territory info
                         List<Location> corners = selection.getPoints();
-                        Faction faction = DGData.FACTION_R.factionFromName(args[0]);
+                        Family family = DGData.FAMILY_R.familyFromName(args[0]);
 
                         // Does the faction exist?
-                        if (faction == null) {
+                        if (family == null) {
                             sender.sendMessage(ChatColor.RED + args[0] + " is not a valid faction name.");
                             return CommandResult.QUIET_ERROR;
                         }
@@ -64,11 +64,11 @@ public class CreateFactionAreaCommand extends BaseCommand {
                             sender.sendMessage(ChatColor.YELLOW + "Area selection cleared.");
 
                             // Create and register the faction territory
-                            FactionTerritory territory = new FactionTerritory(faction, AreaPriority.NORMAL, corners);
+                            FamilyTerritory territory = new FamilyTerritory(family, AreaPriority.NORMAL, corners);
                             DGData.AREA_R.get(selection.getPoints().get(0).getWorld().getName()).register(territory);
 
                             // Notify the admin
-                            sender.sendMessage(ChatColor.YELLOW + "Faction territory for " + faction.getName() + " has been created.");
+                            sender.sendMessage(ChatColor.YELLOW + "Faction territory for " + family.getName() + " has been created.");
 
                             return CommandResult.SUCCESS;
                         } else {

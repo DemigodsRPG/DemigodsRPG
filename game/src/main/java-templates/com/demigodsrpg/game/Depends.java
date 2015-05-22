@@ -39,10 +39,8 @@ public class Depends {
     public static final String DG_DATA_VER = "${data.version}";
 
     public static final String ICIQL = "iciql";
-
     public static final String ICIQL_VER = "${iciql.version}";
 
     public static final String PSQL = "postgresql";
-
     public static final String PSQL_VER = "${psql.version}";
 }

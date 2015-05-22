@@ -21,7 +21,7 @@ import com.demigodsrpg.chitchat.Chitchat;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.Demo;
 import com.demigodsrpg.data.Setting;
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.model.PlayerModel;
 import com.demigodsrpg.data.model.TributeModel;
 import com.demigodsrpg.data.registry.config.AreaRegistry;
@@ -83,12 +83,12 @@ public class DGGame {
         DGData.SAVE_PATH = plugin.getDataFolder().getPath() + "/data/";
 
         // Get custom factions and deities
-        DGData.FACTION_R.registerFromDatabase();
+        DGData.FAMILY_R.registerFromDatabase();
         DGData.DEITY_R.registerFromDatabase();
 
         // Register default factions
-        DGData.FACTION_R.register(Faction.NEUTRAL);
-        DGData.FACTION_R.register(Faction.EXCOMMUNICATED);
+        DGData.FAMILY_R.register(Family.NEUTRAL);
+        DGData.FAMILY_R.register(Family.EXCOMMUNICATED);
 
         // Debug data
         if (Setting.DEBUG_DATA) {
@@ -104,9 +104,9 @@ public class DGGame {
 
             // Debug factions
             DGData.CONSOLE.info("Enabling demo factions.");
-            DGData.FACTION_R.register(Demo.F.KŌHAI);
-            DGData.FACTION_R.register(Demo.F.SENPAI);
-            DGData.FACTION_R.register(Demo.F.SENSEI);
+            DGData.FAMILY_R.register(Demo.F.KŌHAI);
+            DGData.FAMILY_R.register(Demo.F.SENPAI);
+            DGData.FAMILY_R.register(Demo.F.SENSEI);
         }
 
         // Determine territory registries
@@ -143,7 +143,7 @@ public class DGGame {
 
 
         // Register commands
-        plugin.getCommand("faction").setExecutor(new FactionCommand());
+        plugin.getCommand("family").setExecutor(new FamilyCommand());
         plugin.getCommand("binds").setExecutor(new BindsCommand());
         plugin.getCommand("check").setExecutor(new CheckCommand());
         plugin.getCommand("aspect").setExecutor(new AspectCommand());
@@ -154,14 +154,14 @@ public class DGGame {
         // Admin commands
         plugin.getCommand("adminmode").setExecutor(new AdminModeComand());
         plugin.getCommand("selectarea").setExecutor(new SelectAreaCommand());
-        plugin.getCommand("createfaction").setExecutor(new CreateFactionCommand());
-        plugin.getCommand("createfactionarea").setExecutor(new CreateFactionAreaCommand());
+        plugin.getCommand("createfamily").setExecutor(new CreateFamilyCommand());
+        plugin.getCommand("createfamilyarea").setExecutor(new CreateFamilyAreaCommand());
         plugin.getCommand("checkplayer").setExecutor(new CheckPlayerCommand());
         plugin.getCommand("adddevotion").setExecutor(new AddDevotionCommand());
         plugin.getCommand("removedevotion").setExecutor(new RemoveDevotionCommand());
         plugin.getCommand("giveaspect").setExecutor(new GiveAspectCommand());
         plugin.getCommand("removeaspect").setExecutor(new RemoveAspectCommand());
-        plugin.getCommand("setfaction").setExecutor(new SetFactionCommand());
+        plugin.getCommand("setfamilyn").setExecutor(new SetFamilyCommand());
 
         // Enable ZoneUtil
         ZoneUtil.init(plugin);

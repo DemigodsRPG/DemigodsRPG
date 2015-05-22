@@ -6,8 +6,8 @@ authors: [marinating, HmmmQuestionMark, _Alex, TheFatDemon, janie177]
 softdepend: [Chitchat, WorldGuard]
 commands:
   ## Everyday Commands
-  faction:
-    usage: /faction
+  family:
+    usage: /family
     aliases: [f]
   binds:
     usage: /binds
@@ -36,11 +36,11 @@ commands:
   selectarea:
     usage: /selectarea
     aliases: [sa, areaselect]
-  createfaction:
-    usage: /createfaction [name] [color] [symbol] [welcome message...]
-  createfactionarea:
-    usage: /createfactionarea [faction]
-    aliases: [makefactionarea]
+  createfamily:
+    usage: /createfamily [name] [color] [symbol] [welcome message...]
+  createfamilyarea:
+    usage: /createfamilyarea [family]
+    aliases: [makefamilyarea]
   checkplayer:
     usage: /checkplayer [player]
   adddevotion:
@@ -51,8 +51,8 @@ commands:
     usage: /givedeity [player] [aspect] [major|minor]
   removeaspect:
     usage: /removedeity [player] [aspect]
-  setfaction:
-    usage: /setfaction [player] [faction]
+  setfamily:
+    usage: /setfamily [player] [family]
 permisions:
   demigods.admin:
     default: op

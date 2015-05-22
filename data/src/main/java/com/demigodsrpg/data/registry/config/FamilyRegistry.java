@@ -21,17 +21,17 @@ import com.demigodsrpg.aspect.Aspect;
 import com.demigodsrpg.aspect.Groups;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.deity.Deity;
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.util.DataSection;
 
 import java.util.Optional;
 
-public class FactionRegistry extends AbstractConfigRegistry<Faction> {
+public class FamilyRegistry extends AbstractConfigRegistry<Family> {
 
-    private static final String FILE_NAME = "factions";
+    private static final String FILE_NAME = "family";
 
-    public Faction factionFromName(final String name) {
-        Optional<Faction> found = getRegistered().stream().filter(faction -> faction.getName().equalsIgnoreCase(name)).findAny();
+    public Family familyFromName(final String name) {
+        Optional<Family> found = getRegistered().stream().filter(faction -> faction.getName().equalsIgnoreCase(name)).findAny();
         if (found.isPresent()) {
             return found.get();
         }
@@ -39,8 +39,8 @@ public class FactionRegistry extends AbstractConfigRegistry<Faction> {
     }
 
     @Override
-    protected Faction valueFromData(String stringKey, DataSection data) {
-        return new Faction(stringKey, data);
+    protected Family valueFromData(String stringKey, DataSection data) {
+        return new Family(stringKey, data);
     }
 
     @Override
@@ -53,8 +53,8 @@ public class FactionRegistry extends AbstractConfigRegistry<Faction> {
         return true;
     }
 
-    public boolean isInFaction(Faction faction, Aspect aspect) {
-        for (Deity inFaction : DGData.DEITY_R.deitiesInFaction(faction)) {
+    public boolean isInFamily(Family family, Aspect aspect) {
+        for (Deity inFaction : DGData.DEITY_R.deitiesInFamily(family)) {
             for (Aspect.Group group : inFaction.getAspectGroups()) {
                 if (Groups.aspectsInGroup(group).contains(aspect)) {
                     return true;

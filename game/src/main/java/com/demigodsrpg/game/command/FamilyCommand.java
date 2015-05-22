@@ -18,7 +18,7 @@
 package com.demigodsrpg.game.command;
 
 import com.demigodsrpg.data.DGData;
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.model.PlayerModel;
 import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
@@ -28,7 +28,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class FactionCommand extends BaseCommand {
+public class FamilyCommand extends BaseCommand {
     @Override
     public CommandResult onCommand(CommandSender sender, Command command, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
@@ -38,17 +38,17 @@ public class FactionCommand extends BaseCommand {
         Player player = (Player) sender;
         PlayerModel model = DGData.PLAYER_R.fromPlayer(player);
 
-        if (Faction.NEUTRAL.equals(model.getFaction()) || Faction.EXCOMMUNICATED.equals(model.getFaction())) {
-            player.sendMessage(ChatColor.RED + "You aren't in a faction.");
+        if (Family.NEUTRAL.equals(model.getFamily()) || Family.EXCOMMUNICATED.equals(model.getFamily())) {
+            player.sendMessage(ChatColor.RED + "You aren't in a family.");
             return CommandResult.QUIET_ERROR;
         }
 
-        if (DGData.SERVER_R.contains("faction_chat", player.getUniqueId().toString())) {
-            DGData.SERVER_R.remove("faction_chat", player.getUniqueId().toString());
-            player.sendMessage(ChatColor.YELLOW + "You just disabled faction chat.");
+        if (DGData.SERVER_R.contains("family_chat", player.getUniqueId().toString())) {
+            DGData.SERVER_R.remove("family_chat", player.getUniqueId().toString());
+            player.sendMessage(ChatColor.YELLOW + "You just disabled family chat.");
         } else {
-            DGData.SERVER_R.put("faction_chat", player.getUniqueId().toString(), true);
-            player.sendMessage(ChatColor.YELLOW + "You just enabled faction chat.");
+            DGData.SERVER_R.put("family_chat", player.getUniqueId().toString(), true);
+            player.sendMessage(ChatColor.YELLOW + "You just enabled family chat.");
         }
         return CommandResult.SUCCESS;
     }

@@ -17,7 +17,7 @@
 
 package com.demigodsrpg.data.model;
 
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.util.DataSection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -27,16 +27,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SpawnModel extends AbstractPersistentModel<String> {
-    private final Faction faction;
+    private final Family family;
     private Location location;
 
-    public SpawnModel(Faction faction, Location location) {
-        this.faction = faction;
+    public SpawnModel(Family family, Location location) {
+        this.family = family;
         this.location = location;
     }
 
-    public SpawnModel(Faction faction, DataSection conf) {
-        this.faction = faction;
+    public SpawnModel(Family family, DataSection conf) {
+        this.family = family;
 
         World world = Bukkit.getWorld(conf.getString("world_name"));
         if (world != null) {
@@ -48,7 +48,7 @@ public class SpawnModel extends AbstractPersistentModel<String> {
             location = new Location(world, x, y, z, yaw, pitch);
         }
 
-        throw new NullPointerException("World not found for the " + faction.getName() + " spawn location.");
+        throw new NullPointerException("World not found for the " + family.getName() + " spawn location.");
     }
 
     @Override
@@ -63,8 +63,8 @@ public class SpawnModel extends AbstractPersistentModel<String> {
         return map;
     }
 
-    public Faction getAlliance() {
-        return faction;
+    public Family getAlliance() {
+        return family;
     }
 
     public Location getLocation() {

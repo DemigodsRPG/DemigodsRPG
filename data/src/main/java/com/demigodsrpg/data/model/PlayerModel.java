@@ -29,7 +29,7 @@ import com.demigodsrpg.data.Setting;
 import com.demigodsrpg.data.battle.BattleMetaData;
 import com.demigodsrpg.data.deity.Deity;
 import com.demigodsrpg.data.deity.DeityType;
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.util.DataSection;
 import com.demigodsrpg.util.ZoneUtil;
 import com.google.common.collect.BiMap;
@@ -59,7 +59,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
     private final List<String> aspects = new ArrayList<>(1);
     private final List<String> shrineWarps = new ArrayList<>();
-    private Faction faction;
+    private Family family;
     private final BiMap<String, String> binds = HashBiMap.create();
     private final TIntDoubleHashMap experience;
 
@@ -89,7 +89,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
             handleDemo();
         } else {
             // Neutral faction
-            faction = Faction.NEUTRAL;
+            family = Family.NEUTRAL;
 
             // Empty deities
             god = Optional.empty();
@@ -126,9 +126,9 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
                 contracts.add(contract);
             }
         }
-        faction = DGData.FACTION_R.factionFromName(conf.getStringNullable("faction"));
-        if (faction == null) {
-            faction = Faction.NEUTRAL;
+        family = DGData.FAMILY_R.familyFromName(conf.getStringNullable("faction"));
+        if (family == null) {
+            family = Family.NEUTRAL;
         }
         Map binds = conf.getSectionNullable("binds") != null ? (Map) conf.getSectionNullable("binds").getValues() : null;
         if (binds != null) {
@@ -180,7 +180,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
             map.put("hero", hero.get().getName());
         }
         map.put("contracts", contracts.stream().map(Deity::getName).collect(Collectors.toList()));
-        map.put("faction", faction.getName());
+        map.put("faction", family.getName());
         map.put("binds", binds);
         map.put("max_health", maxHealth);
         map.put("favor", favor);
@@ -259,12 +259,12 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     @Override
-    public Faction getFaction() {
-        return faction;
+    public Family getFamily() {
+        return family;
     }
 
-    public void setFaction(Faction faction) {
-        this.faction = faction;
+    public void setFamily(Family family) {
+        this.family = family;
         DGData.PLAYER_R.register(this);
     }
 
@@ -596,10 +596,10 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public boolean checkTeamKills() {
-        if (!Faction.EXCOMMUNICATED.equals(faction)) {
+        if (!Family.EXCOMMUNICATED.equals(family)) {
             if (Setting.MAX_TEAM_KILLS <= teamKills) {
                 // Reset them to excommunicated
-                setFaction(Faction.EXCOMMUNICATED);
+                setFamily(Family.EXCOMMUNICATED);
                 resetTeamKills();
                 // double former = getTotalExperience();
                 if (getOnline()) {
@@ -619,7 +619,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
 
     public void giveHeroAspect(Deity hero, Aspect aspect) {
         giveAspect(aspect);
-        setFaction(hero.getFactions().get(0));
+        setFamily(hero.getFamilies().get(0));
         setMaxHealth(25.0);
         setLevel(1);
         setExperience(aspect, 20.0, true);
@@ -636,7 +636,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     }
 
     public boolean canContract(Deity deity) {
-        return Setting.NO_FACTION_CONTRACT_MODE || deity.getFactions().contains(faction);
+        return Setting.NO_FACTION_CONTRACT_MODE || deity.getFamilies().contains(family);
     }
 
     public void calculateAscensions(boolean announce) {
@@ -729,7 +729,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
     @Deprecated
     public void cleanse() {
         // Neutral faction
-        faction = Faction.NEUTRAL;
+        family = Family.NEUTRAL;
 
         // Empty deities
         god = Optional.empty();
@@ -762,18 +762,18 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         int roll = RandomUtil.generateIntRange(0, 2);
         if (roll == 0) {
             hero = Optional.of(Demo.D.IPSUM);
-            faction = Demo.D.IPSUM.getFactions().get(0);
+            family = Demo.D.IPSUM.getFamilies().get(0);
             addAspect(Aspects.BLOODLUST_ASPECT_HERO);
             setExperience(Aspects.BLOODLUST_ASPECT_HERO, 1000, false);
         } else if (roll == 1) {
             hero = Optional.of(Demo.D.DOLOR);
-            faction = Demo.D.DOLOR.getFactions().get(0);
+            family = Demo.D.DOLOR.getFamilies().get(0);
             addAspect(Aspects.MAGNETISM_ASPECT_HERO);
             setExperience(Aspects.MAGNETISM_ASPECT_HERO, 5000, false);
         } else {
             god = Optional.of(Demo.D.SIT);
             hero = Optional.of(Demo.D.AMET);
-            faction = Demo.D.AMET.getFactions().get(0);
+            family = Demo.D.AMET.getFamilies().get(0);
             addAspect(Aspects.WATER_ASPECT_HERO);
             setExperience(Aspects.WATER_ASPECT_HERO, 1000, false);
         }

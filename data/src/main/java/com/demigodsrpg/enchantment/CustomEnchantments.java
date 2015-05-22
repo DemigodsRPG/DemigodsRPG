@@ -51,7 +51,7 @@ public class CustomEnchantments {
 
     // -- PUBLIC RELEASE -- //
 
-    public static final Claimable CLAIMABLE = new Claimable(150);
+    public static final Claimable CLAIMABLE = new Claimable();
 
     // -- ENCHANTMENT LIST -- //
 

@@ -32,8 +32,8 @@ public class FactionIdTag extends PlayerTag {
     @Override
     public String getFor(Player player) {
         PlayerModel model = DGData.PLAYER_R.fromPlayer(player);
-        String symbol = model.getFaction().getChatSymbol();
-        return ChatColor.DARK_GRAY + "[" + model.getFaction().getColor() + symbol + ChatColor.DARK_GRAY + "]" + ChatColor.RESET;
+        String symbol = model.getFamily().getChatSymbol();
+        return ChatColor.DARK_GRAY + "[" + model.getFamily().getColor() + symbol + ChatColor.DARK_GRAY + "]" + ChatColor.RESET;
     }
 
     @Override

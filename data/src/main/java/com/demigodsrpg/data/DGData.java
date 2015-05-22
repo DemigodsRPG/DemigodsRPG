@@ -21,7 +21,7 @@ import com.demigodsrpg.ability.AbilityRegistry;
 import com.demigodsrpg.data.registry.*;
 import com.demigodsrpg.data.registry.config.AreaRegistry;
 import com.demigodsrpg.data.registry.config.DeityRegistry;
-import com.demigodsrpg.data.registry.config.FactionRegistry;
+import com.demigodsrpg.data.registry.config.FamilyRegistry;
 import com.demigodsrpg.data.registry.memory.BattleRegistry;
 import org.bukkit.plugin.Plugin;
 
@@ -34,7 +34,7 @@ public class DGData {
     public static final ShrineRegistry SHRINE_R = new ShrineRegistry();
     public static final TributeRegistry TRIBUTE_R = new TributeRegistry();
     public static final SpawnRegistry SPAWN_R = new SpawnRegistry();
-    public static final FactionRegistry FACTION_R = new FactionRegistry();
+    public static final FamilyRegistry FAMILY_R = new FamilyRegistry();
     public static final DeityRegistry DEITY_R = new DeityRegistry();
     public static final ServerDataRegistry SERVER_R = new ServerDataRegistry();
     public static final ConcurrentMap<String, AreaRegistry> AREA_R = new ConcurrentHashMap<>();
@@ -51,7 +51,7 @@ public class DGData {
     public static void clearCache() {
         PLAYER_R.clearCache();
         SHRINE_R.clearCache();
-        FACTION_R.clearCache();
+        FAMILY_R.clearCache();
         TRIBUTE_R.clearCache();
         SPAWN_R.clearCache();
         DEITY_R.clearCache();

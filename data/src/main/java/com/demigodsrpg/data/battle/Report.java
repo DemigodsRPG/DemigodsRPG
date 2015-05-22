@@ -18,7 +18,7 @@
 package com.demigodsrpg.data.battle;
 
 import com.demigodsrpg.data.DGData;
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.model.Participant;
 import com.demigodsrpg.data.model.PlayerModel;
 import com.google.common.collect.Multimap;
@@ -37,9 +37,9 @@ public class Report {
     private Battle battle;
 
     private Multimap<Participant, String> participantScores;
-    private Multimap<Faction, String> factionScores;
+    private Multimap<Family, String> familyScores;
     private Map<Participant, Double> weightedKillDeathRatios;
-    private Map<Faction, Double> weightedFactionRatios;
+    private Map<Family, Double> weightedFamilyRatios;
 
     public Report(Battle battle) {
         battleLength = battle.getEndTimeMillis() - battle.getStartTimeMillis();
@@ -47,9 +47,9 @@ public class Report {
 
         // Get the stats together
         participantScores = getParticipantScores();
-        factionScores = getFactionScores();
+        familyScores = getFamilyScores();
         weightedKillDeathRatios = getWeightedKillDeathRatios();
-        weightedFactionRatios = getWeightedFactionRatios();
+        weightedFamilyRatios = getWeightedFamilyRatios();
     }
 
     public void sendToServer() {
@@ -61,37 +61,37 @@ public class Report {
             if (delta > 0.8) {
                 Participant one = participants.get(0);
                 Participant two = participants.get(1);
-                Bukkit.broadcastMessage(one.getFaction().getColor() + one.getLastKnownName() + ChatColor.GRAY + " and " + two.getFaction().getColor() + two.getLastKnownName() + ChatColor.GRAY + " just tied in a duel.");
+                Bukkit.broadcastMessage(one.getFamily().getColor() + one.getLastKnownName() + ChatColor.GRAY + " and " + two.getFamily().getColor() + two.getLastKnownName() + ChatColor.GRAY + " just tied in a duel.");
             } else {
                 int winnerIndex = getWeightedKillDeathRatio(participants.get(0)) > getWeightedKillDeathRatio(participants.get(1)) ? 0 : 1;
                 Participant winner = participants.get(winnerIndex);
                 Participant loser = participants.get(winnerIndex == 0 ? 1 : 0);
-                Bukkit.broadcastMessage(winner.getFaction().getColor() + winner.getLastKnownName() + ChatColor.GRAY + " just won in a duel against " + loser.getFaction().getColor() + loser.getLastKnownName() + ChatColor.GRAY + ".");
+                Bukkit.broadcastMessage(winner.getFamily().getColor() + winner.getLastKnownName() + ChatColor.GRAY + " just won in a duel against " + loser.getFamily().getColor() + loser.getLastKnownName() + ChatColor.GRAY + ".");
             }
         } else if (participants.size() > 2) {
             double winningScore = 0;
-            Faction winningfaction = null;
+            Family winningfamily = null;
             List<Participant> MVPs = getMVPs();
             boolean oneMVP = MVPs.size() == 1;
-            for (Map.Entry<Faction, Double> entry : weightedFactionRatios.entrySet()) {
+            for (Map.Entry<Family, Double> entry : weightedFamilyRatios.entrySet()) {
                 double score = entry.getValue();
                 if (score > winningScore) {
-                    winningfaction = entry.getKey();
+                    winningfamily = entry.getKey();
                     winningScore = score;
                 }
             }
-            if (winningfaction != null) {
-                Bukkit.broadcastMessage(ChatColor.GRAY + "The " + ChatColor.YELLOW + winningfaction.getName() + " faction " + ChatColor.GRAY + "just won a battle involving " + participants.size() + " participants.");
+            if (winningfamily != null) {
+                Bukkit.broadcastMessage(ChatColor.GRAY + "The " + ChatColor.YELLOW + winningfamily.getName() + " family " + ChatColor.GRAY + "just won a battle involving " + participants.size() + " participants.");
                 Bukkit.broadcastMessage(ChatColor.GRAY + "The " + ChatColor.YELLOW + "MVP" + (oneMVP ? "" : "s") + ChatColor.GRAY + " from this battle " + (oneMVP ? "is" : "are") + ":");
                 for (Participant mvp : MVPs) {
                     BattleMetaData data = battle.getInvolved().get(mvp.getPersistentId());
-                    Bukkit.broadcastMessage(ChatColor.DARK_GRAY + " ➥ " + mvp.getFaction().getColor() + mvp.getLastKnownName() + ChatColor.GRAY + " / " + ChatColor.YELLOW + "Kills" + ChatColor.GRAY + ": " + data.getKills() + " / " + ChatColor.YELLOW + "Deaths" + ChatColor.GRAY + ": " + data.getDeaths());
+                    Bukkit.broadcastMessage(ChatColor.DARK_GRAY + " ➥ " + mvp.getFamily().getColor() + mvp.getLastKnownName() + ChatColor.GRAY + " / " + ChatColor.YELLOW + "Kills" + ChatColor.GRAY + ": " + data.getKills() + " / " + ChatColor.YELLOW + "Deaths" + ChatColor.GRAY + ": " + data.getDeaths());
                 }
             }
         }
     }
 
-    public void sendToFactions() {
+    public void sendToFamilies() {
         // TODO
     }
 
@@ -125,13 +125,13 @@ public class Report {
         return weightedRatios;
     }
 
-    public Map<Faction, Double> getWeightedFactionRatios() {
-        Map<Faction, Double> weightedRatios = new HashMap<>();
+    public Map<Family, Double> getWeightedFamilyRatios() {
+        Map<Family, Double> weightedRatios = new HashMap<>();
         for (Map.Entry<Participant, Double> entry : weightedKillDeathRatios.entrySet()) {
-            Faction participantFaction = entry.getKey().getFaction();
-            double score = weightedRatios.getOrDefault(participantFaction, 0.0);
+            Family participantFamily = entry.getKey().getFamily();
+            double score = weightedRatios.getOrDefault(participantFamily, 0.0);
             score += entry.getValue();
-            weightedRatios.put(participantFaction, score);
+            weightedRatios.put(participantFamily, score);
         }
         return weightedRatios;
     }
@@ -162,23 +162,23 @@ public class Report {
         return scores;
     }
 
-    public Multimap<Faction, String> getFactionScores() {
-        Multimap<Faction, String> scores = Multimaps.newListMultimap(new ConcurrentHashMap<>(), ArrayList::new);
-        Map<Faction, BattleMetaData> factionScores = new HashMap<>();
+    public Multimap<Family, String> getFamilyScores() {
+        Multimap<Family, String> scores = Multimaps.newListMultimap(new ConcurrentHashMap<>(), ArrayList::new);
+        Map<Family, BattleMetaData> familyScores = new HashMap<>();
         for (Map.Entry<String, BattleMetaData> entry : battle.getInvolved().entrySet()) {
             Participant participant = DGData.PLAYER_R.fromId(entry.getKey());
-            Faction participantFaction = participant.getFaction();
+            Family participantFamily = participant.getFamily();
             BattleMetaData participantData = entry.getValue();
-            BattleMetaData factionData = factionScores.getOrDefault(participantFaction, new BattleMetaData());
-            factionData.hits += participantData.hits;
-            factionData.kills += participantData.kills;
-            factionData.deaths += participantData.deaths;
-            factionData.denies += participantData.denies;
-            factionData.assists += participantData.assists;
-            factionData.teamKills += participantData.teamKills;
-            factionScores.put(participantFaction, factionData);
+            BattleMetaData familyData = familyScores.getOrDefault(participantFamily, new BattleMetaData());
+            familyData.hits += participantData.hits;
+            familyData.kills += participantData.kills;
+            familyData.deaths += participantData.deaths;
+            familyData.denies += participantData.denies;
+            familyData.assists += participantData.assists;
+            familyData.teamKills += participantData.teamKills;
+            familyScores.put(participantFamily, familyData);
         }
-        for (Map.Entry<Faction, BattleMetaData> entry : factionScores.entrySet()) {
+        for (Map.Entry<Family, BattleMetaData> entry : familyScores.entrySet()) {
             scores.put(entry.getKey(), ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Hits: " + ChatColor.WHITE + entry.getValue().hits);
             scores.put(entry.getKey(), ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Kills: " + ChatColor.WHITE + entry.getValue().kills);
             scores.put(entry.getKey(), ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Deaths: " + ChatColor.WHITE + entry.getValue().deaths);

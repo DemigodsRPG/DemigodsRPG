@@ -20,13 +20,13 @@ package com.demigodsrpg.data;
 import com.demigodsrpg.aspect.Groups;
 import com.demigodsrpg.data.deity.Deity;
 import com.demigodsrpg.data.deity.DeityType;
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.deity.Gender;
 import org.bukkit.ChatColor;
 
 public class Demo {
     public static class D {
-        public static final Deity LOREM = new Deity(DeityType.GOD, "Lorem", Gender.EITHER, Faction.NEUTRAL, Groups.WATER_ASPECT, Groups.FIRE_ASPECT);
+        public static final Deity LOREM = new Deity(DeityType.GOD, "Lorem", Gender.EITHER, Family.NEUTRAL, Groups.WATER_ASPECT, Groups.FIRE_ASPECT);
         public static final Deity IPSUM = new Deity(DeityType.HERO, "Ipsum", Gender.FEMALE, F.SENPAI, Groups.BLOODLUST_ASPECT);
         public static final Deity DOLOR = new Deity(DeityType.HERO, "Dolor", Gender.MALE, F.KŌHAI, Groups.MAGNETISM_ASPECT);
         public static final Deity SIT = new Deity(DeityType.GOD, "Sit", Gender.FEMALE, F.SENSEI, Groups.BLOODLUST_ASPECT, Groups.LIGHTNING_ASPECT);
@@ -34,8 +34,8 @@ public class Demo {
     }
 
     public static class F {
-        public static final Faction KŌHAI = new Faction("Kōhai", ChatColor.GREEN, "KOHAI", "Kohai need senpai.");
-        public static final Faction SENPAI = new Faction("Senpai", ChatColor.YELLOW, "SENPAI", "Senpai need kohai.");
-        public static final Faction SENSEI = new Faction("Sensei", ChatColor.DARK_AQUA, "SENSEI", "Sensei do their thing.");
+        public static final Family KŌHAI = new Family("Kōhai", ChatColor.GREEN, "KOHAI", "Kohai need senpai.");
+        public static final Family SENPAI = new Family("Senpai", ChatColor.YELLOW, "SENPAI", "Senpai need kohai.");
+        public static final Family SENSEI = new Family("Sensei", ChatColor.DARK_AQUA, "SENSEI", "Sensei do their thing.");
     }
 }

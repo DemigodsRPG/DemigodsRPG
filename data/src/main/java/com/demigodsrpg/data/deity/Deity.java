@@ -33,21 +33,21 @@ public class Deity extends AbstractPersistentModel<String> {
     private String name;
     private Gender gender;
     private String[] pronouns;
-    private List<Faction> factions;
+    private List<Family> families;
     private List<Aspect.Group> aspectGroups;
 
     // -- CONSTRUCTORS -- //
 
-    public Deity(DeityType deityType, String name, Gender gender, Faction faction, Aspect.Group... aspectGroups) {
-        this(deityType, name, gender, faction, Arrays.asList(aspectGroups));
+    public Deity(DeityType deityType, String name, Gender gender, Family family, Aspect.Group... aspectGroups) {
+        this(deityType, name, gender, family, Arrays.asList(aspectGroups));
     }
 
-    public Deity(DeityType deityType, String name, Gender gender, Faction faction, List<Aspect.Group> aspectGroups) {
+    public Deity(DeityType deityType, String name, Gender gender, Family family, List<Aspect.Group> aspectGroups) {
         this.deityType = deityType;
         this.name = name;
         this.gender = gender;
-        this.factions = new ArrayList<>();
-        this.factions.add(faction);
+        this.families = new ArrayList<>();
+        this.families.add(family);
         this.aspectGroups = aspectGroups;
         decidePronouns();
     }
@@ -56,11 +56,11 @@ public class Deity extends AbstractPersistentModel<String> {
         name = stringKey;
         gender = Gender.valueOf(conf.getString("gender"));
         deityType = DeityType.valueOf(conf.getString("type"));
-        this.factions = new ArrayList<>();
-        for (Object factionName : conf.getList("factions", new ArrayList<>())) {
-            Faction faction = DGData.FACTION_R.factionFromName(factionName.toString());
-            if (faction != null) {
-                factions.add(faction);
+        this.families = new ArrayList<>();
+        for (Object familyName : conf.getList("families", new ArrayList<>())) {
+            Family family = DGData.FAMILY_R.familyFromName(familyName.toString());
+            if (family != null) {
+                families.add(family);
             }
         }
         aspectGroups = conf.getStringList("aspect-groups").stream().map(Groups::valueOf).collect(Collectors.toList());
@@ -79,7 +79,7 @@ public class Deity extends AbstractPersistentModel<String> {
         Map<String, Object> map = new HashMap<>();
         map.put("gender", gender.name());
         map.put("type", deityType.name());
-        map.put("factions", factions.stream().map(Faction::getName).collect(Collectors.toList()));
+        map.put("families", families.stream().map(Family::getName).collect(Collectors.toList()));
         map.put("aspect-groups", aspectGroups.stream().map(Aspect.Group::getName).collect(Collectors.toList()));
         return map;
     }
@@ -100,8 +100,8 @@ public class Deity extends AbstractPersistentModel<String> {
         return pronouns;
     }
 
-    public List<Faction> getFactions() {
-        return factions;
+    public List<Family> getFamilies() {
+        return families;
     }
 
     public List<Aspect.Group> getAspectGroups() {
@@ -110,12 +110,12 @@ public class Deity extends AbstractPersistentModel<String> {
 
     // -- MUTATORS -- //
 
-    public void addFaction(Faction faction) {
-        factions.add(faction);
+    public void addFamily(Family family) {
+        families.add(family);
     }
 
-    public void removeFaction(Faction faction) {
-        factions.remove(faction);
+    public void removeFamily(Family family) {
+        families.remove(family);
     }
 
     public void addAspectGroup(Aspect.Group group) {

@@ -95,7 +95,7 @@ public class LightningAspectII implements Aspect {
             if (!(entity instanceof LivingEntity)) continue;
             if (entity instanceof Player) {
                 PlayerModel opponent = DGData.PLAYER_R.fromPlayer((Player) entity);
-                if (opponent != null && model.getFaction().equals(opponent.getFaction())) continue;
+                if (opponent != null && model.getFamily().equals(opponent.getFamily())) continue;
             }
             if (DGData.BATTLE_R.canParticipate(entity) && !DGData.BATTLE_R.canTarget(entity)) continue;
 

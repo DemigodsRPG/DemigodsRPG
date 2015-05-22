@@ -19,7 +19,7 @@ package com.demigodsrpg.data.registry;
 
 import com.demigodsrpg.aspect.Aspect;
 import com.demigodsrpg.data.deity.Deity;
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.model.PlayerModel;
 import com.demigodsrpg.util.DataSection;
 import org.bukkit.Bukkit;
@@ -55,11 +55,11 @@ public class PlayerRegistry extends AbstractDataRegistry<PlayerModel> {
         return getRegistered().stream().map(PlayerModel::getOfflinePlayer).collect(Collectors.toSet());
     }
 
-    public Set<PlayerModel> getOnlineInAlliance(Faction faction) {
+    public Set<PlayerModel> getOnlineInAlliance(Family family) {
         Set<PlayerModel> players = new HashSet<>();
         for (Player player : Bukkit.getOnlinePlayers()) {
             PlayerModel model = fromPlayer(player);
-            if (model.getFaction().equals(faction)) {
+            if (model.getFamily().equals(family)) {
                 players.add(model);
             }
         }

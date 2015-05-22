@@ -20,7 +20,7 @@ package com.demigodsrpg.data.registry.config;
 
 import com.demigodsrpg.data.area.Area;
 import com.demigodsrpg.data.area.ClaimRoom;
-import com.demigodsrpg.data.area.FactionTerritory;
+import com.demigodsrpg.data.area.FamilyTerritory;
 import com.demigodsrpg.util.DataSection;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -45,7 +45,7 @@ public class AreaRegistry extends AbstractConfigRegistry<Area> {
     public Area valueFromData(String stringKey, DataSection data) {
         String areaType = stringKey.split("\\$")[0];
         if ("faction".equals(areaType)) {
-            return new FactionTerritory(stringKey, data);
+            return new FamilyTerritory(stringKey, data);
         } else if ("claimroom".equals(areaType)) {
             return new ClaimRoom(stringKey, data);
         }

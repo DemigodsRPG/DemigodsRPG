@@ -78,7 +78,7 @@ public class ShrineCommand extends BaseCommand {
             if (!invite && !invitee.getShrineWarps().contains(shrineName)) {
                 player.sendMessage(ChatColor.RED + "That player has never been invited to that shrine.");
                 return CommandResult.QUIET_ERROR;
-            } else if (invite && !invitee.getFaction().equals(inviter.getFaction())) {
+            } else if (invite && !invitee.getFamily().equals(inviter.getFamily())) {
                 player.sendMessage(ChatColor.RED + "That player is not in the same faction as you.");
                 return CommandResult.QUIET_ERROR;
             }

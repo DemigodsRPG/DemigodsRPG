@@ -20,7 +20,7 @@ package com.demigodsrpg.data.model;
 import com.censoredsoftware.library.schematic.Point;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.deity.Deity;
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.shrine.Shrine;
 import com.demigodsrpg.data.shrine.ShrineWorld;
 import com.demigodsrpg.util.DataSection;
@@ -80,8 +80,8 @@ public class ShrineModel extends AbstractPersistentModel<String> {
         return map;
     }
 
-    public Faction getFaction() {
-        return DGData.PLAYER_R.fromId(ownerMojangId).getFaction();
+    public Family getFaction() {
+        return DGData.PLAYER_R.fromId(ownerMojangId).getFamily();
     }
 
     public String getOwnerMojangId() {

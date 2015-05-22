@@ -18,45 +18,34 @@
 package com.demigodsrpg.game.command.admin;
 
 import com.demigodsrpg.data.DGData;
-import com.demigodsrpg.data.deity.Faction;
-import com.demigodsrpg.game.command.type.BaseCommand;
+import com.demigodsrpg.data.deity.Family;
+import com.demigodsrpg.data.model.PlayerModel;
+import com.demigodsrpg.game.command.type.AdminPlayerCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
-import com.google.common.base.Joiner;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.command.Command;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-public class CreateFactionCommand extends BaseCommand {
+public class SetFamilyCommand extends AdminPlayerCommand {
     @Override
-    protected CommandResult onCommand(CommandSender sender, Command command, String[] args) {
+    public CommandResult onCommand(CommandSender sender, PlayerModel model, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
             return CommandResult.PLAYER_ONLY;
         }
         if (DGData.PLAYER_R.fromPlayer((Player) sender).getAdminMode()) {
-            if (args.length < 3) {
-                return CommandResult.INVALID_SYNTAX;
+            if (args.length == 2) {
+                PlayerModel player = DGData.PLAYER_R.fromName(args[0]);
+                Family family = DGData.FAMILY_R.familyFromName(args[1].toUpperCase());
+                if (player == null || family == null) {
+                    sender.sendMessage(ChatColor.RED + "Wrong player or faction! Please try a little harder.");
+                    return CommandResult.QUIET_ERROR;
+                }
+                player.setFamily(family);
+                sender.sendMessage(ChatColor.YELLOW + player.getLastKnownName() + " has been set to the " + family.getName() + " faction.");
+                return CommandResult.SUCCESS;
             }
-
-            List<String> parts = new ArrayList<>(Arrays.asList(args));
-            parts.subList(3, parts.size() - 1); // FIXME IDK if this will work how I want
-
-            String name = args[0];
-            String color = ChatColor.translateAlternateColorCodes('&', args[1]);
-            String chatSymbol = args[2];
-            String welcomeMessage = Joiner.on(" ").join(parts);
-
-            Faction newFaction = new Faction(name, color, chatSymbol, welcomeMessage);
-            DGData.FACTION_R.register(newFaction);
-
-            sender.sendMessage("You've successfully created the " + color + name + " faction!");
-
-            return CommandResult.SUCCESS;
+            return CommandResult.INVALID_SYNTAX;
         }
         return CommandResult.NO_PERMISSIONS;
     }

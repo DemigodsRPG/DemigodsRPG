@@ -24,8 +24,8 @@ import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 
 public class Claimable extends CustomEnchantment {
-    public Claimable(int id) {
-        super(id);
+    public Claimable() {
+        super(150);
     }
 
     @Override

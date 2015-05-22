@@ -19,7 +19,7 @@ package com.demigodsrpg.game.listener;
 
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.Setting;
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.model.PlayerModel;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -66,9 +66,9 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         PlayerModel model = DGData.PLAYER_R.fromPlayer(event.getPlayer());
-        if (DGData.SERVER_R.contains("faction_chat", event.getPlayer().getUniqueId().toString()) && !Faction.NEUTRAL.equals(model.getFaction()) && !Faction.EXCOMMUNICATED.equals(model.getFaction())) {
+        if (DGData.SERVER_R.contains("faction_chat", event.getPlayer().getUniqueId().toString()) && !Family.NEUTRAL.equals(model.getFamily()) && !Family.EXCOMMUNICATED.equals(model.getFamily())) {
             event.getRecipients().clear();
-            Set<PlayerModel> playerModelSet = DGData.PLAYER_R.getOnlineInAlliance(model.getFaction());
+            Set<PlayerModel> playerModelSet = DGData.PLAYER_R.getOnlineInAlliance(model.getFamily());
             for (PlayerModel playerModel : playerModelSet) {
                 event.getRecipients().add(playerModel.getOfflinePlayer().getPlayer());
             }

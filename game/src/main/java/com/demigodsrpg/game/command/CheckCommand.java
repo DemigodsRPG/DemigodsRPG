@@ -43,7 +43,7 @@ public class CheckCommand extends BaseCommand {
         if (model.getGod().isPresent() && model.getHero().isPresent()) {
             player.sendMessage(ChatColor.YELLOW + "You are the offspring of " + model.getGod().get().getName() + " and " + model.getHero().get().getName() + "."); // TODO Colors
         }
-        player.sendMessage(ChatColor.YELLOW + "You are allied with the " + StringUtil2.beautify(model.getFaction().getName()) + " faction.");
+        player.sendMessage(ChatColor.YELLOW + "You are allied with the " + StringUtil2.beautify(model.getFamily().getName()) + " family.");
         player.sendMessage(ChatColor.YELLOW + "You have " + ColorUtil.getColor(player.getHealth(), player.getMaxHealth()) + ChatColor.ITALIC + player.getHealth() + " / " + player.getMaxHealth() + ChatColor.YELLOW + " health.");
         if (!model.getAspects().isEmpty()) {
             StringBuilder builder = new StringBuilder();

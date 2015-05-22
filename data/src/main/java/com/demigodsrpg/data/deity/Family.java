@@ -24,12 +24,12 @@ import org.bukkit.ChatColor;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Faction extends AbstractPersistentModel<String> {
+public class Family extends AbstractPersistentModel<String> {
 
     // -- ALWAYS EXISTING FACTIONS -- //
 
-    public static final Faction NEUTRAL = new Faction("Neutral", ChatColor.GRAY, "N", "Welcome to neutral ground.");
-    public static final Faction EXCOMMUNICATED = new Faction("Excommunicated", ChatColor.DARK_GRAY, "X", "Something has gone horribly wrong, alert an admin.");
+    public static final Family NEUTRAL = new Family("Neutral", ChatColor.GRAY, "N", "Welcome to neutral ground.");
+    public static final Family EXCOMMUNICATED = new Family("Excommunicated", ChatColor.DARK_GRAY, "X", "Something has gone horribly wrong, alert an admin.");
 
     // -- FACTION META DATA -- //
 
@@ -40,18 +40,18 @@ public class Faction extends AbstractPersistentModel<String> {
 
     // -- CONSTRUCTORS -- //
 
-    public Faction(String name, ChatColor color, String chatSymbol, String welcomeMessage) {
+    public Family(String name, ChatColor color, String chatSymbol, String welcomeMessage) {
         this(name, color.toString(), chatSymbol, welcomeMessage);
     }
 
-    public Faction(String name, String color, String chatSymbol, String welcomeMessage) {
+    public Family(String name, String color, String chatSymbol, String welcomeMessage) {
         this.name = name;
         this.color = color;
         this.chatSymbol = chatSymbol;
         this.welcomeMessage = welcomeMessage;
     }
 
-    public Faction(String stringKey, DataSection conf) {
+    public Family(String stringKey, DataSection conf) {
         name = stringKey;
         color = conf.getString("color");
         chatSymbol = conf.getString("chat-symbol");

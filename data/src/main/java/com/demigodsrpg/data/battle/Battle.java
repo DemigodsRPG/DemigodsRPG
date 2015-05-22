@@ -18,7 +18,7 @@
 package com.demigodsrpg.data.battle;
 
 import com.demigodsrpg.data.DGData;
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.model.Participant;
 import com.demigodsrpg.data.model.PlayerModel;
 import org.bukkit.Location;
@@ -123,7 +123,7 @@ public class Battle {
 
     public void deny(Participant attacking, Participant target, Participant denier) {
         putIfAbsent(attacking, target, denier);
-        if (!attacking.getFaction().equals(denier.getFaction()) && okayToHit(attacking, target)) {
+        if (!attacking.getFamily().equals(denier.getFamily()) && okayToHit(attacking, target)) {
             involved.get(denier.getPersistentId()).denies++;
         }
         lastInteract = System.currentTimeMillis();
@@ -132,7 +132,7 @@ public class Battle {
 
     public void assist(Participant attacking, Participant hit, Participant assistant) {
         putIfAbsent(attacking, hit, assistant);
-        if (!attacking.getFaction().equals(assistant.getFaction()) && okayToHit(attacking, hit)) {
+        if (!attacking.getFamily().equals(assistant.getFamily()) && okayToHit(attacking, hit)) {
             involved.get(assistant.getPersistentId()).assists++;
         }
         lastInteract = System.currentTimeMillis();
@@ -141,7 +141,7 @@ public class Battle {
 
     public void kill(Participant attacking, Participant killed) {
         putIfAbsent(attacking, killed);
-        if (attacking.getFaction().equals(killed.getFaction())) {
+        if (attacking.getFamily().equals(killed.getFamily())) {
             involved.get(attacking.getPersistentId()).teamKills++;
             attacking.addTeamKill();
         } else {
@@ -170,11 +170,11 @@ public class Battle {
     // -- PRIVATE HELPER METHODS -- //
 
     private boolean okayToHit(Participant attacking, Participant defending) {
-        return Faction.NEUTRAL.equals(attacking.getFaction()) ||
-                Faction.NEUTRAL.equals(defending.getFaction()) ||
-                Faction.EXCOMMUNICATED.equals(attacking.getFaction()) ||
-                Faction.EXCOMMUNICATED.equals(defending.getFaction()) ||
-                !attacking.getFaction().equals(defending.getFaction());
+        return Family.NEUTRAL.equals(attacking.getFamily()) ||
+                Family.NEUTRAL.equals(defending.getFamily()) ||
+                Family.EXCOMMUNICATED.equals(attacking.getFamily()) ||
+                Family.EXCOMMUNICATED.equals(defending.getFamily()) ||
+                !attacking.getFamily().equals(defending.getFamily());
     }
 
     private void putIfAbsent(Participant... toPut) {

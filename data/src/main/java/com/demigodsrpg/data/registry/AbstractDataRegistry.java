@@ -165,7 +165,7 @@ public abstract class AbstractDataRegistry<T extends AbstractPersistentModel<Str
     protected abstract String getName();
 
     protected String getExtention() {
-        return ".dgdat";
+        return ".extdat";
     }
 
     protected boolean isPretty() {

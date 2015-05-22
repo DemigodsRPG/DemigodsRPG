@@ -17,7 +17,7 @@
 
 package com.demigodsrpg.data.registry;
 
-import com.demigodsrpg.data.deity.Faction;
+import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.model.SpawnModel;
 import com.demigodsrpg.util.DataSection;
 import org.bukkit.Bukkit;
@@ -28,8 +28,8 @@ import java.util.Optional;
 public class SpawnRegistry extends AbstractDataRegistry<SpawnModel> {
     private static final String FILE_NAME = "spawns";
 
-    public Location getSpawn(final Faction faction) {
-        Optional<SpawnModel> point = getRegistered().stream().filter(model -> model.getAlliance().equals(faction)).findAny();
+    public Location getSpawn(final Family family) {
+        Optional<SpawnModel> point = getRegistered().stream().filter(model -> model.getAlliance().equals(family)).findAny();
         if (!point.isPresent()) {
             return Bukkit.getWorlds().get(0).getSpawnLocation();
         }
@@ -39,7 +39,7 @@ public class SpawnRegistry extends AbstractDataRegistry<SpawnModel> {
     @Override
     public SpawnModel valueFromData(String stringKey, DataSection data) {
         // FIXME return better faction
-        return new SpawnModel(Faction.NEUTRAL, data);
+        return new SpawnModel(Family.NEUTRAL, data);
     }
 
     @Override

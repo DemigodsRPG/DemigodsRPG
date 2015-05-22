@@ -126,7 +126,7 @@ public class BattleRegistry {
         BATTLE_MAP.values().stream().filter(battle -> System.currentTimeMillis() - battle.getLastInteract() > Setting.BATTLE_INTERVAL_SECONDS * 1000).forEach(battle -> {
             Report report = battle.end();
             report.sendToServer();
-            report.sendToFactions();
+            report.sendToFamilies();
             report.sendToInvolved();
         });
     }

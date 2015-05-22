@@ -21,7 +21,7 @@ public interface Model<P> {
     Type getType();
 
     // -- ENUMS -- //
-    public enum Type {
+    enum Type {
         TRANSIENT, PERSISTENT
     }
 }

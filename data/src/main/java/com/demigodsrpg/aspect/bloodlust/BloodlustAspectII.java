@@ -82,7 +82,7 @@ public class BloodlustAspectII implements Aspect {
         for (LivingEntity e : player.getWorld().getLivingEntities()) {
             if (e.getLocation().toVector().isInSphere(player.getLocation().toVector(), 35) && !targets.contains(e)) // jumps to the nearest entity
             {
-                if (e instanceof Player && DGData.PLAYER_R.fromPlayer((Player) e).getFaction().equals(model.getFaction()))
+                if (e instanceof Player && DGData.PLAYER_R.fromPlayer((Player) e).getFamily().equals(model.getFamily()))
                     continue;
                 targets.add(e);
             }
