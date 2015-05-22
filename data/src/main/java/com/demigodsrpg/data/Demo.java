@@ -20,8 +20,8 @@ package com.demigodsrpg.data;
 import com.demigodsrpg.aspect.Groups;
 import com.demigodsrpg.data.deity.Deity;
 import com.demigodsrpg.data.deity.DeityType;
-import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.deity.Gender;
+import com.demigodsrpg.families.data.Family;
 import org.bukkit.ChatColor;
 
 public class Demo {

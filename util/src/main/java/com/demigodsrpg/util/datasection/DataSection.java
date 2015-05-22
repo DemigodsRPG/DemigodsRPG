@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.demigodsrpg.util;
+package com.demigodsrpg.util.datasection;
 
 import java.util.List;
 import java.util.Map;

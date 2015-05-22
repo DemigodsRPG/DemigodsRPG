@@ -19,9 +19,9 @@ package com.demigodsrpg.data.registry;
 
 import com.demigodsrpg.aspect.Aspect;
 import com.demigodsrpg.data.deity.Deity;
-import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.model.PlayerModel;
-import com.demigodsrpg.util.DataSection;
+import com.demigodsrpg.families.data.Family;
+import com.demigodsrpg.util.datasection.DataSection;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -30,7 +30,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class PlayerRegistry extends AbstractDataRegistry<PlayerModel> {
+public class PlayerRegistry extends AbstractDemigodsDataRegistry<PlayerModel> {
     private static final String FILE_NAME = "players";
 
     @Deprecated

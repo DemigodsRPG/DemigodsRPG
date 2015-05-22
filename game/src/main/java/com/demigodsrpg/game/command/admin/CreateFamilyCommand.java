@@ -18,7 +18,7 @@
 package com.demigodsrpg.game.command.admin;
 
 import com.demigodsrpg.data.DGData;
-import com.demigodsrpg.data.deity.Family;
+import com.demigodsrpg.families.data.Family;
 import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
 import com.google.common.base.Joiner;

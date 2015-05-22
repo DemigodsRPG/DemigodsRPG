@@ -35,6 +35,10 @@ public class Depends {
     public static final String DG_UTIL = "demigodsrpg-util";
     public static final String DG_DATA = "demigodsrpg-data";
 
+    public static final String FAMILIES = "families";
+
+    public static final String FAMILES_VER = "${families.version}";
+
     public static final String DG_UTIL_VER = "${util.version}";
     public static final String DG_DATA_VER = "${data.version}";
 

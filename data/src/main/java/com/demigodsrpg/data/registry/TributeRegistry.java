@@ -19,7 +19,7 @@ package com.demigodsrpg.data.registry;
 
 import com.censoredsoftware.library.util.RandomUtil;
 import com.demigodsrpg.data.model.TributeModel;
-import com.demigodsrpg.util.DataSection;
+import com.demigodsrpg.util.datasection.DataSection;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -28,7 +28,7 @@ import org.bukkit.inventory.Recipe;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TributeRegistry extends AbstractDataRegistry<TributeModel> {
+public class TributeRegistry extends AbstractDemigodsDataRegistry<TributeModel> {
     private final String FILE_NAME = "tributes";
 
     @Override

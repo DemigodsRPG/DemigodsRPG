@@ -20,7 +20,8 @@ package com.demigodsrpg.data.model;
 import com.censoredsoftware.library.util.MapUtil2;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.registry.TributeRegistry;
-import com.demigodsrpg.util.DataSection;
+import com.demigodsrpg.util.datasection.AbstractPersistentModel;
+import com.demigodsrpg.util.datasection.DataSection;
 import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 

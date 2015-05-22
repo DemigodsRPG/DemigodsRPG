@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.demigodsrpg.data.model;
+package com.demigodsrpg.util.datasection;
 
 import java.util.Map;
 

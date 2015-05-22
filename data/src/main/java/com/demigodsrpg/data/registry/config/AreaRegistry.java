@@ -21,7 +21,7 @@ package com.demigodsrpg.data.registry.config;
 import com.demigodsrpg.data.area.Area;
 import com.demigodsrpg.data.area.ClaimRoom;
 import com.demigodsrpg.data.area.FamilyTerritory;
-import com.demigodsrpg.util.DataSection;
+import com.demigodsrpg.util.datasection.DataSection;
 import org.bukkit.Location;
 import org.bukkit.World;
 

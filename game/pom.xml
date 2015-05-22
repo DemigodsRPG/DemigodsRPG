@@ -27,6 +27,13 @@
             <artifactId>demigodsrpg-data</artifactId>
             <version>${data.version}</version>
         </dependency>
+
+        <!-- Families -->
+        <dependency>
+            <groupId>com.demigodsrpg</groupId>
+            <artifactId>families</artifactId>
+            <version>${families.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

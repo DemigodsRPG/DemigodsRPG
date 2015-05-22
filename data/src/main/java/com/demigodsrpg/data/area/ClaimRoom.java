@@ -19,8 +19,8 @@ package com.demigodsrpg.data.area;
 
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.deity.Deity;
-import com.demigodsrpg.util.DataSection;
 import com.demigodsrpg.util.LocationUtil;
+import com.demigodsrpg.util.datasection.DataSection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;

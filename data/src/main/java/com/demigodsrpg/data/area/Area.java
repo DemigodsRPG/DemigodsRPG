@@ -17,8 +17,8 @@
 
 package com.demigodsrpg.data.area;
 
-import com.demigodsrpg.data.model.AbstractPersistentModel;
 import com.demigodsrpg.util.LocationUtil;
+import com.demigodsrpg.util.datasection.AbstractPersistentModel;
 import org.bukkit.Location;
 
 import java.awt.*;

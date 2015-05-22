@@ -15,13 +15,15 @@
  * limitations under the License.
  */
 
-package com.demigodsrpg.data.model;
+package com.demigodsrpg.data.registry;
 
-public interface Model<P> {
-    Type getType();
+import com.demigodsrpg.data.DGData;
+import com.demigodsrpg.data.Setting;
+import com.demigodsrpg.util.datasection.AbstractDataRegistry;
+import com.demigodsrpg.util.datasection.AbstractPersistentModel;
 
-    // -- ENUMS -- //
-    enum Type {
-        TRANSIENT, PERSISTENT
+public abstract class AbstractDemigodsDataRegistry<T extends AbstractPersistentModel<String>> extends AbstractDataRegistry<T> {
+    public AbstractDemigodsDataRegistry() {
+        super(DGData.SAVE_PATH, Setting.SAVE_PRETTY, Setting.PSQL_PERSISTENCE, Setting.PSQL_CONNECTION);
     }
 }

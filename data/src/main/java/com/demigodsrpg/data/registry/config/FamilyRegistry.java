@@ -21,13 +21,12 @@ import com.demigodsrpg.aspect.Aspect;
 import com.demigodsrpg.aspect.Groups;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.deity.Deity;
-import com.demigodsrpg.data.deity.Family;
-import com.demigodsrpg.util.DataSection;
+import com.demigodsrpg.families.data.Family;
+import com.demigodsrpg.util.datasection.DataSection;
 
 import java.util.Optional;
 
 public class FamilyRegistry extends AbstractConfigRegistry<Family> {
-
     private static final String FILE_NAME = "family";
 
     public Family familyFromName(final String name) {

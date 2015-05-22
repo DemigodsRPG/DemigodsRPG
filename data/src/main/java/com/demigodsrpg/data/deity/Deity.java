@@ -20,8 +20,9 @@ package com.demigodsrpg.data.deity;
 import com.demigodsrpg.aspect.Aspect;
 import com.demigodsrpg.aspect.Groups;
 import com.demigodsrpg.data.DGData;
-import com.demigodsrpg.data.model.AbstractPersistentModel;
-import com.demigodsrpg.util.DataSection;
+import com.demigodsrpg.families.data.Family;
+import com.demigodsrpg.util.datasection.AbstractPersistentModel;
+import com.demigodsrpg.util.datasection.DataSection;
 
 import java.util.*;
 import java.util.stream.Collectors;

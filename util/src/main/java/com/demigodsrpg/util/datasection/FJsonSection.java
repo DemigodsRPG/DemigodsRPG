@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.demigodsrpg.util;
+package com.demigodsrpg.util.datasection;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

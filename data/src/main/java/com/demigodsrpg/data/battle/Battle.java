@@ -18,9 +18,9 @@
 package com.demigodsrpg.data.battle;
 
 import com.demigodsrpg.data.DGData;
-import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.model.Participant;
 import com.demigodsrpg.data.model.PlayerModel;
+import com.demigodsrpg.families.data.Family;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

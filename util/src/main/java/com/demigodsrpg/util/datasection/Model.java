@@ -15,27 +15,13 @@
  * limitations under the License.
  */
 
-package com.demigodsrpg.data.model;
+package com.demigodsrpg.util.datasection;
 
-import com.demigodsrpg.data.battle.BattleMetaData;
-import com.demigodsrpg.families.data.Family;
-import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
+public interface Model<P> {
+    Type getType();
 
-public interface Participant {
-    String getLastKnownName();
-
-    String getPersistentId();
-
-    boolean getCanPvp();
-
-    EntityType getEntityType();
-
-    Location getLocation();
-
-    Family getFamily();
-
-    void addTeamKill();
-
-    boolean reward(BattleMetaData data);
+    // -- ENUMS -- //
+    enum Type {
+        TRANSIENT, PERSISTENT
+    }
 }

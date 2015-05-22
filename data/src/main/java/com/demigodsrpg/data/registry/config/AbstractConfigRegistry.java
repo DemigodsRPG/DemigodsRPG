@@ -17,10 +17,10 @@
 
 package com.demigodsrpg.data.registry.config;
 
-import com.demigodsrpg.data.model.AbstractPersistentModel;
-import com.demigodsrpg.data.registry.AbstractDataRegistry;
+import com.demigodsrpg.data.registry.AbstractDemigodsDataRegistry;
+import com.demigodsrpg.util.datasection.AbstractPersistentModel;
 
-public abstract class AbstractConfigRegistry<T extends AbstractPersistentModel<String>> extends AbstractDataRegistry<T> {
+public abstract class AbstractConfigRegistry<T extends AbstractPersistentModel<String>> extends AbstractDemigodsDataRegistry<T> {
     @Override
     protected String getExtention() {
         return ".dgcfg";

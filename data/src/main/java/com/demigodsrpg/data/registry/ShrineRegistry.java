@@ -18,14 +18,14 @@
 package com.demigodsrpg.data.registry;
 
 import com.demigodsrpg.data.model.ShrineModel;
-import com.demigodsrpg.util.DataSection;
+import com.demigodsrpg.util.datasection.DataSection;
 import org.bukkit.Location;
 
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ShrineRegistry extends AbstractDataRegistry<ShrineModel> {
+public class ShrineRegistry extends AbstractDemigodsDataRegistry<ShrineModel> {
     private static final String FILE_NAME = "shrines";
 
     public Collection<ShrineModel> getShrines(final Location location, final int range) {

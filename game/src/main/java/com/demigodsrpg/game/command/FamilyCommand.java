@@ -18,8 +18,8 @@
 package com.demigodsrpg.game.command;
 
 import com.demigodsrpg.data.DGData;
-import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.model.PlayerModel;
+import com.demigodsrpg.families.data.Family;
 import com.demigodsrpg.game.command.type.BaseCommand;
 import com.demigodsrpg.game.command.type.CommandResult;
 import org.bukkit.ChatColor;

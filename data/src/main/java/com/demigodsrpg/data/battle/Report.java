@@ -18,9 +18,9 @@
 package com.demigodsrpg.data.battle;
 
 import com.demigodsrpg.data.DGData;
-import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.model.Participant;
 import com.demigodsrpg.data.model.PlayerModel;
+import com.demigodsrpg.families.data.Family;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import net.md_5.bungee.api.ChatColor;

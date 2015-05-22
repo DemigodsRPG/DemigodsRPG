@@ -97,13 +97,6 @@
             <version>${chitchat.version}</version>
         </dependency>
 
-        <!-- Families -->
-        <dependency>
-            <groupId>com.demigodsrpg</groupId>
-            <artifactId>families</artifactId>
-            <version>${families.version}</version>
-        </dependency>
-
         <!-- Apache Lang -->
         <dependency>
             <groupId>commons-lang</groupId>

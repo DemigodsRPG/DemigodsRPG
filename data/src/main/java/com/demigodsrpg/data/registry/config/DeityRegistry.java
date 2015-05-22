@@ -18,8 +18,8 @@
 package com.demigodsrpg.data.registry.config;
 
 import com.demigodsrpg.data.deity.Deity;
-import com.demigodsrpg.data.deity.Family;
-import com.demigodsrpg.util.DataSection;
+import com.demigodsrpg.families.data.Family;
+import com.demigodsrpg.util.datasection.DataSection;
 
 import java.util.List;
 import java.util.Optional;

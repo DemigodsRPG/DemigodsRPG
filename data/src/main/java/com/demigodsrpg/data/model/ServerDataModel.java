@@ -17,7 +17,8 @@
 
 package com.demigodsrpg.data.model;
 
-import com.demigodsrpg.util.DataSection;
+import com.demigodsrpg.util.datasection.AbstractPersistentModel;
+import com.demigodsrpg.util.datasection.DataSection;
 
 import java.util.HashMap;
 import java.util.List;

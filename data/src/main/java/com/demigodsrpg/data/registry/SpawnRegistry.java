@@ -17,15 +17,15 @@
 
 package com.demigodsrpg.data.registry;
 
-import com.demigodsrpg.data.deity.Family;
 import com.demigodsrpg.data.model.SpawnModel;
-import com.demigodsrpg.util.DataSection;
+import com.demigodsrpg.families.data.Family;
+import com.demigodsrpg.util.datasection.DataSection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.util.Optional;
 
-public class SpawnRegistry extends AbstractDataRegistry<SpawnModel> {
+public class SpawnRegistry extends AbstractDemigodsDataRegistry<SpawnModel> {
     private static final String FILE_NAME = "spawns";
 
     public Location getSpawn(final Family family) {
