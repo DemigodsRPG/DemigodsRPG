@@ -18,6 +18,7 @@
 package com.demigodsrpg.data;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.plugin.java.JavaPlugin;
 
 @SuppressWarnings("unchecked")
 public class Setting {
@@ -40,6 +41,6 @@ public class Setting {
     public static final String PSQL_CONNECTION = "jdbc:" + getConfig().getString("psql.connection", "postgresql://localhost:5432/demigods?user=demigods&password=demigods");
 
     private static ConfigurationSection getConfig() {
-        return DGData.PLUGIN.getConfig();
+        return JavaPlugin.getProvidingPlugin(Setting.class).getConfig();
     }
 }

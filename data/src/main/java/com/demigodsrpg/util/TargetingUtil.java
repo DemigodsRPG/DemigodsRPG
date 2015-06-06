@@ -20,7 +20,6 @@ package com.demigodsrpg.util;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.Setting;
 import com.demigodsrpg.data.model.PlayerModel;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -32,6 +31,7 @@ import org.bukkit.util.BlockIterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TargetingUtil {
     private static final int TARGET_OFFSET = 5;
@@ -64,7 +64,7 @@ public class TargetingUtil {
         while (iterator.hasNext()) {
             final Block block = iterator.next();
 
-            targets.addAll(Collections2.filter(player.getWorld().getEntitiesByClass(LivingEntity.class), entity -> {
+            targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class).stream().filter(entity -> {
                 Location location = entity.getLocation();
                 if (location.distance(player.getLocation()) < range) {
                     if (entity.getLocation().distance(block.getLocation()) <= correction) {
@@ -77,12 +77,15 @@ public class TargetingUtil {
                     }
                 }
                 return false;
-            }));
+            }).collect(Collectors.toList()));
         }
 
         // Attempt to return the closest entity to the cursor
-        for (Entity entity : targets)
-            if (entity.getLocation().distance(target) <= correction) return (LivingEntity) entity;
+        for (Entity entity : targets) {
+            if (entity.getLocation().distance(target) <= correction) {
+                return (LivingEntity) entity;
+            }
+        }
 
         // If it failed to do that then just return the first entity
         try {

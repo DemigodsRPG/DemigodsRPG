@@ -30,6 +30,11 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Logger;
 
 public class DGData {
+
+    public static Plugin PLUGIN;
+    public static Logger CONSOLE;
+    public static String SAVE_PATH;
+
     public static final PlayerRegistry PLAYER_R = new PlayerRegistry();
     public static final ShrineRegistry SHRINE_R = new ShrineRegistry();
     public static final TributeRegistry TRIBUTE_R = new TributeRegistry();
@@ -41,10 +46,6 @@ public class DGData {
 
     public static final AbilityRegistry ABILITY_R = new AbilityRegistry();
     public static final BattleRegistry BATTLE_R = new BattleRegistry();
-
-    public static Plugin PLUGIN;
-    public static Logger CONSOLE;
-    public static String SAVE_PATH;
 
     // -- DATA RELATED UTILITY METHODS -- //
 

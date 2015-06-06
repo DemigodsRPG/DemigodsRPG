@@ -51,7 +51,7 @@ public abstract class Area extends AbstractPersistentModel<String> {
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
         map.put("priority", priority.name());
-        java.util.List<String> locStrings = corners.stream().map(LocationUtil::stringFromLocation).collect(Collectors.toList());
+        List<String> locStrings = corners.stream().map(LocationUtil::stringFromLocation).collect(Collectors.toList());
         map.put("locations", locStrings);
         return map;
     }

@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -100,7 +101,7 @@ public class LibraryHandler {
 
     public void addToClasspath(File file) {
         try {
-            ClassPathHack.addFile(file);
+            ClassPathHack.addFile(file, (URLClassLoader) PLUGIN.getClass().getClassLoader());
         } catch (Exception oops) {
             PLUGIN.getLogger().severe("Couldn't load " + (file != null ? file.getName() : "a required library") + ", this may cause problems.");
             oops.printStackTrace();

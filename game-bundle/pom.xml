@@ -70,6 +70,7 @@
                                 <includes>
                                     <include>com.demigodsrpg:demigodsrpg-game</include>
                                     <include>com.demigodsrpg:demigodsrpg-data</include>
+                                    <include>com.demigodsrpg:families</include>
                                     <include>com.demigodsrpg:demigodsrpg-util</include>
                                 </includes>
                             </artifactSet>
