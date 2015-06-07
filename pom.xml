@@ -24,7 +24,7 @@
 
     <properties> <!-- It is important to keep up to date manually. -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>1.8.3-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.8.7-R0.1-SNAPSHOT</spigot.version>
         <censoredlib.version>1.0.2</censoredlib.version>
         <worldguard.version>6.0.0-SNAPSHOT</worldguard.version>
         <iciql.version>1.5.0</iciql.version>
@@ -36,7 +36,7 @@
         <game.version>4.0.0-SNAPSHOT</game.version>
 
         <!-- Related -->
-        <chitchat.version>1.2.0</chitchat.version>
+        <chitchat.version>1.2.1</chitchat.version>
         <families.version>1.0.0-SNAPSHOT</families.version>
     </properties>
 
