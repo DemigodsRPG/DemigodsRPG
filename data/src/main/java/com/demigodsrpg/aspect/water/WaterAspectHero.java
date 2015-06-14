@@ -24,7 +24,7 @@ import com.demigodsrpg.aspect.Groups;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 
 public class WaterAspectHero implements Aspect {
@@ -35,7 +35,7 @@ public class WaterAspectHero implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.SEA_LANTERN, name(), Collections.singletonList(getInfo()), null);
+        return ItemUtil.create(Material.SEA_LANTERN, name(), Arrays.asList(getInfo()), null);
     }
 
     @Override
@@ -44,8 +44,8 @@ public class WaterAspectHero implements Aspect {
     }
 
     @Override
-    public String getInfo() {
-        return "Expert level power over water.";
+    public String[] getInfo() {
+        return new String[]{"Expert level power over water."};
     }
 
     @Override

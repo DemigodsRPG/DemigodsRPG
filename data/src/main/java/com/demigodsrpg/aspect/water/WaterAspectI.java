@@ -34,7 +34,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 public class WaterAspectI implements Aspect {
     @Override
@@ -44,7 +44,7 @@ public class WaterAspectI implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.INK_SACK, name(), Collections.singletonList(getInfo()), null);
+        return ItemUtil.create(Material.INK_SACK, name(), Arrays.asList(getInfo()), null);
     }
 
     @Override
@@ -53,8 +53,8 @@ public class WaterAspectI implements Aspect {
     }
 
     @Override
-    public String getInfo() {
-        return "Adept level power over water.";
+    public String[] getInfo() {
+        return new String[]{"Adept level power over water."};
     }
 
     @Override

@@ -24,7 +24,7 @@ import com.demigodsrpg.aspect.Groups;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 public class CraftingAspectI implements Aspect {
     @Override
@@ -34,7 +34,7 @@ public class CraftingAspectI implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.FURNACE, name(), Collections.singletonList(getInfo()), null);
+        return ItemUtil.create(Material.FURNACE, name(), Arrays.asList(getInfo()), null);
     }
 
     @Override
@@ -43,8 +43,8 @@ public class CraftingAspectI implements Aspect {
     }
 
     @Override
-    public String getInfo() {
-        return "Adept level power over crafting.";
+    public String[] getInfo() {
+        return new String[]{"Adept level power over crafting."};
     }
 
     @Override

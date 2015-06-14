@@ -34,7 +34,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 public class MagnetismAspectHero implements Aspect {
 
@@ -47,7 +47,7 @@ public class MagnetismAspectHero implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.IRON_SPADE, name(), Collections.singletonList(getInfo()), null);
+        return ItemUtil.create(Material.IRON_SPADE, name(), Arrays.asList(getInfo()), null);
     }
 
     @Override
@@ -56,8 +56,8 @@ public class MagnetismAspectHero implements Aspect {
     }
 
     @Override
-    public String getInfo() {
-        return "Expert level power over magnetism.";
+    public String[] getInfo() {
+        return new String[]{"Expert level power over magnetism."};
     }
 
     @Override

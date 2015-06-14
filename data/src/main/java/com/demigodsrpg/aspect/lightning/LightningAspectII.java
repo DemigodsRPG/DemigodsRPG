@@ -36,7 +36,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 public class LightningAspectII implements Aspect {
 
@@ -49,7 +49,7 @@ public class LightningAspectII implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.BLAZE_ROD, name(), Collections.singletonList(getInfo()), null);
+        return ItemUtil.create(Material.BLAZE_ROD, name(), Arrays.asList(getInfo()), null);
     }
 
     @Override
@@ -58,8 +58,8 @@ public class LightningAspectII implements Aspect {
     }
 
     @Override
-    public String getInfo() {
-        return "Mastery over lightning";
+    public String[] getInfo() {
+        return new String[]{"Mastery over lightning"};
     }
 
     @Override

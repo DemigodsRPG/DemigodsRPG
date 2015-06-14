@@ -33,7 +33,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 public class FireAspectI implements Aspect {
 
@@ -46,7 +46,7 @@ public class FireAspectI implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.FIREBALL, name(), Collections.singletonList(getInfo()), null);
+        return ItemUtil.create(Material.FIREBALL, name(), Arrays.asList(getInfo()), null);
     }
 
     @Override
@@ -55,8 +55,8 @@ public class FireAspectI implements Aspect {
     }
 
     @Override
-    public String getInfo() {
-        return "Adept level power over fire.";
+    public String[] getInfo() {
+        return new String[]{"Adept level power over fire."};
     }
 
     @Override

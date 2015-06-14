@@ -35,7 +35,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 
 public class DemonAspectII implements Aspect {
     @Override
@@ -45,7 +45,7 @@ public class DemonAspectII implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.OBSIDIAN, name(), Collections.singletonList(getInfo()), null);
+        return ItemUtil.create(Material.OBSIDIAN, name(), Arrays.asList(getInfo()), null);
     }
 
     @Override
@@ -54,8 +54,8 @@ public class DemonAspectII implements Aspect {
     }
 
     @Override
-    public String getInfo() {
-        return "Blood of a demon.";
+    public String[] getInfo() {
+        return new String[]{"Blood of a demon."};
     }
 
     @Override

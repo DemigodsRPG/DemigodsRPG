@@ -34,7 +34,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -46,7 +46,7 @@ public class BloodlustAspectII implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.GOLD_SWORD, name(), Collections.singletonList(getInfo()), null);
+        return ItemUtil.create(Material.GOLD_SWORD, name(), Arrays.asList(getInfo()), null);
     }
 
     @Override
@@ -55,8 +55,8 @@ public class BloodlustAspectII implements Aspect {
     }
 
     @Override
-    public String getInfo() {
-        return "Expert level power over bloodlust.";
+    public String[] getInfo() {
+        return new String[]{"Expert level power over bloodlust."};
     }
 
     @Override

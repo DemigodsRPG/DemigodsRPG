@@ -28,7 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 public class BloodlustAspectIII implements Aspect {
     @Override
@@ -38,7 +38,7 @@ public class BloodlustAspectIII implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.REDSTONE, name(), Collections.singletonList(getInfo()), null);
+        return ItemUtil.create(Material.REDSTONE, name(), Arrays.asList(getInfo()), null);
     }
 
     @Override
@@ -47,8 +47,8 @@ public class BloodlustAspectIII implements Aspect {
     }
 
     @Override
-    public String getInfo() {
-        return "Mastery over bloodlust.";
+    public String[] getInfo() {
+        return new String[]{"Mastery over bloodlust."};
     }
 
     @Override

@@ -29,14 +29,14 @@ public interface Aspect {
 
     int getId();
 
-    String getInfo();
+    String[] getInfo();
 
     Tier getTier();
 
     String name();
 
     enum Tier {
-        I, II, III, HERO
+        I, II, III, HERO, CUSTOM
     }
 
     interface Group {

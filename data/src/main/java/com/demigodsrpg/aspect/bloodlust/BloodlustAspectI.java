@@ -30,7 +30,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 public class BloodlustAspectI implements Aspect {
     @Override
@@ -40,7 +40,7 @@ public class BloodlustAspectI implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.IRON_SWORD, name(), Collections.singletonList(getInfo()), null);
+        return ItemUtil.create(Material.IRON_SWORD, name(), Arrays.asList(getInfo()), null);
     }
 
     @Override
@@ -49,8 +49,8 @@ public class BloodlustAspectI implements Aspect {
     }
 
     @Override
-    public String getInfo() {
-        return "Adept level power over bloodlust.";
+    public String[] getInfo() {
+        return new String[]{"Adept level power over bloodlust."};
     }
 
     @Override

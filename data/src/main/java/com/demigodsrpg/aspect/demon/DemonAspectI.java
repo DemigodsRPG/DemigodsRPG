@@ -37,7 +37,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 public class DemonAspectI implements Aspect {
     @Override
@@ -47,7 +47,7 @@ public class DemonAspectI implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.IRON_FENCE, name(), Collections.singletonList(getInfo()), null);
+        return ItemUtil.create(Material.IRON_FENCE, name(), Arrays.asList(getInfo()), null);
     }
 
     @Override
@@ -56,8 +56,8 @@ public class DemonAspectI implements Aspect {
     }
 
     @Override
-    public String getInfo() {
-        return "Blood of a demon.";
+    public String[] getInfo() {
+        return new String[]{"Blood of a demon."};
     }
 
     @Override
