@@ -164,7 +164,7 @@ public class AspectCommand extends BaseCommand {
             try {
                 Aspect aspect = Aspects.valueOf(Joiner.on(" ").join(args));
                 player.sendMessage(aspect.getGroup().getColor() + StringUtil2.chatTitle(aspect.name() + " Info"));
-                player.sendMessage(" - Info: " + aspect.getInfo());
+                player.sendMessage(" - Info: " + aspect.getInfo()[0]);
                 // FIXME player.sendMessage(" - Deity: " + StringUtil2.beautify(aspect.getDefaultAlliance().name()));
 
                 for (AbilityMetaData ability : DGData.ABILITY_R.getAbilities(aspect)) {
