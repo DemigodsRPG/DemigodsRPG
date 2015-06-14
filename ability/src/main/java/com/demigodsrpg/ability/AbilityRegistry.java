@@ -19,10 +19,6 @@ package com.demigodsrpg.ability;
 
 import com.censoredsoftware.library.util.StringUtil2;
 import com.demigodsrpg.aspect.Aspect;
-import com.demigodsrpg.aspect.Aspects;
-import com.demigodsrpg.data.DGData;
-import com.demigodsrpg.data.Setting;
-import com.demigodsrpg.data.model.PlayerModel;
 import com.demigodsrpg.util.ZoneUtil;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -34,7 +30,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -44,13 +39,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
 
 public class AbilityRegistry implements Listener {
     // FIXME Do we really need two collections for the same data? This is expensive...
+    private static AbilityCasterProvider CASTER_PROVIDER;
+    private static CooldownHandler COOLDOWNS;
+    private boolean NO_COST_ASPECT_MODE;
 
     private static final ConcurrentMap<String, AbilityMetaData> REGISTERED_COMMANDS = new ConcurrentHashMap<>();
     private static final Multimap<String, AbilityMetaData> REGISTERED_ABILITIES = Multimaps.newListMultimap(new ConcurrentHashMap<>(), () -> new ArrayList<>(0));
+
+    public AbilityRegistry(AbilityCasterProvider casterProvider, CooldownHandler cooldowns, boolean noCostAspectMode) {
+        CASTER_PROVIDER = casterProvider;
+        COOLDOWNS = cooldowns;
+        NO_COST_ASPECT_MODE = noCostAspectMode;
+    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onEvent(PlayerInteractEvent event) {
@@ -61,7 +64,7 @@ public class AbilityRegistry implements Listener {
         }
         for (AbilityMetaData ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
             try {
-                PlayerModel model = DGData.PLAYER_R.fromPlayer(event.getPlayer());
+                AbilityCaster model = CASTER_PROVIDER.fromPlayer(event.getPlayer());
                 if (processAbility1(model, ability)) {
                     Object rawResult = ability.getMethod().invoke(ability.getAspect(), event);
                     processAbility2(event.getPlayer(), model, ability, rawResult);
@@ -81,7 +84,7 @@ public class AbilityRegistry implements Listener {
             try {
                 if (event.getDamager() instanceof Player) {
                     Player player = (Player) event.getDamager();
-                    PlayerModel model = DGData.PLAYER_R.fromPlayer(player);
+                    AbilityCaster model = CASTER_PROVIDER.fromPlayer(player);
                     if (processAbility1(model, ability)) {
                         Object rawResult = ability.getMethod().invoke(ability.getAspect(), event);
                         processAbility2(player, model, ability, rawResult);
@@ -89,25 +92,6 @@ public class AbilityRegistry implements Listener {
                 }
             } catch (Exception oops) {
                 oops.printStackTrace();
-            }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    private void onEvent(FurnaceSmeltEvent event) {
-        for (AbilityMetaData ability : REGISTERED_ABILITIES.get(event.getClass().getName())) {
-            for (PlayerModel model : DGData.PLAYER_R.fromAspect(ability.getAspect())) {
-                try {
-                    if (model.getOnline() && model.getLocation().getWorld().equals(event.getBlock().getWorld()) && model.getLocation().distance(event.getBlock().getLocation()) < (int) Math.round(20 * Math.pow(model.getExperience(Aspects.CRAFTING_ASPECT_I), 0.15))) {
-                        if (processAbility1(model, ability)) {
-                            Object rawResult = ability.getMethod().invoke(ability.getAspect(), event);
-                            processAbility2(null, model, ability, rawResult);
-                            return; // TODO
-                        }
-                    }
-                } catch (Exception oops) {
-                    oops.printStackTrace();
-                }
             }
         }
     }
@@ -124,13 +108,13 @@ public class AbilityRegistry implements Listener {
             try {
                 if (args.length == 2 && "info".equals(args[1])) {
                     if (abilityInfo(player, args[0].toLowerCase())) {
-                        DGData.CONSOLE.info(event.getPlayer().getName() + " used the command: /" + message);
+                        //CONSOLE.info(event.getPlayer().getName() + " used the command: /" + message);
                         event.setCancelled(true);
                         return;
                     }
                 }
                 if (bindAbility(player, args[0].toLowerCase())) {
-                    DGData.CONSOLE.info(event.getPlayer().getName() + " used the command: /" + message);
+                    //CONSOLE.info(event.getPlayer().getName() + " used the command: /" + message);
                     event.setCancelled(true);
                 }
             } catch (Exception errored) {
@@ -171,7 +155,7 @@ public class AbilityRegistry implements Listener {
             return true;
         }
 
-        PlayerModel model = DGData.PLAYER_R.fromPlayer(player);
+        AbilityCaster model = CASTER_PROVIDER.fromPlayer(player);
         Material material = player.getItemInHand().getType();
         AbilityMetaData bound = model.getBound(material);
         if (bound != null) {
@@ -194,7 +178,7 @@ public class AbilityRegistry implements Listener {
         return false;
     }
 
-    boolean processAbility1(PlayerModel model, AbilityMetaData ability) {
+    boolean processAbility1(AbilityCaster model, AbilityMetaData ability) {
         if (ZoneUtil.inNoDGZone(model.getLocation())) return false;
         if (!ability.getType().equals(Ability.Type.PASSIVE)) {
             if ((ability.getType().equals(Ability.Type.OFFENSIVE) || ability.getType().equals(Ability.Type.ULTIMATE)) && ZoneUtil.inNoPvpZone(model.getLocation())) {
@@ -208,14 +192,14 @@ public class AbilityRegistry implements Listener {
             }
 
             double cost = ability.getCost();
-            if (!Setting.NO_COST_ASPECT_MODE && model.getFavor() < cost) {
+            if (!NO_COST_ASPECT_MODE && model.getFavor() < cost) {
                 model.getOfflinePlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " requires more favor.");
                 return false;
             }
-            if (DGData.SERVER_R.contains(model.getMojangId(), ability + ":delay")) {
+            if (COOLDOWNS.hasDelay(model, ability)) {
                 return false;
             }
-            if (DGData.SERVER_R.contains(model.getMojangId(), ability + ":cooldown")) {
+            if (COOLDOWNS.hasCooldown(model, ability)) {
                 model.getOfflinePlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " is on a cooldown.");
                 return false;
             }
@@ -223,7 +207,7 @@ public class AbilityRegistry implements Listener {
         return true;
     }
 
-    void processAbility2(Player player, PlayerModel model, AbilityMetaData ability, @Nullable Object rawResult) {
+    void processAbility2(Player player, AbilityCaster model, AbilityMetaData ability, @Nullable Object rawResult) {
         // Check for result
         if (rawResult == null) {
             throw new NullPointerException("An ability (" + ability.getName() + ") returned null while casting.");
@@ -251,12 +235,12 @@ public class AbilityRegistry implements Listener {
             long cooldown = ability.getCooldown();
 
             if (delay > 0) {
-                DGData.SERVER_R.put(model.getMojangId(), ability + ":delay", true, delay, TimeUnit.MILLISECONDS);
+                COOLDOWNS.delay(model, ability);
             }
             if (cooldown > 0) {
-                DGData.SERVER_R.put(model.getMojangId(), ability + ":cooldown", true, cooldown, TimeUnit.MILLISECONDS);
+                COOLDOWNS.cooldown(model, ability);
             }
-            if (!Setting.NO_COST_ASPECT_MODE && cost > 0) {
+            if (!NO_COST_ASPECT_MODE && cost > 0) {
                 model.setFavor(model.getFavor() - cost);
             }
         } catch (Exception ignored) {
@@ -275,8 +259,8 @@ public class AbilityRegistry implements Listener {
         return abilityMetaDatas;
     }
 
-    public void registerAbilities() {
-        for (Aspect aspect : Aspects.values()) {
+    public void registerAbilities(Aspect[] aspects) {
+        for (Aspect aspect : aspects) {
             Class<? extends Aspect> deityClass = aspect.getClass();
             for (Method method : deityClass.getMethods()) {
                 if (method.isAnnotationPresent(Ability.class)) {
@@ -293,7 +277,7 @@ public class AbilityRegistry implements Listener {
         Class<?>[] paramaters = method.getParameterTypes();
         try {
             if (paramaters.length < 1) {
-                DGData.CONSOLE.severe("An ability (" + ability.name() + ") tried to register without any parameters.");
+                //CONSOLE.severe("An ability (" + ability.name() + ") tried to register without any parameters.");
                 return;
             }
             Class<? extends Event> eventClass = (Class<? extends Event>) paramaters[0];

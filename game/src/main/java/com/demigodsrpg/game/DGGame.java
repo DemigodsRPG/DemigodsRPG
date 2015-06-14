@@ -17,6 +17,7 @@
 
 package com.demigodsrpg.game;
 
+import com.demigodsrpg.aspect.Aspects;
 import com.demigodsrpg.chitchat.Chitchat;
 import com.demigodsrpg.data.DGData;
 import com.demigodsrpg.data.Demo;
@@ -117,7 +118,7 @@ public class DGGame {
         }
 
         // Register the abilities
-        DGData.ABILITY_R.registerAbilities();
+        DGData.ABILITY_R.registerAbilities(Aspects.values());
 
         // Regen shrines
         DGData.SHRINE_R.generate();

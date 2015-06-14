@@ -17,6 +17,7 @@
 
 package com.demigodsrpg.data.registry;
 
+import com.demigodsrpg.ability.CooldownHandler;
 import com.demigodsrpg.data.model.ServerDataModel;
 import com.demigodsrpg.util.datasection.DataSection;
 
@@ -24,7 +25,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class ServerDataRegistry extends AbstractDemigodsDataRegistry<ServerDataModel> {
+public class ServerDataRegistry extends AbstractDemigodsDataRegistry<ServerDataModel> implements CooldownHandler {
     private static final String FILE_NAME = "misc";
 
     public void put(String row, String column, String value) {

@@ -12,6 +12,7 @@
 
     <modules>
         <module>util</module>
+        <module>ability</module>
         <module>data</module>
         <module>game</module>
         <module>game-bundle</module>
@@ -32,11 +33,12 @@
 
         <!-- Modules -->
         <util.version>1.0.0-SNAPSHOT</util.version>
+        <ability.version>1.0.0-SNAPSHOT</ability.version>
         <data.version>1.0.0-SNAPSHOT</data.version>
         <game.version>4.0.0-SNAPSHOT</game.version>
 
         <!-- Related -->
-        <chitchat.version>1.2.1</chitchat.version>
+        <chitchat.version>1.2.1.2</chitchat.version>
         <families.version>1.0.0-SNAPSHOT</families.version>
     </properties>
 

@@ -41,6 +41,11 @@
         </dependency>
         <dependency>
             <groupId>com.demigodsrpg</groupId>
+            <artifactId>demigodsrpg-ability</artifactId>
+            <version>${ability.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.demigodsrpg</groupId>
             <artifactId>demigodsrpg-data</artifactId>
             <version>${data.version}</version>
         </dependency>
@@ -71,6 +76,7 @@
                                     <include>com.demigodsrpg:demigodsrpg-game</include>
                                     <include>com.demigodsrpg:demigodsrpg-data</include>
                                     <include>com.demigodsrpg:families</include>
+                                    <include>com.demigodsrpg:demigodsrpg-ability</include>
                                     <include>com.demigodsrpg:demigodsrpg-util</include>
                                     <include>com.censoredsoftware.library:schematic</include>
                                     <include>com.censoredsoftware.library:util</include>

@@ -33,6 +33,7 @@ public class Depends {
     public static final String CS_VER = "${censoredlib.version}";
 
     public static final String DG_UTIL = "demigodsrpg-util";
+    public static final String DG_ABILITY = "demigodsrpg-ability";
     public static final String DG_DATA = "demigodsrpg-data";
 
     public static final String FAMILIES = "families";
@@ -40,6 +41,7 @@ public class Depends {
     public static final String FAMILES_VER = "${families.version}";
 
     public static final String DG_UTIL_VER = "${util.version}";
+    public static final String DG_ABILITY_VER = "${ability.version}";
     public static final String DG_DATA_VER = "${data.version}";
 
     public static final String ICIQL = "iciql";

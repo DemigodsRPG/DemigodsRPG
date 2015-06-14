@@ -24,6 +24,11 @@
         </dependency>
         <dependency>
             <groupId>com.demigodsrpg</groupId>
+            <artifactId>demigodsrpg-ability</artifactId>
+            <version>${ability.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.demigodsrpg</groupId>
             <artifactId>demigodsrpg-data</artifactId>
             <version>${data.version}</version>
         </dependency>

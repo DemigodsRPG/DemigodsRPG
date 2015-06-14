@@ -19,6 +19,7 @@ package com.demigodsrpg.game.listener;
 
 import com.demigodsrpg.aspect.Aspects;
 import com.demigodsrpg.data.DGData;
+import com.demigodsrpg.data.model.PlayerModel;
 import com.demigodsrpg.util.ZoneUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -30,7 +31,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 public class AbilityListener implements Listener {
@@ -78,6 +81,22 @@ public class AbilityListener implements Listener {
                     event.setCancelled(true);
                     player.setRemainingAir(player.getMaximumAir());
                 }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onEvent(FurnaceSmeltEvent event) {
+        for (PlayerModel model : DGData.PLAYER_R.fromAspect(Aspects.CRAFTING_ASPECT_I)) {
+            try {
+                if (model.getOnline() && model.getLocation().getWorld().equals(event.getBlock().getWorld()) && model.getLocation().distance(event.getBlock().getLocation()) < (int) Math.round(20 * Math.pow(model.getExperience(Aspects.CRAFTING_ASPECT_I), 0.15))) {
+                    int amount = event.getResult().getAmount() * 2;
+                    ItemStack out = event.getResult();
+                    out.setAmount(amount);
+                    event.setResult(out);
+                }
+            } catch (Exception oops) {
+                oops.printStackTrace();
             }
         }
     }

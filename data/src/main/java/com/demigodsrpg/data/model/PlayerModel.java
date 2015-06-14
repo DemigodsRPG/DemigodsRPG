@@ -18,6 +18,7 @@
 package com.demigodsrpg.data.model;
 
 import com.censoredsoftware.library.util.RandomUtil;
+import com.demigodsrpg.ability.AbilityCaster;
 import com.demigodsrpg.ability.AbilityMetaData;
 import com.demigodsrpg.ability.AbilityRegistry;
 import com.demigodsrpg.aspect.Aspect;
@@ -47,7 +48,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class PlayerModel extends AbstractPersistentModel<String> implements Participant {
+public class PlayerModel extends AbstractPersistentModel<String> implements AbilityCaster, Participant {
     private final String mojangId;
     private String lastKnownName;
 
@@ -324,7 +325,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Part
         return favor;
     }
 
-    public void setFavor(Double favor) {
+    public void setFavor(double favor) {
         this.favor = favor;
         DGData.PLAYER_R.register(this);
     }

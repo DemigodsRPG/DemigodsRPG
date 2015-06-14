@@ -26,10 +26,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>demigodsrpg-data</artifactId>
-    <version>${data.version}</version>
+    <artifactId>demigodsrpg-ability</artifactId>
+    <version>${ability.version}</version>
 
-    <name>Demigods RPG - Data</name>
+    <name>Demigods RPG - Ability</name>
     <url>http://github.com/DemigodsRPG/DemigodsRPG</url>
 
     <dependencies>
@@ -37,18 +37,6 @@
             <groupId>com.demigodsrpg</groupId>
             <artifactId>demigodsrpg-util</artifactId>
             <version>${util.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.demigodsrpg</groupId>
-            <artifactId>demigodsrpg-ability</artifactId>
-            <version>${ability.version}</version>
-        </dependency>
-
-        <!-- Families -->
-        <dependency>
-            <groupId>com.demigodsrpg</groupId>
-            <artifactId>families</artifactId>
-            <version>${families.version}</version>
         </dependency>
     </dependencies>
 
@@ -91,6 +79,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>

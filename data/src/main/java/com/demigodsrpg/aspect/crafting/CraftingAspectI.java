@@ -22,7 +22,6 @@ import com.demigodsrpg.ability.Ability;
 import com.demigodsrpg.aspect.Aspect;
 import com.demigodsrpg.aspect.Groups;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
@@ -60,11 +59,8 @@ public class CraftingAspectI implements Aspect {
 
     // -- ABILITIES -- //
 
-    @Ability(name = "Furnace Love", info = {"Doubles the output of nearby furnaces."}, type = Ability.Type.PASSIVE)
-    public void furnaceLoveAbility(FurnaceSmeltEvent event) {
-        int amount = event.getResult().getAmount() * 2;
-        ItemStack out = event.getResult();
-        out.setAmount(amount);
-        event.setResult(out);
+    @Ability(name = "Furnace Love", info = {"Doubles the output of nearby furnaces."}, type = Ability.Type.PASSIVE, placeholder = true)
+    public void furnaceLoveAbility() {
+        // Do nothing, handled directly in the ability listener to save time
     }
 }

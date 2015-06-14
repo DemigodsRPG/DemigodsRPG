@@ -55,6 +55,7 @@ public class DGBukkitPlugin extends JavaPlugin {
         } catch (Exception oops) {
             getLogger().info("Data and utility modules are not bundled.");
             LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_DG, Depends.DG_UTIL, Depends.DG_UTIL_VER);
+            LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_DG, Depends.DG_ABILITY, Depends.DG_ABILITY_VER);
             LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_DG, Depends.FAMILIES, Depends.FAMILES_VER);
             LIBRARIES.addMavenLibrary(Depends.DG_MG_REPO, Depends.COM_DG, Depends.DG_DATA, Depends.DG_DATA_VER);
         }

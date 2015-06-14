@@ -44,7 +44,7 @@ public class DGData {
     public static final ServerDataRegistry SERVER_R = new ServerDataRegistry();
     public static final ConcurrentMap<String, AreaRegistry> AREA_R = new ConcurrentHashMap<>();
 
-    public static final AbilityRegistry ABILITY_R = new AbilityRegistry();
+    public static final AbilityRegistry ABILITY_R = new AbilityRegistry(PLAYER_R, SERVER_R, Setting.NO_COST_ASPECT_MODE);
     public static final BattleRegistry BATTLE_R = new BattleRegistry();
 
     // -- DATA RELATED UTILITY METHODS -- //

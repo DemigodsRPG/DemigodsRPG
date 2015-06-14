@@ -18,21 +18,20 @@
 package com.demigodsrpg.ability;
 
 import com.demigodsrpg.aspect.Aspect;
-import com.demigodsrpg.aspect.Aspects;
 
 import java.lang.reflect.Method;
 
 public class AbilityMetaData {
     // -- PRIVATE FIELDS -- //
 
-    private final String aspect;
+    private final Aspect aspect;
     private final Method method;
     private final Ability ability;
 
     // -- CONSTRUCTOR -- //
 
     public AbilityMetaData(Aspect aspect, Method method, Ability ability) {
-        this.aspect = aspect.name();
+        this.aspect = aspect;
         this.method = method;
         this.ability = ability;
     }
@@ -40,7 +39,7 @@ public class AbilityMetaData {
     // -- GETTERS -- //
 
     public Aspect getAspect() {
-        return Aspects.valueOf(aspect);
+        return aspect;
     }
 
     public String getName() {
