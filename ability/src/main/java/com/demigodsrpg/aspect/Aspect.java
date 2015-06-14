@@ -23,9 +23,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 public interface Aspect {
-    Group getGroup();
+    default Group getGroup() {
+        return null;
+    }
 
-    ItemStack getItem();
+    default ItemStack getItem() {
+        return null;
+    }
 
     int getId();
 
@@ -33,7 +37,11 @@ public interface Aspect {
 
     Tier getTier();
 
-    String name();
+    String getName();
+
+    default String name() {
+        return getName();
+    }
 
     enum Tier {
         I, II, III, HERO, CUSTOM
