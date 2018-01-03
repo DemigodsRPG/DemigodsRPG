@@ -80,16 +80,7 @@ public abstract class AbstractDataRegistry<T extends AbstractPersistentModel<Str
         if (currentDb != null) {
             // Remove data.
             currentDb.remove(key);
-
-            if (!PSQL_PERSISTENCE) {
-                // Save the file!
-                if (isPretty() || SAVE_PRETTY) {
-                    return DataSectionUtil.saveFilePretty(SAVE_PATH + getName() + getExtention(), currentDb);
-                }
-                return DataSectionUtil.saveFile(SAVE_PATH + getName() + getExtention(), currentDb);
-            } else {
-                return DataSectionUtil.savePSQL(getName(), PSQL_CONNECTION, currentDb);
-            }
+            return saveData(currentDb);
         }
 
         return false;
@@ -102,16 +93,7 @@ public abstract class AbstractDataRegistry<T extends AbstractPersistentModel<Str
         if (currentDb != null) {
             // Create/overwrite a configuration section.
             currentDb.createSection(key, data.serialize());
-
-            if (!PSQL_PERSISTENCE) {
-                // Save the file!
-                if (isPretty() || SAVE_PRETTY) {
-                    return DataSectionUtil.saveFilePretty(SAVE_PATH + getName() + getExtention(), currentDb);
-                }
-                return DataSectionUtil.saveFile(SAVE_PATH + getName() + getExtention(), currentDb);
-            } else {
-                return DataSectionUtil.savePSQL(getName(), PSQL_CONNECTION, currentDb);
-            }
+            return saveData(currentDb);
         }
 
         return false;
@@ -133,6 +115,18 @@ public abstract class AbstractDataRegistry<T extends AbstractPersistentModel<Str
             return new PJsonSection(new ConcurrentHashMap<>());
         }
         return new FJsonSection(new ConcurrentHashMap<>());
+    }
+
+    private synchronized boolean saveData(DataSection currentDb) {
+        if (!PSQL_PERSISTENCE) {
+            // Save the file!
+            if (isPretty() || SAVE_PRETTY) {
+                return DataSectionUtil.saveFilePretty(SAVE_PATH + getName() + getExtention(), currentDb);
+            }
+            return DataSectionUtil.saveFile(SAVE_PATH + getName() + getExtention(), currentDb);
+        } else {
+            return DataSectionUtil.savePSQL(getName(), PSQL_CONNECTION, currentDb);
+        }
     }
 
     public synchronized final void clearCache() {
