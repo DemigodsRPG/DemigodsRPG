@@ -21,9 +21,7 @@ import com.demigodsrpg.DGData;
 import com.demigodsrpg.deity.Deity;
 import com.demigodsrpg.util.LocationUtil;
 import com.demigodsrpg.util.datasection.DataSection;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 
 import java.util.*;
 import java.util.stream.Collectors;

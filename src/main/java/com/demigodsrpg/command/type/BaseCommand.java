@@ -18,9 +18,7 @@
 package com.demigodsrpg.command.type;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 
 public abstract class BaseCommand implements CommandExecutor {
     @Override

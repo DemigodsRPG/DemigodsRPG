@@ -18,9 +18,7 @@
 package com.demigodsrpg;
 
 import com.demigodsrpg.aspect.Groups;
-import com.demigodsrpg.deity.Deity;
-import com.demigodsrpg.deity.DeityType;
-import com.demigodsrpg.deity.Gender;
+import com.demigodsrpg.deity.*;
 import com.demigodsrpg.family.Family;
 import org.bukkit.ChatColor;
 

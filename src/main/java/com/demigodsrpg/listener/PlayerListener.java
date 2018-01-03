@@ -23,12 +23,8 @@ import com.demigodsrpg.family.Family;
 import com.demigodsrpg.model.PlayerModel;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.*;
+import org.bukkit.event.player.*;
 
 import java.util.Set;
 

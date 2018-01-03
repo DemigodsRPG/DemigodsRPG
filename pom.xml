@@ -15,8 +15,8 @@
 
     <properties> <!-- It is important to keep up to date manually. -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>1.10-R0.1-SNAPSHOT</spigot.version>
-        <worldguard.version>6.0.0-SNAPSHOT</worldguard.version>
+        <spigot.version>1.12.2-R0.1-SNAPSHOT</spigot.version>
+        <worldguard.version>6.1.1-SNAPSHOT</worldguard.version>
         <iciql.version>2.1.1</iciql.version>
         <psql.version>9.3-1103-jdbc41</psql.version>
         <evo.version>1.0.1</evo.version>
@@ -54,7 +54,7 @@
         </repository>
         <repository>
             <id>spigot-releases</id>
-            <url>http://hub.spigotmc.org/nexus/content/repositories/public</url>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/public</url>
         </repository>
         <repository>
             <id>com.iciql</id>

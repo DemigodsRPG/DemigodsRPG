@@ -17,9 +17,7 @@
 
 package com.demigodsrpg.util.datasection;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Object representing a section of a json file.

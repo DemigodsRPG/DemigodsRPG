@@ -17,15 +17,9 @@
 
 package com.demigodsrpg.model;
 
-import com.demigodsrpg.DGData;
-import com.demigodsrpg.Demo;
-import com.demigodsrpg.Setting;
-import com.demigodsrpg.ability.AbilityCaster;
-import com.demigodsrpg.ability.AbilityMetaData;
-import com.demigodsrpg.ability.AbilityRegistry;
-import com.demigodsrpg.aspect.Aspect;
-import com.demigodsrpg.aspect.Aspects;
-import com.demigodsrpg.aspect.Groups;
+import com.demigodsrpg.*;
+import com.demigodsrpg.ability.*;
+import com.demigodsrpg.aspect.*;
 import com.demigodsrpg.battle.BattleMetaData;
 import com.demigodsrpg.deity.Deity;
 import com.demigodsrpg.deity.DeityType;
@@ -34,9 +28,7 @@ import com.demigodsrpg.util.ZoneUtil;
 import com.demigodsrpg.util.datasection.AbstractPersistentModel;
 import com.demigodsrpg.util.datasection.DataSection;
 import com.demigodsrpg.util.misc.RandomUtil;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-import com.google.common.collect.Lists;
+import com.google.common.collect.*;
 import gnu.trove.iterator.TIntIterator;
 import gnu.trove.map.hash.TIntDoubleHashMap;
 import org.bukkit.*;

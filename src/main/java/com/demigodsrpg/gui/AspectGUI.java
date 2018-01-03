@@ -26,17 +26,13 @@ import com.demigodsrpg.model.PlayerModel;
 import com.demigodsrpg.util.InventoryGUI;
 import com.demigodsrpg.util.SlotFunction;
 import com.google.common.collect.ImmutableMap;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 // TODO Format this so it is actually a list and not just jumbled together
 
@@ -67,12 +63,12 @@ public class AspectGUI implements InventoryGUI {
             ItemStack item = aspect.getItem().clone();
             ItemMeta meta = item.getItemMeta();
             List<String> lore = meta.getLore();
-            if(model.getAspects().contains(aspect.name())) {
+            if (model.getAspects().contains(aspect.name())) {
                 lore.add(ChatColor.YELLOW + "You already have this aspect!");
                 meta.setLore(lore);
                 item.setItemMeta(meta);
                 builder.put(count, SlotFunction.LOCKED);
-            } else if(model.canClaim(aspect)) {
+            } else if (model.canClaim(aspect)) {
                 lore.add(ChatColor.GREEN + "This aspect is claimable!");
                 meta.setLore(lore);
                 item.setItemMeta(meta);

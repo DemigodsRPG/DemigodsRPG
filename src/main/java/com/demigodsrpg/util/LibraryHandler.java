@@ -19,15 +19,9 @@ package com.demigodsrpg.util;
 
 import org.bukkit.plugin.Plugin;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 public class LibraryHandler {
     // -- IMPORTANT FIELDS -- //

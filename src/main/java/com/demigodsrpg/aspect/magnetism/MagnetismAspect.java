@@ -18,9 +18,7 @@
 package com.demigodsrpg.aspect.magnetism;
 
 import com.demigodsrpg.aspect.Aspect;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.material.MaterialData;
 
 public class MagnetismAspect implements Aspect.Group {

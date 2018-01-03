@@ -26,10 +26,7 @@ import org.postgresql.util.PGobject;
 
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Object representing a section of a json db.

@@ -25,13 +25,9 @@ import com.demigodsrpg.gui.ShrineGUI;
 import com.demigodsrpg.model.PlayerModel;
 import com.demigodsrpg.model.ShrineModel;
 import com.demigodsrpg.util.SlotFunction;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class InventoryListener implements Listener {

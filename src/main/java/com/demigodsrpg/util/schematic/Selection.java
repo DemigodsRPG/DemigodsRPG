@@ -18,17 +18,12 @@ package com.demigodsrpg.util.schematic;
 
 import com.demigodsrpg.util.misc.RandomUtil;
 import com.google.common.base.Objects;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("deprecation")
 public class Selection {

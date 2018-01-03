@@ -17,9 +17,7 @@
 
 package com.demigodsrpg.ability;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 
 import java.util.List;
 

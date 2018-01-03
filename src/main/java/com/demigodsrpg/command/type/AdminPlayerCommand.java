@@ -19,9 +19,7 @@ package com.demigodsrpg.command.type;
 
 import com.demigodsrpg.DGData;
 import com.demigodsrpg.model.PlayerModel;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 
 import java.util.ArrayList;
 import java.util.List;

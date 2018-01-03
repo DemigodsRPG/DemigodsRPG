@@ -26,9 +26,7 @@ import com.demigodsrpg.model.PlayerModel;
 import com.demigodsrpg.util.ColorUtil;
 import com.demigodsrpg.util.misc.StringUtil2;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
 public class CheckCommand extends BaseCommand {

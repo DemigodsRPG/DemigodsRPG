@@ -19,9 +19,7 @@ package com.demigodsrpg;
 
 import com.demigodsrpg.ability.AbilityRegistry;
 import com.demigodsrpg.registry.*;
-import com.demigodsrpg.registry.config.AreaRegistry;
-import com.demigodsrpg.registry.config.DeityRegistry;
-import com.demigodsrpg.registry.config.FamilyRegistry;
+import com.demigodsrpg.registry.config.*;
 import com.demigodsrpg.registry.memory.BattleRegistry;
 import org.bukkit.plugin.Plugin;
 

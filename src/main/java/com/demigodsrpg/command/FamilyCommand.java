@@ -23,9 +23,7 @@ import com.demigodsrpg.command.type.CommandResult;
 import com.demigodsrpg.family.Family;
 import com.demigodsrpg.model.PlayerModel;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
 public class FamilyCommand extends BaseCommand {

@@ -21,24 +21,18 @@ package com.demigodsrpg.aspect.demon;
 import com.demigodsrpg.DGData;
 import com.demigodsrpg.ability.Ability;
 import com.demigodsrpg.ability.AbilityResult;
-import com.demigodsrpg.aspect.Aspect;
-import com.demigodsrpg.aspect.Aspects;
-import com.demigodsrpg.aspect.Groups;
+import com.demigodsrpg.aspect.*;
 import com.demigodsrpg.model.PlayerModel;
 import com.demigodsrpg.util.ItemUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class DemonAspectHero implements Aspect {
     @Override

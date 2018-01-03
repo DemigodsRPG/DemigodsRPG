@@ -18,9 +18,7 @@
 package com.demigodsrpg.command.admin;
 
 import com.demigodsrpg.DGData;
-import com.demigodsrpg.area.AreaPriority;
-import com.demigodsrpg.area.AreaSelection;
-import com.demigodsrpg.area.FamilyTerritory;
+import com.demigodsrpg.area.*;
 import com.demigodsrpg.command.type.BaseCommand;
 import com.demigodsrpg.command.type.CommandResult;
 import com.demigodsrpg.family.Family;

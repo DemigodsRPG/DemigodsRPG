@@ -18,9 +18,7 @@
 package com.demigodsrpg.util;
 
 import com.google.common.collect.Sets;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.Plugin;

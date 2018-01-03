@@ -22,9 +22,7 @@ import com.google.gson.GsonBuilder;
 import com.iciql.Db;
 import com.iciql.util.Utils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Map;
 import java.util.Optional;
 
@@ -109,8 +107,8 @@ public class DataSectionUtil {
     /**
      * Save a JsonSection as a json file.
      *
-     * @param file     The path to the json file.
-     * @param section  The JsonSection to be saved.
+     * @param file    The path to the json file.
+     * @param section The JsonSection to be saved.
      * @return Save success or failure.
      */
     public static boolean saveFile(String file, DataSection section) {
@@ -122,8 +120,8 @@ public class DataSectionUtil {
     /**
      * Save a JsonSection as a json file in a pretty format.
      *
-     * @param file     The path to the json file.
-     * @param section  The JsonSection to be saved.
+     * @param file    The path to the json file.
+     * @param section The JsonSection to be saved.
      * @return Save success or failure.
      */
     public static boolean saveFilePretty(String file, DataSection section) {

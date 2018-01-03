@@ -17,14 +17,9 @@
 
 package com.demigodsrpg.aspect;
 
-import com.demigodsrpg.aspect.bloodlust.BloodlustAspectHero;
-import com.demigodsrpg.aspect.bloodlust.BloodlustAspectI;
-import com.demigodsrpg.aspect.bloodlust.BloodlustAspectII;
-import com.demigodsrpg.aspect.bloodlust.BloodlustAspectIII;
+import com.demigodsrpg.aspect.bloodlust.*;
 import com.demigodsrpg.aspect.crafting.CraftingAspectI;
-import com.demigodsrpg.aspect.demon.DemonAspectHero;
-import com.demigodsrpg.aspect.demon.DemonAspectI;
-import com.demigodsrpg.aspect.demon.DemonAspectII;
+import com.demigodsrpg.aspect.demon.*;
 import com.demigodsrpg.aspect.fire.FireAspectI;
 import com.demigodsrpg.aspect.lightning.LightningAspectI;
 import com.demigodsrpg.aspect.lightning.LightningAspectII;

@@ -25,17 +25,13 @@ import com.demigodsrpg.aspect.Groups;
 import com.demigodsrpg.model.PlayerModel;
 import com.demigodsrpg.util.ItemUtil;
 import com.google.common.util.concurrent.AtomicDouble;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BloodlustAspectII implements Aspect {

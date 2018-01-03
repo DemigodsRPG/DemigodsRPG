@@ -25,10 +25,7 @@ import com.demigodsrpg.aspect.lightning.LightingAspect;
 import com.demigodsrpg.aspect.magnetism.MagnetismAspect;
 import com.demigodsrpg.aspect.water.WaterAspect;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class Groups {
 

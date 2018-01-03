@@ -18,9 +18,7 @@
 package com.demigodsrpg;
 
 import com.demigodsrpg.aspect.Aspects;
-import com.demigodsrpg.chitchat.Chitchat;
-import com.demigodsrpg.chitchat.FactionChatTag;
-import com.demigodsrpg.chitchat.FactionIdTag;
+import com.demigodsrpg.chitchat.*;
 import com.demigodsrpg.command.*;
 import com.demigodsrpg.command.admin.*;
 import com.demigodsrpg.enchantment.CustomEnchantments;
@@ -218,7 +216,7 @@ public class DGGame {
         FIRE_SPREAD = () -> {
             for (World world : Bukkit.getWorlds()) {
                 world.getLivingEntities().stream().filter(entity -> entity.getFireTicks() > 0).forEach(entity ->
-                                entity.getNearbyEntities(0.5, 0.5, 0.5).stream().filter(nearby -> nearby instanceof LivingEntity && !nearby.equals(entity)).forEach(nearby -> nearby.setFireTicks(100))
+                        entity.getNearbyEntities(0.5, 0.5, 0.5).stream().filter(nearby -> nearby instanceof LivingEntity && !nearby.equals(entity)).forEach(nearby -> nearby.setFireTicks(100))
                 );
             }
         };
