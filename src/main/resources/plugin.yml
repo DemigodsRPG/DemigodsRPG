@@ -2,7 +2,7 @@ name: DemigodsRPG
 main: com.demigodsrpg.DGBukkitPlugin
 version: ${project.version}
 description: Ally yourself with mythical deities and battle in the name of the Gods or Titans.
-authors: [marinating, HmmmQuestionMark, _Alex, TheFatDemon, janie177]
+authors: [HmmmQuestionMark, _Alex, marinating, janie177, TheFatDemon]
 softdepend: [Chitchat, WorldGuard]
 commands:
   ## Everyday Commands
