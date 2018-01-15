@@ -54,7 +54,8 @@ public class CleanseCommand extends BaseCommand {
                 }
 
                 playerModel.cleanse();
-                sender.sendMessage(ChatColor.YELLOW + "You have removed all aspects from " + playerModel.getLastKnownName());
+                sender.sendMessage(
+                        ChatColor.YELLOW + "You have removed all aspects from " + playerModel.getLastKnownName());
                 return CommandResult.SUCCESS;
             } else {
                 // TODO Check for individual aspect forsake requests.

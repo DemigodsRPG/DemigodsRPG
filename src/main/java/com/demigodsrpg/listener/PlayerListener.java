@@ -24,7 +24,8 @@ public class PlayerListener implements Listener {
 
         player.sendMessage("Welcome!");
         if (Setting.DEBUG_DATA) {
-            player.sendMessage(ChatColor.RED + "This server is currently in " + ChatColor.BOLD + "Demigods Demo Mode" + ChatColor.RED + ".");
+            player.sendMessage(ChatColor.RED + "This server is currently in " + ChatColor.BOLD + "Demigods Demo Mode" +
+                    ChatColor.RED + ".");
         }
         if (model.getAspects().isEmpty()) {
             // TODO IDK what to do here yet
@@ -45,7 +46,8 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         PlayerModel model = DGData.PLAYER_R.fromPlayer(event.getPlayer());
-        if (DGData.SERVER_R.contains("faction_chat", event.getPlayer().getUniqueId().toString()) && !Family.NEUTRAL.equals(model.getFamily()) && !Family.EXCOMMUNICATED.equals(model.getFamily())) {
+        if (DGData.SERVER_R.contains("faction_chat", event.getPlayer().getUniqueId().toString()) &&
+                !Family.NEUTRAL.equals(model.getFamily()) && !Family.EXCOMMUNICATED.equals(model.getFamily())) {
             event.getRecipients().clear();
             Set<PlayerModel> playerModelSet = DGData.PLAYER_R.getOnlineInAlliance(model.getFamily());
             for (PlayerModel playerModel : playerModelSet) {

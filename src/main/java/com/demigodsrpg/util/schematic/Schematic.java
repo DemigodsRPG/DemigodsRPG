@@ -43,8 +43,7 @@ public class Schematic extends ArrayList<Selection> {
 
     public Set<Location> getLocations(Location reference) {
         Set<Location> locations = Sets.newHashSet();
-        for (Selection cuboid : this)
-            locations.addAll(cuboid.getBlockLocations(reference));
+        for (Selection cuboid : this) { locations.addAll(cuboid.getBlockLocations(reference)); }
         return locations;
     }
 

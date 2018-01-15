@@ -98,8 +98,7 @@ public class StringUtil2 {
     public static String chatTitle(String title) {
         int total = 86;
         String chatTitle = " " + CommonSymbol.RIGHTWARD_ARROW + " " + title + " ";
-        for (int i = 0; i < (total - chatTitle.length()); i++)
-            chatTitle += "-";
+        for (int i = 0; i < (total - chatTitle.length()); i++) { chatTitle += "-"; }
         return chatTitle;
     }
 }

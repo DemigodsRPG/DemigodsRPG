@@ -34,14 +34,19 @@ public class CheckPlayerCommand extends AdminPlayerCommand {
     }
 
     private void sendInfo(Player p, CommandSender s) {
-        PlayerModel model = DGData.PLAYER_R.fromId(p.getUniqueId().toString());
+        PlayerModel model = (PlayerModel) DGData.PLAYER_R.fromPlayer(p);
         s.sendMessage(StringUtil2.chatTitle("Player Stats"));
         if (model.getGod().isPresent() && model.getHero().isPresent()) {
-            s.sendMessage(ChatColor.YELLOW + p.getName() + " is the offspring of " + model.getGod().get().getName() + " and " + model.getHero().get().getName() + "."); // TODO Colors
+            s.sendMessage(ChatColor.YELLOW + p.getName() + " is the offspring of " + model.getGod().get().getName() +
+                    " and " + model.getHero().get().getName() + "."); // TODO Colors
         }
-        s.sendMessage(p.getName() + " is a member of the " + StringUtil2.beautify(model.getFamily().getName()) + " family.");
-        if (p.isOnline())
-            s.sendMessage(p.getName() + " has " + ColorUtil.getColor(p.getPlayer().getHealth(), p.getPlayer().getMaxHealth()) + ChatColor.ITALIC + p.getPlayer().getHealth() + " / " + p.getPlayer().getMaxHealth() + ChatColor.YELLOW + " health.");
+        s.sendMessage(
+                p.getName() + " is a member of the " + StringUtil2.beautify(model.getFamily().getName()) + " family.");
+        if (p.isOnline()) {
+            s.sendMessage(p.getName() + " has " +
+                    ColorUtil.getColor(p.getPlayer().getHealth(), p.getPlayer().getMaxHealth()) + ChatColor.ITALIC +
+                    p.getPlayer().getHealth() + " / " + p.getPlayer().getMaxHealth() + ChatColor.YELLOW + " health.");
+        }
         if (!model.getAspects().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for (String deityName : model.getAspects()) {

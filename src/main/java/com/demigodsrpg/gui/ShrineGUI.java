@@ -42,18 +42,22 @@ public class ShrineGUI implements InventoryGUI {
         INVENTORY_LIST = new ArrayList<>();
         List<ItemStack> items = new ArrayList<>();
         int count = 0, icount = 0;
-        Iterator<ShrineModel> shrines = model.getShrineWarps().stream().map(DGData.SHRINE_R::fromId).collect(Collectors.toSet()).iterator();
+        Iterator<ShrineModel> shrines =
+                model.getShrineWarps().stream().map(DGData.SHRINE_R::fromKey).filter(Optional::isPresent)
+                        .map(Optional::get).collect(Collectors.toSet()).iterator();
         while (shrines.hasNext()) {
             ShrineModel shrine = shrines.next();
-            final String name = shrine.getPersistentId();
+            final String name = shrine.getKey();
             final String type = shrine.getShrineType().name();
             final String owner = DGData.PLAYER_R.fromId(shrine.getOwnerMojangId()).getLastKnownName();
 
-            items.add(count, new ItemStack(owner.equals(model.getLastKnownName()) ? Material.ENCHANTED_BOOK : Material.WRITTEN_BOOK, 1) {
+            items.add(count, new ItemStack(
+                    owner.equals(model.getLastKnownName()) ? Material.ENCHANTED_BOOK : Material.WRITTEN_BOOK, 1) {
                 {
                     ItemMeta meta = getItemMeta();
                     meta.setDisplayName(name);
-                    List<String> lore = Lists.newArrayList(ChatColor.AQUA + type, ChatColor.YELLOW + "Owner: " + ChatColor.LIGHT_PURPLE + owner);
+                    List<String> lore = Lists.newArrayList(ChatColor.AQUA + type,
+                            ChatColor.YELLOW + "Owner: " + ChatColor.LIGHT_PURPLE + owner);
                     meta.setLore(lore);
                     setItemMeta(meta);
                 }

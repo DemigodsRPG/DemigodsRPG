@@ -12,6 +12,8 @@ import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import java.util.Optional;
+
 public class ShrineCommand extends BaseCommand {
     @Override
     public CommandResult onCommand(CommandSender sender, Command command, String[] args) {
@@ -46,7 +48,7 @@ public class ShrineCommand extends BaseCommand {
             }
 
             PlayerModel invitee = DGData.PLAYER_R.fromName(inviteeName);
-            ShrineModel shrine = DGData.SHRINE_R.fromId(shrineName);
+            Optional<ShrineModel> opShrine = DGData.SHRINE_R.fromKey(shrineName);
 
             PlayerModel inviter = DGData.PLAYER_R.fromPlayer(player);
 
@@ -63,22 +65,23 @@ public class ShrineCommand extends BaseCommand {
                 player.sendMessage(ChatColor.RED + "That player is not in the same faction as you.");
                 return CommandResult.QUIET_ERROR;
             }
-            if (shrine == null || !inviter.getMojangId().equals(shrine.getOwnerMojangId())) {
+            if (!opShrine.isPresent() || !inviter.getMojangId().equals(opShrine.get().getOwnerMojangId())) {
                 player.sendMessage(ChatColor.RED + "That shrine is not yours.");
                 return CommandResult.QUIET_ERROR;
             }
 
             if (invite) {
-                invitee.addShrineWarp(shrine);
+                invitee.addShrineWarp(opShrine.get());
                 player.sendMessage(ChatColor.YELLOW + "Invite sent to " + invitee.getLastKnownName() + ".");
             } else {
-                invitee.removeShrineWarp(shrine);
+                invitee.removeShrineWarp(opShrine.get());
                 player.sendMessage(ChatColor.YELLOW + "Uninvited " + invitee.getLastKnownName() + ".");
             }
             OfflinePlayer inviteePlayer = invitee.getOfflinePlayer();
             if (inviteePlayer.isOnline()) {
-                inviteePlayer.getPlayer().sendMessage(invite ? ChatColor.YELLOW + player.getName() + " has invited you to a shrine." :
-                        ChatColor.YELLOW + player.getName() + " has uninvited you from a shrine.");
+                inviteePlayer.getPlayer()
+                        .sendMessage(invite ? ChatColor.YELLOW + player.getName() + " has invited you to a shrine." :
+                                ChatColor.YELLOW + player.getName() + " has uninvited you from a shrine.");
             }
 
             return CommandResult.SUCCESS;

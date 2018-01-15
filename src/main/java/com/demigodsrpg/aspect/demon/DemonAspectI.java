@@ -52,7 +52,8 @@ public class DemonAspectI implements Aspect {
         return "Dark Secret";
     }
 
-    @Ability(name = "Chain", command = "chain", info = "Fire a chain of smoke that damages and blinds.", cost = 250, delay = 1500)
+    @Ability(name = "Chain", command = "chain", info = "Fire a chain of smoke that damages and blinds.", cost = 250,
+            delay = 1500)
     public AbilityResult chainAbility(EntityDamageByEntityEvent event) {
         Player player = (Player) event.getDamager();
         PlayerModel model = DGData.PLAYER_R.fromPlayer(player);
@@ -71,7 +72,8 @@ public class DemonAspectI implements Aspect {
         if (target == null) return false;
         target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, blindduration, blindpower));
         target.damage(damage);
-        target.setLastDamageCause(new EntityDamageByEntityEvent(p, target, EntityDamageEvent.DamageCause.ENTITY_ATTACK, damage));
+        target.setLastDamageCause(
+                new EntityDamageByEntityEvent(p, target, EntityDamageEvent.DamageCause.ENTITY_ATTACK, damage));
         for (BlockFace bf : BlockFace.values()) {
             p.getWorld().playEffect(target.getLocation().getBlock().getRelative(bf).getLocation(), Effect.SMOKE, 1);
         }

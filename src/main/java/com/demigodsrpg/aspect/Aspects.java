@@ -6,14 +6,14 @@ import com.demigodsrpg.aspect.demon.*;
 import com.demigodsrpg.aspect.fire.FireAspectI;
 import com.demigodsrpg.aspect.lightning.LightningAspectI;
 import com.demigodsrpg.aspect.lightning.LightningAspectII;
-import com.demigodsrpg.aspect.magnetism.MagnetismAspectHero;
 import com.demigodsrpg.aspect.water.WaterAspectHero;
 import com.demigodsrpg.aspect.water.WaterAspectI;
+import com.demigodsrpg.aspect.wind.WindAspectHero;
 
 public class Aspects {
     // -- PUBLIC RELEASE -- //
 
-    public static final MagnetismAspectHero MAGNETISM_ASPECT_HERO = new MagnetismAspectHero();
+    public static final WindAspectHero MAGNETISM_ASPECT_HERO = new WindAspectHero();
 
     public static final LightningAspectI LIGHTNING_ASPECT_I = new LightningAspectI();
     public static final LightningAspectII LIGHTNING_ASPECT_II = new LightningAspectII();

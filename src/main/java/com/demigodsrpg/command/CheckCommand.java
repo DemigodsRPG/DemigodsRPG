@@ -22,10 +22,17 @@ public class CheckCommand extends BaseCommand {
         PlayerModel model = DGData.PLAYER_R.fromPlayer(player);
         player.sendMessage(StringUtil2.chatTitle("Player Stats"));
         if (model.getGod().isPresent() && model.getHero().isPresent()) {
-            player.sendMessage(ChatColor.YELLOW + "You are the offspring of " + model.getGod().get().getName() + " and " + model.getHero().get().getName() + "."); // TODO Colors
+            player.sendMessage(
+                    ChatColor.YELLOW + "You are the offspring of " + model.getGod().get().getName() + " and " +
+                            model.getHero().get().getName() + "."); // TODO Colors
         }
-        player.sendMessage(ChatColor.YELLOW + "You are allied with the " + StringUtil2.beautify(model.getFamily().getName()) + " family.");
-        player.sendMessage(ChatColor.YELLOW + "You have " + ColorUtil.getColor(player.getHealth(), player.getMaxHealth()) + ChatColor.ITALIC + player.getHealth() + " / " + player.getMaxHealth() + ChatColor.YELLOW + " health.");
+        player.sendMessage(
+                ChatColor.YELLOW + "You are allied with the " + StringUtil2.beautify(model.getFamily().getName()) +
+                        " family.");
+        player.sendMessage(
+                ChatColor.YELLOW + "You have " + ColorUtil.getColor(player.getHealth(), player.getMaxHealth()) +
+                        ChatColor.ITALIC + player.getHealth() + " / " + player.getMaxHealth() + ChatColor.YELLOW +
+                        " health.");
         if (!model.getAspects().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for (String deityName : model.getAspects()) {
@@ -39,7 +46,8 @@ public class CheckCommand extends BaseCommand {
         player.sendMessage("Favor: " + model.getFavor());
         player.sendMessage("Total Devotion: " + model.getTotalExperience());
         player.sendMessage("Number of ascensions: " + model.getLevel());
-        player.sendMessage("Use " + ChatColor.ITALIC + "/binds" + ChatColor.RESET + " for a list of all ability binds.");
+        player.sendMessage(
+                "Use " + ChatColor.ITALIC + "/binds" + ChatColor.RESET + " for a list of all ability binds.");
 
         return CommandResult.SUCCESS;
     }

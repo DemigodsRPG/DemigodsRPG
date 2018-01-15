@@ -61,9 +61,10 @@ public class TimeUtil {
      */
     public static String getTimeTagged(long time, boolean round) {
         DecimalFormat format = round ? new DecimalFormat("#") : new DecimalFormat("#.##");
-        if (getHours(time) >= 1) return format.format(getHours(time)) + "h";
-        else if (Double.valueOf(format.format(getMinutes(time))) >= 1) return format.format(getMinutes(time)) + "m";
-        else return format.format(getSeconds(time)) + "s";
+        if (getHours(time) >= 1) { return format.format(getHours(time)) + "h"; } else if (
+                Double.valueOf(format.format(getMinutes(time))) >= 1) {
+            return format.format(getMinutes(time)) + "m";
+        } else { return format.format(getSeconds(time)) + "s"; }
     }
 
     public static String prettyDate(long time) {

@@ -1,14 +1,14 @@
 package com.demigodsrpg.model;
 
 import com.demigodsrpg.family.Family;
-import com.demigodsrpg.util.datasection.AbstractPersistentModel;
 import com.demigodsrpg.util.datasection.DataSection;
+import com.demigodsrpg.util.datasection.Model;
 import org.bukkit.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SpawnModel extends AbstractPersistentModel<String> {
+public class SpawnModel implements Model {
     private final Family family;
     private Location location;
 
@@ -54,7 +54,7 @@ public class SpawnModel extends AbstractPersistentModel<String> {
     }
 
     @Override
-    public String getPersistentId() {
+    public String getKey() {
         return getAlliance().getName();
     }
 }

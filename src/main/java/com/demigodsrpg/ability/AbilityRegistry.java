@@ -27,7 +27,8 @@ public class AbilityRegistry implements Listener {
     private boolean NO_COST_ASPECT_MODE;
 
     private static final ConcurrentMap<String, AbilityMetaData> REGISTERED_COMMANDS = new ConcurrentHashMap<>();
-    private static final Multimap<String, AbilityMetaData> REGISTERED_ABILITIES = Multimaps.newListMultimap(new ConcurrentHashMap<>(), () -> new ArrayList<>(0));
+    private static final Multimap<String, AbilityMetaData> REGISTERED_ABILITIES =
+            Multimaps.newListMultimap(new ConcurrentHashMap<>(), () -> new ArrayList<>(0));
 
     public AbilityRegistry(AbilityCasterProvider casterProvider, CooldownHandler cooldowns, boolean noCostAspectMode) {
         CASTER_PROVIDER = casterProvider;
@@ -108,7 +109,8 @@ public class AbilityRegistry implements Listener {
         for (AbilityMetaData ability : REGISTERED_ABILITIES.values()) {
             if (ability.getCommand().equals(command)) {
                 player.sendMessage(StringUtil2.chatTitle(ability.getName()));
-                player.sendMessage(" - Aspect: " + ability.getAspect().getGroup().getColor() + ability.getAspect().name());
+                player.sendMessage(
+                        " - Aspect: " + ability.getAspect().getGroup().getColor() + ability.getAspect().name());
                 player.sendMessage(" - Type: " + StringUtil2.beautify(ability.getType().name()));
                 if (!ability.getType().equals(Ability.Type.PASSIVE)) {
                     player.sendMessage(" - Cost: " + ability.getCost());
@@ -149,9 +151,11 @@ public class AbilityRegistry implements Listener {
             }
         } else {
             AbilityMetaData ability = fromCommand(command);
-            if (ability.getCommand().equals(command) && model.getAspects().contains(ability.getAspect().name()) && ability.getCommand().equals(command)) {
+            if (ability.getCommand().equals(command) && model.getAspects().contains(ability.getAspect().name()) &&
+                    ability.getCommand().equals(command)) {
                 model.bind(ability, material);
-                player.sendMessage(ChatColor.YELLOW + ability.getName() + " has been bound to " + StringUtil2.beautify(material.name()) + ".");
+                player.sendMessage(ChatColor.YELLOW + ability.getName() + " has been bound to " +
+                        StringUtil2.beautify(material.name()) + ".");
                 return true;
             }
         }
@@ -161,7 +165,8 @@ public class AbilityRegistry implements Listener {
     boolean processAbility1(AbilityCaster model, AbilityMetaData ability) {
         if (ZoneUtil.inNoDGZone(model.getLocation())) return false;
         if (!ability.getType().equals(Ability.Type.PASSIVE)) {
-            if ((ability.getType().equals(Ability.Type.OFFENSIVE) || ability.getType().equals(Ability.Type.ULTIMATE)) && ZoneUtil.inNoPvpZone(model.getLocation())) {
+            if ((ability.getType().equals(Ability.Type.OFFENSIVE) || ability.getType().equals(Ability.Type.ULTIMATE)) &&
+                    ZoneUtil.inNoPvpZone(model.getLocation())) {
                 return false;
             }
             if (model.getBound(ability) == null) {
@@ -173,14 +178,16 @@ public class AbilityRegistry implements Listener {
 
             double cost = ability.getCost();
             if (!NO_COST_ASPECT_MODE && model.getFavor() < cost) {
-                model.getOfflinePlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " requires more favor.");
+                model.getOfflinePlayer().getPlayer()
+                        .sendMessage(ChatColor.YELLOW + ability.getName() + " requires more favor.");
                 return false;
             }
             if (COOLDOWNS.hasDelay(model, ability)) {
                 return false;
             }
             if (COOLDOWNS.hasCooldown(model, ability)) {
-                model.getOfflinePlayer().getPlayer().sendMessage(ChatColor.YELLOW + ability.getName() + " is on a cooldown.");
+                model.getOfflinePlayer().getPlayer()
+                        .sendMessage(ChatColor.YELLOW + ability.getName() + " is on a cooldown.");
                 return false;
             }
         }

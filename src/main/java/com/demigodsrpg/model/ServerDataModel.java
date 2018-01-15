@@ -1,12 +1,12 @@
 package com.demigodsrpg.model;
 
-import com.demigodsrpg.util.datasection.AbstractPersistentModel;
 import com.demigodsrpg.util.datasection.DataSection;
+import com.demigodsrpg.util.datasection.Model;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class ServerDataModel extends AbstractPersistentModel<String> {
+public class ServerDataModel implements Model {
     private String id;
     private DataType type;
     private String row;
@@ -54,10 +54,10 @@ public class ServerDataModel extends AbstractPersistentModel<String> {
     }
 
     public void setValue(Object data) {
-        if (data instanceof String || data instanceof Integer || data instanceof Boolean || data instanceof Double || data instanceof Map || data instanceof List)
-            this.value = data;
-        else if (data == null) this.value = "null";
-        else this.value = data.toString();
+        if (data instanceof String || data instanceof Integer || data instanceof Boolean || data instanceof Double ||
+                data instanceof Map || data instanceof List) { this.value = data; } else if (data == null) {
+            this.value = "null";
+        } else { this.value = data.toString(); }
     }
 
     public void setExpiration(TimeUnit unit, long time) {
@@ -69,7 +69,7 @@ public class ServerDataModel extends AbstractPersistentModel<String> {
     }
 
     @Override
-    public String getPersistentId() {
+    public String getKey() {
         return id;
     }
 

@@ -28,22 +28,29 @@ public class ValuesCommand extends BaseCommand {
         sender.sendMessage(StringUtil2.chatTitle("Current Top Value Tributes"));
         sender.sendMessage(" ");
 
-        for (Map.Entry<Material, Integer> entry : MapUtil2.sortByValue(DGData.TRIBUTE_R.getTributeValuesMap(), true).entrySet()) {
+        for (Map.Entry<Material, Integer> entry : MapUtil2.sortByValue(DGData.TRIBUTE_R.getTributeValuesMap(), true)
+                .entrySet()) {
             // Handle count
             if (count >= 10) break;
             count++;
 
             // Display value
-            sender.sendMessage(ChatColor.GRAY + " " + CommonSymbol.RIGHTWARD_ARROW + " " + ChatColor.YELLOW + StringUtil2.beautify(entry.getKey().name()) + ChatColor.GRAY + " (currently worth " + ChatColor.GREEN + entry.getValue() + ChatColor.GRAY + " per item)");
+            sender.sendMessage(ChatColor.GRAY + " " + CommonSymbol.RIGHTWARD_ARROW + " " + ChatColor.YELLOW +
+                    StringUtil2.beautify(entry.getKey().name()) + ChatColor.GRAY + " (currently worth " +
+                    ChatColor.GREEN + entry.getValue() + ChatColor.GRAY + " per item)");
         }
 
         sender.sendMessage(" ");
-        sender.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "Values are constantly changing based on how players");
+        sender.sendMessage(
+                ChatColor.GRAY + "" + ChatColor.ITALIC + "Values are constantly changing based on how players");
         sender.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "tribute, so check back often!");
 
         if (!Material.AIR.equals(player.getItemInHand().getType())) {
             sender.sendMessage(" ");
-            sender.sendMessage(ChatColor.GRAY + "The " + (player.getItemInHand().getAmount() == 1 ? "item in your hand is" : "items in your hand are") + " worth " + ChatColor.GREEN + DGData.TRIBUTE_R.getValue(player.getItemInHand()) + ChatColor.GRAY + " in total.");
+            sender.sendMessage(ChatColor.GRAY + "The " +
+                    (player.getItemInHand().getAmount() == 1 ? "item in your hand is" : "items in your hand are") +
+                    " worth " + ChatColor.GREEN + DGData.TRIBUTE_R.getValue(player.getItemInHand()) + ChatColor.GRAY +
+                    " in total.");
         }
 
         return CommandResult.SUCCESS;

@@ -24,7 +24,8 @@ public class ItemUtil {
      * @param enchantments the enchantments attached to the new item.
      * @return the ItemStack of the newly created item.
      */
-    public static ItemStack create(Material material, String name, List<String> lore, Map<Enchantment, Integer> enchantments) {
+    public static ItemStack create(Material material, String name, List<String> lore,
+                                   Map<Enchantment, Integer> enchantments) {
         // Define variables
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();

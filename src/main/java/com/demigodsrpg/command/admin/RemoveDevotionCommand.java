@@ -30,7 +30,8 @@ public class RemoveDevotionCommand extends AdminPlayerCommand {
 
                 m.setExperience(aspect, newAmount, true);
 
-                sender.sendMessage(ChatColor.YELLOW + "You removed " + amount + " devotion from " + p.getName() + " in the aspect group " + aspect.getGroup().getName() + ".");
+                sender.sendMessage(ChatColor.YELLOW + "You removed " + amount + " devotion from " + p.getName() +
+                        " in the aspect group " + aspect.getGroup().getName() + ".");
             } catch (Exception ignored) {
                 sender.sendMessage(ChatColor.RED + "Invalid syntax! /RemoveDevotion [Name, Deity, Amount]");
                 return CommandResult.QUIET_ERROR;

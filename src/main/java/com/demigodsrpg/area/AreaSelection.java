@@ -30,7 +30,8 @@ public class AreaSelection implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onClick(PlayerInteractEvent event) {
-        if (event.getPlayer().getUniqueId().toString().equals(playerUUID) && Action.RIGHT_CLICK_BLOCK.equals(event.getAction())) {
+        if (event.getPlayer().getUniqueId().toString().equals(playerUUID) &&
+                Action.RIGHT_CLICK_BLOCK.equals(event.getAction())) {
             // Get the point
             Location point = event.getClickedBlock().getLocation();
 

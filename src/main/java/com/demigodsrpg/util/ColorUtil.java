@@ -201,8 +201,8 @@ public class ColorUtil {
      */
     public static ChatColor getColor(double value, double max) {
         ChatColor color = ChatColor.RESET;
-        if (value < Math.ceil(0.33 * max)) color = ChatColor.RED;
-        else if (value < Math.ceil(0.66 * max) && value > Math.ceil(0.33 * max)) color = ChatColor.YELLOW;
+        if (value < Math.ceil(0.33 * max)) { color = ChatColor.RED; } else if (value < Math.ceil(0.66 * max) &&
+                value > Math.ceil(0.33 * max)) { color = ChatColor.YELLOW; }
         if (value > Math.ceil(0.66 * max)) color = ChatColor.GREEN;
         return color;
     }

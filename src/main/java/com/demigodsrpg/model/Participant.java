@@ -8,7 +8,7 @@ import org.bukkit.entity.EntityType;
 public interface Participant {
     String getLastKnownName();
 
-    String getPersistentId();
+    String getKey();
 
     boolean getCanPvp();
 

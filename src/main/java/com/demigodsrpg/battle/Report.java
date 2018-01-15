@@ -39,17 +39,22 @@ public class Report {
         Multimap<Participant, String> scores = getParticipantScores();
         List<Participant> participants = new ArrayList<>(scores.keySet());
         if (participants.size() == 2) {
-            double delta = getWeightedKillDeathRatio(participants.get(0)) - getWeightedKillDeathRatio(participants.get(1));
+            double delta =
+                    getWeightedKillDeathRatio(participants.get(0)) - getWeightedKillDeathRatio(participants.get(1));
             delta = delta < 0 ? delta * -1 : delta;
             if (delta > 0.8) {
                 Participant one = participants.get(0);
                 Participant two = participants.get(1);
-                Bukkit.broadcastMessage(one.getFamily().getColor() + one.getLastKnownName() + ChatColor.GRAY + " and " + two.getFamily().getColor() + two.getLastKnownName() + ChatColor.GRAY + " just tied in a duel.");
+                Bukkit.broadcastMessage(one.getFamily().getColor() + one.getLastKnownName() + ChatColor.GRAY + " and " +
+                        two.getFamily().getColor() + two.getLastKnownName() + ChatColor.GRAY + " just tied in a duel.");
             } else {
-                int winnerIndex = getWeightedKillDeathRatio(participants.get(0)) > getWeightedKillDeathRatio(participants.get(1)) ? 0 : 1;
+                int winnerIndex = getWeightedKillDeathRatio(participants.get(0)) >
+                        getWeightedKillDeathRatio(participants.get(1)) ? 0 : 1;
                 Participant winner = participants.get(winnerIndex);
                 Participant loser = participants.get(winnerIndex == 0 ? 1 : 0);
-                Bukkit.broadcastMessage(winner.getFamily().getColor() + winner.getLastKnownName() + ChatColor.GRAY + " just won in a duel against " + loser.getFamily().getColor() + loser.getLastKnownName() + ChatColor.GRAY + ".");
+                Bukkit.broadcastMessage(winner.getFamily().getColor() + winner.getLastKnownName() + ChatColor.GRAY +
+                        " just won in a duel against " + loser.getFamily().getColor() + loser.getLastKnownName() +
+                        ChatColor.GRAY + ".");
             }
         } else if (participants.size() > 2) {
             double winningScore = 0;
@@ -64,11 +69,20 @@ public class Report {
                 }
             }
             if (winningfamily != null) {
-                Bukkit.broadcastMessage(ChatColor.GRAY + "The " + ChatColor.YELLOW + winningfamily.getName() + " family " + ChatColor.GRAY + "just won a battle involving " + participants.size() + " participants.");
-                Bukkit.broadcastMessage(ChatColor.GRAY + "The " + ChatColor.YELLOW + "MVP" + (oneMVP ? "" : "s") + ChatColor.GRAY + " from this battle " + (oneMVP ? "is" : "are") + ":");
+                Bukkit.broadcastMessage(
+                        ChatColor.GRAY + "The " + ChatColor.YELLOW + winningfamily.getName() + " family " +
+                                ChatColor.GRAY + "just won a battle involving " + participants.size() +
+                                " participants.");
+                Bukkit.broadcastMessage(
+                        ChatColor.GRAY + "The " + ChatColor.YELLOW + "MVP" + (oneMVP ? "" : "s") + ChatColor.GRAY +
+                                " from this battle " + (oneMVP ? "is" : "are") + ":");
                 for (Participant mvp : MVPs) {
-                    BattleMetaData data = battle.getInvolved().get(mvp.getPersistentId());
-                    Bukkit.broadcastMessage(ChatColor.DARK_GRAY + " ➥ " + mvp.getFamily().getColor() + mvp.getLastKnownName() + ChatColor.GRAY + " / " + ChatColor.YELLOW + "Kills" + ChatColor.GRAY + ": " + data.getKills() + " / " + ChatColor.YELLOW + "Deaths" + ChatColor.GRAY + ": " + data.getDeaths());
+                    BattleMetaData data = battle.getInvolved().get(mvp.getKey());
+                    Bukkit.broadcastMessage(
+                            ChatColor.DARK_GRAY + " ➥ " + mvp.getFamily().getColor() + mvp.getLastKnownName() +
+                                    ChatColor.GRAY + " / " + ChatColor.YELLOW + "Kills" + ChatColor.GRAY + ": " +
+                                    data.getKills() + " / " + ChatColor.YELLOW + "Deaths" + ChatColor.GRAY + ": " +
+                                    data.getDeaths());
                 }
             }
         }
@@ -92,7 +106,7 @@ public class Report {
     }
 
     public double getWeightedKillDeathRatio(Participant participant) {
-        BattleMetaData data = battle.getInvolved().get(participant.getPersistentId());
+        BattleMetaData data = battle.getInvolved().get(participant.getKey());
         if (data.deaths == 0) {
             return data.getKills() * 1.2;
         }
@@ -124,22 +138,28 @@ public class Report {
         for (Map.Entry<String, BattleMetaData> entry : battle.getInvolved().entrySet()) {
             Participant participant = DGData.PLAYER_R.fromId(entry.getKey());
             if (entry.getValue().hits > 0) {
-                scores.put(participant, ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Hits: " + ChatColor.WHITE + entry.getValue().hits);
+                scores.put(participant, ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Hits: " + ChatColor.WHITE +
+                        entry.getValue().hits);
             }
             if (entry.getValue().kills > 0) {
-                scores.put(participant, ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Kills: " + ChatColor.WHITE + entry.getValue().kills);
+                scores.put(participant, ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Kills: " + ChatColor.WHITE +
+                        entry.getValue().kills);
             }
             if (entry.getValue().deaths > 0) {
-                scores.put(participant, ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Deaths: " + ChatColor.WHITE + entry.getValue().deaths);
+                scores.put(participant, ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Deaths: " + ChatColor.WHITE +
+                        entry.getValue().deaths);
             }
             if (entry.getValue().denies > 0) {
-                scores.put(participant, ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Denies: " + ChatColor.WHITE + entry.getValue().denies);
+                scores.put(participant, ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Denies: " + ChatColor.WHITE +
+                        entry.getValue().denies);
             }
             if (entry.getValue().assists > 0) {
-                scores.put(participant, ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Assists: " + ChatColor.WHITE + entry.getValue().assists);
+                scores.put(participant, ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Assists: " + ChatColor.WHITE +
+                        entry.getValue().assists);
             }
             if (entry.getValue().teamKills > 0) {
-                scores.put(participant, ChatColor.DARK_GRAY + " ➥ " + ChatColor.RED + "Team kills: " + ChatColor.WHITE + entry.getValue().teamKills);
+                scores.put(participant, ChatColor.DARK_GRAY + " ➥ " + ChatColor.RED + "Team kills: " + ChatColor.WHITE +
+                        entry.getValue().teamKills);
             }
         }
         return scores;
@@ -162,17 +182,23 @@ public class Report {
             familyScores.put(participantFamily, familyData);
         }
         for (Map.Entry<Family, BattleMetaData> entry : familyScores.entrySet()) {
-            scores.put(entry.getKey(), ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Hits: " + ChatColor.WHITE + entry.getValue().hits);
-            scores.put(entry.getKey(), ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Kills: " + ChatColor.WHITE + entry.getValue().kills);
-            scores.put(entry.getKey(), ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Deaths: " + ChatColor.WHITE + entry.getValue().deaths);
-            scores.put(entry.getKey(), ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Denies: " + ChatColor.WHITE + entry.getValue().denies);
-            scores.put(entry.getKey(), ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Assists: " + ChatColor.WHITE + entry.getValue().assists);
+            scores.put(entry.getKey(), ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Hits: " + ChatColor.WHITE +
+                    entry.getValue().hits);
+            scores.put(entry.getKey(), ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Kills: " + ChatColor.WHITE +
+                    entry.getValue().kills);
+            scores.put(entry.getKey(), ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Deaths: " + ChatColor.WHITE +
+                    entry.getValue().deaths);
+            scores.put(entry.getKey(), ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Denies: " + ChatColor.WHITE +
+                    entry.getValue().denies);
+            scores.put(entry.getKey(), ChatColor.DARK_GRAY + " ➥ " + ChatColor.YELLOW + "Assists: " + ChatColor.WHITE +
+                    entry.getValue().assists);
         }
         return scores;
     }
 
     public List<Participant> getMVPs() {
         final double max = Collections.max(getWeightedKillDeathRatios().values());
-        return getWeightedKillDeathRatios().entrySet().stream().filter(entry -> entry.getValue() == max).map(Map.Entry::getKey).collect(Collectors.toList());
+        return getWeightedKillDeathRatios().entrySet().stream().filter(entry -> entry.getValue() == max)
+                .map(Map.Entry::getKey).collect(Collectors.toList());
     }
 }

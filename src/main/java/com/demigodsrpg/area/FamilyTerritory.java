@@ -21,10 +21,11 @@ public class FamilyTerritory extends Area {
 
     public FamilyTerritory(String id, final DataSection conf) {
         super(AreaPriority.valueOf(conf.getString("priority")), new ArrayList<Location>() {{
-            addAll(conf.getStringList("locations").stream().map(LocationUtil::locationFromString).collect(Collectors.toList()));
+            addAll(conf.getStringList("locations").stream().map(LocationUtil::locationFromString)
+                    .collect(Collectors.toList()));
         }});
         this.uuid = id.split("\\$")[2];
-        this.family = DGData.FAMILY_R.familyFromName(id.split("\\$")[1]);
+        this.family = DGData.getFamily(id.split("\\$")[1]);
     }
 
     public Family getFamily() {
@@ -32,7 +33,7 @@ public class FamilyTerritory extends Area {
     }
 
     @Override
-    public String getPersistentId() {
+    public String getKey() {
         return "family$" + getFamily().getName() + "$" + uuid;
     }
 }

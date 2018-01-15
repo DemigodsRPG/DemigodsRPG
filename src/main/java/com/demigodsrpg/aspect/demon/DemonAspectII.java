@@ -57,17 +57,23 @@ public class DemonAspectII implements Aspect {
 
         LivingEntity le = TargetingUtil.autoTarget(player);
         if (le == null) return AbilityResult.NO_TARGET_FOUND;
-        int duration = (int) Math.round(2.18678 * Math.pow(model.getExperience(Aspects.DEMON_ASPECT_II), 0.24723)); // seconds
+        int duration =
+                (int) Math.round(2.18678 * Math.pow(model.getExperience(Aspects.DEMON_ASPECT_II), 0.24723)); // seconds
         final ArrayList<Block> tochange = new ArrayList<Block>();
         for (int x = -3; x <= 3; x++) {
             for (int y = -3; y <= 3; y++) {
                 for (int z = -3; z <= 3; z++) {
-                    Block block = player.getWorld().getBlockAt(le.getLocation().getBlockX() + x, le.getLocation().getBlockY() + y, le.getLocation().getBlockZ() + z);
-                    if ((block.getLocation().distance(le.getLocation()) > 2) && (block.getLocation().distance(le.getLocation()) < 3.5))
-                        if ((block.getType() == Material.AIR) || (block.getType() == Material.WATER) || (block.getType() == Material.LAVA)) {
+                    Block block = player.getWorld()
+                            .getBlockAt(le.getLocation().getBlockX() + x, le.getLocation().getBlockY() + y,
+                                    le.getLocation().getBlockZ() + z);
+                    if ((block.getLocation().distance(le.getLocation()) > 2) &&
+                            (block.getLocation().distance(le.getLocation()) < 3.5)) {
+                        if ((block.getType() == Material.AIR) || (block.getType() == Material.WATER) ||
+                                (block.getType() == Material.LAVA)) {
                             block.setType(Material.OBSIDIAN);
                             tochange.add(block);
                         }
+                    }
                 }
             }
         }

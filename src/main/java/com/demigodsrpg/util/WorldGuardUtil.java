@@ -33,24 +33,28 @@ public class WorldGuardUtil implements Listener {
             ENABLED = false;
         }
 
-        if (plugin.isEnabled()) Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable() {
-            @Override
-            public void run() {
-                Bukkit.getPluginManager().registerEvents(th, plugin);
-            }
-        }, 40);
-        if (plugin.isEnabled()) Bukkit.getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable() {
-            @Override
-            public void run() {
-                // process proto-listeners
-                Iterator<ProtoPVPListener> protoPVPListenerIterator = protoPVPListeners.values().iterator();
-                while (worldGuardEnabled() && protoPVPListenerIterator.hasNext()) {
-                    ProtoPVPListener queued = protoPVPListenerIterator.next();
-                    queued.register();
-                    protoPVPListeners.remove(queued.plugin.getName());
+        if (plugin.isEnabled()) {
+            Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable() {
+                @Override
+                public void run() {
+                    Bukkit.getPluginManager().registerEvents(th, plugin);
                 }
-            }
-        }, 0, 5);
+            }, 40);
+        }
+        if (plugin.isEnabled()) {
+            Bukkit.getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable() {
+                @Override
+                public void run() {
+                    // process proto-listeners
+                    Iterator<ProtoPVPListener> protoPVPListenerIterator = protoPVPListeners.values().iterator();
+                    while (worldGuardEnabled() && protoPVPListenerIterator.hasNext()) {
+                        ProtoPVPListener queued = protoPVPListenerIterator.next();
+                        queued.register();
+                        protoPVPListeners.remove(queued.plugin.getName());
+                    }
+                }
+            }, 0, 5);
+        }
     }
 
     /**
@@ -77,12 +81,14 @@ public class WorldGuardUtil implements Listener {
      * @return The region does exist at the provided location.
      */
     public static boolean checkForRegion(final String name, Location location) {
-        return Iterators.any(WorldGuardPlugin.inst().getRegionManager(location.getWorld()).getApplicableRegions(location).iterator(), new Predicate<ProtectedRegion>() {
-            @Override
-            public boolean apply(ProtectedRegion region) {
-                return region.getId().toLowerCase().contains(name);
-            }
-        });
+        return Iterators
+                .any(WorldGuardPlugin.inst().getRegionManager(location.getWorld()).getApplicableRegions(location)
+                        .iterator(), new Predicate<ProtectedRegion>() {
+                    @Override
+                    public boolean apply(ProtectedRegion region) {
+                        return region.getId().toLowerCase().contains(name);
+                    }
+                });
     }
 
     /**
@@ -93,16 +99,18 @@ public class WorldGuardUtil implements Listener {
      * @return The flag does exist at the provided location.
      */
     public static boolean checkForFlag(final Flag flag, Location location) {
-        return Iterators.any(WorldGuardPlugin.inst().getRegionManager(location.getWorld()).getApplicableRegions(location).iterator(), new Predicate<ProtectedRegion>() {
-            @Override
-            public boolean apply(ProtectedRegion region) {
-                try {
-                    return region.getFlags().containsKey(flag);
-                } catch (Exception ignored) {
-                }
-                return false;
-            }
-        });
+        return Iterators
+                .any(WorldGuardPlugin.inst().getRegionManager(location.getWorld()).getApplicableRegions(location)
+                        .iterator(), new Predicate<ProtectedRegion>() {
+                    @Override
+                    public boolean apply(ProtectedRegion region) {
+                        try {
+                            return region.getFlags().containsKey(flag);
+                        } catch (Exception ignored) {
+                        }
+                        return false;
+                    }
+                });
     }
 
     /**
@@ -125,16 +133,18 @@ public class WorldGuardUtil implements Listener {
      * @return The flag-value does exist at the provided location.
      */
     public static boolean checkForFlagValue(final Flag flag, final String value, Location location) {
-        return Iterators.any(WorldGuardPlugin.inst().getRegionManager(location.getWorld()).getApplicableRegions(location).iterator(), new Predicate<ProtectedRegion>() {
-            @Override
-            public boolean apply(ProtectedRegion region) {
-                try {
-                    return flag.marshal(region.getFlag(flag)).equals(value);
-                } catch (Exception ignored) {
-                }
-                return false;
-            }
-        });
+        return Iterators
+                .any(WorldGuardPlugin.inst().getRegionManager(location.getWorld()).getApplicableRegions(location)
+                        .iterator(), new Predicate<ProtectedRegion>() {
+                    @Override
+                    public boolean apply(ProtectedRegion region) {
+                        try {
+                            return flag.marshal(region.getFlag(flag)).equals(value);
+                        } catch (Exception ignored) {
+                        }
+                        return false;
+                    }
+                });
     }
 
     /**
@@ -155,8 +165,9 @@ public class WorldGuardUtil implements Listener {
     }
 
     public static void setWhenToOverridePVP(Plugin plugin, Predicate<Event> checkPVP) {
-        if (!worldGuardEnabled()) protoPVPListeners.put(plugin.getName(), new ProtoPVPListener(plugin, checkPVP));
-        else new WorldGuardPVPListener(plugin, checkPVP);
+        if (!worldGuardEnabled()) {
+            protoPVPListeners.put(plugin.getName(), new ProtoPVPListener(plugin, checkPVP));
+        } else { new WorldGuardPVPListener(plugin, checkPVP); }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

@@ -1,7 +1,7 @@
 package com.demigodsrpg.area;
 
 import com.demigodsrpg.util.LocationUtil;
-import com.demigodsrpg.util.datasection.AbstractPersistentModel;
+import com.demigodsrpg.util.datasection.Model;
 import org.bukkit.Location;
 
 import java.awt.*;
@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class Area extends AbstractPersistentModel<String> {
+public abstract class Area implements Model {
     protected final AreaPriority priority;
     protected final List<Location> corners;
     protected final transient Polygon shape;

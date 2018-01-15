@@ -5,13 +5,13 @@ import com.demigodsrpg.chitchat.*;
 import com.demigodsrpg.command.*;
 import com.demigodsrpg.command.admin.*;
 import com.demigodsrpg.enchantment.CustomEnchantments;
-import com.demigodsrpg.family.Family;
 import com.demigodsrpg.listener.*;
 import com.demigodsrpg.model.PlayerModel;
 import com.demigodsrpg.model.TributeModel;
-import com.demigodsrpg.registry.config.AreaRegistry;
+import com.demigodsrpg.registry.file.AreaRegistry;
 import com.demigodsrpg.util.ZoneUtil;
-import com.iciql.Db;
+import com.mongodb.*;
+import com.mongodb.client.MongoDatabase;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
@@ -30,6 +30,7 @@ public class DGGame {
 
     private static DGGame INST;
     private static DGBukkitPlugin PLUGIN;
+    private static MongoDatabase DATABASE;
 
     // -- ENABLE/DISABLE -- //
 
@@ -43,55 +44,52 @@ public class DGGame {
         DGData.CONSOLE = plugin.getLogger();
 
         // Test for SQL connection if it is enabled
-        if (Setting.PSQL_PERSISTENCE) {
+        if (Setting.MONGODB_PERSISTENCE) {
             try {
-                Class.forName("org.postgresql.Driver");
-                Db.open(Setting.PSQL_CONNECTION).close();
-                DGData.CONSOLE.info("PSQL database saving enabled.");
+                String hostname = Setting.MONGODB_HOSTNAME;
+                int port = Setting.MONGODB_PORT;
+                String database = Setting.MONGODB_DATABASE;
+                String username = Setting.MONGODB_USERNAME;
+                String password = Setting.MONGODB_PASSWORD;
+                ServerAddress address = new ServerAddress(hostname, port);
+                MongoCredential credential =
+                        MongoCredential.createCredential(username, database, password.toCharArray());
+                DATABASE =
+                        new MongoClient(address, credential, new MongoClientOptions.Builder().build())
+                                .getDatabase(database);
+
+                // Create Registries
+                DGData.enableMongo(DATABASE);
+
+                DGData.CONSOLE.info("MongoDB enabled.");
             } catch (Exception oops) {
                 oops.printStackTrace();
-                DGData.CONSOLE.warning("Could not load the PSQL driver.");
-                DGData.CONSOLE.warning("Defaulting to json file save.");
-                Setting.PSQL_PERSISTENCE = false;
+                DGData.CONSOLE.warning("MongoDB connection failed. Disabling plugin.");
+                Bukkit.getPluginManager().disablePlugin(PLUGIN);
+                return;
             }
         } else {
-            DGData.CONSOLE.info("Json file database saving enabled.");
+            // Create Registries
+            DGData.enableFile();
+
+            DGData.CONSOLE.info("Json file saving enabled.");
         }
 
         // Define the save path
         DGData.SAVE_PATH = plugin.getDataFolder().getPath() + "/data/";
 
-        // Get custom factions and deities
-        DGData.FAMILY_R.registerFromDatabase();
-        DGData.DEITY_R.registerFromDatabase();
-
-        // Register default factions
-        DGData.FAMILY_R.register(Family.NEUTRAL);
-        DGData.FAMILY_R.register(Family.EXCOMMUNICATED);
-
         // Debug data
-        if (Setting.DEBUG_DATA) {
-            DGData.CONSOLE.info("Enabling demo mode.");
-
-            // Debug deities
-            DGData.CONSOLE.info("Enabling demo deities.");
-            DGData.DEITY_R.register(Demo.D.LOREM);
-            DGData.DEITY_R.register(Demo.D.IPSUM);
-            DGData.DEITY_R.register(Demo.D.DOLOR);
-            DGData.DEITY_R.register(Demo.D.SIT);
-            DGData.DEITY_R.register(Demo.D.AMET);
-
-            // Debug factions
-            DGData.CONSOLE.info("Enabling demo factions.");
-            DGData.FAMILY_R.register(Demo.F.KŌHAI);
-            DGData.FAMILY_R.register(Demo.F.SENPAI);
-            DGData.FAMILY_R.register(Demo.F.SENSEI);
+        if (Setting.DEBUG_DATA || Setting.NORSE_ENABLED) {
+            DGData.addPantheon(new Norse());
+        }
+        if (Setting.GREEK_ENABLED) {
+            // TODO
         }
 
         // Determine territory registries
         for (World world : Bukkit.getWorlds()) {
             AreaRegistry area_r = new AreaRegistry(world);
-            area_r.registerFromDatabase();
+            area_r.loadAllFromDb();
             DGData.AREA_R.put(world.getName(), new AreaRegistry(world));
         }
 
@@ -102,7 +100,8 @@ public class DGGame {
         DGData.SHRINE_R.generate();
 
         // Fill up tribute data
-        if (DGData.TRIBUTE_R.getRegistered().isEmpty()) {
+        DGData.TRIBUTE_R.loadAllFromDb();
+        if (DGData.TRIBUTE_R.getRegisteredData().isEmpty()) {
             DGData.TRIBUTE_R.initializeTributeTracking();
         }
 
@@ -133,7 +132,6 @@ public class DGGame {
         // Admin commands
         plugin.getCommand("adminmode").setExecutor(new AdminModeComand());
         plugin.getCommand("selectarea").setExecutor(new SelectAreaCommand());
-        plugin.getCommand("createfamily").setExecutor(new CreateFamilyCommand());
         plugin.getCommand("createfamilyarea").setExecutor(new CreateFamilyAreaCommand());
         plugin.getCommand("checkplayer").setExecutor(new CheckPlayerCommand());
         plugin.getCommand("adddevotion").setExecutor(new AddDevotionCommand());
@@ -169,9 +167,6 @@ public class DGGame {
         HandlerList.unregisterAll(plugin);
         Bukkit.getScheduler().cancelTasks(plugin);
 
-        // Clear the cache.
-        DGData.clearCache();
-
         // Let the console know
         DGData.CONSOLE.info("Disabled successfully.");
     }
@@ -199,7 +194,9 @@ public class DGGame {
         FIRE_SPREAD = () -> {
             for (World world : Bukkit.getWorlds()) {
                 world.getLivingEntities().stream().filter(entity -> entity.getFireTicks() > 0).forEach(entity ->
-                        entity.getNearbyEntities(0.5, 0.5, 0.5).stream().filter(nearby -> nearby instanceof LivingEntity && !nearby.equals(entity)).forEach(nearby -> nearby.setFireTicks(100))
+                        entity.getNearbyEntities(0.5, 0.5, 0.5).stream()
+                                .filter(nearby -> nearby instanceof LivingEntity && !nearby.equals(entity))
+                                .forEach(nearby -> nearby.setFireTicks(100))
                 );
             }
         };

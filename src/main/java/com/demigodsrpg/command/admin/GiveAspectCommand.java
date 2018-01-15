@@ -30,7 +30,9 @@ public class GiveAspectCommand extends AdminPlayerCommand {
             }
 
             p.giveAspect(aspect);
-            sender.sendMessage(ChatColor.YELLOW + "You added " + aspect.getGroup().getName() + " " + aspect.getTier().name() + " to " + p.getLastKnownName() + ".");
+            sender.sendMessage(
+                    ChatColor.YELLOW + "You added " + aspect.getGroup().getName() + " " + aspect.getTier().name() +
+                            " to " + p.getLastKnownName() + ".");
             return CommandResult.SUCCESS;
         }
         return CommandResult.INVALID_SYNTAX;

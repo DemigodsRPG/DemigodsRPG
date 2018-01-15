@@ -8,8 +8,8 @@ import com.demigodsrpg.deity.Deity;
 import com.demigodsrpg.deity.DeityType;
 import com.demigodsrpg.family.Family;
 import com.demigodsrpg.util.ZoneUtil;
-import com.demigodsrpg.util.datasection.AbstractPersistentModel;
 import com.demigodsrpg.util.datasection.DataSection;
+import com.demigodsrpg.util.datasection.Model;
 import com.demigodsrpg.util.misc.RandomUtil;
 import com.google.common.collect.*;
 import gnu.trove.iterator.TIntIterator;
@@ -23,13 +23,13 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class PlayerModel extends AbstractPersistentModel<String> implements AbilityCaster, Participant {
+public class PlayerModel implements Model, AbilityCaster, Participant {
     private final String mojangId;
     private String lastKnownName;
 
     // -- PARENTS -- //
-    private Optional<Deity> god;
-    private Optional<Deity> hero;
+    private Optional<Deity> primary;
+    private Optional<Deity> secondary;
 
     // -- CONTRACTS -- //
     private List<Deity> contracts = new ArrayList<>();
@@ -54,7 +54,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
     private int teamKills;
 
     @SuppressWarnings("deprecation")
-    public PlayerModel(Player player) {
+    public PlayerModel(OfflinePlayer player) {
         mojangId = player.getUniqueId().toString();
         lastKnownName = player.getName();
         lastLoginTime = System.currentTimeMillis();
@@ -69,8 +69,8 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
             family = Family.NEUTRAL;
 
             // Empty deities
-            god = Optional.empty();
-            hero = Optional.empty();
+            primary = Optional.empty();
+            secondary = Optional.empty();
         }
 
         maxHealth = 20.0;
@@ -95,19 +95,19 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
         if (conf.getStringList("shrine_warps") != null) {
             shrineWarps.addAll(conf.getStringList("shrine_warps"));
         }
-        god = Optional.ofNullable(DGData.DEITY_R.deityFromName(conf.getStringNullable("god")));
-        hero = Optional.ofNullable(DGData.DEITY_R.deityFromName(conf.getStringNullable("hero")));
+        primary = Optional.ofNullable(DGData.getDeity(conf.getStringNullable("primary")));
+        secondary = Optional.ofNullable(DGData.getDeity(conf.getStringNullable("secondary")));
         for (Object contractName : conf.getList("contracts", new ArrayList<>())) {
-            Deity contract = DGData.DEITY_R.deityFromName(contractName.toString());
+            Deity contract = DGData.getDeity(contractName.toString());
             if (contract != null) {
                 contracts.add(contract);
             }
         }
-        family = DGData.FAMILY_R.familyFromName(conf.getStringNullable("faction"));
+        family = DGData.getFamily(conf.getStringNullable("faction"));
         if (family == null) {
             family = Family.NEUTRAL;
         }
-        Map binds = conf.getSectionNullable("binds") != null ? (Map) conf.getSectionNullable("binds").getValues() : null;
+        Map binds = conf.isSection("binds") ? conf.getSectionNullable("binds") : null;
         if (binds != null) {
             this.binds.putAll(binds);
         }
@@ -115,7 +115,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
         favor = conf.getDouble("favor", 20.0);
         experience = new TIntDoubleHashMap(1);
         boolean expError = false;
-        for (Map.Entry<String, Object> entry : conf.getSectionNullable("devotion").getValues().entrySet()) {
+        for (Map.Entry<String, Object> entry : conf.getSectionNullable("devotion").entrySet()) {
             try {
                 experience.put(Integer.valueOf(entry.getKey()), Double.valueOf(entry.getValue().toString()));
             } catch (Exception ignored) {
@@ -134,12 +134,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
     }
 
     @Override
-    public Type getType() {
-        return Type.PERSISTENT;
-    }
-
-    @Override
-    public String getPersistentId() {
+    public String getKey() {
         return mojangId;
     }
 
@@ -150,11 +145,11 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
         map.put("last_login_time", lastLoginTime);
         map.put("aspects", Lists.newArrayList(aspects));
         map.put("shrine_warps", Lists.newArrayList(shrineWarps));
-        if (god.isPresent()) {
-            map.put("god", god.get().getName());
+        if (primary.isPresent()) {
+            map.put("primary", primary.get().getName());
         }
-        if (hero.isPresent()) {
-            map.put("hero", hero.get().getName());
+        if (secondary.isPresent()) {
+            map.put("secondary", secondary.get().getName());
         }
         map.put("contracts", contracts.stream().map(Deity::getName).collect(Collectors.toList()));
         map.put("faction", family.getName());
@@ -221,12 +216,12 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
     }
 
     public void addShrineWarp(ShrineModel model) {
-        shrineWarps.add(model.getPersistentId());
+        shrineWarps.add(model.getKey());
         DGData.PLAYER_R.register(this);
     }
 
     public void removeShrineWarp(ShrineModel model) {
-        shrineWarps.remove(model.getPersistentId());
+        shrineWarps.remove(model.getKey());
         DGData.PLAYER_R.register(this);
     }
 
@@ -247,28 +242,28 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
 
     public void setGod(Deity god) {
         if (DeityType.GOD.equals(god.getDeityType())) {
-            this.god = Optional.ofNullable(god);
+            this.primary = Optional.ofNullable(god);
             DGData.PLAYER_R.register(this);
         } else {
-            throw new IllegalArgumentException("Cannot set a non-god deity as a god.");
+            throw new IllegalArgumentException("Cannot set a non-primary deity as a primary.");
         }
     }
 
     public void setHero(Deity hero) {
         if (DeityType.HERO.equals(hero.getDeityType())) {
-            this.hero = Optional.ofNullable(hero);
+            this.secondary = Optional.ofNullable(hero);
             DGData.PLAYER_R.register(this);
         } else {
-            throw new IllegalArgumentException("Cannot set a non-hero deity as a hero.");
+            throw new IllegalArgumentException("Cannot set a non-secondary deity as a secondary.");
         }
     }
 
     public Optional<Deity> getGod() {
-        return god;
+        return primary;
     }
 
     public Optional<Deity> getHero() {
-        return hero;
+        return secondary;
     }
 
     public List<Deity> getContracts() {
@@ -284,7 +279,9 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
     }
 
     public boolean hasDeity(Deity deity) {
-        return god.isPresent() && god.get().equals(deity) || hero.isPresent() && hero.get().equals(deity) || contracts.contains(deity);
+        return primary.isPresent() && primary.get().equals(deity) ||
+                secondary.isPresent() && secondary.get().equals(deity) ||
+                contracts.contains(deity);
     }
 
     public double getMaxHealth() {
@@ -469,7 +466,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
     }
 
     public boolean isDemigod() {
-        return hero != null && god != null;
+        return secondary != null && primary != null;
     }
 
     public boolean hasAspect(Aspect aspect) {
@@ -498,12 +495,12 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
         // Get the deities
         List<Deity> deities = new ArrayList<>(contracts);
 
-        // Add hero and god tot he deity list
-        if (hero.isPresent()) {
-            deities.add(hero.get());
+        // Add secondary and primary tot he deity list
+        if (secondary.isPresent()) {
+            deities.add(secondary.get());
         }
-        if (god.isPresent()) {
-            deities.add(god.get());
+        if (primary.isPresent()) {
+            deities.add(primary.get());
         }
 
         // For each deity, find the groups
@@ -517,20 +514,18 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
     public List<Aspect> getPotentialAspects(Aspect.Group group, boolean alwaysIncludeHero) {
         List<Aspect> aspects = new ArrayList<>();
         Optional<Aspect> heroAspect = Groups.heroAspectInGroup(group);
-        if (hero.isPresent() && hero.get().getAspectGroups().contains(group) && heroAspect.isPresent()) {
+        if (secondary.isPresent() && secondary.get().getAspectGroups().contains(group) && heroAspect.isPresent()) {
             aspects.add(heroAspect.get());
         }
         List<Deity> gods = new ArrayList<>(contracts);
-        if (god.isPresent()) {
-            gods.add(god.get());
+        if (primary.isPresent()) {
+            gods.add(primary.get());
         }
         for (Deity deity : gods) {
             if (deity.getAspectGroups().contains(group)) {
                 if (alwaysIncludeHero) {
                     List<Aspect> allAspects = Groups.aspectsInGroup(group);
-                    if (heroAspect.isPresent()) {
-                        allAspects.remove(heroAspect.get());
-                    }
+                    heroAspect.ifPresent(allAspects::remove);
                     aspects.addAll(allAspects);
                 } else {
                     aspects.addAll(Groups.godAspectsInGroup(group));
@@ -584,7 +579,8 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
                     player.sendMessage(ChatColor.RED + "Your former faction has just excommunicated you.");
                     player.sendMessage(ChatColor.RED + "You will no longer respawn at the faction spawn.");
                     // player.sendMessage(ChatColor.RED + "You have lost " +
-                    //         ChatColor.GOLD + DecimalFormat.getCurrencyInstance().format(former - getTotalExperience()) +
+                    //         ChatColor.GOLD + DecimalFormat.getCurrencyInstance().format(former -
+                    // getTotalExperience()) +
                     //         ChatColor.RED + " experience.");
                     // player.sendMessage(ChatColor.YELLOW + "To join a faction, "); // TODO
                 }
@@ -596,7 +592,7 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
 
     public void giveHeroAspect(Deity hero, Aspect aspect) {
         giveAspect(aspect);
-        setFamily(hero.getFamilies().get(0));
+        setFamily(hero.getFamily());
         setMaxHealth(25.0);
         setLevel(1);
         setExperience(aspect, 20.0, true);
@@ -613,14 +609,15 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
     }
 
     public boolean canContract(Deity deity) {
-        return Setting.NO_FACTION_CONTRACT_MODE || deity.getFamilies().contains(family);
+        return Setting.NO_FACTION_CONTRACT_MODE || deity.getFamily().equals(family);
     }
 
     public void calculateAscensions(boolean announce) {
         Player player = getOfflinePlayer().getPlayer();
         if (getLevel() >= Setting.ASCENSION_CAP) return;
         boolean did = false;
-        while (getTotalExperience() >= (int) Math.ceil(500 * Math.pow(getLevel() + 1, 2.02)) && getLevel() < Setting.ASCENSION_CAP) {
+        while (getTotalExperience() >= (int) Math.ceil(500 * Math.pow(getLevel() + 1, 2.02)) &&
+                getLevel() < Setting.ASCENSION_CAP) {
             did = true;
             setMaxHealth(getMaxHealth() + 10.0);
             player.setMaxHealth(getMaxHealth());
@@ -631,7 +628,8 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
             setLevel(getLevel() + 1);
         }
         if (did && announce) {
-            player.sendMessage(ChatColor.AQUA + "Congratulations! Your Ascensions have increased to " + getLevel() + ".");
+            player.sendMessage(
+                    ChatColor.AQUA + "Congratulations! Your Ascensions have increased to " + getLevel() + ".");
             player.sendMessage(ChatColor.YELLOW + "Your maximum HP has increased to " + getMaxHealth() + ".");
         }
         DGData.PLAYER_R.register(this);
@@ -709,8 +707,8 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
         family = Family.NEUTRAL;
 
         // Empty deities
-        god = Optional.empty();
-        hero = Optional.empty();
+        primary = Optional.empty();
+        secondary = Optional.empty();
 
         // Reset stats
         maxHealth = 20.0;
@@ -733,26 +731,25 @@ public class PlayerModel extends AbstractPersistentModel<String> implements Abil
 
     private void handleDemo() {
         // Debug deities
-        god = Optional.of(Demo.D.LOREM);
+        primary = Optional.of(Norse.ODIN);
+        family = Norse.ODIN.getFamily();
 
         // Debug aspects
         int roll = RandomUtil.generateIntRange(0, 2);
         if (roll == 0) {
-            hero = Optional.of(Demo.D.IPSUM);
-            family = Demo.D.IPSUM.getFamilies().get(0);
+            secondary = Optional.of(Norse.VIDAR);
             addAspect(Aspects.BLOODLUST_ASPECT_HERO);
             setExperience(Aspects.BLOODLUST_ASPECT_HERO, 1000, false);
         } else if (roll == 1) {
-            hero = Optional.of(Demo.D.DOLOR);
-            family = Demo.D.DOLOR.getFamilies().get(0);
-            addAspect(Aspects.MAGNETISM_ASPECT_HERO);
-            setExperience(Aspects.MAGNETISM_ASPECT_HERO, 5000, false);
-        } else {
-            god = Optional.of(Demo.D.SIT);
-            hero = Optional.of(Demo.D.AMET);
-            family = Demo.D.AMET.getFamilies().get(0);
+            secondary = Optional.of(Norse.ELF);
             addAspect(Aspects.WATER_ASPECT_HERO);
-            setExperience(Aspects.WATER_ASPECT_HERO, 1000, false);
+            setExperience(Aspects.WATER_ASPECT_HERO, 5000, false);
+        } else {
+            primary = Optional.of(Norse.HEL);
+            secondary = Optional.of(Norse.THYRMR);
+            family = Norse.HEL.getFamily();
+            addAspect(Aspects.BLOODLUST_ASPECT_HERO);
+            setExperience(Aspects.BLOODLUST_ASPECT_HERO, 1000, false);
         }
     }
 }

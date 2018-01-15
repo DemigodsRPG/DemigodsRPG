@@ -26,7 +26,8 @@ public class ZoneUtil {
         ENABLED_WORLDS.addAll(enabledWorlds);
 
         // Init WorldGuard stuff
-        WorldGuardUtil.setWhenToOverridePVP(plugin, event -> event instanceof EntityDamageByEntityEvent && !inNoDGZone(((EntityDamageByEntityEvent) event).getEntity().getLocation()));
+        WorldGuardUtil.setWhenToOverridePVP(plugin, event -> event instanceof EntityDamageByEntityEvent &&
+                !inNoDGZone(((EntityDamageByEntityEvent) event).getEntity().getLocation()));
 
         return erroredWorlds;
     }
@@ -38,7 +39,8 @@ public class ZoneUtil {
      * @return true/false depending on if it's a no-PVP zone or not.
      */
     public static boolean inNoPvpZone(Location location) {
-        return !PLUGIN_CONFIG.getBoolean("zones.allow_skills_anywhere") && WorldGuardUtil.worldGuardEnabled() && !WorldGuardUtil.canPVP(location);
+        return !PLUGIN_CONFIG.getBoolean("zones.allow_skills_anywhere") && WorldGuardUtil.worldGuardEnabled() &&
+                !WorldGuardUtil.canPVP(location);
     }
 
     public static boolean inNoDGZone(Location location) {

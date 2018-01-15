@@ -4,15 +4,15 @@ import com.demigodsrpg.DGData;
 import com.demigodsrpg.deity.Deity;
 import com.demigodsrpg.family.Family;
 import com.demigodsrpg.shrine.Shrine;
-import com.demigodsrpg.util.datasection.AbstractPersistentModel;
 import com.demigodsrpg.util.datasection.DataSection;
+import com.demigodsrpg.util.datasection.Model;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ShrineModel extends AbstractPersistentModel<String> {
+public class ShrineModel implements Model {
     private final String shrineId;
     private final String ownerMojangId;
     private final Deity deity;
@@ -30,7 +30,7 @@ public class ShrineModel extends AbstractPersistentModel<String> {
     public ShrineModel(String shrineId, DataSection conf) {
         this.shrineId = shrineId;
         ownerMojangId = conf.getString("owner_id");
-        deity = DGData.DEITY_R.deityFromName(conf.getString("deity"));
+        deity = DGData.getDeity(conf.getString("deity"));
         shrine = Shrine.valueOf(conf.getString("type"));
 
         World world = Bukkit.getWorld(conf.getString("world_name"));
@@ -86,7 +86,7 @@ public class ShrineModel extends AbstractPersistentModel<String> {
     }
 
     @Override
-    public String getPersistentId() {
+    public String getKey() {
         return shrineId;
     }
 }

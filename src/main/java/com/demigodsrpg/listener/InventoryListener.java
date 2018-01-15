@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+import java.util.Optional;
+
 public class InventoryListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -25,7 +27,8 @@ public class InventoryListener implements Listener {
                 int count = Integer.parseInt(event.getInventory().getName().split(" ")[2]);
                 ShrineGUI gui = new ShrineGUI(player);
                 String function = gui.getFunction(event.getSlot());
-                if (!SlotFunction.NO_FUNCTION.equals(function) && event.getCurrentItem() != null && !event.getCurrentItem().getType().equals(Material.AIR)) {
+                if (!SlotFunction.NO_FUNCTION.equals(function) && event.getCurrentItem() != null &&
+                        !event.getCurrentItem().getType().equals(Material.AIR)) {
                     event.setCancelled(true);
                     switch (function) {
                         case SlotFunction.NEXT_PAGE:
@@ -36,10 +39,10 @@ public class InventoryListener implements Listener {
                             break;
                         case SlotFunction.WARP:
                             String shrineId = event.getCurrentItem().getItemMeta().getDisplayName();
-                            ShrineModel model = DGData.SHRINE_R.fromId(shrineId);
-                            if (model != null) {
+                            Optional<ShrineModel> opModel = DGData.SHRINE_R.fromKey(shrineId);
+                            if (opModel.isPresent()) {
                                 player.closeInventory();
-                                player.teleport(model.getSafeTeleport());
+                                player.teleport(opModel.get().getSafeTeleport());
                                 player.sendMessage(ChatColor.YELLOW + "You have warped to " + shrineId + ".");
                             } else {
                                 player.closeInventory();
@@ -57,7 +60,8 @@ public class InventoryListener implements Listener {
                 int count = Integer.parseInt(event.getInventory().getName().split(" ")[2]);
                 AspectGUI gui = new AspectGUI(player);
                 String function = gui.getFunction(event.getSlot());
-                if (!SlotFunction.NO_FUNCTION.equals(function) && event.getCurrentItem() != null && !event.getCurrentItem().getType().equals(Material.AIR)) {
+                if (!SlotFunction.NO_FUNCTION.equals(function) && event.getCurrentItem() != null &&
+                        !event.getCurrentItem().getType().equals(Material.AIR)) {
                     event.setCancelled(true);
                     switch (function) {
                         case SlotFunction.NEXT_PAGE:

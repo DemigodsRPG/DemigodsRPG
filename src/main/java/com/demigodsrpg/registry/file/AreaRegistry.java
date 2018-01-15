@@ -1,4 +1,4 @@
-package com.demigodsrpg.registry.config;
+package com.demigodsrpg.registry.file;
 
 
 import com.demigodsrpg.area.*;
@@ -11,11 +11,10 @@ import java.util.stream.Collectors;
 
 public class AreaRegistry extends AbstractConfigRegistry<Area> {
     private final World WORLD;
-    private final String FILE_NAME;
 
     public AreaRegistry(World world) {
+        super(world.getName() + ".areas");
         WORLD = world;
-        FILE_NAME = world.getName() + ".areas";
     }
 
     public World getWorld() {
@@ -23,28 +22,19 @@ public class AreaRegistry extends AbstractConfigRegistry<Area> {
     }
 
     @Override
-    public Area valueFromData(String stringKey, DataSection data) {
-        String areaType = stringKey.split("\\$")[0];
+    public Area fromDataSection(String key, DataSection section) {
+        String areaType = key.split("\\$")[0];
         if ("faction".equals(areaType)) {
-            return new FamilyTerritory(stringKey, data);
+            return new FamilyTerritory(key, section);
         } else if ("claimroom".equals(areaType)) {
-            return new ClaimRoom(stringKey, data);
+            return new ClaimRoom(key, section);
         }
         throw new NullPointerException("There is no area of type \"" + areaType + ".\"");
     }
 
-    @Override
-    public String getName() {
-        return FILE_NAME;
-    }
-
     public List<Area> fromLocation(final Location location) {
-        return getRegistered().parallelStream().filter(area -> area.contains(location)).collect(Collectors.toList());
-    }
-
-    @Override
-    protected boolean isPretty() {
-        return true;
+        return REGISTERED_DATA.asMap().values().parallelStream().filter(area -> area.contains(location))
+                .collect(Collectors.toList());
     }
 }
 

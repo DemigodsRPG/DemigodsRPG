@@ -42,7 +42,8 @@ public class WaterAspectHero implements Aspect {
         return "Soul of the Sea";
     }
 
-    @Ability(name = "Swim", info = "Swim like quickly poseidon through the water.", type = Ability.Type.SUPPORT, placeholder = true)
+    @Ability(name = "Swim", info = "Swim like quickly poseidon through the water.", type = Ability.Type.SUPPORT,
+            placeholder = true)
     public void swimAbility() {
         // Do nothing, handled directly in the ability listener to save time
     }

@@ -55,7 +55,8 @@ public class AbilityListener implements Listener {
             }
 
             if (DGData.PLAYER_R.hasAspect(player, Aspects.FIRE_ASPECT_I)) {
-                if (EntityDamageEvent.DamageCause.FIRE.equals(event.getCause()) || EntityDamageEvent.DamageCause.FIRE_TICK.equals(event.getCause())) {
+                if (EntityDamageEvent.DamageCause.FIRE.equals(event.getCause()) ||
+                        EntityDamageEvent.DamageCause.FIRE_TICK.equals(event.getCause())) {
                     event.setCancelled(true);
                     player.setRemainingAir(player.getMaximumAir());
                 }
@@ -67,7 +68,9 @@ public class AbilityListener implements Listener {
     private void onEvent(FurnaceSmeltEvent event) {
         for (PlayerModel model : DGData.PLAYER_R.fromAspect(Aspects.CRAFTING_ASPECT_I)) {
             try {
-                if (model.getOnline() && model.getLocation().getWorld().equals(event.getBlock().getWorld()) && model.getLocation().distance(event.getBlock().getLocation()) < (int) Math.round(20 * Math.pow(model.getExperience(Aspects.CRAFTING_ASPECT_I), 0.15))) {
+                if (model.getOnline() && model.getLocation().getWorld().equals(event.getBlock().getWorld()) &&
+                        model.getLocation().distance(event.getBlock().getLocation()) <
+                                (int) Math.round(20 * Math.pow(model.getExperience(Aspects.CRAFTING_ASPECT_I), 0.15))) {
                     int amount = event.getResult().getAmount() * 2;
                     ItemStack out = event.getResult();
                     out.setAmount(amount);
@@ -92,8 +95,11 @@ public class AbilityListener implements Listener {
 
         if (DGData.PLAYER_R.hasAspect(player, Aspects.WATER_ASPECT_HERO)) {
             Material locationMaterial = player.getLocation().getBlock().getType();
-            if (player.isSneaking() && (locationMaterial.equals(Material.STATIONARY_WATER) || locationMaterial.equals(Material.WATER))) {
-                Vector victor = (player.getPassenger() != null && player.getLocation().getDirection().getY() > 0 ? player.getLocation().getDirection().clone().setY(0) : player.getLocation().getDirection()).normalize().multiply(1.3D);
+            if (player.isSneaking() &&
+                    (locationMaterial.equals(Material.STATIONARY_WATER) || locationMaterial.equals(Material.WATER))) {
+                Vector victor = (player.getPassenger() != null && player.getLocation().getDirection().getY() > 0 ?
+                        player.getLocation().getDirection().clone().setY(0) : player.getLocation().getDirection())
+                        .normalize().multiply(1.3D);
                 player.setVelocity(victor);
             }
         }

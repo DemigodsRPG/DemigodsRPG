@@ -63,7 +63,8 @@ public class AspectGUI implements InventoryGUI {
                 if (!model.hasPrereqs(aspect)) {
                     lore.add(ChatColor.GRAY + "You don't have the prereqs for this aspect.");
                 } else if (model.getLevel() < model.costForNextAspect()) {
-                    lore.add(ChatColor.GRAY + "You need " + model.costForNextAspect() + " ascensions to claim a new aspect.");
+                    lore.add(ChatColor.GRAY + "You need " + model.costForNextAspect() +
+                            " ascensions to claim a new aspect.");
                 }
                 meta.setLore(lore);
                 item.setItemMeta(meta);

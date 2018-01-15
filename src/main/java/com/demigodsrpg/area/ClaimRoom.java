@@ -22,10 +22,11 @@ public class ClaimRoom extends Area {
 
     public ClaimRoom(String id, DataSection conf) {
         super(AreaPriority.valueOf(conf.getString("priority")), new ArrayList<Location>() {{
-            addAll(conf.getStringList("locations").stream().map(LocationUtil::locationFromString).collect(Collectors.toList()));
+            addAll(conf.getStringList("locations").stream().map(LocationUtil::locationFromString)
+                    .collect(Collectors.toList()));
         }});
         this.uuid = id.split("\\$")[2];
-        this.deity = DGData.DEITY_R.deityFromName(id.split("\\$")[1]);
+        this.deity = DGData.getDeity(id.split("\\$")[1]);
 
         // Load next location if it exists
         if (conf.getSectionNullable("next-location") != null) {
@@ -55,7 +56,7 @@ public class ClaimRoom extends Area {
     }
 
     @Override
-    public String getPersistentId() {
+    public String getKey() {
         return "claimroom$" + deity.getName() + "$" + uuid;
     }
 

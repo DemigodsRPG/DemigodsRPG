@@ -51,7 +51,8 @@ public class WaterAspectI implements Aspect {
         return "Living Water";
     }
 
-    @Ability(name = "Drown", command = "drown", info = "Use the power of water for a stronger attack.", cost = 120, delay = 1500)
+    @Ability(name = "Drown", command = "drown", info = "Use the power of water for a stronger attack.", cost = 120,
+            delay = 1500)
     public AbilityResult drownAbility(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         PlayerModel model = DGData.PLAYER_R.fromPlayer(player);
@@ -63,7 +64,8 @@ public class WaterAspectI implements Aspect {
         if (hit != null) {
             player.sendMessage(ChatColor.AQUA + "*shploosh*");
             hit.damage(damage);
-            hit.setLastDamageCause(new EntityDamageByEntityEvent(player, hit, EntityDamageEvent.DamageCause.DROWNING, damage));
+            hit.setLastDamageCause(
+                    new EntityDamageByEntityEvent(player, hit, EntityDamageEvent.DamageCause.DROWNING, damage));
 
             if (hit.getLocation().getBlock().getType().equals(Material.AIR)) {
                 player.getWorld().spawnFallingBlock(hit.getLocation(), Material.WATER, (byte) 0);

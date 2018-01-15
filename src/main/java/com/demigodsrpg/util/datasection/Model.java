@@ -1,10 +1,9 @@
 package com.demigodsrpg.util.datasection;
 
-public interface Model<P> {
-    Type getType();
+import java.util.Map;
 
-    // -- ENUMS -- //
-    enum Type {
-        TRANSIENT, PERSISTENT
-    }
+public interface Model {
+    String getKey();
+
+    Map<String, Object> serialize();
 }

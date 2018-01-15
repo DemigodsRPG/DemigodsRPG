@@ -2,8 +2,8 @@ package com.demigodsrpg.model;
 
 import com.demigodsrpg.DGData;
 import com.demigodsrpg.registry.TributeRegistry;
-import com.demigodsrpg.util.datasection.AbstractPersistentModel;
 import com.demigodsrpg.util.datasection.DataSection;
+import com.demigodsrpg.util.datasection.Model;
 import com.demigodsrpg.util.misc.MapUtil2;
 import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -11,7 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class TributeModel extends AbstractPersistentModel<String> {
+public class TributeModel implements Model {
     private static final double VALUE_K = 14.286;
     private static double OFFSET = 1.0;
 
@@ -81,7 +81,7 @@ public class TributeModel extends AbstractPersistentModel<String> {
         } else if (getCategory().equals(TributeRegistry.Category.CHEATING)) {
             lastKnownValue = -3000.0;
         } else {
-            lastKnownValue = (getValuePercentage() / OFFSET) * VALUE_K * DGData.TRIBUTE_R.getRegistered().size();
+            lastKnownValue = (getValuePercentage() / OFFSET) * VALUE_K * DGData.TRIBUTE_R.getRegisteredData().size();
         }
         DGData.TRIBUTE_R.register(this);
     }
@@ -120,7 +120,7 @@ public class TributeModel extends AbstractPersistentModel<String> {
     }
 
     @Override
-    public String getPersistentId() {
+    public String getKey() {
         return getMaterial().name();
     }
 
@@ -128,14 +128,15 @@ public class TributeModel extends AbstractPersistentModel<String> {
         @Override
         public void run() {
             OFFSET = 1.0;
-            for (TributeModel model : DGData.TRIBUTE_R.getRegistered()) {
+            for (TributeModel model : DGData.TRIBUTE_R.getRegisteredData().values()) {
                 OFFSET += model.getValuePercentage();
             }
 
-            for (TributeModel model : DGData.TRIBUTE_R.getRegistered()) {
+            for (TributeModel model : DGData.TRIBUTE_R.getRegisteredData().values()) {
                 // Trim the tribute times
                 if (model.tributeTimes.size() > 300) {
-                    model.tributeTimes = model.tributeTimes.subList(model.tributeTimes.size() - 31, model.tributeTimes.size() - 1);
+                    model.tributeTimes =
+                            model.tributeTimes.subList(model.tributeTimes.size() - 31, model.tributeTimes.size() - 1);
                 }
 
                 // Update the value

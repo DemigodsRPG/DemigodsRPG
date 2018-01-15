@@ -43,7 +43,8 @@ public class CraftingAspectI implements Aspect {
 
     // -- ABILITIES -- //
 
-    @Ability(name = "Furnace Love", info = {"Doubles the output of nearby furnaces."}, type = Ability.Type.PASSIVE, placeholder = true)
+    @Ability(name = "Furnace Love", info = {"Doubles the output of nearby furnaces."}, type = Ability.Type.PASSIVE,
+            placeholder = true)
     public void furnaceLoveAbility() {
         // Do nothing, handled directly in the ability listener to save time
     }

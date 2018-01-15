@@ -53,7 +53,8 @@ public class LightningAspectI implements Aspect {
 
     // -- ABILITIES -- //
 
-    @Ability(name = "Lightning", command = "lightning", info = "Strike lightning at a target location.", cost = 140, delay = 1000)
+    @Ability(name = "Lightning", command = "lightning", info = "Strike lightning at a target location.", cost = 140,
+            delay = 1000)
     public AbilityResult lightningAbility(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
@@ -88,14 +89,18 @@ public class LightningAspectI implements Aspect {
                 LivingEntity livingEntity = (LivingEntity) entity;
                 if (livingEntity.equals(player)) continue;
                 double damage = 10 * model.getLevel();
-                if ((toHit.getBlock().getType().equals(Material.WATER) || toHit.getBlock().getType().equals(Material.STATIONARY_WATER)) && livingEntity.getLocation().distance(toHit) < 8) {
+                if ((toHit.getBlock().getType().equals(Material.WATER) ||
+                        toHit.getBlock().getType().equals(Material.STATIONARY_WATER)) &&
+                        livingEntity.getLocation().distance(toHit) < 8) {
                     damage += 4;
                     livingEntity.damage(damage);
-                    entity.setLastDamageCause(new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.LIGHTNING, damage));
+                    entity.setLastDamageCause(
+                            new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.LIGHTNING, damage));
                 } else if (livingEntity.getLocation().distance(toHit) < 2) {
                     damage += 3;
                     livingEntity.damage(damage);
-                    entity.setLastDamageCause(new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.LIGHTNING, damage));
+                    entity.setLastDamageCause(
+                            new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.LIGHTNING, damage));
                 }
             }
         }

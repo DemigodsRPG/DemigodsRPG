@@ -9,7 +9,7 @@ import com.demigodsrpg.deity.Deity;
 import com.demigodsrpg.deity.DeityType;
 import com.demigodsrpg.family.Family;
 import com.demigodsrpg.model.PlayerModel;
-import com.demigodsrpg.registry.config.AreaRegistry;
+import com.demigodsrpg.registry.file.AreaRegistry;
 import com.demigodsrpg.util.ZoneUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.apache.commons.lang.StringUtils;
@@ -50,7 +50,8 @@ public class AreaListener implements Listener {
                     if (area instanceof FamilyTerritory) {
                         // Handle the faction territory, check if it should cancel the event
                         FamilyTerritory factionArea = (FamilyTerritory) area;
-                        if (!handleFactionAreas(factionArea, event.getPlayer(), event.getTo(), !(event instanceof PlayerTeleportEvent))) {
+                        if (!handleFactionAreas(factionArea, event.getPlayer(), event.getTo(),
+                                !(event instanceof PlayerTeleportEvent))) {
                             // Cancel the event
                             event.setCancelled(true);
 
@@ -83,7 +84,9 @@ public class AreaListener implements Listener {
         if (!family.equals(model.getFamily()) && !model.getAdminMode()) {
             // Throttle the warning message
             if (!DGData.SERVER_R.contains(model.getMojangId(), "faction-area")) {
-                player.sendMessage(ChatColor.RED + "You are not a member of the " + family.getColor() + family.getName() + org.bukkit.ChatColor.RED + " faction.");
+                player.sendMessage(
+                        ChatColor.RED + "You are not a member of the " + family.getColor() + family.getName() +
+                                org.bukkit.ChatColor.RED + " faction.");
                 DGData.SERVER_R.put(model.getMojangId(), "faction-area", false, 4, TimeUnit.SECONDS);
             }
 
@@ -120,13 +123,14 @@ public class AreaListener implements Listener {
         switch (deity.getDeityType()) {
             case HERO:
                 model.setHero(deity);
-                endMessage += deity.getFamilies().get(0).getColor() + deity.getName() + ChatColor.YELLOW + " as your parent Hero.";
+                endMessage += deity.getFamily().getColor() + deity.getName() + ChatColor.YELLOW +
+                        " as your parent Hero.";
                 break;
             case GOD:
                 model.setGod(deity);
                 String color = ChatColor.WHITE.toString();
                 if (model.getHero().isPresent()) {
-                    color = model.getHero().get().getFamilies().get(0).getColor();
+                    color = model.getHero().get().getFamily().getColor();
                 }
                 endMessage += color + deity.getName() + ChatColor.YELLOW + " as your parent God.";
                 break;
@@ -142,7 +146,9 @@ public class AreaListener implements Listener {
                 // Hero aspect
                 if (DeityType.HERO.equals(deity.getDeityType()) && Aspect.Tier.HERO.equals(aspect.getTier())) {
                     model.giveHeroAspect(deity, aspect);
-                    player.sendMessage(ChatColor.YELLOW + StringUtils.capitalize(deity.getPronouns()[0]) + " has placed you in the " + deity.getFamilies().get(0).getColor() + deity.getFamilies().get(0).getName() + ChatColor.YELLOW + " faction.");
+                    player.sendMessage(ChatColor.YELLOW + StringUtils.capitalize(deity.getPronouns()[0]) +
+                            " has placed you in the " + deity.getFamily().getColor() +
+                            deity.getFamily().getName() + ChatColor.YELLOW + " faction.");
                     break;
                 }
 

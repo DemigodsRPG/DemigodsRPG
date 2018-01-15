@@ -19,13 +19,15 @@ public class SetFamilyCommand extends AdminPlayerCommand {
         if (DGData.PLAYER_R.fromPlayer((Player) sender).getAdminMode()) {
             if (args.length == 2) {
                 PlayerModel player = DGData.PLAYER_R.fromName(args[0]);
-                Family family = DGData.FAMILY_R.familyFromName(args[1].toUpperCase());
+                Family family = DGData.getFamily(args[1].toUpperCase());
                 if (player == null || family == null) {
                     sender.sendMessage(ChatColor.RED + "Wrong player or faction! Please try a little harder.");
                     return CommandResult.QUIET_ERROR;
                 }
                 player.setFamily(family);
-                sender.sendMessage(ChatColor.YELLOW + player.getLastKnownName() + " has been set to the " + family.getName() + " faction.");
+                sender.sendMessage(
+                        ChatColor.YELLOW + player.getLastKnownName() + " has been set to the " + family.getName() +
+                                " faction.");
                 return CommandResult.SUCCESS;
             }
             return CommandResult.INVALID_SYNTAX;

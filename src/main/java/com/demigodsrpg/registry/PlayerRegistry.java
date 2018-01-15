@@ -6,6 +6,7 @@ import com.demigodsrpg.deity.Deity;
 import com.demigodsrpg.family.Family;
 import com.demigodsrpg.model.PlayerModel;
 import com.demigodsrpg.util.datasection.DataSection;
+import com.demigodsrpg.util.datasection.Registry;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -14,35 +15,45 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class PlayerRegistry extends AbstractDemigodsDataRegistry<PlayerModel> implements AbilityCasterProvider {
-    private static final String FILE_NAME = "players";
+public interface PlayerRegistry extends Registry<PlayerModel>, AbilityCasterProvider {
+    String NAME = "players";
 
     @Deprecated
-    public PlayerModel fromName(final String name) {
-        Optional<PlayerModel> player = getRegistered().stream().filter(model -> model.getLastKnownName().equalsIgnoreCase(name)).findFirst();
-        if (player.isPresent()) {
-            return player.get();
+    default PlayerModel fromName(final String name) {
+        Optional<PlayerModel> player =
+                getRegisteredData().values().stream().filter(model -> model.getLastKnownName().equalsIgnoreCase(name))
+                        .findFirst();
+        return player.orElse(null);
+    }
+
+    default PlayerModel fromPlayer(OfflinePlayer player) {
+        Optional<PlayerModel> found = fromKey(player.getUniqueId().toString());
+        if (!found.isPresent()) {
+            PlayerModel model = new PlayerModel(player);
+            return register(model);
         }
-        return null;
+        return found.get();
     }
 
-    public PlayerModel fromPlayer(Player player) {
-        PlayerModel found = fromId(player.getUniqueId().toString());
-        if (found == null) {
-            found = new PlayerModel(player);
-            register(found);
-        }
-        return found;
+    @Deprecated
+    default PlayerModel fromId(UUID id) {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(id);
+        return fromPlayer(player);
     }
 
-    public Set<OfflinePlayer> getOfflinePlayers() {
-        return getRegistered().stream().map(PlayerModel::getOfflinePlayer).collect(Collectors.toSet());
+    @Deprecated
+    default PlayerModel fromId(String id) {
+        return fromId(UUID.fromString(id));
     }
 
-    public Set<PlayerModel> getOnlineInAlliance(Family family) {
+    default Set<OfflinePlayer> getOfflinePlayers() {
+        return getRegisteredData().values().stream().map(PlayerModel::getOfflinePlayer).collect(Collectors.toSet());
+    }
+
+    default Set<PlayerModel> getOnlineInAlliance(Family family) {
         Set<PlayerModel> players = new HashSet<>();
         for (Player player : Bukkit.getOnlinePlayers()) {
-            PlayerModel model = fromPlayer(player);
+            PlayerModel model = (PlayerModel) fromPlayer(player);
             if (model.getFamily().equals(family)) {
                 players.add(model);
             }
@@ -50,30 +61,29 @@ public class PlayerRegistry extends AbstractDemigodsDataRegistry<PlayerModel> im
         return players;
     }
 
-    public Set<PlayerModel> fromDeity(Deity deity) {
-        return getRegistered().parallelStream().filter(model -> model.hasDeity(deity)).collect(Collectors.toSet());
+    default Set<PlayerModel> fromDeity(Deity deity) {
+        return getRegisteredData().values().parallelStream().filter(model -> model.hasDeity(deity))
+                .collect(Collectors.toSet());
     }
 
-    public List<PlayerModel> fromAspect(final Aspect aspect) {
-        return getRegistered().stream().filter(model -> model.getAspects().contains(aspect.name())).collect(Collectors.toList());
+    default List<PlayerModel> fromAspect(final Aspect aspect) {
+        return getRegisteredData().values().stream().filter(model -> model.getAspects().contains(aspect.name()))
+                .collect(Collectors.toList());
     }
 
-    public List<String> getNameStartsWith(final String name) {
-        return getRegistered().stream().filter(model -> TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - model.getLastLoginTime()) < 3
-                && model.getLastKnownName().toLowerCase().startsWith(name.toLowerCase())).map(PlayerModel::getLastKnownName).collect(Collectors.toList());
+    default List<String> getNameStartsWith(final String name) {
+        return getRegisteredData().values().stream()
+                .filter(model -> TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - model.getLastLoginTime()) < 3
+                        && model.getLastKnownName().toLowerCase().startsWith(name.toLowerCase()))
+                .map(PlayerModel::getLastKnownName).collect(Collectors.toList());
     }
 
-    public boolean hasAspect(Player player, Aspect aspect) {
+    default boolean hasAspect(Player player, Aspect aspect) {
         return fromPlayer(player).hasAspect(aspect);
     }
 
     @Override
-    public String getName() {
-        return FILE_NAME;
-    }
-
-    @Override
-    public PlayerModel valueFromData(String stringKey, DataSection data) {
+    default PlayerModel fromDataSection(String stringKey, DataSection data) {
         return new PlayerModel(stringKey, data);
     }
 }

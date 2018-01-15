@@ -16,9 +16,9 @@
     <properties> <!-- It is important to keep up to date manually. -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spigot.version>1.12.2-R0.1-SNAPSHOT</spigot.version>
+        <chitchat.version>2.1-SNAPSHOT</chitchat.version>
+        <mongodb.version>3.6.1</mongodb.version>
         <worldguard.version>6.1.1-SNAPSHOT</worldguard.version>
-        <iciql.version>2.1.1</iciql.version>
-        <psql.version>9.3-1103-jdbc41</psql.version>
         <evo.version>1.0.1</evo.version>
 
         <!-- Related -->
@@ -77,41 +77,6 @@
             <version>${chitchat.version}</version>
         </dependency>
 
-        <!-- Apache Lang -->
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
-        </dependency>
-
-        <!-- Guava -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>17.0</version>
-        </dependency>
-
-        <!-- Gson -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.3</version>
-        </dependency>
-
-        <!-- GNU Trove -->
-        <dependency>
-            <groupId>net.sf.trove4j</groupId>
-            <artifactId>trove4j</artifactId>
-            <version>3.0.3</version>
-        </dependency>
-
-        <!-- ICIQL -->
-        <dependency>
-            <groupId>com.gitblit.iciql</groupId>
-            <artifactId>iciql</artifactId>
-            <version>${iciql.version}</version>
-        </dependency>
-
         <!-- English Inflector -->
         <dependency>
             <groupId>org.atteo</groupId>
@@ -119,11 +84,18 @@
             <version>${evo.version}</version>
         </dependency>
 
-        <!-- PostgreSQL -->
+        <!-- MongoDB -->
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${psql.version}</version>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver</artifactId>
+            <version>${mongodb.version}</version>
+        </dependency>
+
+        <!-- Guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>17.0</version>
         </dependency>
 
         <!-- WorldGuard -->

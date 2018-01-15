@@ -30,7 +30,7 @@ public class CreateFamilyAreaCommand extends BaseCommand {
 
                         // Get territory info
                         List<Location> corners = selection.getPoints();
-                        Family family = DGData.FAMILY_R.familyFromName(args[0]);
+                        Family family = DGData.getFamily(args[0]);
 
                         // Does the faction exist?
                         if (family == null) {
@@ -49,7 +49,8 @@ public class CreateFamilyAreaCommand extends BaseCommand {
                             DGData.AREA_R.get(selection.getPoints().get(0).getWorld().getName()).register(territory);
 
                             // Notify the admin
-                            sender.sendMessage(ChatColor.YELLOW + "Faction territory for " + family.getName() + " has been created.");
+                            sender.sendMessage(ChatColor.YELLOW + "Faction territory for " + family.getName() +
+                                    " has been created.");
 
                             return CommandResult.SUCCESS;
                         } else {

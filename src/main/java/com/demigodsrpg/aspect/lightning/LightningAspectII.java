@@ -54,7 +54,8 @@ public class LightningAspectII implements Aspect {
 
     // -- ABILITIES -- //
 
-    @Ability(name = "Storm", command = "storm", info = "Strike fear into the hearts of your enemies.", cost = 3700, cooldown = 600000, type = Ability.Type.ULTIMATE)
+    @Ability(name = "Storm", command = "storm", info = "Strike fear into the hearts of your enemies.", cost = 3700,
+            cooldown = 600000, type = Ability.Type.ULTIMATE)
     public AbilityResult stormAbility(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
 
@@ -93,7 +94,9 @@ public class LightningAspectII implements Aspect {
                         } else {
                             ((LivingEntity) entity).damage(damage);
                         }
-                        entity.setLastDamageCause(new EntityDamageByEntityEvent(player, entity, EntityDamageEvent.DamageCause.LIGHTNING, damage));
+                        entity.setLastDamageCause(
+                                new EntityDamageByEntityEvent(player, entity, EntityDamageEvent.DamageCause.LIGHTNING,
+                                        damage));
                     }
                 }
             }, 15);

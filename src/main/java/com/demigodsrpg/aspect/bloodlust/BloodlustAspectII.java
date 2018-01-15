@@ -48,7 +48,9 @@ public class BloodlustAspectII implements Aspect {
         return "Bloodrage";
     }
 
-    @Ability(name = "Deathblow", command = "deathblow", info = "Deal massive amounts of damage, increasing with each kill.", cost = 3500, cooldown = 200000, type = Ability.Type.ULTIMATE)
+    @Ability(name = "Deathblow", command = "deathblow",
+            info = "Deal massive amounts of damage, increasing with each kill.", cost = 3500, cooldown = 200000,
+            type = Ability.Type.ULTIMATE)
     public AbilityResult deathblowAbility(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         PlayerModel model = DGData.PLAYER_R.fromPlayer(player);
@@ -59,10 +61,11 @@ public class BloodlustAspectII implements Aspect {
         final List<LivingEntity> targets = new ArrayList<LivingEntity>();
         final Location startloc = player.getLocation();
         for (LivingEntity e : player.getWorld().getLivingEntities()) {
-            if (e.getLocation().toVector().isInSphere(player.getLocation().toVector(), 35) && !targets.contains(e)) // jumps to the nearest entity
+            if (e.getLocation().toVector().isInSphere(player.getLocation().toVector(), 35) &&
+                    !targets.contains(e)) // jumps to the nearest entity
             {
-                if (e instanceof Player && DGData.PLAYER_R.fromPlayer((Player) e).getFamily().equals(model.getFamily()))
-                    continue;
+                if (e instanceof Player &&
+                        DGData.PLAYER_R.fromPlayer((Player) e).getFamily().equals(model.getFamily())) { continue; }
                 targets.add(e);
             }
         }

@@ -23,10 +23,9 @@ public class DGBukkitPlugin extends JavaPlugin {
         // Evo-inflector
         LIBRARIES.addMavenLibrary(LibraryHandler.MAVEN_CENTRAL, Depends.ORG_ATTEO, Depends.EVO, Depends.EVO_VER);
 
-        // PostgreSQL & Iciql Libs
-        if (getConfig().getBoolean("psql.use", false)) {
-            LIBRARIES.addMavenLibrary(LibraryHandler.MAVEN_CENTRAL, Depends.COM_ICIQL, Depends.ICIQL, Depends.ICIQL_VER);
-            LIBRARIES.addMavenLibrary(LibraryHandler.MAVEN_CENTRAL, Depends.ORG_PSQL, Depends.PSQL, Depends.PSQL_VER);
+        if (Setting.MONGODB_PERSISTENCE) {
+            LIBRARIES.addMavenLibrary(LibraryHandler.MAVEN_CENTRAL, Depends.ORG_MONGO, Depends.MONGODB,
+                    Depends.MONGODB_VER);
         }
 
         // Enable

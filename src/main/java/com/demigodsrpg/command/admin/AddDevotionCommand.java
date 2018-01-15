@@ -18,14 +18,18 @@ public class AddDevotionCommand extends AdminPlayerCommand {
                 Player p = DGData.PLAYER_R.fromName(args[0]).getOfflinePlayer().getPlayer();
                 double amount = Double.parseDouble(args[2]);
                 Aspect aspect = Aspects.valueOf(args[1].toUpperCase());
-                if (!DGData.PLAYER_R.fromPlayer(p).getAspects().contains(aspect.getGroup().getName() + " " + aspect.getTier().name())) {
+                if (!DGData.PLAYER_R.fromPlayer(p).getAspects()
+                        .contains(aspect.getGroup().getName() + " " + aspect.getTier().name())) {
                     sender.sendMessage(ChatColor.RED + "The player you are accessing does not have that aspect.");
                     return CommandResult.QUIET_ERROR;
                 }
 
-                DGData.PLAYER_R.fromPlayer(p).setExperience(aspect, DGData.PLAYER_R.fromPlayer(p).getExperience(aspect) + amount, true);
+                DGData.PLAYER_R.fromPlayer(p)
+                        .setExperience(aspect, DGData.PLAYER_R.fromPlayer(p).getExperience(aspect) + amount, true);
 
-                sender.sendMessage(ChatColor.YELLOW + "You added " + amount + " devotion to " + p.getName() + " to the " + aspect.getGroup().getName() + " " + aspect.getTier().name() + " aspect.");
+                sender.sendMessage(
+                        ChatColor.YELLOW + "You added " + amount + " devotion to " + p.getName() + " to the " +
+                                aspect.getGroup().getName() + " " + aspect.getTier().name() + " aspect.");
             } catch (Exception ignored) {
                 sender.sendMessage(ChatColor.RED + "Invalid syntax! /AddDevotion [Name, Aspect, Amount]");
                 return CommandResult.QUIET_ERROR;

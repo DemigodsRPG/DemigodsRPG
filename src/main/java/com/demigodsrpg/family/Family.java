@@ -1,13 +1,13 @@
 package com.demigodsrpg.family;
 
-import com.demigodsrpg.util.datasection.AbstractPersistentModel;
 import com.demigodsrpg.util.datasection.DataSection;
+import com.demigodsrpg.util.datasection.Model;
 import org.bukkit.ChatColor;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Family extends AbstractPersistentModel<String> {
+public class Family implements Model {
 
     // -- ALWAYS EXISTING FACTIONS -- //
 
@@ -61,7 +61,7 @@ public class Family extends AbstractPersistentModel<String> {
     }
 
     @Override
-    public String getPersistentId() {
+    public String getKey() {
         return name;
     }
 

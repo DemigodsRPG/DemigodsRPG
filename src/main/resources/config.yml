@@ -36,9 +36,16 @@ no_cost_aspect_mode: false
 no_faction_aspect_mode: false
 debug_data: false
 debug_invisible_walls: false
-psql:
+mongo:
   use: false
-  connection: 'postgresql://localhost:5432/demigods?user=demigods&password=demigods'
+  hostname: 127.0.0.1
+  port: 27017
+  database: demigods
+  username: demigods
+  password: demigods
+pantheon:
+  norse: true
+  greek: false
 #Deity specific
 #Ares
 #Hades

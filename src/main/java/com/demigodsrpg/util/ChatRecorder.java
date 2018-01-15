@@ -28,12 +28,14 @@ public class ChatRecorder {
     public List<String> stop() {
         HandlerList.unregisterAll(this.listener);
 
-        return Lists.newArrayList(Collections2.transform(lines.entrySet(), new Function<Map.Entry<Long, String>, String>() {
-            @Override
-            public String apply(Map.Entry<Long, String> entry) {
-                return ChatColor.GRAY + "[" + TimeUtil.getTimeTagged(entry.getKey(), true) + " ago]" + entry.getValue();
-            }
-        }));
+        return Lists
+                .newArrayList(Collections2.transform(lines.entrySet(), new Function<Map.Entry<Long, String>, String>() {
+                    @Override
+                    public String apply(Map.Entry<Long, String> entry) {
+                        return ChatColor.GRAY + "[" + TimeUtil.getTimeTagged(entry.getKey(), true) + " ago]" +
+                                entry.getValue();
+                    }
+                }));
     }
 
     public Listener getListener() {

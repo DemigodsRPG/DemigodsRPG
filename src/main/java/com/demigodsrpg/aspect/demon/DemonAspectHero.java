@@ -48,19 +48,22 @@ public class DemonAspectHero implements Aspect {
         return "Demonlord";
     }
 
-    @Ability(name = "Demon Friendlies", info = "Demon monsters will not attack you.", type = Ability.Type.PASSIVE, placeholder = true)
+    @Ability(name = "Demon Friendlies", info = "Demon monsters will not attack you.", type = Ability.Type.PASSIVE,
+            placeholder = true)
     public void friendlyAbility() {
         // Do nothing, handled directly in the ability listener to save time
     }
 
-    @Ability(name = "Curse", command = "curse", info = "Turns day to night as nothingness corrupts your enemies.", cost = 4000, cooldown = 600000, type = Ability.Type.ULTIMATE)
+    @Ability(name = "Curse", command = "curse", info = "Turns day to night as nothingness corrupts your enemies.",
+            cost = 4000, cooldown = 600000, type = Ability.Type.ULTIMATE)
     public AbilityResult curseAbility(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         PlayerModel model = DGData.PLAYER_R.fromPlayer(player);
 
         int amt = tartarus(player, model);
         if (amt > 0) {
-            player.sendMessage(ChatColor.DARK_RED + "Nothingness" + ChatColor.GRAY + " has corrupted " + amt + " enemies.");
+            player.sendMessage(
+                    ChatColor.DARK_RED + "Nothingness" + ChatColor.GRAY + " has corrupted " + amt + " enemies.");
             player.getWorld().setTime(18000);
             return AbilityResult.SUCCESS;
         } else {
@@ -73,7 +76,8 @@ public class DemonAspectHero implements Aspect {
         int range = (int) Math.round(18.83043 * Math.pow(m.getExperience(Aspects.DEMON_ASPECT_HERO), 0.088637));
         List<LivingEntity> entitylist = new ArrayList<>();
         for (Entity anEntity : p.getNearbyEntities(range, range, range)) {
-            if (anEntity instanceof Player && m.getFamily().equals(DGData.PLAYER_R.fromPlayer((Player) anEntity).getFamily())) {
+            if (anEntity instanceof Player &&
+                    m.getFamily().equals(DGData.PLAYER_R.fromPlayer((Player) anEntity).getFamily())) {
                 continue;
             }
             if (anEntity instanceof LivingEntity) {

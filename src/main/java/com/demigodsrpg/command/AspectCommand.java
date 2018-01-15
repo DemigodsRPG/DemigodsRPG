@@ -36,7 +36,9 @@ public class AspectCommand extends BaseCommand {
             // FIXME Display the deities not aspects
             player.sendMessage(ChatColor.YELLOW + StringUtil2.chatTitle("Aspect List"));
             for (Aspect aspect : Aspects.values()) {
-                player.sendMessage(" - " + aspect.getGroup().getColor() + aspect.name() + ": " + aspect.getInfo()[0] /* FIXME + " (" + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + ")" */);
+                player.sendMessage(" - " + aspect.getGroup().getColor() + aspect.name() + ": " +
+                        aspect.getInfo()[0] /* FIXME + " (" + StringUtil2.beautify(aspect.getDefaultAlliance().name()
+                        ) + ")" */);
             }
             return CommandResult.SUCCESS;
         }
@@ -78,7 +80,9 @@ public class AspectCommand extends BaseCommand {
                         // Check if the tier is I
                         else if (Aspect.Tier.I.equals(aspect.getTier())) {
                             // Pondering message
-                            player.sendMessage(aspect.getGroup().getColor() + aspect.getGroup().getName() + ChatColor.GRAY + " is pondering your choice...");
+                            player.sendMessage(
+                                    aspect.getGroup().getColor() + aspect.getGroup().getName() + ChatColor.GRAY +
+                                            " is pondering your choice...");
 
                             // Play scary sound
                             player.playSound(player.getLocation(), Sound.AMBIENT_CAVE, 0.6F, 1F);
@@ -94,18 +98,23 @@ public class AspectCommand extends BaseCommand {
                                     player.playSound(player.getLocation(), Sound.ENTITY_ENDERDRAGON_DEATH, 1F, 1F);
 
                                     // Message them and do cool things
-                                    // FIXME player.sendMessage(aspect.getColor() + "The " + StringUtil2.beautify(aspect.getDefaultAlliance().name()) + " faction welcomes you, " + aspect.getNomen() + ".");
+                                    // FIXME player.sendMessage(aspect.getColor() + "The " + StringUtil2.beautify
+                                    // (aspect.getDefaultAlliance().name()) + " faction welcomes you, " + aspect
+                                    // .getNomen() + ".");
                                     player.getWorld().strikeLightningEffect(player.getLocation());
 
                                     // Fancy particles
-                                    for (int i = 0; i < 20; i++)
+                                    for (int i = 0; i < 20; i++) {
                                         player.getWorld().spawn(player.getLocation(), ExperienceOrb.class);
+                                    }
                                 }
                             }, 60);
                         } else {
                             // Pondering message
                             // FIXME Display a more fitting message
-                            player.sendMessage(aspect.getGroup().getColor() + aspect.getGroup().getName() + ChatColor.GRAY + " is pondering your choice...");
+                            player.sendMessage(
+                                    aspect.getGroup().getColor() + aspect.getGroup().getName() + ChatColor.GRAY +
+                                            " is pondering your choice...");
 
                             // Play scary sound
                             player.playSound(player.getLocation(), Sound.AMBIENT_CAVE, 0.6F, 1F);
@@ -121,12 +130,14 @@ public class AspectCommand extends BaseCommand {
                                     player.playSound(player.getLocation(), Sound.ENTITY_ENDERDRAGON_DEATH, 1F, 1F);
 
                                     // Message them and do cool things
-                                    // FIXME player.sendMessage(aspect.getColor() + "You have been accepted as an " + aspect.getNomen() + ".");
+                                    // FIXME player.sendMessage(aspect.getColor() + "You have been accepted as an " +
+                                    // aspect.getNomen() + ".");
                                     player.getWorld().playEffect(player.getLocation(), Effect.EXPLOSION_HUGE, 4F);
 
                                     // Fancy particles
-                                    for (int i = 0; i < 20; i++)
+                                    for (int i = 0; i < 20; i++) {
                                         player.getWorld().spawn(player.getLocation(), ExperienceOrb.class);
+                                    }
                                 }
                             }, 60);
                         }

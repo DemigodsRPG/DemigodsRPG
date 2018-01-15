@@ -36,8 +36,6 @@ commands:
   selectarea:
     usage: /selectarea
     aliases: [sa, areaselect]
-  createfamily:
-    usage: /createfamily [name] [color] [symbol] [welcome message...]
   createfamilyarea:
     usage: /createfamilyarea [family]
     aliases: [makefamilyarea]

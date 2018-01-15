@@ -28,6 +28,6 @@ public class VehicleUtil {
             entity.teleport(to);
             passenger.teleport(to);
             entity.setPassenger(passenger);
-        } else entity.teleport(to);
+        } else { entity.teleport(to); }
     }
 }

@@ -1,4 +1,4 @@
-package com.demigodsrpg.aspect.magnetism;
+package com.demigodsrpg.aspect.wind;
 
 
 import com.demigodsrpg.DGData;
@@ -18,18 +18,18 @@ import org.bukkit.util.Vector;
 
 import java.util.Arrays;
 
-public class MagnetismAspectHero implements Aspect {
+public class WindAspectHero implements Aspect {
 
     // -- ASPECT META -- //
 
     @Override
     public Group getGroup() {
-        return Groups.MAGNETISM_ASPECT;
+        return Groups.WIND_ASPECT;
     }
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.IRON_SPADE, getName(), Arrays.asList(getInfo()), null);
+        return ItemUtil.create(Material.FEATHER, getName(), Arrays.asList(getInfo()), null);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class MagnetismAspectHero implements Aspect {
 
     @Override
     public String[] getInfo() {
-        return new String[]{"Expert level power over magnetism."};
+        return new String[]{"Expert level power over wind."};
     }
 
     @Override
@@ -49,12 +49,13 @@ public class MagnetismAspectHero implements Aspect {
 
     @Override
     public String getName() {
-        return "Fundamental Energy";
+        return "Gale Force";
     }
 
     // -- ABILITIES -- //
 
-    @Ability(name = "Shove", command = "shove", info = "Use the force of wind to shove your enemies.", cost = 170, delay = 1500)
+    @Ability(name = "Shove", command = "shove", info = "Use the force of wind to shove your enemies.", cost = 170,
+            delay = 1500)
     public AbilityResult pullAbility(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         PlayerModel model = DGData.PLAYER_R.fromPlayer(player);

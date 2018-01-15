@@ -2,6 +2,7 @@ package com.demigodsrpg.registry;
 
 import com.demigodsrpg.model.TributeModel;
 import com.demigodsrpg.util.datasection.DataSection;
+import com.demigodsrpg.util.datasection.Registry;
 import com.demigodsrpg.util.misc.RandomUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -11,20 +12,15 @@ import org.bukkit.inventory.Recipe;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TributeRegistry extends AbstractDemigodsDataRegistry<TributeModel> {
-    private final String FILE_NAME = "tributes";
+public interface TributeRegistry extends Registry<TributeModel> {
+    String NAME = "tributes";
 
     @Override
-    public TributeModel valueFromData(String stringKey, DataSection data) {
+    default TributeModel fromDataSection(String stringKey, DataSection data) {
         return new TributeModel(Material.getMaterial(stringKey), data);
     }
 
-    @Override
-    public String getName() {
-        return FILE_NAME;
-    }
-
-    void save(Material material, int amount) {
+    default void save(Material material, int amount) {
         // Remove the data if it exists already
         remove(material);
 
@@ -32,15 +28,15 @@ public class TributeRegistry extends AbstractDemigodsDataRegistry<TributeModel> 
         register(new TributeModel(material, amount));
     }
 
-    void remove(Material material) {
-        if (fromId(material.name()) != null) {
-            unregister(fromId(material.name()));
-        }
+    default void remove(Material material) {
+        remove(material.name());
     }
 
-    @Override
-    public TributeModel fromId(String materialName) {
-        TributeModel model = super.fromId(materialName);
+    default TributeModel fromKeyOrNew(String materialName) {
+        if (!getRegisteredData().containsKey(materialName)) {
+            loadFromDb(materialName);
+        }
+        TributeModel model = getRegisteredData().getOrDefault(materialName, null);
         if (model == null) {
             model = new TributeModel(Material.valueOf(materialName), 1);
             register(model);
@@ -48,8 +44,9 @@ public class TributeRegistry extends AbstractDemigodsDataRegistry<TributeModel> 
         return model;
     }
 
-    public Collection<TributeModel> find(final Category category) {
-        return getRegistered().stream().filter(model -> category.equals(model.getCategory())).collect(Collectors.toList());
+    default Collection<TributeModel> find(final Category category) {
+        return getRegisteredData().values().stream().filter(model -> category.equals(model.getCategory()))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -57,9 +54,9 @@ public class TributeRegistry extends AbstractDemigodsDataRegistry<TributeModel> 
      *
      * @return a Map of all tribute data.
      */
-    public Map<Material, Integer> getTributeValuesMap() {
+    default Map<Material, Integer> getTributeValuesMap() {
         Map<Material, Integer> map = new HashMap<>();
-        for (TributeModel data : getRegistered()) {
+        for (TributeModel data : getRegisteredData().values()) {
             map.put(data.getMaterial(), (int) getValue(data.getMaterial()));
         }
         return map;
@@ -70,9 +67,9 @@ public class TributeRegistry extends AbstractDemigodsDataRegistry<TributeModel> 
      *
      * @return the total server tributes.
      */
-    public int getTotalTributes() {
+    default int getTotalTributes() {
         int total = 1;
-        for (TributeModel data : getRegistered()) {
+        for (TributeModel data : getRegisteredData().values()) {
             total += data.getFitness();
         }
         return total;
@@ -84,10 +81,9 @@ public class TributeRegistry extends AbstractDemigodsDataRegistry<TributeModel> 
      * @param material the material to check.
      * @return the total number of tributes.
      */
-    int getTributes(Material material) {
-        TributeModel data = fromId(material.name());
-        if (data != null) return data.getFitness();
-        else return 1;
+    default double getTributes(Material material) {
+        TributeModel data = fromKeyOrNew(material.name());
+        if (data != null) { return data.getFitness(); } else return 1;
     }
 
     /**
@@ -97,10 +93,9 @@ public class TributeRegistry extends AbstractDemigodsDataRegistry<TributeModel> 
      * @return the total number of tributes.
      */
     @Deprecated
-    public int getTributesForCategory(Category category) {
+    default int getTributesForCategory(Category category) {
         int total = 1;
-        for (TributeModel data : find(category))
-            total += data.getFitness();
+        for (TributeModel data : find(category)) { total += data.getFitness(); }
         return total;
     }
 
@@ -109,8 +104,8 @@ public class TributeRegistry extends AbstractDemigodsDataRegistry<TributeModel> 
      *
      * @param item the item whose amount to save.
      */
-    void saveTribute(ItemStack item) {
-        TributeModel data = fromId(item.getType().name());
+    default void saveTribute(ItemStack item) {
+        TributeModel data = fromKeyOrNew(item.getType().name());
 
         if (data != null) {
             data.setFitness(data.getFitness() + item.getAmount());
@@ -122,8 +117,8 @@ public class TributeRegistry extends AbstractDemigodsDataRegistry<TributeModel> 
     /**
      * Returns the value for a <code>material</code>.
      */
-    double getValue(Material material) {
-        int lastKnownValue = (int) fromId(material.name()).getLastKnownValue();
+    default double getValue(Material material) {
+        int lastKnownValue = (int) fromKeyOrNew(material.name()).getLastKnownValue();
         return lastKnownValue >= 0.0 ? lastKnownValue : 1.0;
     }
 
@@ -133,7 +128,7 @@ public class TributeRegistry extends AbstractDemigodsDataRegistry<TributeModel> 
      * @param item the item whose value to calculate.
      * @return the value of the item.
      */
-    public int getValue(ItemStack item) {
+    default int getValue(ItemStack item) {
         return (int) getValue(item.getType()) * item.getAmount();
     }
 
@@ -144,7 +139,7 @@ public class TributeRegistry extends AbstractDemigodsDataRegistry<TributeModel> 
      * @return the category
      */
     @Deprecated
-    public Category getCategory(final Material material) {
+    default Category getCategory(final Material material) {
         switch (material) {
             case BEDROCK:
                 return Category.CHEATING;
@@ -254,7 +249,7 @@ public class TributeRegistry extends AbstractDemigodsDataRegistry<TributeModel> 
      * @param item the item to process.
      * @return the value of the item.
      */
-    public int processTribute(ItemStack item) {
+    default int processTribute(ItemStack item) {
         // Grab the value before
         int value = getValue(item);
 
@@ -274,7 +269,7 @@ public class TributeRegistry extends AbstractDemigodsDataRegistry<TributeModel> 
      * Initialized the tribute map with some base data. This prevents fresh data from being out of whack.
      */
     @Deprecated
-    public void initializeTributeTracking() {
+    default void initializeTributeTracking() {
         for (Material material : Material.values()) {
             // Don't use certain materials
             Material[] unused = {

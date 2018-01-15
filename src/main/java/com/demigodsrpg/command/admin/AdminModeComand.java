@@ -13,7 +13,7 @@ public class AdminModeComand extends BaseCommand {
     @Override
     protected CommandResult onCommand(CommandSender sender, Command command, String[] args) {
         if (sender instanceof Player && sender.hasPermission("demigods.admin")) {
-            PlayerModel model = DGData.PLAYER_R.fromPlayer((Player) sender);
+            PlayerModel model = (PlayerModel) DGData.PLAYER_R.fromPlayer((Player) sender);
             if (model.getAdminMode()) {
                 sender.sendMessage(ChatColor.YELLOW + "Demigods admin mode disabled.");
             } else {

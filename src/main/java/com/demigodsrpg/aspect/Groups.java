@@ -5,8 +5,8 @@ import com.demigodsrpg.aspect.crafting.CraftingAspect;
 import com.demigodsrpg.aspect.demon.DemonAspect;
 import com.demigodsrpg.aspect.fire.FireAspect;
 import com.demigodsrpg.aspect.lightning.LightingAspect;
-import com.demigodsrpg.aspect.magnetism.MagnetismAspect;
 import com.demigodsrpg.aspect.water.WaterAspect;
+import com.demigodsrpg.aspect.wind.WindAspect;
 
 import java.util.*;
 
@@ -14,7 +14,7 @@ public class Groups {
 
     // -- PUBLIC RELEASE -- //
 
-    public static final MagnetismAspect MAGNETISM_ASPECT = new MagnetismAspect();
+    public static final WindAspect WIND_ASPECT = new WindAspect();
     public static final LightingAspect LIGHTNING_ASPECT = new LightingAspect();
     public static final FireAspect FIRE_ASPECT = new FireAspect();
     public static final WaterAspect WATER_ASPECT = new WaterAspect();
@@ -28,7 +28,7 @@ public class Groups {
     // -- GROUP LIST -- //
 
     public static final Aspect.Group[] groupList = new Aspect.Group[]{
-            MAGNETISM_ASPECT, LIGHTNING_ASPECT, FIRE_ASPECT, WATER_ASPECT, BLOODLUST_ASPECT, CRAFTING_ASPECT
+            WIND_ASPECT, LIGHTNING_ASPECT, FIRE_ASPECT, WATER_ASPECT, BLOODLUST_ASPECT, CRAFTING_ASPECT
     };
 
     // -- PRIVATE CONSTRUCTOR -- //

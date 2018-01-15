@@ -37,7 +37,7 @@ public class Battle {
         }
         involved = new ConcurrentHashMap<>();
         for (Participant participant : participants) {
-            involved.put(participant.getPersistentId(), new BattleMetaData());
+            involved.put(participant.getKey(), new BattleMetaData());
         }
         startLocation = participants[0].getLocation();
         startTimeMillis = System.currentTimeMillis();
@@ -72,7 +72,7 @@ public class Battle {
     }
 
     public boolean isInvolved(Participant participant) {
-        return involved.keySet().contains(participant.getPersistentId());
+        return involved.keySet().contains(participant.getKey());
     }
 
     public boolean isInvolved(Player player) {
@@ -98,7 +98,7 @@ public class Battle {
     public void hit(Participant attacking, Participant hit) {
         putIfAbsent(attacking, hit);
         if (okayToHit(attacking, hit)) {
-            involved.get(attacking.getPersistentId()).hits++;
+            involved.get(attacking.getKey()).hits++;
         }
         lastInteract = System.currentTimeMillis();
         DGData.BATTLE_R.register(this);
@@ -107,7 +107,7 @@ public class Battle {
     public void deny(Participant attacking, Participant target, Participant denier) {
         putIfAbsent(attacking, target, denier);
         if (!attacking.getFamily().equals(denier.getFamily()) && okayToHit(attacking, target)) {
-            involved.get(denier.getPersistentId()).denies++;
+            involved.get(denier.getKey()).denies++;
         }
         lastInteract = System.currentTimeMillis();
         DGData.BATTLE_R.register(this);
@@ -116,7 +116,7 @@ public class Battle {
     public void assist(Participant attacking, Participant hit, Participant assistant) {
         putIfAbsent(attacking, hit, assistant);
         if (!attacking.getFamily().equals(assistant.getFamily()) && okayToHit(attacking, hit)) {
-            involved.get(assistant.getPersistentId()).assists++;
+            involved.get(assistant.getKey()).assists++;
         }
         lastInteract = System.currentTimeMillis();
         DGData.BATTLE_R.register(this);
@@ -125,10 +125,10 @@ public class Battle {
     public void kill(Participant attacking, Participant killed) {
         putIfAbsent(attacking, killed);
         if (attacking.getFamily().equals(killed.getFamily())) {
-            involved.get(attacking.getPersistentId()).teamKills++;
+            involved.get(attacking.getKey()).teamKills++;
             attacking.addTeamKill();
         } else {
-            involved.get(attacking.getPersistentId()).kills++;
+            involved.get(attacking.getKey()).kills++;
         }
         lastInteract = System.currentTimeMillis();
         die(killed);
@@ -136,7 +136,7 @@ public class Battle {
 
     public void die(Participant dead) {
         putIfAbsent(dead);
-        involved.get(dead.getPersistentId()).deaths++;
+        involved.get(dead.getKey()).deaths++;
         DGData.BATTLE_R.register(this);
     }
 
@@ -162,7 +162,7 @@ public class Battle {
 
     private void putIfAbsent(Participant... toPut) {
         for (Participant participant : toPut) {
-            involved.putIfAbsent(participant.getPersistentId(), new BattleMetaData());
+            involved.putIfAbsent(participant.getKey(), new BattleMetaData());
         }
     }
 }

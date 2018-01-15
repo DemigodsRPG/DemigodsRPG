@@ -40,7 +40,8 @@ public class BloodlustAspectHero implements Aspect {
         return "Bloodline";
     }
 
-    @Ability(name = "Blessings of Battle", info = "Can only die while being attacked.", type = Ability.Type.PASSIVE, placeholder = true)
+    @Ability(name = "Blessings of Battle", info = "Can only die while being attacked.", type = Ability.Type.PASSIVE,
+            placeholder = true)
     public void cheatDeathAbility() {
         // Do nothing, handled directly in the ability listener to save time
     }

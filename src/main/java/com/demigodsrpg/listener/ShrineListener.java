@@ -26,13 +26,14 @@ public class ShrineListener implements Listener {
     public void createShrine(PlayerInteractEvent e) {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (ZoneUtil.isNoDGWorld(e.getPlayer().getWorld())) return;
-        if (e.getClickedBlock().getType() != Material.SIGN && e.getClickedBlock().getType() != Material.SIGN_POST)
+        if (e.getClickedBlock().getType() != Material.SIGN && e.getClickedBlock().getType() != Material.SIGN_POST) {
             return;
+        }
         Sign s = (Sign) e.getClickedBlock().getState();
         if (!s.getLines()[0].trim().equalsIgnoreCase("shrine")) return;
         if (!s.getLines()[1].trim().equalsIgnoreCase("dedicate")) return;
         Player p = e.getPlayer();
-        Deity deity = DGData.DEITY_R.deityFromName(s.getLines()[2].trim());
+        Deity deity = DGData.getDeity(s.getLines()[2].trim());
 
         if (deity == null) {
             p.sendMessage(ChatColor.YELLOW + "There is no deity by that name.");
@@ -52,23 +53,24 @@ public class ShrineListener implements Listener {
                 p.sendMessage(ChatColor.YELLOW + "The shrine's name cannot contain a space.");
                 return;
             }
-            for (Deity d : DGData.DEITY_R.getRegistered()) {
+            for (Deity d : DGData.DEITIES) {
                 if (s.getLines()[3].trim().equalsIgnoreCase(d.getName())) {
                     p.sendMessage(ChatColor.YELLOW + "The shrine's name cannot be the same as a deity.");
                     return;
                 }
             }
-            for (ShrineModel shrine : DGData.SHRINE_R.getRegistered()) {
-                if (shrine.getPersistentId().equals(s.getLines()[3].trim())) {
+            for (ShrineModel shrine : DGData.SHRINE_R.getRegisteredData().values()) {
+                if (shrine.getKey().equals(s.getLines()[3].trim())) {
                     p.sendMessage(ChatColor.YELLOW + "A shrine with that name already exists.");
                     return;
                 }
             }
             shrinename = "#" + s.getLines()[3].trim();
         }
-        for (ShrineModel shrine : DGData.SHRINE_R.getRegistered()) {
+        for (ShrineModel shrine : DGData.SHRINE_R.getRegisteredData().values()) {
             if (shrine.getLocation().getWorld().equals(e.getClickedBlock().getWorld())) {
-                if (e.getClickedBlock().getLocation().distance(shrine.getLocation()) < (shrine.getShrineType().getGroundRadius() + 1)) {
+                if (e.getClickedBlock().getLocation().distance(shrine.getLocation()) <
+                        (shrine.getShrineType().getGroundRadius() + 1)) {
                     p.sendMessage(ChatColor.YELLOW + "Too close to an existing shrine.");
                     return;
                 }
@@ -84,7 +86,8 @@ public class ShrineListener implements Listener {
         shrine.getShrineType().generate(shrine.getLocation());
         DGData.PLAYER_R.fromPlayer(p).addShrineWarp(shrine);
         e.getClickedBlock().getWorld().strikeLightningEffect(e.getClickedBlock().getLocation());
-        p.sendMessage("You have dedicated this shrine to " + shrine.getFaction().getColor() + deity.getName() + ChatColor.WHITE + ".");
+        p.sendMessage("You have dedicated this shrine to " + shrine.getFaction().getColor() + deity.getName() +
+                ChatColor.WHITE + ".");
         p.sendMessage(ChatColor.YELLOW + "Warp here at any time with /shrine.");
     }
 
@@ -174,16 +177,18 @@ public class ShrineListener implements Listener {
 
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getPlugin(), () -> {
             // Remove all drops from explosion zone
-            for (final ShrineModel save : saves)
-                event.getLocation().getWorld().getEntitiesByClass(Item.class).stream().filter(drop -> drop.getLocation().distance(save.getLocation()) <= save.getShrineType().getGroundRadius()).forEach(org.bukkit.entity.Item::remove);
+            for (final ShrineModel save : saves) {
+                event.getLocation().getWorld().getEntitiesByClass(Item.class).stream()
+                        .filter(drop -> drop.getLocation().distance(save.getLocation()) <=
+                                save.getShrineType().getGroundRadius()).forEach(org.bukkit.entity.Item::remove);
+            }
         }, 1);
 
         if (DGData.SERVER_R.contains("explode-structure", "blaam")) return;
         DGData.SERVER_R.put("explode-structure", "blaam", true, 2, TimeUnit.SECONDS);
 
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getPlugin(), () -> {
-            for (final ShrineModel save : saves)
-                save.getShrineType().generate(save.getLocation());
+            for (final ShrineModel save : saves) { save.getShrineType().generate(save.getLocation()); }
         }, 30);
     }
 }

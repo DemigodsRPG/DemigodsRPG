@@ -183,9 +183,12 @@ public class Selection {
      * @param X         The relative X coordinate of the schematic from the reference location.
      * @param Y         The relative Y coordinate of the schematic from the reference location.
      * @param Z         The relative Z coordinate of the schematic from the reference location.
-     * @param XX        The second relative X coordinate of the schematic from the reference location, creating a cuboid.
-     * @param YY        The second relative Y coordinate of the schematic from the reference location, creating a cuboid.
-     * @param ZZ        The second relative Z coordinate of the schematic from the reference location, creating a cuboid.
+     * @param XX        The second relative X coordinate of the schematic from the reference location, creating a
+     *                  cuboid.
+     * @param YY        The second relative Y coordinate of the schematic from the reference location, creating a
+     *                  cuboid.
+     * @param ZZ        The second relative Z coordinate of the schematic from the reference location, creating a
+     *                  cuboid.
      * @param blockData The potential material of this schematic.
      */
     public Selection(int X, int Y, int Z, int XX, int YY, int ZZ, PotentialMaterial blockData) {
@@ -225,9 +228,12 @@ public class Selection {
      * @param X         The relative X coordinate of the schematic from the reference location.
      * @param Y         The relative Y coordinate of the schematic from the reference location.
      * @param Z         The relative Z coordinate of the schematic from the reference location.
-     * @param XX        The second relative X coordinate of the schematic from the reference location, creating a cuboid.
-     * @param YY        The second relative Y coordinate of the schematic from the reference location, creating a cuboid.
-     * @param ZZ        The second relative Z coordinate of the schematic from the reference location, creating a cuboid.
+     * @param XX        The second relative X coordinate of the schematic from the reference location, creating a
+     *                  cuboid.
+     * @param YY        The second relative Y coordinate of the schematic from the reference location, creating a
+     *                  cuboid.
+     * @param ZZ        The second relative Z coordinate of the schematic from the reference location, creating a
+     *                  cuboid.
      * @param blockData The potential materials of this schematic.
      */
     public Selection(int X, int Y, int Z, int XX, int YY, int ZZ, List<PotentialMaterial> blockData) {
@@ -259,11 +265,14 @@ public class Selection {
         int differenceX = referenceB.getBlockX() - referenceA.getBlockX();
         int differenceY = referenceB.getBlockY() - referenceA.getBlockY();
         int differenceZ = referenceB.getBlockZ() - referenceA.getBlockZ();
-        for (int x = (X < XX ? X : XX); x <= (X < XX ? XX : X); x++)
-            for (int y = (Y < YY ? Y : YY); y <= (Y < YY ? YY : Y); y++)
-                for (int z = (Z < ZZ ? Z : ZZ); z <= (Z < ZZ ? ZZ : Z); z++)
+        for (int x = (X < XX ? X : XX); x <= (X < XX ? XX : X); x++) {
+            for (int y = (Y < YY ? Y : YY); y <= (Y < YY ? YY : Y); y++) {
+                for (int z = (Z < ZZ ? Z : ZZ); z <= (Z < ZZ ? ZZ : Z); z++) {
                     selections.add(new Selection(x + differenceX, y + differenceY, z + differenceZ,
                             getMaterialData(referenceA)));
+                }
+            }
+        }
         return selections;
     }
 
@@ -324,7 +333,8 @@ public class Selection {
      */
     public PotentialMaterial getStructureMaterialData() {
         final int roll = RandomUtil.generateIntRange(1, 100);
-        Collection<PotentialMaterial> check = Collections2.filter(blockData, blockData1 -> blockData1.getOdds() >= roll);
+        Collection<PotentialMaterial> check =
+                Collections2.filter(blockData, blockData1 -> blockData1.getOdds() >= roll);
         if (check.isEmpty()) return getStructureMaterialData();
         return Lists.newArrayList(check).get(RandomUtil.generateIntRange(0, check.size() - 1));
     }
@@ -338,9 +348,10 @@ public class Selection {
     public Set<Location> getBlockLocations(final Location reference) {
         if (cuboid) {
             if (exclude) {
-                if (excludeSelection)
+                if (excludeSelection) {
                     return Sets.difference(rangeLoop(reference, X, XX, Y, YY, Z, ZZ), rangeLoop(reference, eX, eXX, eY,
                             eYY, eZ, eZZ));
+                }
                 return Sets.difference(rangeLoop(reference, X, XX, Y, YY, Z, ZZ), Sets.newHashSet(getLocation(reference,
                         eX, eY, eZ)));
             }
@@ -393,10 +404,13 @@ public class Selection {
     public Set<Location> rangeLoop(final Location reference, final int X, final int XX, final int Y, final int YY,
                                    final int Z, final int ZZ) {
         Set<Location> set = new HashSet<>();
-        for (int x = (X < XX ? X : XX); x <= (X < XX ? XX : X); x++)
-            for (int y = (Y < YY ? Y : YY); y <= (Y < YY ? YY : Y); y++)
-                for (int z = (Z < ZZ ? Z : ZZ); z <= (Z < ZZ ? ZZ : Z); z++)
+        for (int x = (X < XX ? X : XX); x <= (X < XX ? XX : X); x++) {
+            for (int y = (Y < YY ? Y : YY); y <= (Y < YY ? YY : Y); y++) {
+                for (int z = (Z < ZZ ? Z : ZZ); z <= (Z < ZZ ? ZZ : Z); z++) {
                     set.add(getLocation(reference, x, y, z));
+                }
+            }
+        }
         return set;
     }
 

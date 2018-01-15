@@ -82,7 +82,8 @@ public class BukkitImageUtil {
             return convertImage(image, "█");
         } catch (Exception errored) {
             errored.printStackTrace();
-            Bukkit.getServer().getLogger().warning("[CensoredLib] " + "Something went wrong during an image conversion process.");
+            Bukkit.getServer().getLogger()
+                    .warning("[CensoredLib] " + "Something went wrong during an image conversion process.");
         }
 
         // Something went wrong.
@@ -97,8 +98,7 @@ public class BukkitImageUtil {
         }
 
         static MapView applyToMap(MapView map, BufferedImage image) {
-            for (MapRenderer renderer : map.getRenderers())
-                map.removeRenderer(renderer);
+            for (MapRenderer renderer : map.getRenderers()) { map.removeRenderer(renderer); }
 
             map.addRenderer(new ImageRenderer(image));
 

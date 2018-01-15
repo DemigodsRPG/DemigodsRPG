@@ -20,8 +20,14 @@ public class Setting {
     public static final boolean SAVE_PRETTY = getConfig().getBoolean("save_pretty", false);
     public static final boolean DEBUG_DATA = getConfig().getBoolean("debug_data", false);
     public static final boolean DEBUG_INVISIBLE_WALLS = getConfig().getBoolean("debug_invisible_walls", false);
-    public static boolean PSQL_PERSISTENCE = getConfig().getBoolean("psql.use", false);
-    public static final String PSQL_CONNECTION = "jdbc:" + getConfig().getString("psql.connection", "postgresql://localhost:5432/demigods?user=demigods&password=demigods");
+    public static boolean MONGODB_PERSISTENCE = getConfig().getBoolean("mongo.use", false);
+    public static final String MONGODB_HOSTNAME = getConfig().getString("mongo.hostname", "127.0.0.1");
+    public static final int MONGODB_PORT = getConfig().getInt("mongo.port", 27017);
+    public static final String MONGODB_DATABASE = getConfig().getString("mongo.database", "demigods");
+    public static final String MONGODB_USERNAME = getConfig().getString("mongo.username", "demigods");
+    public static final String MONGODB_PASSWORD = getConfig().getString("mongo.password", "demigods");
+    public static final boolean NORSE_ENABLED = getConfig().getBoolean("pantheon.norse", true);
+    public static final boolean GREEK_ENABLED = getConfig().getBoolean("pantheon.greek", true);
 
     private static ConfigurationSection getConfig() {
         return JavaPlugin.getProvidingPlugin(Setting.class).getConfig();
