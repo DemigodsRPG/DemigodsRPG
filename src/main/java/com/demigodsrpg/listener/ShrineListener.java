@@ -26,8 +26,8 @@ public class ShrineListener implements Listener {
     public void createShrine(PlayerInteractEvent e) {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (ZoneUtil.isNoDGWorld(e.getPlayer().getWorld())) return;
-        if (e.getClickedBlock().getType() != Material.LEGACY_SIGN &&
-                e.getClickedBlock().getType() != Material.LEGACY_SIGN_POST) {
+        if (e.getClickedBlock().getType() != Material.matchMaterial("SIGN", true) &&
+                e.getClickedBlock().getType() != Material.matchMaterial("SIGN_POST", true)) {
             return;
         }
         Sign s = (Sign) e.getClickedBlock().getState();

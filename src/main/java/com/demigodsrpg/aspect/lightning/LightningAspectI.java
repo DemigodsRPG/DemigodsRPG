@@ -90,7 +90,7 @@ public class LightningAspectI implements Aspect {
                 if (livingEntity.equals(player)) continue;
                 double damage = 10 * model.getLevel();
                 if ((toHit.getBlock().getType().equals(Material.WATER) ||
-                        toHit.getBlock().getType().equals(Material.LEGACY_STATIONARY_WATER)) &&
+                        toHit.getBlock().getType().equals(Material.matchMaterial("STATIONARY_WATER", true))) &&
                         livingEntity.getLocation().distance(toHit) < 8) {
                     damage += 4;
                     livingEntity.damage(damage);

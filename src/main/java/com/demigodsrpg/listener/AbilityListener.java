@@ -96,7 +96,7 @@ public class AbilityListener implements Listener {
         if (DGData.PLAYER_R.hasAspect(player, Aspects.WATER_ASPECT_HERO)) {
             Material locationMaterial = player.getLocation().getBlock().getType();
             if (player.isSneaking() &&
-                    (locationMaterial.equals(Material.LEGACY_STATIONARY_WATER) ||
+                    (locationMaterial.equals(Material.matchMaterial("STATIONARY_WATER", true)) ||
                             locationMaterial.equals(Material.WATER))) {
                 Vector victor = (player.getPassenger() != null && player.getLocation().getDirection().getY() > 0 ?
                         player.getLocation().getDirection().clone().setY(0) : player.getLocation().getDirection())

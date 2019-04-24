@@ -50,6 +50,7 @@ public abstract class AbstractFileRegistry<T extends Model> implements Registry<
             REGISTERED_DATA = CacheBuilder.newBuilder().concurrencyLevel(4).build();
         }
         FOLDER = new File(path + "/" + folder + "/");
+        FOLDER.mkdirs();
         PRETTY = pretty;
     }
 

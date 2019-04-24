@@ -132,7 +132,7 @@ public class DGGame {
         plugin.getCommand("removedevotion").setExecutor(new RemoveDevotionCommand());
         plugin.getCommand("giveaspect").setExecutor(new GiveAspectCommand());
         plugin.getCommand("removeaspect").setExecutor(new RemoveAspectCommand());
-        plugin.getCommand("setfamilyn").setExecutor(new SetFamilyCommand());
+        plugin.getCommand("setfamily").setExecutor(new SetFamilyCommand());
 
         // Enable ZoneUtil
         ZoneUtil.init(plugin);

@@ -181,7 +181,7 @@ public interface TributeRegistry extends Registry<TributeModel> {
             case CHICKEN:
             case COD:
             case LEATHER:
-            case LEGACY_WOOL:
+                //case LEGACY_WOOL:
             case INK_SAC:
             case EGG:
             case ROSE_BUSH:
@@ -197,12 +197,12 @@ public interface TributeRegistry extends Registry<TributeModel> {
             case PUMPKIN_SEEDS:
             case MELON:
             case MELON_SEEDS:
-            case LEGACY_SEEDS:
+                //case LEGACY_SEEDS:
             case WHEAT:
             case HAY_BLOCK:
-            case LEGACY_SULPHUR:
+                //case LEGACY_SULPHUR:
                 return Category.MOB_LOOT;
-            case LEGACY_LOG:
+            //case LEGACY_LOG:
             case DIRT:
             case SAND:
             case GRAVEL:
@@ -272,7 +272,7 @@ public interface TributeRegistry extends Registry<TributeModel> {
     default void initializeTributeTracking() {
         for (Material material : Material.values()) {
             // Don't use certain materials
-            Material[] unused = {
+            Material[] unused = {/* TODO Fix this
                     Material.AIR, Material.WATER, Material.LEGACY_STATIONARY_WATER, Material.LAVA,
                     Material.LEGACY_STATIONARY_LAVA,
                     Material.END_PORTAL, Material.BEDROCK, Material.FIRE, Material.SPAWNER,
@@ -283,7 +283,7 @@ public interface TributeRegistry extends Registry<TributeModel> {
                     Material.EXPERIENCE_BOTTLE,
                     Material.LEGACY_GLOWING_REDSTONE_ORE, Material.LEGACY_LOG_2, Material.LEGACY_SIGN_POST,
                     Material.SNOW,
-                    Material.LEGACY_WALL_SIGN
+                    Material.LEGACY_WALL_SIGN*/
             };
             if (Arrays.asList(unused).contains(material)) continue;
 

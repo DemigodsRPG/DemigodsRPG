@@ -12,8 +12,6 @@ import com.demigodsrpg.util.datasection.DataSection;
 import com.demigodsrpg.util.datasection.Model;
 import com.demigodsrpg.util.misc.RandomUtil;
 import com.google.common.collect.*;
-import gnu.trove.iterator.TIntIterator;
-import gnu.trove.map.hash.TIntDoubleHashMap;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -38,7 +36,7 @@ public class PlayerModel implements Model, AbilityCaster, Participant {
     private final List<String> shrineWarps = new ArrayList<>();
     private Family family;
     private final BiMap<String, String> binds = HashBiMap.create();
-    private final TIntDoubleHashMap experience;
+    private final Map<Integer, Double> experience;
 
     private long lastLoginTime;
 
@@ -59,7 +57,7 @@ public class PlayerModel implements Model, AbilityCaster, Participant {
         lastKnownName = player.getName();
         lastLoginTime = System.currentTimeMillis();
 
-        experience = new TIntDoubleHashMap(1);
+        experience = new HashMap<>(1);
 
         // Debug data
         if (Setting.DEBUG_DATA) {
@@ -113,7 +111,7 @@ public class PlayerModel implements Model, AbilityCaster, Participant {
         }
         maxHealth = conf.getDouble("max_health", 20.0);
         favor = conf.getDouble("favor", 20.0);
-        experience = new TIntDoubleHashMap(1);
+        experience = new HashMap<>(1);
         boolean expError = false;
         for (Map.Entry<String, Object> entry : conf.getSectionNullable("devotion").entrySet()) {
             try {
@@ -157,9 +155,7 @@ public class PlayerModel implements Model, AbilityCaster, Participant {
         map.put("max_health", maxHealth);
         map.put("favor", favor);
         Map<Integer, Double> devotionMap = new HashMap<>();
-        TIntIterator iterator = experience.keySet().iterator();
-        while (iterator.hasNext()) {
-            int key = iterator.next();
+        for (int key : experience.keySet()) {
             try {
                 devotionMap.put(key, experience.get(key));
             } catch (Exception ignored) {
