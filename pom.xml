@@ -16,7 +16,7 @@
     <properties> <!-- It is important to keep up to date manually. -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spigot.version>1.14-pre5-SNAPSHOT</spigot.version>
-        <chitchat.version>2.1-SNAPSHOT</chitchat.version>
+        <chitchat.version>2.1.1-SNAPSHOT</chitchat.version>
         <mongodb.version>3.6.1</mongodb.version>
         <worldguard.version>7.0.0-SNAPSHOT</worldguard.version>
         <evo.version>1.0.1</evo.version>
