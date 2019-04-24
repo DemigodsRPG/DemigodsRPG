@@ -7,6 +7,6 @@ import com.mongodb.client.MongoDatabase;
 
 public class MServerDataRegistry extends AbstractMongoRegistry<ServerDataModel> implements ServerDataRegistry {
     public MServerDataRegistry(MongoDatabase database) {
-        super(database.getCollection(NAME), 0);
+        super(database.getCollection(NAME), 0, false);
     }
 }

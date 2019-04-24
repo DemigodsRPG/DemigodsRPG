@@ -17,7 +17,7 @@ public class LightingAspect implements Aspect.Group {
 
     @Override
     public Sound getSound() {
-        return Sound.ENTITY_LIGHTNING_THUNDER;
+        return Sound.ENTITY_LIGHTNING_BOLT_THUNDER;
     }
 
     @Override

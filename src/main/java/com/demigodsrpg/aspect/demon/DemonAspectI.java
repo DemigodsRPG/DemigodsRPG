@@ -29,7 +29,7 @@ public class DemonAspectI implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.IRON_FENCE, getName(), Arrays.asList(getInfo()), null);
+        return ItemUtil.create(Material.IRON_BARS, getName(), Arrays.asList(getInfo()), null);
     }
 
     @Override

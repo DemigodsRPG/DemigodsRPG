@@ -17,7 +17,7 @@ public class BloodlustAspectHero implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.GOLD_CHESTPLATE, getName(), Arrays.asList(getInfo()), null);
+        return ItemUtil.create(Material.GOLDEN_CHESTPLATE, getName(), Arrays.asList(getInfo()), null);
     }
 
     @Override

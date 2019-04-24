@@ -22,6 +22,8 @@ import com.google.common.collect.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Directional;
 
 import java.util.*;
 
@@ -82,7 +84,7 @@ public class Selection {
      * @param Z        The relative Z coordinate of the schematic from the reference location.
      * @param material The StoaMaterialData objects of this schematic.
      */
-    public Selection(int X, int Y, int Z, String material) {
+    public Selection(int X, int Y, int Z, Material material) {
         this.X = this.XX = X;
         this.Y = this.YY = Y;
         this.Z = this.ZZ = Z;
@@ -103,7 +105,7 @@ public class Selection {
      * @param ZZ       The second relative Z coordinate of the schematic from the reference location, creating a cuboid.
      * @param material The MaterialData objects of this schematic.
      */
-    public Selection(int X, int Y, int Z, int XX, int YY, int ZZ, String material) {
+    public Selection(int X, int Y, int Z, int XX, int YY, int ZZ, Material material) {
         this.X = X;
         this.Y = Y;
         this.Z = Z;
@@ -124,14 +126,14 @@ public class Selection {
      * @param Z        The relative Z coordinate of the schematic from the reference location.
      * @param material The StoaMaterialData objects of this schematic.
      */
-    public Selection(int X, int Y, int Z, String material, byte data) {
+    public Selection(int X, int Y, int Z, Material material, BlockFace face) {
         this.X = this.XX = X;
         this.Y = this.YY = Y;
         this.Z = this.ZZ = Z;
         this.cuboid = false;
         this.exclude = false;
         this.excludeSelection = false;
-        this.blockData = Lists.newArrayList(new PotentialMaterial(material, data));
+        this.blockData = Lists.newArrayList(new PotentialMaterial(material, face));
     }
 
     /**
@@ -143,10 +145,9 @@ public class Selection {
      * @param XX       The second relative X coordinate of the schematic from the reference location, creating a cuboid.
      * @param YY       The second relative Y coordinate of the schematic from the reference location, creating a cuboid.
      * @param ZZ       The second relative Z coordinate of the schematic from the reference location, creating a cuboid.
-     * @param material The material id of this schematic.
-     * @param data     The material byte data of this schematic.
+     * @param material The MaterialData objects of this schematic.
      */
-    public Selection(int X, int Y, int Z, int XX, int YY, int ZZ, String material, byte data) {
+    public Selection(int X, int Y, int Z, int XX, int YY, int ZZ, Material material, BlockFace face) {
         this.X = X;
         this.Y = Y;
         this.Z = Z;
@@ -156,7 +157,7 @@ public class Selection {
         this.cuboid = true;
         this.exclude = false;
         this.excludeSelection = false;
-        this.blockData = Lists.newArrayList(new PotentialMaterial(material, data));
+        this.blockData = Lists.newArrayList(new PotentialMaterial(material, face));
     }
 
     /**
@@ -284,7 +285,10 @@ public class Selection {
      */
     public static PotentialMaterial getMaterialData(Location location) {
         Block block = location.getBlock();
-        return new PotentialMaterial(block.getType().name(), block.getData());
+        if (block instanceof Directional) {
+            return new PotentialMaterial(block.getType(), ((Directional) block).getFacing());
+        }
+        return new PotentialMaterial(block.getType());
     }
 
     /**
@@ -369,9 +373,11 @@ public class Selection {
         if (blockData.isEmpty()) return;
         for (Location location : getBlockLocations(reference)) {
             PotentialMaterial data = getStructureMaterialData();
-            Material material = Material.valueOf(data.getMaterial());
+            Material material = data.getMaterial();
             location.getBlock().setType(material);
-            location.getBlock().setData(data.getData());
+            if (data.getFace() != null) {
+                ((Directional) location.getBlock()).setFacing(data.getFace());
+            }
         }
     }
 

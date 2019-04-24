@@ -90,7 +90,7 @@ public class BattleRegistry {
     }
 
     public boolean canTarget(Entity entity) {
-        if (!ZoneUtil.inNoDGZone(entity.getLocation()) && !ZoneUtil.inNoPvpZone(entity.getLocation())) {
+        if (!ZoneUtil.inNoDGZone(entity.getLocation()) && !ZoneUtil.inNoPvpZone(entity, entity.getLocation())) {
             return false;
         }
         Participant participant = defineParticipant(entity);

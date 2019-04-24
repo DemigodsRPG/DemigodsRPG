@@ -166,7 +166,7 @@ public class AbilityRegistry implements Listener {
         if (ZoneUtil.inNoDGZone(model.getLocation())) return false;
         if (!ability.getType().equals(Ability.Type.PASSIVE)) {
             if ((ability.getType().equals(Ability.Type.OFFENSIVE) || ability.getType().equals(Ability.Type.ULTIMATE)) &&
-                    ZoneUtil.inNoPvpZone(model.getLocation())) {
+                    ZoneUtil.inNoPvpZone(model.getOfflinePlayer().getPlayer(), model.getLocation())) {
                 return false;
             }
             if (model.getBound(ability) == null) {

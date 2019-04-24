@@ -3,10 +3,14 @@ package com.demigodsrpg.util;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Maps;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.events.DisallowedPVPEvent;
+import com.sk89q.worldguard.bukkit.protection.events.DisallowedPVPEvent;
+import com.sk89q.worldguard.protection.association.RegionAssociable;
 import com.sk89q.worldguard.protection.flags.*;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -70,7 +74,7 @@ public class WorldGuardUtil implements Listener {
      */
     @Deprecated
     public static Flag<?> getFlag(String id) {
-        return DefaultFlag.fuzzyMatchFlag(id);
+        return Flags.get(id);
     }
 
     /**
@@ -82,7 +86,9 @@ public class WorldGuardUtil implements Listener {
      */
     public static boolean checkForRegion(final String name, Location location) {
         return Iterators
-                .any(WorldGuardPlugin.inst().getRegionManager(location.getWorld()).getApplicableRegions(location)
+                .any(WorldGuard.getInstance().getPlatform().getRegionContainer()
+                        .get(BukkitAdapter.adapt(location.getWorld()))
+                        .getApplicableRegions(BukkitAdapter.asBlockVector(location))
                         .iterator(), new Predicate<ProtectedRegion>() {
                     @Override
                     public boolean apply(ProtectedRegion region) {
@@ -100,7 +106,9 @@ public class WorldGuardUtil implements Listener {
      */
     public static boolean checkForFlag(final Flag flag, Location location) {
         return Iterators
-                .any(WorldGuardPlugin.inst().getRegionManager(location.getWorld()).getApplicableRegions(location)
+                .any(WorldGuard.getInstance().getPlatform().getRegionContainer()
+                        .get(BukkitAdapter.adapt(location.getWorld()))
+                        .getApplicableRegions(BukkitAdapter.asBlockVector(location))
                         .iterator(), new Predicate<ProtectedRegion>() {
                     @Override
                     public boolean apply(ProtectedRegion region) {
@@ -120,8 +128,21 @@ public class WorldGuardUtil implements Listener {
      * @param location The location being checked.
      * @return The flag is enabled.
      */
-    public static boolean checkStateFlagAllows(final StateFlag flag, Location location) {
-        return WorldGuardPlugin.inst().getGlobalRegionManager().allows(flag, location);
+    public static boolean checkStateFlagAllows(final StateFlag flag, Location location, RegionAssociable associable) {
+        RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+        return query.testState(BukkitAdapter.adapt(location), associable, flag);
+    }
+
+    /**
+     * Check if a StateFlag is enabled at a given location.
+     *
+     * @param flag     The flag being checked.
+     * @param location The location being checked.
+     * @return The flag is enabled.
+     */
+    public static boolean checkStateFlagAllows(final StateFlag flag, Location location, Player player) {
+        RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+        return query.testState(BukkitAdapter.adapt(location), WorldGuardPlugin.inst().wrapPlayer(player), flag);
     }
 
     /**
@@ -134,7 +155,9 @@ public class WorldGuardUtil implements Listener {
      */
     public static boolean checkForFlagValue(final Flag flag, final String value, Location location) {
         return Iterators
-                .any(WorldGuardPlugin.inst().getRegionManager(location.getWorld()).getApplicableRegions(location)
+                .any(WorldGuard.getInstance().getPlatform().getRegionContainer()
+                        .get(BukkitAdapter.adapt(location.getWorld()))
+                        .getApplicableRegions(BukkitAdapter.asBlockVector(location))
                         .iterator(), new Predicate<ProtectedRegion>() {
                     @Override
                     public boolean apply(ProtectedRegion region) {
@@ -153,15 +176,15 @@ public class WorldGuardUtil implements Listener {
      * @return The player can build here.
      */
     public static boolean canBuild(Player player, Location location) {
-        return WorldGuardPlugin.inst().canBuild(player, location);
+        return checkStateFlagAllows(Flags.BUILD, location, player);
     }
 
     /**
      * @param location Given location.
      * @return PVP is allowed here.
      */
-    public static boolean canPVP(Location location) {
-        return checkStateFlagAllows(DefaultFlag.PVP, location);
+    public static boolean canPVP(Player player, Location location) {
+        return checkStateFlagAllows(Flags.PVP, location, player);
     }
 
     public static void setWhenToOverridePVP(Plugin plugin, Predicate<Event> checkPVP) {

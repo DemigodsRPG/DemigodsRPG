@@ -25,7 +25,7 @@ public class DemonAspectHero implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.SKULL_ITEM, getName(), Arrays.asList(getInfo()), null);
+        return ItemUtil.create(Material.SKELETON_SKULL, getName(), Arrays.asList(getInfo()), null);
     }
 
     @Override

@@ -4,7 +4,6 @@ import com.demigodsrpg.aspect.Aspects;
 import com.demigodsrpg.chitchat.*;
 import com.demigodsrpg.command.*;
 import com.demigodsrpg.command.admin.*;
-import com.demigodsrpg.enchantment.CustomEnchantments;
 import com.demigodsrpg.listener.*;
 import com.demigodsrpg.model.PlayerModel;
 import com.demigodsrpg.model.TributeModel;
@@ -14,16 +13,11 @@ import com.mongodb.*;
 import com.mongodb.client.MongoDatabase;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Map;
 
 public class DGGame {
     // -- PLUGIN RELATED CONSTANTS -- //
@@ -150,7 +144,7 @@ public class DGGame {
         }
 
         // Register custom enchantments
-        handleCustomEnchatments();
+        //handleCustomEnchatments();
 
         // Let the console know
         DGData.CONSOLE.info("     ____            _           _");
@@ -224,7 +218,7 @@ public class DGGame {
         DGData.CONSOLE.info("Demigods VALUE task enabled...");
     }
 
-    @SuppressWarnings("unchecked")
+    /*@SuppressWarnings("unchecked")
     void handleCustomEnchatments() {
         try {
             // Set the server to accept new enchantments
@@ -264,7 +258,7 @@ public class DGGame {
         } catch (Exception ignored) {
         }
         DGData.CONSOLE.info("Custom enchantments injected.");
-    }
+    }*/
 
     public static DGGame getInst() {
         return INST;
@@ -276,11 +270,11 @@ public class DGGame {
 
     // -- DIRTY PRIVATE HELPER METHOD -- //
 
-    private void setFinalStatic(Field field, Object newValue) throws Exception {
+    /*private void setFinalStatic(Field field, Object newValue) throws Exception {
         field.setAccessible(true);
         Field modifiersField = Field.class.getDeclaredField("modifiers");
         modifiersField.setAccessible(true);
         modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
         field.set(null, newValue);
-    }
+    }*/
 }

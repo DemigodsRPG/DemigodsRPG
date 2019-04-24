@@ -95,7 +95,7 @@ public class AspectCommand extends BaseCommand {
                                     // FIXME model.giveHeroAspect(hero, aspect);
 
                                     // Play acceptance sound
-                                    player.playSound(player.getLocation(), Sound.ENTITY_ENDERDRAGON_DEATH, 1F, 1F);
+                                    player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 1F, 1F);
 
                                     // Message them and do cool things
                                     // FIXME player.sendMessage(aspect.getColor() + "The " + StringUtil2.beautify
@@ -127,12 +127,12 @@ public class AspectCommand extends BaseCommand {
                                     model.giveAspect(aspect);
 
                                     // Play acceptance sound
-                                    player.playSound(player.getLocation(), Sound.ENTITY_ENDERDRAGON_DEATH, 1F, 1F);
+                                    player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 1F, 1F);
 
                                     // Message them and do cool things
                                     // FIXME player.sendMessage(aspect.getColor() + "You have been accepted as an " +
                                     // aspect.getNomen() + ".");
-                                    player.getWorld().playEffect(player.getLocation(), Effect.EXPLOSION_HUGE, 4F);
+                                    player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 4);
 
                                     // Fancy particles
                                     for (int i = 0; i < 20; i++) {

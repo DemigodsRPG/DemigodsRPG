@@ -674,7 +674,7 @@ public class PlayerModel implements Model, AbilityCaster, Participant {
 
         // Define variables
         final Player player = Bukkit.getPlayer(UUID.fromString(mojangId));
-        final boolean inNoPvpZone = ZoneUtil.inNoPvpZone(player.getLocation());
+        final boolean inNoPvpZone = ZoneUtil.inNoPvpZone(player, player.getLocation());
 
         if (DGData.BATTLE_R.isInBattle(this)) return;
 
@@ -691,7 +691,7 @@ public class PlayerModel implements Model, AbilityCaster, Participant {
             Bukkit.getScheduler().scheduleSyncDelayedTask(DGData.PLUGIN, new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (ZoneUtil.inNoPvpZone(player.getLocation())) {
+                    if (ZoneUtil.inNoPvpZone(player, player.getLocation())) {
                         if (DGData.BATTLE_R.isInBattle(THIS)) return;
                         setCanPvp(false);
                         player.sendMessage(ChatColor.GRAY + "You are now safe from other players.");

@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -79,7 +80,7 @@ public class TributeListener implements Listener {
         ShrineModel save = DGData.SHRINE_R.getShrine(player.getTargetBlock((Set<Material>) null, 10).getLocation());
 
         // If it isn't a tribute chest then break the method
-        if (!event.getInventory().getName().contains("Tribute to") || save == null) { return; }
+        if (!event.getView().getTitle().contains("Tribute to") || save == null) { return; }
 
         // Calculate the tribute value
         int tributeValue = 0, items = 0;
@@ -171,7 +172,7 @@ public class TributeListener implements Listener {
         Deity shrineDeity = save.getDeity();
 
         // Open the tribute inventory
-        Inventory ii = Bukkit.getServer().createInventory(player, 27,
+        Inventory ii = Bukkit.getServer().createInventory(player, InventoryType.CHEST,
                 "Tribute to " + save.getFaction().getColor() + shrineDeity.getName() + ChatColor.RESET + ".");
         player.openInventory(ii);
     }

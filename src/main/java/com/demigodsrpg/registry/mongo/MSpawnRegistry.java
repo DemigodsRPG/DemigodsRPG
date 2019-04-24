@@ -7,6 +7,6 @@ import com.mongodb.client.MongoDatabase;
 
 public class MSpawnRegistry extends AbstractMongoRegistry<SpawnModel> implements SpawnRegistry {
     public MSpawnRegistry(MongoDatabase database) {
-        super(database.getCollection(NAME), 0);
+        super(database.getCollection(NAME), 0, false);
     }
 }

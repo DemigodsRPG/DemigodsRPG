@@ -26,7 +26,8 @@ public class ShrineListener implements Listener {
     public void createShrine(PlayerInteractEvent e) {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (ZoneUtil.isNoDGWorld(e.getPlayer().getWorld())) return;
-        if (e.getClickedBlock().getType() != Material.SIGN && e.getClickedBlock().getType() != Material.SIGN_POST) {
+        if (e.getClickedBlock().getType() != Material.LEGACY_SIGN &&
+                e.getClickedBlock().getType() != Material.LEGACY_SIGN_POST) {
             return;
         }
         Sign s = (Sign) e.getClickedBlock().getState();
@@ -172,7 +173,7 @@ public class ShrineListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityExplode(final EntityExplodeEvent event) {
-        if (event.getEntity() == null || ZoneUtil.inNoDGZone(event.getEntity().getLocation())) return;
+        if (ZoneUtil.inNoDGZone(event.getEntity().getLocation())) return;
         final List<ShrineModel> saves = Lists.newArrayList(DGData.SHRINE_R.getShrines(event.getLocation(), 10));
 
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGGame.getPlugin(), () -> {

@@ -16,78 +16,25 @@
 
 package com.demigodsrpg.util.schematic;
 
+import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class PotentialMaterial {
-    private String material;
-    private byte data;
+    private Material data;
+    private BlockFace face;
     private int odds;
     private boolean physics;
 
     /**
-     * Constructor for StoaMaterialData with only Material given.
-     *
-     * @param material Material of the block.
-     */
-    public PotentialMaterial(String material) {
-        this.material = material;
-        this.data = 0;
-        this.odds = 100;
-        this.physics = false;
-    }
-
-    /**
-     * Constructor for StoaMaterialData with only Material given.
-     *
-     * @param material Material of the block.
-     * @param physics  If physics is on.
-     */
-    public PotentialMaterial(String material, boolean physics) {
-        this.material = material;
-        this.data = 0;
-        this.odds = 100;
-        this.physics = physics;
-    }
-
-    /**
-     * Constructor for StoaMaterialData with only Material given and odds given.
-     *
-     * @param material Material of the block.
-     * @param odds     The odds of this object being generated.
-     */
-    public PotentialMaterial(String material, int odds) {
-        if (odds == 0 || odds > 100) throw new PotentialMaterialException();
-        this.material = material;
-        this.data = 100;
-        this.odds = odds;
-        this.physics = false;
-    }
-
-    /**
-     * Constructor for StoaMaterialData with only Material given and odds given.
-     *
-     * @param material Material of the block.
-     * @param odds     The odds of this object being generated.
-     * @param physics  If physics is on.
-     */
-    public PotentialMaterial(String material, int odds, boolean physics) {
-        if (odds == 0 || odds > 100) throw new PotentialMaterialException();
-        this.material = material;
-        this.data = 100;
-        this.odds = odds;
-        this.physics = physics;
-    }
-
-    /**
      * Constructor for StoaMaterialData with only Material and byte data given.
      *
      * @param material Material of the block.
-     * @param data     Byte data of the block.
      */
-    public PotentialMaterial(String material, byte data) {
-        this.material = material;
-        this.data = data;
+    public PotentialMaterial(Material material) {
+        this.data = material;
         this.odds = 100;
         this.physics = false;
     }
@@ -96,12 +43,35 @@ public class PotentialMaterial {
      * Constructor for StoaMaterialData with only Material and byte data given.
      *
      * @param material Material of the block.
-     * @param data     Byte data of the block.
+     */
+    public PotentialMaterial(Material material, BlockFace face) {
+        this.data = material;
+        this.face = face;
+        this.odds = 100;
+        this.physics = false;
+    }
+
+    /**
+     * Constructor for StoaMaterialData with only Material and byte data given.
+     *
+     * @param material Material of the block.
      * @param physics  If physics is on.
      */
-    public PotentialMaterial(String material, byte data, boolean physics) {
-        this.material = material;
-        this.data = data;
+    public PotentialMaterial(Material material, boolean physics) {
+        this.data = material;
+        this.odds = 100;
+        this.physics = physics;
+    }
+
+    /**
+     * Constructor for StoaMaterialData with only Material and byte data given.
+     *
+     * @param material Material of the block.
+     * @param physics  If physics is on.
+     */
+    public PotentialMaterial(Material material, BlockFace face, boolean physics) {
+        this.data = material;
+        this.face = face;
         this.odds = 100;
         this.physics = physics;
     }
@@ -110,13 +80,12 @@ public class PotentialMaterial {
      * Constructor for StoaMaterialData with Material, byte data, and odds given.
      *
      * @param material Material of the block.
-     * @param data     Byte data of the block.
      * @param odds     The odds of this object being generated.
      */
-    public PotentialMaterial(String material, byte data, int odds) {
+    public PotentialMaterial(Material material, int odds) {
         if (odds == 0 || odds > 100) throw new PotentialMaterialException();
-        this.material = material;
-        this.data = data;
+        this.data = material;
+        this.face = face;
         this.odds = odds;
         this.physics = false;
     }
@@ -125,14 +94,41 @@ public class PotentialMaterial {
      * Constructor for StoaMaterialData with Material, byte data, and odds given.
      *
      * @param material Material of the block.
-     * @param data     Byte data of the block.
+     * @param odds     The odds of this object being generated.
+     */
+    public PotentialMaterial(Material material, BlockFace face, int odds) {
+        if (odds == 0 || odds > 100) throw new PotentialMaterialException();
+        this.data = material;
+        this.face = face;
+        this.odds = odds;
+        this.physics = false;
+    }
+
+    /**
+     * Constructor for StoaMaterialData with Material, byte data, and odds given.
+     *
+     * @param material Material of the block.
      * @param odds     The odds of this object being generated.
      * @param physics  If physics is on.
      */
-    public PotentialMaterial(String material, byte data, int odds, boolean physics) {
+    public PotentialMaterial(Material material, int odds, boolean physics) {
         if (odds == 0 || odds > 100) throw new PotentialMaterialException();
-        this.material = material;
-        this.data = data;
+        this.data = material;
+        this.odds = odds;
+        this.physics = physics;
+    }
+
+    /**
+     * Constructor for StoaMaterialData with Material, byte data, and odds given.
+     *
+     * @param material Material of the block.
+     * @param odds     The odds of this object being generated.
+     * @param physics  If physics is on.
+     */
+    public PotentialMaterial(Material material, BlockFace face, int odds, boolean physics) {
+        if (odds == 0 || odds > 100) throw new PotentialMaterialException();
+        this.data = material;
+        this.face = face;
         this.odds = odds;
         this.physics = physics;
     }
@@ -142,17 +138,17 @@ public class PotentialMaterial {
      *
      * @return A Material.
      */
-    public String getMaterial() {
-        return this.material;
+    public Material getMaterial() {
+        return this.data;
     }
 
     /**
-     * Get the byte data of this object.
+     * Get the block face of this object.
      *
-     * @return Byte data.
+     * @return Block face.
      */
-    public byte getData() {
-        return this.data;
+    public BlockFace getFace() {
+        return this.face;
     }
 
     /**
@@ -176,31 +172,26 @@ public class PotentialMaterial {
     public enum Preset {
         STONE_BRICK(new ArrayList<PotentialMaterial>(3) {
             {
-                add(new PotentialMaterial("SMOOTH_BRICK", 80));
-                add(new PotentialMaterial("SMOOTH_BRICK", (byte) 1, 10));
-                add(new PotentialMaterial("SMOOTH_BRICK", (byte) 2, 10));
+                add(new PotentialMaterial(Material.STONE_BRICKS, 80));
+                add(new PotentialMaterial(Material.CRACKED_STONE_BRICKS, 10));
+                add(new PotentialMaterial(Material.CHISELED_STONE_BRICKS, 10));
             }
         }), SANDY_GRASS(new ArrayList<PotentialMaterial>(2) {
             {
-                add(new PotentialMaterial("SAND", 65));
-                add(new PotentialMaterial("GRASS", 35));
+                add(new PotentialMaterial(Material.SAND, 65));
+                add(new PotentialMaterial(Material.GRASS_BLOCK, 35));
             }
         }), PRETTY_FLOWERS_AND_GRASS(new ArrayList<PotentialMaterial>(4) {
             {
-                add(new PotentialMaterial("AIR", 50));
-                add(new PotentialMaterial("LONG_GRASS", (byte) 1, 35, true));
-                add(new PotentialMaterial("YELLOW_FLOWER", 9, true));
-                add(new PotentialMaterial("RED_ROSE", 6, true));
+                add(new PotentialMaterial(Material.AIR, 50));
+                add(new PotentialMaterial(Material.TALL_GRASS, 35, true));
+                add(new PotentialMaterial(Material.DANDELION, 9, true));
+                add(new PotentialMaterial(Material.ROSE_BUSH, 6, true));
             }
-        }), VINE_1(new ArrayList<PotentialMaterial>(2) {
+        }), VINE(new ArrayList<PotentialMaterial>(2) {
             {
-                add(new PotentialMaterial("VINE", (byte) 1, 40));
-                add(new PotentialMaterial("AIR", 60));
-            }
-        }), VINE_4(new ArrayList<PotentialMaterial>(2) {
-            {
-                add(new PotentialMaterial("VINE", (byte) 4, 40));
-                add(new PotentialMaterial("AIR", 60));
+                add(new PotentialMaterial(Material.VINE, 40));
+                add(new PotentialMaterial(Material.AIR, 60));
             }
         });
 

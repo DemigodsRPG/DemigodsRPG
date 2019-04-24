@@ -7,6 +7,6 @@ import com.mongodb.client.MongoDatabase;
 
 public class MShrineRegistry extends AbstractMongoRegistry<ShrineModel> implements ShrineRegistry {
     public MShrineRegistry(MongoDatabase database) {
-        super(database.getCollection(NAME), 0);
+        super(database.getCollection(NAME), 0, false);
     }
 }

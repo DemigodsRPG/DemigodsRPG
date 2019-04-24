@@ -7,6 +7,6 @@ import com.mongodb.client.MongoDatabase;
 
 public class MPlayerRegistry extends AbstractMongoRegistry<PlayerModel> implements PlayerRegistry {
     public MPlayerRegistry(MongoDatabase database) {
-        super(database.getCollection(NAME), 0);
+        super(database.getCollection(NAME), 0, true);
     }
 }

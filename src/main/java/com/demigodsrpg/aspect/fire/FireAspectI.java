@@ -27,7 +27,7 @@ public class FireAspectI implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.FIREBALL, getName(), Arrays.asList(getInfo()), null);
+        return ItemUtil.create(Material.FIRE_CHARGE, getName(), Arrays.asList(getInfo()), null);
     }
 
     @Override

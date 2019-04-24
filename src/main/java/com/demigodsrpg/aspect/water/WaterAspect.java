@@ -22,6 +22,6 @@ public class WaterAspect implements Aspect.Group {
 
     @Override
     public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.INK_SACK);
+        return new MaterialData(Material.INK_SAC);
     }
 }

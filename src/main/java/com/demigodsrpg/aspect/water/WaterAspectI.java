@@ -28,7 +28,7 @@ public class WaterAspectI implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.INK_SACK, getName(), Arrays.asList(getInfo()), null);
+        return ItemUtil.create(Material.INK_SAC, getName(), Arrays.asList(getInfo()), null);
     }
 
     @Override

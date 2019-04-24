@@ -25,7 +25,7 @@ public class BloodlustAspectII implements Aspect {
 
     @Override
     public ItemStack getItem() {
-        return ItemUtil.create(Material.GOLD_SWORD, getName(), Arrays.asList(getInfo()), null);
+        return ItemUtil.create(Material.GOLDEN_SWORD, getName(), Arrays.asList(getInfo()), null);
     }
 
     @Override

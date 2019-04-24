@@ -4,7 +4,6 @@ package com.demigodsrpg.gui;
 
 import com.demigodsrpg.DGData;
 import com.demigodsrpg.aspect.Aspect;
-import com.demigodsrpg.enchantment.CustomEnchantments;
 import com.demigodsrpg.model.PlayerModel;
 import com.demigodsrpg.util.InventoryGUI;
 import com.demigodsrpg.util.SlotFunction;
@@ -55,7 +54,7 @@ public class AspectGUI implements InventoryGUI {
                 lore.add(ChatColor.GREEN + "This aspect is claimable!");
                 meta.setLore(lore);
                 item.setItemMeta(meta);
-                item = CustomEnchantments.enchant(item, CustomEnchantments.CLAIMABLE, 1, false);
+                // item = CustomEnchantments.enchant(item, CustomEnchantments.CLAIMABLE, 1, false);
                 builder.put(count, SlotFunction.CLAIM);
             } else {
                 item.setType(Material.BARRIER);

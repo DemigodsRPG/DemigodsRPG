@@ -22,6 +22,6 @@ public class FireAspect implements Aspect.Group {
 
     @Override
     public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.FIREBALL);
+        return new MaterialData(Material.FIRE_CHARGE);
     }
 }

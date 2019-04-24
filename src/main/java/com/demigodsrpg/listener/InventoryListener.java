@@ -22,9 +22,9 @@ public class InventoryListener implements Listener {
         Player player = (Player) event.getWhoClicked();
 
         // Shrine Select
-        if (event.getInventory().getName().startsWith(ShrineGUI.INVENTORY_NAME)) {
+        if (event.getView().getTitle().startsWith(ShrineGUI.INVENTORY_NAME)) {
             try {
-                int count = Integer.parseInt(event.getInventory().getName().split(" ")[2]);
+                int count = Integer.parseInt(event.getView().getTitle().split(" ")[2]);
                 ShrineGUI gui = new ShrineGUI(player);
                 String function = gui.getFunction(event.getSlot());
                 if (!SlotFunction.NO_FUNCTION.equals(function) && event.getCurrentItem() != null &&
@@ -55,9 +55,9 @@ public class InventoryListener implements Listener {
                 oops.printStackTrace();
                 player.sendMessage(ChatColor.RED + "Something went wrong...");
             }
-        } else if (event.getInventory().getName().startsWith(AspectGUI.INVENTORY_NAME)) {
+        } else if (event.getView().getTitle().startsWith(AspectGUI.INVENTORY_NAME)) {
             try {
-                int count = Integer.parseInt(event.getInventory().getName().split(" ")[2]);
+                int count = Integer.parseInt(event.getView().getTitle().split(" ")[2]);
                 AspectGUI gui = new AspectGUI(player);
                 String function = gui.getFunction(event.getSlot());
                 if (!SlotFunction.NO_FUNCTION.equals(function) && event.getCurrentItem() != null &&

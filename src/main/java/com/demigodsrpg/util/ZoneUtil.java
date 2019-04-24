@@ -3,6 +3,8 @@ package com.demigodsrpg.util;
 import com.google.common.collect.Sets;
 import org.bukkit.*;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.Plugin;
 
@@ -38,9 +40,10 @@ public class ZoneUtil {
      * @param location the location to check.
      * @return true/false depending on if it's a no-PVP zone or not.
      */
-    public static boolean inNoPvpZone(Location location) {
-        return !PLUGIN_CONFIG.getBoolean("zones.allow_skills_anywhere") && WorldGuardUtil.worldGuardEnabled() &&
-                !WorldGuardUtil.canPVP(location);
+    public static boolean inNoPvpZone(Entity reference, Location location) {
+        return reference instanceof Player && !PLUGIN_CONFIG.getBoolean("zones.allow_skills_anywhere") &&
+                WorldGuardUtil.worldGuardEnabled() &&
+                !WorldGuardUtil.canPVP((Player) reference, location);
     }
 
     public static boolean inNoDGZone(Location location) {

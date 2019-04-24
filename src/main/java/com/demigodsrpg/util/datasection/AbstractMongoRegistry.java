@@ -36,8 +36,9 @@ import java.util.concurrent.TimeUnit;
 public abstract class AbstractMongoRegistry<T extends Model> implements Registry<T> {
     protected final Cache<String, T> REGISTERED_DATA;
     protected final MongoCollection<Document> COLLECTION;
+    protected final boolean UUID_KEYS;
 
-    public AbstractMongoRegistry(MongoCollection<Document> collection, int expireMins) {
+    public AbstractMongoRegistry(MongoCollection<Document> collection, int expireMins, boolean uuidKeys) {
         COLLECTION = collection;
         if (expireMins > 0) {
             REGISTERED_DATA =
@@ -46,6 +47,7 @@ public abstract class AbstractMongoRegistry<T extends Model> implements Registry
         } else {
             REGISTERED_DATA = CacheBuilder.newBuilder().concurrencyLevel(4).build();
         }
+        UUID_KEYS = uuidKeys;
     }
 
     public Optional<T> fromKey(String key) {
@@ -110,7 +112,7 @@ public abstract class AbstractMongoRegistry<T extends Model> implements Registry
                 String key = document.getString("key");
                 if (key != null) {
                     try {
-                        UUID.fromString(key);
+                        if (UUID_KEYS) UUID.fromString(key);
                         REGISTERED_DATA.put(key, fromDataSection(key, new MJsonSection(document)));
                     } catch (Exception oops) {
                         oops.printStackTrace();

@@ -22,6 +22,6 @@ public class BloodlustAspect implements Aspect.Group {
 
     @Override
     public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.GOLD_SWORD);
+        return new MaterialData(Material.GOLDEN_SWORD);
     }
 }

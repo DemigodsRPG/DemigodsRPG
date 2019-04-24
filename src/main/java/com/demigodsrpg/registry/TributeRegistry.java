@@ -168,27 +168,27 @@ public interface TributeRegistry extends Registry<TributeModel> {
                 return Category.MID_RANGE;
             case COOKED_BEEF:
             case COOKED_CHICKEN:
-            case COOKED_FISH:
-            case GRILLED_PORK:
+            case COOKED_COD:
+            case COOKED_PORKCHOP:
             case BAKED_POTATO:
-            case MUSHROOM_SOUP:
+            case MUSHROOM_STEW:
             case CAKE:
             case PUMPKIN_PIE:
                 return Category.COOKED_FOOD;
             case APPLE:
             case ROTTEN_FLESH:
-            case RAW_BEEF:
-            case RAW_CHICKEN:
-            case RAW_FISH:
+            case BEEF:
+            case CHICKEN:
+            case COD:
             case LEATHER:
-            case WOOL:
-            case INK_SACK:
+            case LEGACY_WOOL:
+            case INK_SAC:
             case EGG:
-            case RED_ROSE:
+            case ROSE_BUSH:
             case SPIDER_EYE:
             case STRING:
             case BONE:
-            case PORK:
+            case PORKCHOP:
             case FEATHER:
             case POTATO:
             case POISONOUS_POTATO:
@@ -197,12 +197,12 @@ public interface TributeRegistry extends Registry<TributeModel> {
             case PUMPKIN_SEEDS:
             case MELON:
             case MELON_SEEDS:
-            case SEEDS:
+            case LEGACY_SEEDS:
             case WHEAT:
             case HAY_BLOCK:
-            case SULPHUR:
+            case LEGACY_SULPHUR:
                 return Category.MOB_LOOT;
-            case LOG:
+            case LEGACY_LOG:
             case DIRT:
             case SAND:
             case GRAVEL:
@@ -273,13 +273,17 @@ public interface TributeRegistry extends Registry<TributeModel> {
         for (Material material : Material.values()) {
             // Don't use certain materials
             Material[] unused = {
-                    Material.AIR, Material.WATER, Material.STATIONARY_WATER, Material.LAVA, Material.STATIONARY_LAVA,
-                    Material.ENDER_PORTAL, Material.BEDROCK, Material.FIRE, Material.MOB_SPAWNER,
-                    Material.BURNING_FURNACE, Material.FLOWER_POT, Material.SKULL, Material.DOUBLE_STEP,
-                    Material.PORTAL, Material.CAKE_BLOCK, Material.BREWING_STAND, Material.CARROT,
-                    Material.DIODE_BLOCK_OFF, Material.DIODE_BLOCK_ON, Material.DOUBLE_PLANT, Material.EXP_BOTTLE,
-                    Material.GLOWING_REDSTONE_ORE, Material.LOG_2, Material.SIGN_POST, Material.SNOW,
-                    Material.WALL_SIGN
+                    Material.AIR, Material.WATER, Material.LEGACY_STATIONARY_WATER, Material.LAVA,
+                    Material.LEGACY_STATIONARY_LAVA,
+                    Material.END_PORTAL, Material.BEDROCK, Material.FIRE, Material.SPAWNER,
+                    Material.LEGACY_BURNING_FURNACE, Material.FLOWER_POT, Material.SKELETON_SKULL,
+                    Material.LEGACY_DOUBLE_STEP,
+                    Material.LEGACY_PORTAL, Material.CAKE, Material.BREWING_STAND, Material.CARROT,
+                    Material.LEGACY_DIODE_BLOCK_OFF, Material.LEGACY_DIODE_BLOCK_ON, Material.LEGACY_DOUBLE_PLANT,
+                    Material.EXPERIENCE_BOTTLE,
+                    Material.LEGACY_GLOWING_REDSTONE_ORE, Material.LEGACY_LOG_2, Material.LEGACY_SIGN_POST,
+                    Material.SNOW,
+                    Material.LEGACY_WALL_SIGN
             };
             if (Arrays.asList(unused).contains(material)) continue;
 
