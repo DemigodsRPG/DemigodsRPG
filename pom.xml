@@ -15,10 +15,10 @@
 
     <properties> <!-- It is important to keep up to date manually. -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>1.14-pre5-SNAPSHOT</spigot.version>
+        <spigot.version>1.14.2-R0.1-SNAPSHOT</spigot.version>
         <chitchat.version>2.1.1-SNAPSHOT</chitchat.version>
         <mongodb.version>3.6.1</mongodb.version>
-        <worldguard.version>7.0.0-SNAPSHOT</worldguard.version>
+        <worldguard.version>7.0.1-SNAPSHOT</worldguard.version>
         <evo.version>1.0.1</evo.version>
 
         <!-- Related -->
@@ -97,7 +97,7 @@
         <!-- WorldGuard -->
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>
-            <artifactId>worldguard-legacy</artifactId>
+            <artifactId>worldguard-bukkit</artifactId>
             <version>${worldguard.version}</version>
             <exclusions>
                 <exclusion>

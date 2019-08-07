@@ -9,7 +9,6 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.bukkit.protection.events.DisallowedPVPEvent;
 import com.sk89q.worldguard.protection.association.RegionAssociable;
 import com.sk89q.worldguard.protection.flags.*;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -38,24 +37,17 @@ public class WorldGuardUtil implements Listener {
         }
 
         if (plugin.isEnabled()) {
-            Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    Bukkit.getPluginManager().registerEvents(th, plugin);
-                }
-            }, 40);
+            Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin,
+                    () -> Bukkit.getPluginManager().registerEvents(th, plugin), 40);
         }
         if (plugin.isEnabled()) {
-            Bukkit.getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    // process proto-listeners
-                    Iterator<ProtoPVPListener> protoPVPListenerIterator = protoPVPListeners.values().iterator();
-                    while (worldGuardEnabled() && protoPVPListenerIterator.hasNext()) {
-                        ProtoPVPListener queued = protoPVPListenerIterator.next();
-                        queued.register();
-                        protoPVPListeners.remove(queued.plugin.getName());
-                    }
+            Bukkit.getScheduler().scheduleAsyncRepeatingTask(plugin, () -> {
+                // process proto-listeners
+                Iterator<ProtoPVPListener> protoPVPListenerIterator = protoPVPListeners.values().iterator();
+                while (worldGuardEnabled() && protoPVPListenerIterator.hasNext()) {
+                    ProtoPVPListener queued = protoPVPListenerIterator.next();
+                    queued.register();
+                    protoPVPListeners.remove(queued.plugin.getName());
                 }
             }, 0, 5);
         }
@@ -74,7 +66,7 @@ public class WorldGuardUtil implements Listener {
      */
     @Deprecated
     public static Flag<?> getFlag(String id) {
-        return Flags.get(id);
+        return Flags.fuzzyMatchFlag(WorldGuard.getInstance().getFlagRegistry(), id);
     }
 
     /**
@@ -89,12 +81,7 @@ public class WorldGuardUtil implements Listener {
                 .any(WorldGuard.getInstance().getPlatform().getRegionContainer()
                         .get(BukkitAdapter.adapt(location.getWorld()))
                         .getApplicableRegions(BukkitAdapter.asBlockVector(location))
-                        .iterator(), new Predicate<ProtectedRegion>() {
-                    @Override
-                    public boolean apply(ProtectedRegion region) {
-                        return region.getId().toLowerCase().contains(name);
-                    }
-                });
+                        .iterator(), region -> region.getId().toLowerCase().contains(name));
     }
 
     /**
@@ -109,15 +96,12 @@ public class WorldGuardUtil implements Listener {
                 .any(WorldGuard.getInstance().getPlatform().getRegionContainer()
                         .get(BukkitAdapter.adapt(location.getWorld()))
                         .getApplicableRegions(BukkitAdapter.asBlockVector(location))
-                        .iterator(), new Predicate<ProtectedRegion>() {
-                    @Override
-                    public boolean apply(ProtectedRegion region) {
-                        try {
-                            return region.getFlags().containsKey(flag);
-                        } catch (Exception ignored) {
-                        }
-                        return false;
+                        .iterator(), region -> {
+                    try {
+                        return region.getFlags().containsKey(flag);
+                    } catch (Exception ignored) {
                     }
+                    return false;
                 });
     }
 
@@ -158,15 +142,12 @@ public class WorldGuardUtil implements Listener {
                 .any(WorldGuard.getInstance().getPlatform().getRegionContainer()
                         .get(BukkitAdapter.adapt(location.getWorld()))
                         .getApplicableRegions(BukkitAdapter.asBlockVector(location))
-                        .iterator(), new Predicate<ProtectedRegion>() {
-                    @Override
-                    public boolean apply(ProtectedRegion region) {
-                        try {
-                            return flag.marshal(region.getFlag(flag)).equals(value);
-                        } catch (Exception ignored) {
-                        }
-                        return false;
+                        .iterator(), region -> {
+                    try {
+                        return flag.marshal(region.getFlag(flag)).equals(value);
+                    } catch (Exception ignored) {
                     }
+                    return false;
                 });
     }
 
