@@ -59,7 +59,7 @@ public class BloodlustAspectII implements Aspect {
         final AtomicInteger deaths = new AtomicInteger(0);
 
         final List<LivingEntity> targets = new ArrayList<LivingEntity>();
-        final Location startloc = player.getLocation();
+        final Location startLoc = player.getLocation();
         for (LivingEntity e : player.getWorld().getLivingEntities()) {
             if (e.getLocation().toVector().isInSphere(player.getLocation().toVector(), 35) &&
                     !targets.contains(e)) // jumps to the nearest entity
@@ -92,7 +92,7 @@ public class BloodlustAspectII implements Aspect {
         }
 
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGData.PLUGIN, () -> {
-            player.teleport(startloc);
+            player.teleport(startLoc);
             player.setHealth(savedHealth);
             player.sendMessage(targets.size() + " targets were struck with the power of bloodlust.");
         }, targets.size() * 10);

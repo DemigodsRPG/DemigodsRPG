@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentMap;
 public class Battle {
     private final String id;
 
-    private ConcurrentMap<String, BattleMetaData> involved;
+    private final ConcurrentMap<String, BattleMetaData> involved;
 
     private Location startLocation;
 
@@ -39,7 +39,7 @@ public class Battle {
         for (Participant participant : participants) {
             involved.put(participant.getKey(), new BattleMetaData());
         }
-        startLocation = participants[0].getLocation();
+        startLocation = participants[0].getLocation().get(); // TODO Replace this dirty get
         startTimeMillis = System.currentTimeMillis();
         lastInteract = System.currentTimeMillis();
         DGData.BATTLE_R.register(this);
@@ -72,7 +72,7 @@ public class Battle {
     }
 
     public boolean isInvolved(Participant participant) {
-        return involved.keySet().contains(participant.getKey());
+        return involved.containsKey(participant.getKey());
     }
 
     public boolean isInvolved(Player player) {

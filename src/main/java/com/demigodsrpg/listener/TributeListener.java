@@ -34,7 +34,7 @@ public class TributeListener implements Listener {
         // Return from actions we don't care about
         if (!Action.RIGHT_CLICK_BLOCK.equals(event.getAction())) {
             if (Action.RIGHT_CLICK_AIR.equals(event.getAction())) {
-                location = event.getPlayer().getTargetBlock((Set<Material>) null, 10).getLocation();
+                location = event.getPlayer().getTargetBlock(null, 10).getLocation();
             } else {
                 return;
             }
@@ -141,7 +141,7 @@ public class TributeListener implements Listener {
                 if (shrineOwner.getFavor() < Setting.FAVOR_CAP &&
                         !model.getMojangId().equals(shrineOwner.getMojangId())) {
                     // Give them some of the blessings
-                    shrineOwner.setFavor(shrineOwner.getFavor() + tributeValue / 5);
+                    shrineOwner.setFavor(shrineOwner.getFavor() + tributeValue / 5.0);
 
                     // Message them
                     if (shrineOwnerPlayer.isOnline()) {

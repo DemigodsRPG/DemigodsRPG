@@ -14,6 +14,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import java.util.Objects;
+
 public class AbilityListener implements Listener {
     /**
      * Various no damage abilities, these must be done by hand, and directly in this method.
@@ -29,9 +31,7 @@ public class AbilityListener implements Listener {
                 if (player.getHealth() <= event.getDamage()) {
                     switch (event.getCause()) {
                         case ENTITY_ATTACK:
-                            break;
                         case PROJECTILE:
-                            break;
                         case CUSTOM:
                             break;
                         default:
@@ -65,11 +65,11 @@ public class AbilityListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    private void onEvent(FurnaceSmeltEvent event) {
+    private void onEvent(FurnaceSmeltEvent event) { // TODO Fix 2 dirty gets
         for (PlayerModel model : DGData.PLAYER_R.fromAspect(Aspects.CRAFTING_ASPECT_I)) {
             try {
-                if (model.getOnline() && model.getLocation().getWorld().equals(event.getBlock().getWorld()) &&
-                        model.getLocation().distance(event.getBlock().getLocation()) <
+                if (model.getOnline() && Objects.equals(model.getLocation().get().getWorld(), event.getBlock().getWorld()) &&
+                        model.getLocation().get().distance(event.getBlock().getLocation()) <
                                 (int) Math.round(20 * Math.pow(model.getExperience(Aspects.CRAFTING_ASPECT_I), 0.15))) {
                     int amount = event.getResult().getAmount() * 2;
                     ItemStack out = event.getResult();
@@ -95,10 +95,8 @@ public class AbilityListener implements Listener {
 
         if (DGData.PLAYER_R.hasAspect(player, Aspects.WATER_ASPECT_HERO)) {
             Material locationMaterial = player.getLocation().getBlock().getType();
-            if (player.isSneaking() &&
-                    (locationMaterial.equals(Material.matchMaterial("STATIONARY_WATER", true)) ||
-                            locationMaterial.equals(Material.WATER))) {
-                Vector victor = (player.getPassenger() != null && player.getLocation().getDirection().getY() > 0 ?
+            if (player.isSneaking() && locationMaterial.equals(Material.WATER)) {
+                Vector victor = (!player.getPassengers().isEmpty() && player.getLocation().getDirection().getY() > 0 ?
                         player.getLocation().getDirection().clone().setY(0) : player.getLocation().getDirection())
                         .normalize().multiply(1.3D);
                 player.setVelocity(victor);

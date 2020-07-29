@@ -2,6 +2,7 @@ package com.demigodsrpg.aspect.demon;
 
 import com.demigodsrpg.aspect.Aspect;
 import org.bukkit.*;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.material.MaterialData;
 
 public class DemonAspect implements Aspect.Group {
@@ -21,7 +22,7 @@ public class DemonAspect implements Aspect.Group {
     }
 
     @Override
-    public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.BONE);
+    public BlockData getClaimMaterial() {
+        return Bukkit.getServer().createBlockData(Material.BONE);
     }
 }

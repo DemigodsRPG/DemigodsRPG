@@ -49,7 +49,7 @@ public class BloodlustAspectIII implements Aspect {
         if (event.getDamager() instanceof Player) {
             Player player = (Player) event.getDamager();
             if (DGData.PLAYER_R.fromPlayer(player).getAspects().contains(getGroup() + " " + getTier().name())) {
-                if (player.getItemInHand().getType().equals(Material.AIR)) {
+                if (player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                     event.setDamage(15.0);
                 }
             }

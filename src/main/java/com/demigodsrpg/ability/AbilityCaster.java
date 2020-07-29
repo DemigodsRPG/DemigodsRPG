@@ -3,6 +3,7 @@ package com.demigodsrpg.ability;
 import org.bukkit.*;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AbilityCaster {
     List<String> getAspects();
@@ -13,13 +14,13 @@ public interface AbilityCaster {
 
     OfflinePlayer getOfflinePlayer();
 
-    Location getLocation();
+    Optional<Location> getLocation();
 
-    AbilityMetaData getBound(Material material);
+    Optional<AbilityMetaData> getBound(Material material);
 
-    Material getBound(AbilityMetaData ability);
+    Optional<Material> getBound(AbilityMetaData ability);
 
-    Material getBound(String abilityCommand);
+    Optional<Material> getBound(String abilityCommand);
 
     void bind(AbilityMetaData ability, Material material);
 

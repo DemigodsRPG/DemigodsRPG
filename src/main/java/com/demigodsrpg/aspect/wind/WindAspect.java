@@ -2,6 +2,7 @@ package com.demigodsrpg.aspect.wind;
 
 import com.demigodsrpg.aspect.Aspect;
 import org.bukkit.*;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.material.MaterialData;
 
 public class WindAspect implements Aspect.Group {
@@ -21,7 +22,7 @@ public class WindAspect implements Aspect.Group {
     }
 
     @Override
-    public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.FEATHER);
+    public BlockData getClaimMaterial() {
+        return Bukkit.getServer().createBlockData(Material.FEATHER);
     }
 }

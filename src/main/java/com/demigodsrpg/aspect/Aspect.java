@@ -2,8 +2,8 @@ package com.demigodsrpg.aspect;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 
 public interface Aspect {
     default Group getGroup() {
@@ -37,6 +37,6 @@ public interface Aspect {
 
         Sound getSound();
 
-        MaterialData getClaimMaterial();
+        BlockData getClaimMaterial();
     }
 }

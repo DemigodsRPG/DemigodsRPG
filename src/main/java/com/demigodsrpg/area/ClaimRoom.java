@@ -38,8 +38,8 @@ public class ClaimRoom extends Area {
                 double x = next.getDouble("x");
                 double y = next.getDouble("y");
                 double z = next.getDouble("z");
-                float yaw = Float.valueOf(next.getString("yaw"));
-                float pitch = Float.valueOf(next.getString("pitch"));
+                float yaw = Float.parseFloat(next.getString("yaw"));
+                float pitch = Float.parseFloat(next.getString("pitch"));
                 nextLocation = new Location(world, x, y, z, yaw, pitch);
             } else {
                 DGData.CONSOLE.warning("The claim room with id " + uuid + " has an invalid next location.");
@@ -60,6 +60,7 @@ public class ClaimRoom extends Area {
         return "claimroom$" + deity.getName() + "$" + uuid;
     }
 
+    @SuppressWarnings("ConstantConditions") // World should be loaded when saving
     @Override
     public Map<String, Object> serialize() {
         // Save next location

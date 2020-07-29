@@ -2,6 +2,7 @@ package com.demigodsrpg.aspect.fire;
 
 import com.demigodsrpg.aspect.Aspect;
 import org.bukkit.*;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.material.MaterialData;
 
 public class FireAspect implements Aspect.Group {
@@ -21,7 +22,7 @@ public class FireAspect implements Aspect.Group {
     }
 
     @Override
-    public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.FIRE_CHARGE);
+    public BlockData getClaimMaterial() {
+        return Bukkit.getServer().createBlockData(Material.FIRE_CHARGE);
     }
 }

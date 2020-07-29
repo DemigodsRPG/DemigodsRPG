@@ -12,11 +12,14 @@ import org.bukkit.event.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.MainHand;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -24,7 +27,7 @@ public class AbilityRegistry implements Listener {
     // FIXME Do we really need two collections for the same data? This is expensive...
     private static AbilityCasterProvider CASTER_PROVIDER;
     private static CooldownHandler COOLDOWNS;
-    private boolean NO_COST_ASPECT_MODE;
+    private final boolean NO_COST_ASPECT_MODE;
 
     private static final ConcurrentMap<String, AbilityMetaData> REGISTERED_COMMANDS = new ConcurrentHashMap<>();
     private static final Multimap<String, AbilityMetaData> REGISTERED_ABILITIES =
@@ -127,69 +130,61 @@ public class AbilityRegistry implements Listener {
 
     boolean bindAbility(Player player, String command) {
         // Is this a correct command?
-        if (!REGISTERED_COMMANDS.keySet().contains(command)) {
+        if (!REGISTERED_COMMANDS.containsKey(command)) {
             return false;
         }
 
         // Can't bind to air.
-        if (player.getItemInHand() == null || Material.AIR.equals(player.getItemInHand().getType())) {
+        ItemStack handItem = player.getInventory().getItemInMainHand();
+        if (Material.AIR.equals(handItem.getType())) {
             abilityInfo(player, command);
             return true;
         }
 
         AbilityCaster model = CASTER_PROVIDER.fromPlayer(player);
-        Material material = player.getItemInHand().getType();
-        AbilityMetaData bound = model.getBound(material);
-        if (bound != null) {
+        Material material = handItem.getType();
+        Optional<AbilityMetaData> boundOptional = model.getBound(material);
+        if (boundOptional.isPresent()) {
+            AbilityMetaData bound = boundOptional.get();
             if (!bound.getCommand().equals(command)) {
                 player.sendMessage(ChatColor.RED + "This item already has /" + bound.getCommand() + " bound to it.");
-                return true;
             } else {
                 model.unbind(bound);
                 player.sendMessage(ChatColor.YELLOW + bound.getName() + " has been unbound.");
-                return true;
             }
+            return true;
         } else {
-            AbilityMetaData ability = fromCommand(command);
-            if (ability.getCommand().equals(command) && model.getAspects().contains(ability.getAspect().name()) &&
-                    ability.getCommand().equals(command)) {
-                model.bind(ability, material);
-                player.sendMessage(ChatColor.YELLOW + ability.getName() + " has been bound to " +
-                        StringUtil2.beautify(material.name()) + ".");
-                return true;
+            Optional<AbilityMetaData> abilityOptional = fromCommand(command);
+            if (abilityOptional.isPresent()) {
+                AbilityMetaData ability = abilityOptional.get();
+                if (ability.getCommand().equals(command) && model.getAspects().contains(ability.getAspect().name()) &&
+                        ability.getCommand().equals(command)) {
+                    model.bind(ability, material);
+                    player.sendMessage(ChatColor.YELLOW + ability.getName() + " has been bound to " +
+                            StringUtil2.beautify(material.name()) + ".");
+                    return true;
+                }
             }
         }
         return false;
     }
 
+    @SuppressWarnings("ConstantConditions") // This should never be run on an offline player
     boolean processAbility1(AbilityCaster model, AbilityMetaData ability) {
-        if (ZoneUtil.inNoDGZone(model.getLocation())) return false;
+        if (!model.getLocation().isPresent()) return false;
+        if (ZoneUtil.inNoDGZone(model.getLocation().get())) return false;
         if (!ability.getType().equals(Ability.Type.PASSIVE)) {
             if ((ability.getType().equals(Ability.Type.OFFENSIVE) || ability.getType().equals(Ability.Type.ULTIMATE)) &&
-                    ZoneUtil.inNoPvpZone(model.getOfflinePlayer().getPlayer(), model.getLocation())) {
+                    ZoneUtil.inNoPvpZone(model.getOfflinePlayer().getPlayer(), model.getLocation().get())) {
                 return false;
             }
-            if (model.getBound(ability) == null) {
+            if (!model.getBound(ability).isPresent()) {
                 return false;
             }
-            if (!model.getOfflinePlayer().getPlayer().getItemInHand().getType().equals(model.getBound(ability))) {
-                return false;
-            }
+            model.getOfflinePlayer().getPlayer().getInventory().getItemInMainHand().getType();
+            model.getBound(ability);
+            return false;
 
-            double cost = ability.getCost();
-            if (!NO_COST_ASPECT_MODE && model.getFavor() < cost) {
-                model.getOfflinePlayer().getPlayer()
-                        .sendMessage(ChatColor.YELLOW + ability.getName() + " requires more favor.");
-                return false;
-            }
-            if (COOLDOWNS.hasDelay(model, ability)) {
-                return false;
-            }
-            if (COOLDOWNS.hasCooldown(model, ability)) {
-                model.getOfflinePlayer().getPlayer()
-                        .sendMessage(ChatColor.YELLOW + ability.getName() + " is on a cooldown.");
-                return false;
-            }
         }
         return true;
     }
@@ -278,10 +273,10 @@ public class AbilityRegistry implements Listener {
         }
     }
 
-    public static AbilityMetaData fromCommand(String commandName) {
+    public static Optional<AbilityMetaData> fromCommand(String commandName) {
         if (REGISTERED_COMMANDS.containsKey(commandName)) {
-            return REGISTERED_COMMANDS.get(commandName);
+            return Optional.of(REGISTERED_COMMANDS.get(commandName));
         }
-        return null;
+        return Optional.empty();
     }
 }

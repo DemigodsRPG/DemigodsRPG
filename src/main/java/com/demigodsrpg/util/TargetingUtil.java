@@ -50,7 +50,9 @@ public class TargetingUtil {
                         if (entity instanceof Player) {
                             PlayerModel target1 = DGData.PLAYER_R.fromPlayer((Player) entity);
                             if (!Setting.FRIENDLY_FIRE && looking.getFamily().equals(target1.getFamily()) ||
-                                    ((Player) entity).getGameMode().equals(GameMode.CREATIVE)) { return false; }
+                                    ((Player) entity).getGameMode().equals(GameMode.CREATIVE)) {
+                                return false;
+                            }
                         }
                         return true;
                     }

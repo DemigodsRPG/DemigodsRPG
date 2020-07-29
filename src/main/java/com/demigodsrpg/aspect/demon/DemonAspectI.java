@@ -67,16 +67,16 @@ public class DemonAspectI implements Aspect {
         return AbilityResult.SUCCESS;
     }
 
-    private boolean chain(Player p, double damage, int blindpower, int blindduration) {
+    private void chain(Player p, double damage, int blindpower, int blindduration) {
         LivingEntity target = TargetingUtil.autoTarget(p);
-        if (target == null) return false;
-        target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, blindduration, blindpower));
-        target.damage(damage);
-        target.setLastDamageCause(
-                new EntityDamageByEntityEvent(p, target, EntityDamageEvent.DamageCause.ENTITY_ATTACK, damage));
-        for (BlockFace bf : BlockFace.values()) {
-            p.getWorld().playEffect(target.getLocation().getBlock().getRelative(bf).getLocation(), Effect.SMOKE, 1);
+        if (target != null){
+            target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, blindduration, blindpower));
+            target.damage(damage);
+            target.setLastDamageCause(
+                    new EntityDamageByEntityEvent(p, target, EntityDamageEvent.DamageCause.ENTITY_ATTACK, damage));
+            for (BlockFace bf : BlockFace.values()) {
+                p.getWorld().playEffect(target.getLocation().getBlock().getRelative(bf).getLocation(), Effect.SMOKE, 1);
+            }
         }
-        return true;
     }
 }
