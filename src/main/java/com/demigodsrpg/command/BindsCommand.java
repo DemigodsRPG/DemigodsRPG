@@ -12,6 +12,7 @@ import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class BindsCommand extends BaseCommand {
     @Override
@@ -25,8 +26,9 @@ public class BindsCommand extends BaseCommand {
         sender.sendMessage(StringUtil2.chatTitle("Binds"));
         if (!player.getBindsMap().isEmpty()) {
             for (Map.Entry<String, String> bind : player.getBindsMap().entrySet()) {
-                AbilityMetaData ability = AbilityRegistry.fromCommand(bind.getKey());
-                if (ability != null) {
+                Optional<AbilityMetaData> abilityOptional = AbilityRegistry.fromCommand(bind.getKey());
+                if (abilityOptional.isPresent()) {
+                    AbilityMetaData ability = abilityOptional.get();
                     String materialName = bind.getValue();
                     sender.sendMessage(" - " + ability.getAspect().getGroup().getColor() + ability.getName() +
                             ChatColor.WHITE + ", bound to " + StringUtil2.beautify(materialName) + ".");

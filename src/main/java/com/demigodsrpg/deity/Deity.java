@@ -68,6 +68,8 @@ public class Deity {
             case NON_BINARY:
                 pronouns = new String[]{"they", "them"};
                 break;
+            case AGENDER:
+                pronouns = new String[]{name, name};
         }
     }
 }

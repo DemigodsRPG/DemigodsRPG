@@ -410,9 +410,9 @@ public class Selection {
     public Set<Location> rangeLoop(final Location reference, final int X, final int XX, final int Y, final int YY,
                                    final int Z, final int ZZ) {
         Set<Location> set = new HashSet<>();
-        for (int x = (X < XX ? X : XX); x <= (X < XX ? XX : X); x++) {
-            for (int y = (Y < YY ? Y : YY); y <= (Y < YY ? YY : Y); y++) {
-                for (int z = (Z < ZZ ? Z : ZZ); z <= (Z < ZZ ? ZZ : Z); z++) {
+        for (int x = (Math.min(X, XX)); x <= (Math.max(X, XX)); x++) {
+            for (int y = (Math.min(Y, YY)); y <= (Math.max(Y, YY)); y++) {
+                for (int z = (Math.min(Z, ZZ)); z <= (Math.max(Z, ZZ)); z++) {
                     set.add(getLocation(reference, x, y, z));
                 }
             }

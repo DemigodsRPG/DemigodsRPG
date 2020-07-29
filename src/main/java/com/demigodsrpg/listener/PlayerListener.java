@@ -17,7 +17,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         PlayerModel model = DGData.PLAYER_R.fromPlayer(event.getPlayer());
 
-        player.setMaxHealth(model.getMaxHealth());
+        player.setMaxHealth(model.getMaxHealth()); // TODO Update to new API 1.16.1
         player.setHealthScale(20.0);
         player.setHealthScaled(true);
         player.setHealth(model.getMaxHealth());

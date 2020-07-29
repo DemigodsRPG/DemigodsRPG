@@ -15,14 +15,11 @@
 
     <properties> <!-- It is important to keep up to date manually. -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>1.14.2-R0.1-SNAPSHOT</spigot.version>
-        <chitchat.version>2.1.1-SNAPSHOT</chitchat.version>
+        <spigot.version>1.16.1-R0.1-SNAPSHOT</spigot.version>
+        <chitchat.version>2.1.3-SNAPSHOT</chitchat.version>
         <mongodb.version>3.6.1</mongodb.version>
         <worldguard.version>7.0.1-SNAPSHOT</worldguard.version>
         <evo.version>1.0.1</evo.version>
-
-        <!-- Related -->
-        <chitchat.version>2.1-SNAPSHOT</chitchat.version>
     </properties>
 
     <developers>

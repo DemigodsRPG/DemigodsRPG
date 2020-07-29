@@ -5,6 +5,8 @@ import com.demigodsrpg.family.Family;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
+import java.util.Optional;
+
 public interface Participant {
     String getLastKnownName();
 
@@ -14,7 +16,7 @@ public interface Participant {
 
     EntityType getEntityType();
 
-    Location getLocation();
+    Optional<Location> getLocation();
 
     Family getFamily();
 

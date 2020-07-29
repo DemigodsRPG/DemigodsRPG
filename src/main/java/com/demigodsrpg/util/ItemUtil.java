@@ -31,9 +31,11 @@ public class ItemUtil {
         ItemMeta meta = item.getItemMeta();
 
         // Set meta data
-        if (name != null) meta.setDisplayName(name);
-        if (lore != null) meta.setLore(lore);
-        item.setItemMeta(meta);
+        if (meta != null) {
+            meta.setDisplayName(name);
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
 
         // Add enchantments if passed in
         if (enchantments != null) item.addUnsafeEnchantments(enchantments);
@@ -54,10 +56,12 @@ public class ItemUtil {
         ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta meta = (BookMeta) book.getItemMeta();
 
-        meta.setTitle(title);
-        meta.setAuthor(author);
-        meta.setPages(pages);
-        if (lore != null) meta.setLore(lore);
+        if (meta != null) {
+            meta.setTitle(title);
+            meta.setAuthor(author);
+            meta.setPages(pages);
+            if (lore != null) meta.setLore(lore);
+        }
 
         book.setItemMeta(meta);
 
@@ -91,12 +95,13 @@ public class ItemUtil {
      * @param item2 the second item to check with.
      * @return true if the items are equal.
      */
+    @SuppressWarnings("deprecation") // For this case, durability does not need to stay permanent
     public static boolean areEqual(ItemStack item1, ItemStack item2) {
         // Clone the items
         ItemStack newItem1 = item1.clone();
         ItemStack newItem2 = item2.clone();
 
-        // Set durabilities
+        // Set durability
         newItem1.setDurability(Short.parseShort("1"));
         newItem2.setDurability(Short.parseShort("1"));
 

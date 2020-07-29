@@ -347,22 +347,22 @@ public class PlayerModel implements Model, AbilityCaster, Participant {
         return binds;
     }
 
-    public AbilityMetaData getBound(Material material) {
+    public Optional<AbilityMetaData> getBound(Material material) {
         if (binds.inverse().containsKey(material.name())) {
             return AbilityRegistry.fromCommand(binds.inverse().get(material.name()));
         }
-        return null;
+        return Optional.empty();
     }
 
-    public Material getBound(AbilityMetaData ability) {
+    public Optional<Material> getBound(AbilityMetaData ability) {
         return getBound(ability.getCommand());
     }
 
-    public Material getBound(String abilityCommand) {
+    public Optional<Material> getBound(String abilityCommand) {
         if (binds.containsKey(abilityCommand)) {
-            return Material.valueOf(binds.get(abilityCommand));
+            return Optional.of(Material.valueOf(binds.get(abilityCommand)));
         }
-        return null;
+        return Optional.empty();
     }
 
     public void bind(AbilityMetaData ability, Material material) {
@@ -454,15 +454,15 @@ public class PlayerModel implements Model, AbilityCaster, Participant {
     }
 
     @Override
-    public Location getLocation() {
+    public Optional<Location> getLocation() {
         if (getOnline()) {
-            return getOfflinePlayer().getPlayer().getLocation();
+            return Optional.of(getOfflinePlayer().getPlayer().getLocation());
         }
         throw new UnsupportedOperationException("We don't support finding locations for players who aren't online.");
     }
 
     public boolean isDemigod() {
-        return secondary != null && primary != null;
+        return secondary.isPresent() && primary.isPresent();
     }
 
     public boolean hasAspect(Aspect aspect) {
@@ -547,7 +547,7 @@ public class PlayerModel implements Model, AbilityCaster, Participant {
         teamKills += data.getTeamKills();
 
         if (checkTeamKills()) {
-            double score = data.getHits() + data.getAssists() / 2;
+            double score = data.getHits() + data.getAssists() / 2.0;
             score += data.getDenies();
             score += data.getKills() * 2;
             score -= data.getDeaths() * 1.5;

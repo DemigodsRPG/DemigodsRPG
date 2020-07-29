@@ -9,6 +9,7 @@ import com.demigodsrpg.aspect.Groups;
 import com.demigodsrpg.model.PlayerModel;
 import com.demigodsrpg.util.ItemUtil;
 import com.demigodsrpg.util.TargetingUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -68,7 +69,7 @@ public class WaterAspectI implements Aspect {
                     new EntityDamageByEntityEvent(player, hit, EntityDamageEvent.DamageCause.DROWNING, damage));
 
             if (hit.getLocation().getBlock().getType().equals(Material.AIR)) {
-                player.getWorld().spawnFallingBlock(hit.getLocation(), Material.WATER, (byte) 0);
+                player.getWorld().spawnFallingBlock(hit.getLocation(), Bukkit.getServer().createBlockData(Material.WATER));
             }
 
             return AbilityResult.SUCCESS;

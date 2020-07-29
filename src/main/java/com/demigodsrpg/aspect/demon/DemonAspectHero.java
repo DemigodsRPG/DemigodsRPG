@@ -74,21 +74,21 @@ public class DemonAspectHero implements Aspect {
 
     private int tartarus(Player p, PlayerModel m) {
         int range = (int) Math.round(18.83043 * Math.pow(m.getExperience(Aspects.DEMON_ASPECT_HERO), 0.088637));
-        List<LivingEntity> entitylist = new ArrayList<>();
+        List<LivingEntity> entityList = new ArrayList<>();
         for (Entity anEntity : p.getNearbyEntities(range, range, range)) {
             if (anEntity instanceof Player &&
                     m.getFamily().equals(DGData.PLAYER_R.fromPlayer((Player) anEntity).getFamily())) {
                 continue;
             }
             if (anEntity instanceof LivingEntity) {
-                entitylist.add((LivingEntity) anEntity);
+                entityList.add((LivingEntity) anEntity);
             }
         }
         int duration = (int) Math.round(30 * Math.pow(m.getExperience(Aspects.DEMON_ASPECT_HERO), 0.09)) * 20;
-        for (LivingEntity le : entitylist) {
+        for (LivingEntity le : entityList) {
             target(le, duration);
         }
-        return entitylist.size();
+        return entityList.size();
     }
 
     private void target(LivingEntity le, int duration) {

@@ -20,14 +20,15 @@ public class AreaSelection implements Listener {
 
     // -- META DATA -- //
 
-    private String playerUUID;
-    private List<Location> points;
+    private final String playerUUID;
+    private final List<Location> points;
 
     public AreaSelection(Player player) {
         this.playerUUID = player.getUniqueId().toString();
         points = new ArrayList<>();
     }
 
+    @SuppressWarnings("ConstantConditions") // Locations should always be loaded when clicking
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onClick(PlayerInteractEvent event) {
         if (event.getPlayer().getUniqueId().toString().equals(playerUUID) &&

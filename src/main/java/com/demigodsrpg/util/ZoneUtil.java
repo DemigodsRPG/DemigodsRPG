@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Optional;
 import java.util.Set;
 
 public class ZoneUtil {
@@ -46,6 +47,7 @@ public class ZoneUtil {
                 !WorldGuardUtil.canPVP((Player) reference, location);
     }
 
+    @SuppressWarnings("ConstantConditions") // If world is unloaded this should not be called
     public static boolean inNoDGZone(Location location) {
         return isNoDGWorld(location.getWorld());
     }

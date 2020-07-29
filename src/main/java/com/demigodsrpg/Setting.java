@@ -27,7 +27,7 @@ public class Setting {
     public static final String MONGODB_USERNAME = getConfig().getString("mongo.username", "demigods");
     public static final String MONGODB_PASSWORD = getConfig().getString("mongo.password", "demigods");
     public static final boolean NORSE_ENABLED = getConfig().getBoolean("pantheon.norse", true);
-    public static final boolean GREEK_ENABLED = getConfig().getBoolean("pantheon.greek", true);
+    public static final boolean GREEK_ENABLED = getConfig().getBoolean("pantheon.greek", false);
 
     private static ConfigurationSection getConfig() {
         return JavaPlugin.getProvidingPlugin(Setting.class).getConfig();

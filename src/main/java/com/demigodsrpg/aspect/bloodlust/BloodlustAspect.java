@@ -2,6 +2,7 @@ package com.demigodsrpg.aspect.bloodlust;
 
 import com.demigodsrpg.aspect.Aspect;
 import org.bukkit.*;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.material.MaterialData;
 
 public class BloodlustAspect implements Aspect.Group {
@@ -21,7 +22,7 @@ public class BloodlustAspect implements Aspect.Group {
     }
 
     @Override
-    public MaterialData getClaimMaterial() {
-        return new MaterialData(Material.GOLDEN_SWORD);
+    public BlockData getClaimMaterial() {
+        return Bukkit.getServer().createBlockData(Material.GOLDEN_SWORD);
     }
 }

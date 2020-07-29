@@ -84,7 +84,7 @@ public class LightningAspectII implements Aspect {
             if (entity instanceof Player) setWeather((Player) entity, 100);
 
             // Strike them with a small delay
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGData.PLUGIN, new BukkitRunnable() {
+            new BukkitRunnable() {
                 @Override
                 public void run() {
                     for (int i = 0; i <= 3; i++) {
@@ -99,7 +99,7 @@ public class LightningAspectII implements Aspect {
                                         damage));
                     }
                 }
-            }, 15);
+            }.runTaskLater(DGData.PLUGIN, 15);
         }
 
         return AbilityResult.SUCCESS;
@@ -110,11 +110,11 @@ public class LightningAspectII implements Aspect {
         player.setPlayerWeather(WeatherType.DOWNFALL);
 
         // Create the runnable to switch back
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DGData.PLUGIN, new BukkitRunnable() {
+        new BukkitRunnable() {
             @Override
             public void run() {
                 player.resetPlayerWeather();
             }
-        }, ticks);
+        }.runTaskLater(DGData.PLUGIN, ticks);
     }
 }
